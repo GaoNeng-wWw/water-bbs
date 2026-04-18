@@ -1,0 +1,40 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = [
+    ".",         # 你的主程序 crate
+    "migration", # 你的迁移 crate
+]
+
+[workspace.dependencies]
+anyhow = "1.0.102"
+axum = "0.8.9"
+fred = "10.1.0"
+jose-jws = "0.1.2"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+thiserror = "2.0.18"
+tokio = { version = "1.52.1", features = ["full"] }
+sea-orm = { version = "2.0.0-rc.38", features = [ "sqlx-sqlite", "with-chrono", "macros", "with-uuid", "with-json", "runtime-tokio"] }
+sea-orm-migration = { version = "2.0.0-rc.38", features = ["runtime-tokio", "sqlx-sqlite"] }
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+fred.workspace = true
+jose-jws.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+sea-orm.workspace = true
+sea-orm-migration.workspace = true
+nutype = { version = "0.6.2", features = ["derive_unsafe", "serde"] }
+uuid = { version = "1.23.1", features = ["serde", "v7"] }
+bcrypt = "0.19.0"
+async-trait = "0.1.89"
+chrono = "0.4.44"
+rand = "0.10.1"
