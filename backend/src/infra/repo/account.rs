@@ -6,13 +6,13 @@ use sea_orm::{
 
 use crate::{
     domain::{
-        ar::account::Account,
+        ar::account::{Account, Identity},
         error::repo::RepositoryError,
         repo::account::IAccountRepo,
         vo::{account_id::AccountId, profile::Profile},
     },
     infra::{
-        entity::{self},
+        entity::{self, identity::Entity},
         mapper,
     },
     shared::pagination::{CursorPaginationRequest, CursorPaginationResponse},
@@ -21,7 +21,7 @@ use crate::{
 pub struct AccountRepo {
     db: DatabaseConnection,
     redis: Pool,
-    cnt_thread: Option<tokio::task::JoinHandle<Result<u64, RepositoryError>>>,
+    cnt_thread: Option<tokio::task::JoinHandle<Result<i64, RepositoryError>>>,
 }
 
 impl AccountRepo {
@@ -36,6 +36,29 @@ impl AccountRepo {
 
 #[async_trait::async_trait]
 impl IAccountRepo for AccountRepo {
+    async fn find_account_id_by_ident(
+        &self,
+        identity: &Identity,
+    ) -> Result<Option<AccountId>, RepositoryError> {
+        let identity = identity.clone();
+        let ident_type = identity.ident_type.clone();
+        let ident_value = identity.ident_value.clone();
+
+        let account_id = entity::identity::Entity::find()
+            .filter(entity::identity::Column::IdentType.eq(ident_type))
+            .filter(entity::identity::Column::IdentValue.eq(ident_value))
+            .column(entity::identity::Column::AccountId)            
+            .one(&self.db)
+            .await
+            .map_err(|err| RepositoryError::DatabaseError {
+                reason: err.to_string(),
+            })?;
+        if account_id.is_none() {
+            return Ok(None);
+        }
+        let account_id = account_id.unwrap();
+        Ok(Some(AccountId::new(account_id.account_id)))
+    }
     async fn get_account(
         &self,
         account_id: &AccountId,
@@ -152,8 +175,9 @@ impl IAccountRepo for AccountRepo {
             .map_err(|e| RepositoryError::DatabaseError {
                 reason: e.to_string(),
             })?;
-
-        // 更新 Redis 计数器
+        Ok(())
+    }
+    async fn incr(&self) -> Result<(), RepositoryError> {
         let _: () =
             self.redis
                 .incr("account_count")
@@ -161,7 +185,16 @@ impl IAccountRepo for AccountRepo {
                 .map_err(|e| RepositoryError::RedisError {
                     reason: e.to_string(),
                 })?;
-
+        Ok(())
+    }
+    async fn decr(&self) -> Result<(), RepositoryError> {
+        let _: () =
+            self.redis
+                .decr("account_count")
+                .await
+                .map_err(|e| RepositoryError::RedisError {
+                    reason: e.to_string(),
+                })?;
         Ok(())
     }
     async fn update_account(&self, account: &Account) -> Result<(), RepositoryError> {
@@ -206,9 +239,8 @@ impl IAccountRepo for AccountRepo {
     async fn get_all_accounts(
         &mut self,
         pagination: &CursorPaginationRequest<DateTime<Utc>, u64>,
-    ) -> Result<CursorPaginationResponse<Account, String, u64>, RepositoryError> {
+    ) -> Result<CursorPaginationResponse<Account, DateTime<Utc>, u64>, RepositoryError> {
         let pagination = pagination;
-        let count = self.get_account_count().await?;
         let accounts = entity::account::Entity::find()
             .filter(entity::account::Column::CreatedAt.gt(pagination.cursor))
             .order_by(entity::account::Column::CreatedAt, sea_orm::Order::Desc)
@@ -225,7 +257,7 @@ impl IAccountRepo for AccountRepo {
             .collect::<Vec<_>>();
         let cursor = accounts
             .last()
-            .map(|account| account.created_at.to_string());
+            .map(|account| account.created_at);
         let mut data = vec![];
         for mut account in accounts {
             let id = account.id.clone().into_inner();
@@ -277,11 +309,11 @@ impl IAccountRepo for AccountRepo {
         Ok(CursorPaginationResponse {
             next_cursor: cursor,
             items: data,
-            total: Some(count),
+            total: None,
         })
     }
-    async fn get_account_count(&mut self) -> Result<u64, RepositoryError> {
-        let cnt: Option<u64> =
+    async fn get_account_count(&mut self) -> Result<i64, RepositoryError> {
+        let cnt: Option<i64> =
             self.redis
                 .get("account_count")
                 .await
@@ -304,7 +336,7 @@ impl IAccountRepo for AccountRepo {
                 }?;
                 return res;
             } else {
-                return Ok(0);
+                return Ok(-1);
             }
         };
         let db = self.db.clone();
@@ -325,10 +357,10 @@ impl IAccountRepo for AccountRepo {
                     reason: err.to_string(),
                 })?;
 
-            Ok(count)
+            Ok(count as i64)
         });
 
         self.cnt_thread = Some(handle);
-        Ok(0)
+        Ok(-1)
     }
 }

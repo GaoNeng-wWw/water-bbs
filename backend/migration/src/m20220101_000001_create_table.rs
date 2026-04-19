@@ -64,6 +64,7 @@ enum Identity {
     AccountId,
     IdentType,
     IdentValue,
+    IdentVerified,
 }
 
 #[derive(DeriveIden)]
@@ -73,7 +74,6 @@ enum Cert {
     AccountId,
     CertType,
     CertValue,
-    Verified,
 }
 
 #[derive(DeriveIden)]
@@ -332,6 +332,7 @@ impl MigrationTrait for Migration {
                     .col(uuid(Identity::AccountId))
                     .col(text(Identity::IdentType))
                     .col(text(Identity::IdentValue))
+                    .col(boolean(Identity::IdentVerified).default(false))
                     .primary_key(Index::create().col(Identity::Id))
                     .foreign_key(
                         ForeignKey::create()
@@ -366,7 +367,6 @@ impl MigrationTrait for Migration {
                     .col(uuid(Cert::AccountId))
                     .col(text(Cert::CertType))
                     .col(text(Cert::CertValue))
-                    .col(boolean(Cert::Verified).default(false))
                     .primary_key(Index::create().col(Cert::Id))
                     .foreign_key(
                         ForeignKey::create()

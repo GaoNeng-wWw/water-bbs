@@ -9,8 +9,12 @@ pub enum AccountDomainError {
     NotEnoughFreeMoney { required: Money, available: Money },
     #[error("CAN_NOT_FIND_CERT")]
     CanNotFindCert,
-    #[error("CAN_NOT_APPROVE_IDENTITY")]
+    #[error("CAN_NOT_FIND_IDENTITY")]
     CanNotFindIdentity,
+    #[error("IDENTITY_INCONSISTENT")]
+    IdentityInconsistent,
+    #[error("CERT_INCONSISTENT")]
+    CertInconsistent,
 }
 
 #[derive(Clone)]
@@ -18,11 +22,15 @@ pub struct Identity {
     pub id: Uuid,
     pub ident_type: String,
     pub ident_value: String,
+    pub ident_verified: bool,
 }
 
 impl Identity {
     pub fn check(&self, ident_type: &str, ident_value: &str) -> bool {
         self.ident_type == ident_type && self.ident_value == ident_value
+    }
+    pub fn verify(&mut self){
+        self.ident_verified = true;
     }
 }
 
@@ -31,15 +39,11 @@ pub struct Cert {
     pub id: Uuid,
     pub cert_type: String,
     pub cert_value: String,
-    pub verified: bool,
 }
 
 impl Cert {
-    pub fn verify(&mut self){
-        self.verified = true;
-    }
     pub fn check(&self, cert_type: &str, cert_value: &str) -> bool {
-        self.cert_type == cert_type && self.cert_value == cert_value && self.verified
+        self.cert_type == cert_type && self.cert_value == cert_value
     }
 }
 
@@ -59,6 +63,25 @@ pub struct Account {
 }
 
 impl Account {
+    pub fn build(
+        identity: &Identity,
+        cert: &Cert,
+        profile: &Profile,
+        money: &Money,
+    ) -> Self {
+        Self {
+            id: AccountId::build(),
+            money: money.clone(),
+            locked_money: Money::try_new(0).unwrap(),
+            bd: false,
+            identity: vec![identity.clone()],
+            cert: vec![cert.clone()],
+            profile: profile.clone(),
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+            deleted_at: None,
+        }
+    }
     pub fn free_money(&self) -> Money {
         Money::try_new(
             self.money.clone().into_inner() - self.locked_money.clone().into_inner()
@@ -75,6 +98,14 @@ impl Account {
             Ok(())
         }
     }
+    pub fn update_identity(&mut self, ident_type: &str, ident_value: &str) {
+        self.updated_at = Utc::now();
+        self.identity.iter_mut().for_each(|i| {
+            if i.check(ident_type, ident_value) {
+                i.ident_value = ident_value.to_string();
+            }
+        });
+    }
     pub fn add_identity(&mut self, identity: Identity) {
         self.updated_at = Utc::now();
         self.identity.push(identity);
@@ -83,30 +114,55 @@ impl Account {
         self.updated_at = Utc::now();
         self.cert.push(cert);
     }
+    pub fn find_identity(&self, ident_type: &str) -> Vec<&Identity> {
+        self.identity.iter().filter(|i| i.ident_type == ident_type)
+        .collect::<Vec<_>>()
+    }
+    pub fn find_cert(&self, cert_type: &str) -> Vec<&Cert> {
+        self.cert.iter().filter(|c| c.cert_type == cert_type)
+        .collect::<Vec<_>>()
+    }
     // 检查标识符
     pub fn check_identity(&self, ident_type: &str, ident_value: &str) -> Result<(), AccountDomainError> {
+        let ident_exists = self.identity.iter().any(|i| i.ident_type == ident_type);
+        if !ident_exists {
+            return Err(AccountDomainError::CanNotFindIdentity);
+        }
         if self.identity.iter().any(|i| i.check(ident_type, ident_value)) {
             Ok(())
         } else {
-            Err(AccountDomainError::CanNotFindIdentity)
+            Err(AccountDomainError::IdentityInconsistent)
         }
     }
     // 检查凭证
     pub fn check_cert(&self, cert_type: &str, cert_value: &str) -> Result<(), AccountDomainError> {
+        let cert_exists = self.cert.iter().any(|c| c.cert_type == cert_type);
+        if !cert_exists {
+            return Err(AccountDomainError::CanNotFindCert);
+        }
         if self.cert.iter().any(|c| c.check(cert_type, cert_value)) {
             Ok(())
+        } else {
+            Err(AccountDomainError::CertInconsistent)
+        }
+    }
+    // 验证凭证
+    pub fn approve_cert(&mut self, cert_id: &Uuid) -> Result<bool, AccountDomainError> {
+        let cert = self.cert.iter_mut().find(|c| c.id == *cert_id);
+        if let Some(cert) = cert {
+            Ok(cert.check(&cert.cert_type, &cert.cert_value))
         } else {
             Err(AccountDomainError::CanNotFindCert)
         }
     }
-    // 验证凭证
-    pub fn approve_cert(&mut self, cert_id: &Uuid) -> Result<(), AccountDomainError> {
-        let cert = self.cert.iter_mut().find(|c| c.id == *cert_id);
-        if let Some(cert) = cert {
-            cert.verify();
-            Ok(())
-        } else {
-            Err(AccountDomainError::CanNotFindCert)
+
+    pub fn approve_identity(&mut self, ident_id: &Uuid) -> Result<(), AccountDomainError> {
+        self.updated_at = Utc::now();
+        let ident = self.identity.iter_mut().find(|i| i.id == *ident_id);
+        if let Some(ident) = ident {
+            ident.verify();
+            return Ok(())
         }
+        return Err(AccountDomainError::CanNotFindIdentity);
     }
 }

@@ -1,4 +1,6 @@
-#[derive(thiserror::Error, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(thiserror::Error, Debug, Clone, Deserialize, Serialize)]
 pub enum RepositoryError {
     #[error("DATABASE_ERROR")]
     DatabaseError { reason: String  },
