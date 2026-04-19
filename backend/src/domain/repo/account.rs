@@ -4,7 +4,7 @@ use crate::{domain::{ar::account::{Account, Identity}, error::repo::RepositoryEr
 
 
 #[async_trait::async_trait]
-pub trait IAccountRepo {
+pub trait IAccountRepo: Send + Sync {
     async fn incr(&self) -> Result<(), RepositoryError>;
     async fn decr(&self) -> Result<(), RepositoryError>;
     async fn find_account_id_by_ident(&self, identity: &Identity) -> Result<Option<AccountId>, RepositoryError>;

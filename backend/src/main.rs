@@ -5,6 +5,7 @@ pub mod intf;
 pub mod application;
 
 
-fn main() {
-    println!("Hello, world!");
+#[tokio::main]
+async fn main() {
+    intf::http::startup::startup().await;
 }
