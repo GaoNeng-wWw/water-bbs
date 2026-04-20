@@ -5,8 +5,7 @@ use std::sync::Arc;
 use crate::{
     application::account::error::RegistoryError,
     domain::{
-        repo::account::IAccountRepo,
-        service::{mailer::Mailer, verify_code::IVerifyCodeService},
+        config::features::IFeaturePolicyProvider, repo::account::IAccountRepo, service::{mailer::Mailer, verify_code::VerifyCodeService}
     },
 };
 
@@ -20,11 +19,10 @@ pub struct RegisterRequest {
 }
 
 #[derive(Clone)]
-pub struct RegistoryContext {
+pub struct RegistorContext {
     pub repo: Arc<dyn IAccountRepo + Send + Sync>,
-    pub mailer: Arc<dyn Mailer + Send + Sync>,
-    pub verify_code: Arc<dyn IVerifyCodeService + Send + Sync>,
-    pub code_free: bool,
+    pub verify_code: Arc<VerifyCodeService>,
+    pub policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,
 }
 
 #[async_trait::async_trait]
@@ -33,6 +31,6 @@ pub trait Registor {
     async fn perform_registration(
         &self,
         request: &RegisterRequest,
-        context: &RegistoryContext,
+        context: &RegistorContext,
     ) -> Result<(), RegistoryError>;
 }

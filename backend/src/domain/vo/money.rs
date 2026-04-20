@@ -2,7 +2,7 @@ use nutype::nutype;
 
 #[nutype(
     validate(greater_or_equal = 0),
-    derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, PartialOrd, Ord, Into),
+    derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, PartialOrd, Ord, Into, Serialize),
 )]
 pub struct Money(i32);
 

@@ -1,21 +1,28 @@
-#[derive(Clone)]
+use fred::prelude::{KeysInterface, Pool};
+use serde::Serialize;
+
+use crate::domain::{error::IntoApiError, event::verification_code_sent_event::VerificationCodeSentEvent};
+
+#[derive(Clone, Debug)]
 pub struct VerifyCode {
     pub code: String,
     pub target: String,
     pub expires_at: chrono::DateTime<chrono::Utc>,
+    pub channel: Channel,
 }
 
 impl VerifyCode {
-    pub fn new(code: String, target: String, expires_at: Option<chrono::DateTime<chrono::Utc>>) -> Self {
+    pub fn new(code: String, target: String, channel: Channel, expires_at: Option<chrono::DateTime<chrono::Utc>>,) -> Self {
         Self {
             code,
             target,
-            expires_at: expires_at.unwrap_or(chrono::Utc::now() + chrono::Duration::minutes(5))
+            expires_at: expires_at.unwrap_or(chrono::Utc::now() + chrono::Duration::minutes(5)),
+            channel,
         }
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Clone, Debug, thiserror::Error, Serialize)]
 pub enum VerifyCodeServiceError {
     #[error("INVALID_CODE")]
     InvalidCode,
@@ -29,8 +36,75 @@ pub enum VerifyCodeServiceError {
     InfraError,
 }
 
-#[async_trait::async_trait]
-pub trait IVerifyCodeService {
-    async fn verify(&self, code: &str, target: &str) -> Result<(), VerifyCodeServiceError>;
-    async fn put(&self, code: &VerifyCode) -> Result<(), VerifyCodeServiceError>;
+impl IntoApiError for VerifyCodeServiceError {
+    fn status_code(&self) -> u16 {
+        500
+    }
+    fn message(&self) -> String {
+        self.to_string()
+    }
+    fn cause(&self) -> Option<serde_json::Value> {
+        None
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct VerifyCodeService {
+    tx: tokio::sync::broadcast::Sender<VerificationCodeSentEvent>,
+    redis: Pool
+}
+
+#[derive(Clone, Debug)]
+pub enum Channel {
+    Email,
+}
+
+impl VerifyCodeService {
+    pub fn new(tx: tokio::sync::broadcast::Sender<VerificationCodeSentEvent>, redis: Pool) -> Self {
+        Self { tx, redis }
+    }
+    
+    // 发布验证码
+    // 通过指定频道
+    pub async fn send_code(
+        &self,
+        channel: Channel,
+        target: &str,
+        code: &str
+    ) -> Result<(), VerifyCodeServiceError> {
+        let code = VerifyCode::new(code.to_string(), target.to_string(), channel.clone(),None);
+
+        let _:() = self.redis.set(
+            format!("verify_code:{}:{}", code.target,code.code),
+            &code.target,
+            Some(fred::types::Expiration::EXAT(code.expires_at.timestamp())),
+            None,
+            false
+        )
+        .await
+        .map_err(|_| VerifyCodeServiceError::InfraError)?;
+
+
+        self.tx.send(
+            VerificationCodeSentEvent {
+                code,
+                channel,
+                target: target.to_string(),
+            }
+        ).map_err(|_| VerifyCodeServiceError::InfraError)?;
+
+        Ok(())
+    }
+    pub async fn verify_code(&self, target: &str, code: &str) -> Result<(), VerifyCodeServiceError> {
+        let stored_code:Option<String> = self.redis.get(format!("verify_code:{}:{}", target, code))
+        .await
+        .map_err(|_| VerifyCodeServiceError::InfraError)?;
+        if stored_code.is_none() {
+            return Err(VerifyCodeServiceError::InvalidCode);
+        }
+        if stored_code.unwrap() != code {
+            return Err(VerifyCodeServiceError::InvalidCode);
+        }
+        Ok(())
+    }
 }

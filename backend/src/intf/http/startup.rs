@@ -1,13 +1,18 @@
 use std::{sync::Arc, time::Duration};
 
 use fred::{prelude::{Pool, ClientLike, Config, TcpConfig}, types::Builder};
+use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
+use tracing::{info, level_filters::LevelFilter};
 
-use crate::{infra::repo::account::AccountRepo, intf::http::ext::state::AppState};
+use crate::{domain::{event::verification_code_sent_event::VerificationCodeSentEvent, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::account::AccountRepo}, intf::http::ext::state::AppState};
 
-async fn startup_redis() -> Result<Pool, Box<dyn std::error::Error>>{
-    let config = Config::from_url("redis://localhost:6379").unwrap();
-    let pool = Builder::default_centralized()
+#[tracing::instrument(name="redis", skip_all, fields(url=%url))]
+async fn startup_redis(
+    url: &str,
+) -> Result<Pool, Box<dyn std::error::Error>>{
+    let config = Config::from_url(url).unwrap();
+    let pool = Builder::from_config(config)
             .with_connection_config(|config| {
                 config.connection_timeout = Duration::from_secs(5);
                 config.tcp = TcpConfig {
@@ -20,7 +25,10 @@ async fn startup_redis() -> Result<Pool, Box<dyn std::error::Error>>{
     Ok(pool)
 }
 
-async fn setup_database(url: &str) -> Result<DatabaseConnection, DbErr> {
+#[tracing::instrument(name="db", skip_all, fields(url=%url))]
+async fn setup_database(
+    url: &str,
+) -> Result<DatabaseConnection, DbErr> {
     let mut opt = ConnectOptions::new(url.to_owned());
     
     opt.max_connections(100)
@@ -36,12 +44,41 @@ async fn setup_database(url: &str) -> Result<DatabaseConnection, DbErr> {
 
 pub async fn startup(){
 
-    let db = setup_database("sqlite://").await.unwrap();
-    let redis= startup_redis().await.unwrap();
+    tracing_subscriber::fmt()
+        .with_max_level(LevelFilter::INFO) 
+        .init();
+    let root_span = tracing::info_span!("app_startup");
+    let _enter = root_span.enter();
+    
+    info!("Starting application initialization...");
+
+    let db = setup_database("sqlite://water_bbs.db").await.unwrap();
+    let redis= startup_redis("redis://localhost:6379").await.unwrap();
     let account_repo = Arc::new(AccountRepo::new(db, redis.clone()));
+    let loader = RedisConfigLoader::new(redis.clone());
+    let provider = RedisFeaturesProvider::new(Arc::new(loader));
+    let (tx, rx) = tokio::sync::broadcast::channel::<VerificationCodeSentEvent>(100);
+    let verify_code_service = VerifyCodeService::new(tx, redis.clone());
+
+    let smtp_client = SmtpTransport::unencrypted_localhost();
+
+
+    let notification_dispatcher = Arc::new(
+        NotificationDispatcher::new(
+                vec![
+                    Box::new(MailSender::new(smtp_client))
+                ],
+            rx
+        )
+    );
+    tokio::spawn(async move {
+        let _ = notification_dispatcher.run().await;
+    });
     let state = AppState {
         account_repo,
         redis: Arc::new(redis),
+        policy_provider: Arc::new(provider),
+        verify_code_service: Arc::new(verify_code_service),
     };
     let app = axum::Router::new()
     .with_state(state);

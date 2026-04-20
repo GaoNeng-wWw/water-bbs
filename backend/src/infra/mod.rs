@@ -2,5 +2,5 @@ pub mod repo;
 pub mod entity;
 pub mod mapper;
 pub mod mailer;
-pub mod verify_code;
-pub mod config_loader;
+pub mod config;
+pub mod notification;

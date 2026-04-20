@@ -1,9 +1,13 @@
 use crate::{
     application::account::{
         error::RegistoryError,
-        registor::{RegisterRequest, Registor, RegistoryContext},
+        registor::{RegisterRequest, Registor, RegistorContext},
     },
-    domain::{ar::account::{Account, Cert, Identity}, service::{mailer::Mail, verify_code::VerifyCode}, vo::{account_id::AccountId, money::Money, profile::Profile}},
+    domain::{
+        ar::account::{Account, Cert, Identity},
+        service::verify_code::Channel,
+        vo::{account_id::AccountId, money::Money, profile::Profile},
+    },
     shared::random::generator,
 };
 
@@ -16,47 +20,28 @@ impl Registor for MailRegistor {
         value.to_lowercase() == "email" || value.to_lowercase() == "mail"
     }
 
-    async fn perform_registration(
-        &self,
-        request: &RegisterRequest,
-        context: &RegistoryContext,
-    ) -> Result<(), RegistoryError> {
-        if !context.code_free {
+    async fn perform_registration(&self, request: &RegisterRequest, context: &RegistorContext) -> Result<(), RegistoryError> {
+        let features = context.policy_provider.get_features().await?;
+        if !features.enable_captcha {
             let code_val = generator::digital(8);
-            let code = VerifyCode::new(code_val.clone(), request.ident_value.clone(), None);
-            context
-                .verify_code
-                .put(&code)
-                .await
-                .map_err(|err| RegistoryError::InfraError {
-                    cause: err.to_string(),
-                })?;
-    
-            let mail = Mail {
-                to: request.ident_value.clone(),
-                // TODO: 从配置中获取
-                from: "water-bbs@example.com".to_string(),
-                // TODO: 从配置中获取
-                subject: format!("邮箱验证码"),
-                // TODO: 从配置中获取
-                body: format!("验证码为: {}", code_val),
-            };
-            context.mailer.send(&mail)
-                .await
-                .map_err(|err| RegistoryError::InfraError {
-                    cause: err.to_string(),
-                })?;
+            context.verify_code.send_code(Channel::Email, request.ident_value.as_str(), &code_val).await?;
         }
         let ident = Identity {
-            id: uuid::Uuid::now_v7(), ident_type: request.ident_type.clone(), ident_value: request.ident_value.clone(),
-            ident_verified: context.code_free
+            id: uuid::Uuid::now_v7(),
+            ident_type: request.ident_type.clone(),
+            ident_value: request.ident_value.clone(),
+            ident_verified: !features.enable_captcha,
         };
         let account_exists = context.repo.find_account_id_by_ident(&ident).await?.is_some();
         if account_exists {
             return Err(RegistoryError::AccountExists);
         }
-        let cert = Cert { id: uuid::Uuid::now_v7(), cert_type: request.cert_type.clone(), cert_value: request.cert_value.clone() };
-        let profile = Profile { 
+        let cert = Cert {
+            id: uuid::Uuid::now_v7(),
+            cert_type: request.cert_type.clone(),
+            cert_value: request.cert_value.clone(),
+        };
+        let profile = Profile {
             id: uuid::Uuid::now_v7(),
             name: request.name.clone(),
             bio: None,

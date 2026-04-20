@@ -1,6 +1,6 @@
 use fred::prelude::{KeysInterface, Pool};
 
-use crate::infra::config_loader::ConfigLoaderError;
+use crate::domain::{config::loader::Loader, error::config::ConfigLoaderError};
 
 #[derive(Clone)]
 pub struct RedisConfigLoader {
@@ -14,8 +14,8 @@ impl RedisConfigLoader {
 }
 
 #[async_trait::async_trait]
-impl super::Loader for RedisConfigLoader {
-    async fn put<T: serde::ser::Serialize>(&self, path:&str, value: &T) -> Result<(), ConfigLoaderError> {
+impl Loader for RedisConfigLoader {
+    async fn put<T: serde::ser::Serialize + Sync>(&self, path:&str, value: &T) -> Result<(), ConfigLoaderError> {
         let value = serde_json::to_string(value)
         .map_err(|err| ConfigLoaderError::InfraError {
             cause: err.to_string(),
@@ -26,7 +26,7 @@ impl super::Loader for RedisConfigLoader {
         })?;
         Ok(())
     }
-    async fn load<T: serde::de::DeserializeOwned>(&self, path: &str) -> Result<Option<T>, ConfigLoaderError> {
+    async fn load<T: serde::de::DeserializeOwned + Sync>(&self, path: &str) -> Result<Option<T>, ConfigLoaderError> {
         let value: String = self.redis.get(format!("config:{}", path)).await
         .map_err(|err| ConfigLoaderError::InfraError {
             cause: err.to_string(),

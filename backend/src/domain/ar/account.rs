@@ -1,9 +1,10 @@
 use chrono::{DateTime, Utc};
+use serde::Serialize;
 use uuid::Uuid;
 
-use crate::domain::vo::{account_id::AccountId, money::Money, profile::Profile};
+use crate::domain::{error::IntoApiError, vo::{account_id::AccountId, money::Money, profile::Profile}};
 
-#[derive(Clone,Debug, thiserror::Error)]
+#[derive(Clone,Debug, thiserror::Error, Serialize)]
 pub enum AccountDomainError {
     #[error("NOT_ENOUGH_MONEY")]
     NotEnoughFreeMoney { required: Money, available: Money },
@@ -15,7 +16,30 @@ pub enum AccountDomainError {
     IdentityInconsistent,
     #[error("CERT_INCONSISTENT")]
     CertInconsistent,
+    #[error("ACCOUNT_ALREADY_DEACTIVATED")]
+    AccountAlreadyDeactivated,
 }
+
+impl IntoApiError for AccountDomainError {
+    fn status_code(&self) -> u16 {
+        400
+    }
+    fn message(&self) -> String {
+        self.to_string()
+    }
+    
+    fn cause(&self) -> Option<serde_json::Value> {
+        match self {
+            AccountDomainError::NotEnoughFreeMoney { .. } => Some(serde_json::json!(self)),
+            AccountDomainError::CanNotFindCert => None,
+            AccountDomainError::CanNotFindIdentity => None,
+            AccountDomainError::IdentityInconsistent => None,
+            AccountDomainError::CertInconsistent => None,
+            AccountDomainError::AccountAlreadyDeactivated => None,
+        }
+    }
+}
+
 
 #[derive(Clone)]
 pub struct Identity {
@@ -164,5 +188,13 @@ impl Account {
             return Ok(())
         }
         return Err(AccountDomainError::CanNotFindIdentity);
+    }
+
+    pub fn deactivate(&mut self) -> Result<(), AccountDomainError> {
+        if self.deleted_at.is_some() {
+            return Err(AccountDomainError::AccountAlreadyDeactivated);
+        }
+        self.deleted_at = Some(Utc::now());
+        Ok(())
     }
 }

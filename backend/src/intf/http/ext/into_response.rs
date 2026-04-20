@@ -41,17 +41,22 @@ impl From<RepositoryError> for AppError {
     }
 }
 
-// 定义一个专门的内部错误类型
 pub struct InternalException(pub Option<serde_json::Value>);
-
-// impl std::fmt::Display for InternalException { fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result { write!(f, "Internal Error") } }
 impl Exception for InternalException {
     fn status_code(&self) -> StatusCode { StatusCode::INTERNAL_SERVER_ERROR }
     fn message(&self) -> &'static str { "INTERNAL_ERROR" }
     fn cause(&self) -> Option<serde_json::Value> { None }
 }
 
+pub struct HttpException(pub u16, pub String, pub Option<serde_json::Value>);
+
 #[macro_export]
 macro_rules! app_err {
     ($e:expr) => { AppError(Box::new($e)) };
+}
+
+#[macro_export]
+macro_rules! http_exception {
+    ($status:expr,$e:expr) => { crate::intf::http::ext::into_response::HttpException($status, $e, None) };
+    ($status:expr,$e:expr,$cause:expr) => { crate::intf::http::ext::into_response::HttpException($status, $e, $cause) };
 }
