@@ -24,7 +24,7 @@ sea-orm-migration = { version = "2.0.0-rc.38", features = ["runtime-tokio", "sql
 [dependencies]
 anyhow.workspace = true
 axum.workspace = true
-fred.workspace = true
+fred = { workspace = true, features = ["i-hexpire"] }
 jose-jws.workspace = true
 serde.workspace = true
 serde_json.workspace = true

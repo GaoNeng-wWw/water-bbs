@@ -16,7 +16,10 @@ pub enum RepositoryError {
     RedisError { reason: String },
     #[error("THREAD_ERROR")]
     ThreadError { reason: String },
+    #[error("DESERIALIZE_ERROR")]
+    DeserializeError { reason: String },
 }
+
 
 impl IntoApiError for RepositoryError {
     fn status_code(&self) -> u16 {
@@ -34,6 +37,7 @@ impl IntoApiError for RepositoryError {
             RepositoryError::EntityNotFound => None,
             RepositoryError::RedisError { .. } => Some(serde_json::json!(self)),
             RepositoryError::ThreadError { .. } => Some(serde_json::json!(self)),
+            RepositoryError::DeserializeError { reason } => Some(serde_json::json!(self)),
         }
     }
 }

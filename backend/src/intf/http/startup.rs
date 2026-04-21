@@ -5,7 +5,7 @@ use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use tracing::{info, level_filters::LevelFilter};
 
-use crate::{domain::{event::verification_code_sent_event::VerificationCodeSentEvent, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::account::AccountRepo}, intf::http::ext::state::AppState};
+use crate::{application::session::events::session_revoked::SessionRevoked, domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}}, intf::http::ext::state::AppState};
 
 #[tracing::instrument(name="redis", skip_all, fields(url=%url))]
 async fn startup_redis(
@@ -42,12 +42,15 @@ async fn setup_database(
     Database::connect(opt).await
 }
 
+#[tracing::instrument(name="event_bus", skip_all)]
 pub async fn event_startup(
     capacity: usize,
-){
+    session_repo: Arc<dyn ISessionRepo + 'static + Sync + Send>
+) -> Arc<InMemoryEventBus> {
     let bus = Arc::new(InMemoryEventBus::new(capacity));
-    let registry = Registry::new(bus);
-    // registry.register(handler);
+    let registry = Registry::new(bus.clone());
+    registry.register(SessionRevoked::new(session_repo));
+    bus
 }
 
 pub async fn startup(){
@@ -63,6 +66,10 @@ pub async fn startup(){
     let db = setup_database("sqlite://water_bbs.db").await.unwrap();
     let redis= startup_redis("redis://localhost:6379").await.unwrap();
     let account_repo = Arc::new(AccountRepo::new(db, redis.clone()));
+    let session_repo = Arc::new(SessionRepo::new(redis.clone()));
+
+    let bus = event_startup(100, session_repo).await;
+
     let loader = RedisConfigLoader::new(redis.clone());
     let provider = RedisFeaturesProvider::new(Arc::new(loader));
     let (tx, rx) = tokio::sync::broadcast::channel::<VerificationCodeSentEvent>(100);
@@ -87,6 +94,7 @@ pub async fn startup(){
         redis: Arc::new(redis),
         policy_provider: Arc::new(provider),
         verify_code_service: Arc::new(verify_code_service),
+        event_bus: bus
     };
     let app = axum::Router::new()
     .with_state(state);

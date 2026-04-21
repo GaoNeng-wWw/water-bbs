@@ -1,8 +1,7 @@
-use crate::domain::{error::auth_session::SessionError, vo::account_id::AccountId};
+use crate::domain::{error::auth_session::SessionError, vo::{account_id::AccountId, session::{Jti, SessionId}}};
 use chrono::{DateTime, Utc};
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum TokenType {
@@ -12,8 +11,8 @@ pub enum TokenType {
 
 #[derive(Clone, Debug, Deserialize, Serialize, Builder)]
 pub struct Token {
-    #[builder(default=uuid::Uuid::now_v7())]
-    pub jti: Uuid,
+    #[builder(default=Jti::build())]
+    pub jti: Jti,
     pub token: String,
     pub token_type: TokenType,
     pub expires_at: DateTime<Utc>,
@@ -36,7 +35,7 @@ impl Token {
 
 #[derive(Clone, Debug, Deserialize, Serialize, Builder)]
 pub struct AuthSession {
-    pub id: Uuid,
+    pub id: SessionId,
     pub account_id: AccountId,
     pub refresh_token: Token,
     pub access_token: Token,
@@ -52,7 +51,8 @@ impl AuthSession {
 
 #[derive(Clone, Debug, Deserialize, Serialize, Builder)]
 pub struct UserSession {
-    pub id: Uuid,
+    pub ver: i8,
+    pub id: SessionId,
     pub account_id: AccountId,
     #[builder(default=vec![])]
     pub sessions: Vec<AuthSession>,
@@ -87,7 +87,7 @@ impl UserSession {
         self.sessions.push(session);
     }
 
-    pub fn revoke_session(&mut self, session_id: &Uuid) -> Result<(), SessionError> {
+    pub fn revoke_session(&mut self, session_id: &SessionId) -> Result<(), SessionError> {
         let session = self.sessions
             .iter_mut().find(|s| s.id == *session_id)
             .ok_or(SessionError::SessionNotFound { id: session_id.to_string() })?;

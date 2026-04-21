@@ -1,6 +1,7 @@
 use tokio::sync::broadcast;
+use tracing::info;
 
-use crate::domain::event::DomainEvent;
+use crate::domain::{error::handler::HandlerError, event::DomainEvent};
 use std::sync::Arc;
 
 pub mod in_memory_event_bus;
@@ -9,7 +10,7 @@ pub mod in_memory_event_bus;
 #[async_trait::async_trait]
 pub trait EventHandler: Send + Sync {
     async fn precheck(&self, event: &DomainEvent) -> bool;
-    async fn handle(&self, event: &DomainEvent) -> Result<(), String>;
+    async fn handle(&self, event: &DomainEvent) -> Result<(), HandlerError>;
 }
 
 // 事件总线，专注于分发

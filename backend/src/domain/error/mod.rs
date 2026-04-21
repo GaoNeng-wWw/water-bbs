@@ -1,6 +1,7 @@
 pub mod repo;
 pub mod config;
 pub mod auth_session;
+pub mod handler;
 
 pub trait IntoApiError {
     fn status_code(&self) -> u16;
