@@ -5,7 +5,7 @@ use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use tracing::{info, level_filters::LevelFilter};
 
-use crate::{domain::{event::verification_code_sent_event::VerificationCodeSentEvent, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::account::AccountRepo}, intf::http::ext::state::AppState};
+use crate::{domain::{event::verification_code_sent_event::VerificationCodeSentEvent, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::account::AccountRepo}, intf::http::ext::state::AppState};
 
 #[tracing::instrument(name="redis", skip_all, fields(url=%url))]
 async fn startup_redis(
@@ -40,6 +40,14 @@ async fn setup_database(
        .sqlx_logging(true);
 
     Database::connect(opt).await
+}
+
+pub async fn event_startup(
+    capacity: usize,
+){
+    let bus = Arc::new(InMemoryEventBus::new(capacity));
+    let registry = Registry::new(bus);
+    // registry.register(handler);
 }
 
 pub async fn startup(){

@@ -4,3 +4,4 @@ pub mod mapper;
 pub mod mailer;
 pub mod config;
 pub mod notification;
+pub mod eventbus;

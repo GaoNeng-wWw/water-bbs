@@ -1,7 +1,7 @@
 use nutype::nutype;
 
 #[nutype(
-    derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref),
+    derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, Deserialize, Serialize,),
 )]
 pub struct AccountId(uuid::Uuid);
 
