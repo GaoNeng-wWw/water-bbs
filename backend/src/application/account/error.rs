@@ -59,6 +59,8 @@ pub enum AccountServiceError {
     RepoError(#[from] RepositoryError),
     #[error(transparent)]
     DomainError(#[from] AccountDomainError),
+    #[error(transparent)]
+    TokenServiceError(#[from] crate::domain::error::service::token::TokenServiceError),
 }
 
 impl IntoApiError for AccountServiceError {
@@ -72,6 +74,7 @@ impl IntoApiError for AccountServiceError {
             AccountServiceError::AccountNotFound => 404,
             AccountServiceError::RepoError(repository_error) => repository_error.status_code(),
             AccountServiceError::DomainError(account_domain_error) => account_domain_error.status_code(),
+            AccountServiceError::TokenServiceError(token_service_error) => token_service_error.status_code(),
         }
     }
 
@@ -89,6 +92,7 @@ impl IntoApiError for AccountServiceError {
             AccountServiceError::PolicyError(policy_error) => policy_error.cause(),
             AccountServiceError::RepoError(repository_error) => repository_error.cause(),
             AccountServiceError::DomainError(account_domain_error) => account_domain_error.cause(),
+            AccountServiceError::TokenServiceError(token_service_error) => token_service_error.cause(),
         }
     }
 }

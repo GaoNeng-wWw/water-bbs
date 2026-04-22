@@ -26,9 +26,9 @@ impl ITokenService for JwtService {
 
         let jwt = Jwt::builder_jwt()
             .build(claims)
-            .map_err(|err| TokenServiceError::InvalidHeader(err))?;
+            .map_err(|err| TokenServiceError::InvalidHeader { cause: err.to_string() })?;
         let signed_jwt = jwt.sign(&mut signer)
-            .map_err(|err| TokenServiceError::Sign(err))?;
+            .map_err(|err| TokenServiceError::Sign { cause: err.to_string() })?;
         let token = signed_jwt.to_string();
 
         let jwt_ar = Token {

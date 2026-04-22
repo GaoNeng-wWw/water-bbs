@@ -1,9 +1,9 @@
 use jose::{header::JoseHeaderBuilderError, jws::SignError};
-use serde_json::Error;
+use serde::Serialize;
 
 use crate::domain::error::IntoApiError;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, thiserror::Error, Clone, Serialize)]
 pub enum TokenServiceError {
     #[error("TOKEN_ALREADY_REVOKED")]
     TokenAlreadyRevoked,
@@ -18,13 +18,13 @@ pub enum TokenServiceError {
     #[error("HEADER_COUNT_MISMATCH_ERROR")]
     HeaderCountMismatch,
     #[error("SERIALIZE_HEADER_ERROR")]
-    SerializeHeader(#[source] serde_json::Error),
+    SerializeHeader{ cause: String },
     #[error("EMPTY_PROTECTED_HEADER")]
     EmptyProtectedHeader,
     #[error("INVALID_HEADER")]
-    InvalidHeader(#[source] JoseHeaderBuilderError),
+    InvalidHeader{ cause: String },
     #[error("SIGN_FAIL")]
-    Sign(#[source] SignError<Error>),
+    Sign { cause: String },
     #[error("REQUIRE_SIGN_KEY")]
     RequireSignKey,
     #[error("REQUIRE_VERIFY_KEY")]
