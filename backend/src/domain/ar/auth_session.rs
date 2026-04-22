@@ -1,5 +1,5 @@
 use crate::domain::{error::auth_session::SessionError, vo::{account_id::AccountId, session::{Jti, SessionId}}};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Duration, Utc};
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
@@ -15,7 +15,7 @@ pub struct Token {
     pub jti: Jti,
     pub token: String,
     pub token_type: TokenType,
-    pub expires_at: DateTime<Utc>,
+    pub ttl: i64,
     pub created_at: DateTime<Utc>,
     pub revoked_at: Option<DateTime<Utc>>,
 }
@@ -29,7 +29,7 @@ impl Token {
         Ok(())
     }
     pub fn is_expired(&self) -> bool {
-        self.expires_at < Utc::now()
+        self.created_at + Duration::seconds(self.ttl) < Utc::now()
     }
 }
 
