@@ -1,8 +1,9 @@
+use serde::Serialize;
 use thiserror::Error;
 
 use crate::domain::error::IntoApiError;
 
-#[derive(Debug, Error)]
+#[derive(Debug, Error, Clone, Serialize)]
 pub enum SessionError {
     #[error("SESSION_NOT_FOUND")]
     SessionNotFound { id: String },
