@@ -44,6 +44,6 @@ pub async fn handler(
         state.policy_provider.clone(),
     )
     .await
-    .map_err(|err| {http_exception!(err.status_code(), err.message(), err.cause())});
+    .map_err(|err| {http_exception!(err.status_code(), err.message(), err.cause())})?;
     Ok(())
 }

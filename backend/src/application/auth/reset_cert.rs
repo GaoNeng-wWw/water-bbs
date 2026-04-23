@@ -47,6 +47,8 @@ pub async fn handle(
         return Err(AuthServiceError::CertInconsistent);
     }
     account.update_cert(&req.cert_type, &req.cert_value, &req.old_value_cert)?;
+    
+    account_repo.update_account(&account).await?;
 
     bus.publish_auto_try(
         crate::domain::event::DomainEvent::Auth(

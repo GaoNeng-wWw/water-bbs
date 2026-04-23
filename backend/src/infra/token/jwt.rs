@@ -6,8 +6,7 @@ use serde_json::{Map, Value};
 use crate::domain::{ar::auth_session::Token, error::service::token::TokenServiceError, service::token::{ITokenService, IssueTokenRequest}, vo::session::Jti};
 
 #[derive(Clone,Debug)]
-pub struct JwtService {
-}
+pub struct JwtService {}
 
 impl ITokenService for JwtService {
     fn issue_token(&self,request: &IssueTokenRequest, key: &JsonWebKey) -> Result<Token,TokenServiceError>  {

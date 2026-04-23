@@ -5,13 +5,13 @@ use crate::domain::error::config::PolicyError;
 #[derive(Clone, Default, Deserialize, Serialize)]
 pub struct Features {
     pub enable_invite: bool,
-    pub enable_captcha: bool
+    pub enable_register_captcha: bool
 }
 
 impl Features {
     pub fn can_register(&self, invite_code: Option<&str>, captcha: Option<&str>) -> bool {
         let mut res = true;
-        if self.enable_captcha {
+        if self.enable_register_captcha {
             res &= captcha.is_some();
         }
         if self.enable_invite {

@@ -1,5 +1,5 @@
 use fred::prelude::{KeysInterface, Pool};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::domain::{error::IntoApiError, event::verification_code_sent_event::VerificationCodeSentEvent};
 
@@ -22,7 +22,7 @@ impl VerifyCode {
     }
 }
 
-#[derive(Clone, Debug, thiserror::Error, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, thiserror::Error)]
 pub enum VerifyCodeServiceError {
     #[error("INVALID_CODE")]
     InvalidCode,

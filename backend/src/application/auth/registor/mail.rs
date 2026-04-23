@@ -22,7 +22,7 @@ impl Registor for MailRegistor {
 
     async fn perform_registration(&self, request: &RegisterRequest, context: &RegistorContext) -> Result<(), RegistoryError> {
         let features = context.policy_provider.get_features().await?;
-        if !features.enable_captcha {
+        if !features.enable_register_captcha {
             let code_val = generator::digital(8);
             context.verify_code.send_code(Channel::Email, request.ident_value.as_str(), &code_val).await?;
         }
@@ -30,7 +30,7 @@ impl Registor for MailRegistor {
             id: uuid::Uuid::now_v7(),
             ident_type: request.ident_type.clone(),
             ident_value: request.ident_value.clone(),
-            ident_verified: !features.enable_captcha,
+            ident_verified: !features.enable_register_captcha,
         };
         let account_exists = context.repo.find_account_id_by_ident(&ident).await?.is_some();
         if account_exists {

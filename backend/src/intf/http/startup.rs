@@ -94,7 +94,9 @@ pub async fn startup(){
         redis: Arc::new(redis),
         policy_provider: Arc::new(provider),
         verify_code_service: Arc::new(verify_code_service),
-        event_bus: bus
+        event_bus: bus,
+        session_repo,
+        jwk: todo!(),
     };
     let app = axum::Router::new()
     .with_state(state);

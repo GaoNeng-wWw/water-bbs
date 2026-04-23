@@ -14,7 +14,7 @@ pub struct LoginRequest {
 }
 
 #[derive(Clone, Debug)]
-pub struct LoginResposne {
+pub struct LoginResponse {
     pub access_token: String,
     pub refresh_token: String,
 }
@@ -25,7 +25,7 @@ pub async fn handler(
     token_service: Arc<dyn ITokenService>,
     session_repo: Arc<dyn ISessionRepo>,
     key: Arc<JsonWebKey>
-) -> Result<LoginResposne, AuthServiceError> {
+) -> Result<LoginResponse, AuthServiceError> {
     let account = repo.find_account_id_by_ident(
         &Identity {
             id: uuid::Uuid::now_v7(),
@@ -98,7 +98,7 @@ pub async fn handler(
         );
     user_session.add_session(session);
     session_repo.upsert(&user_session).await?;
-    Ok(LoginResposne {
+    Ok(LoginResponse {
         access_token: at.token,
         refresh_token: rt.token,
     })

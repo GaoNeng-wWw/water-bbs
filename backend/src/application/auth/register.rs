@@ -37,7 +37,7 @@ pub async fn handle(
     let features = policy_provider.get_features().await?;
 
     if !features.can_register(req.invite_code.as_deref(), req.captcha.as_deref()) {
-        if features.enable_captcha && !req.captcha.is_some() {
+        if features.enable_register_captcha && !req.captcha.is_some() {
             return Err(AuthServiceError::CaptchaRequire);
         }
         if features.enable_invite && !req.invite_code.is_some() {

@@ -1,10 +1,14 @@
 use std::sync::Arc;
 
-use crate::{domain::{config::features::IFeaturePolicyProvider, repo::account::IAccountRepo, service::verify_code::VerifyCodeService}, infra::eventbus::EventBus};
+use jose::JsonWebKey;
+
+use crate::{domain::{config::features::IFeaturePolicyProvider, repo::{account::IAccountRepo, session::ISessionRepo}, service::verify_code::VerifyCodeService}, infra::eventbus::EventBus};
 
 #[derive(Clone)]
 pub struct AppState {
     pub account_repo: Arc<dyn IAccountRepo>,
+    pub session_repo: Arc<dyn ISessionRepo>,
+    pub jwk: Arc<JsonWebKey>,
     pub event_bus: Arc<dyn EventBus>,
     pub redis: Arc<fred::prelude::Pool>,
     pub policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,

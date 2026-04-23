@@ -4,7 +4,7 @@ use crate::domain::error::repo::RepositoryError;
 
 pub trait Exception {
     fn status_code(&self) -> StatusCode;
-    fn message(&self) -> &'static str;
+    fn message(&self) -> &str;
     fn cause(&self) -> Option<serde_json::Value>;
 }
 
@@ -49,6 +49,27 @@ impl Exception for InternalException {
 }
 
 pub struct HttpException(pub u16, pub String, pub Option<serde_json::Value>);
+
+impl Exception for HttpException {
+    fn status_code(&self) -> StatusCode {
+        StatusCode::from_u16(self.0).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR)
+    }
+
+    fn message(&self) -> &str {
+        &self.1
+    }
+
+    fn cause(&self) -> Option<serde_json::Value> {
+        self.2.clone()
+    }
+}
+
+impl From<HttpException> for AppError {
+    fn from(value: HttpException) -> Self {
+        Self(Box::new(value))
+    }
+}
+
 
 #[macro_export]
 macro_rules! app_err {
