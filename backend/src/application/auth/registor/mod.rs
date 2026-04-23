@@ -3,7 +3,7 @@ pub mod mail;
 use std::sync::Arc;
 
 use crate::{
-    application::account::error::RegistoryError,
+    application::auth::error::RegistoryError,
     domain::{
         config::features::IFeaturePolicyProvider, repo::account::IAccountRepo, service::{mailer::Mailer, verify_code::VerifyCodeService}
     },

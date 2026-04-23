@@ -3,7 +3,7 @@ use std::sync::Arc;
 use derive_builder::Builder;
 
 use crate::{
-    application::account::{
+    application::auth::{
         error::AccountServiceError,
         registor::{RegisterRequest, Registor, RegistorContext},
     },
