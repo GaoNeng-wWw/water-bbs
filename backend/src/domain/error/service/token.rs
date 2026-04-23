@@ -1,4 +1,3 @@
-use jose::{header::JoseHeaderBuilderError, jws::SignError};
 use serde::Serialize;
 
 use crate::domain::error::IntoApiError;
@@ -32,7 +31,17 @@ pub enum TokenServiceError {
     #[error("INVALID_KEY")]
     InvalidKey,
     #[error("DESERIALIZE_FAIL")]
-    DeserializeFail { cause: String }
+    DeserializeFail { cause: String },
+    #[error("SERIALIZE_FAIL")]
+    SerializeFail { cause: String },
+    #[error("CAN_NOT_CREATE_SIGNER")]
+    CanNotCreateSigner {cause:String},
+    #[error("CAN_NOT_CREATE_VERIFIER")]
+    CanNotCreateVerifier { cause: String },
+    #[error("SIGN_TOKEN_FAIL")]
+    SignTokenFail { cause: String },
+    #[error("VERIFY_FAIL")]
+    VerifyFail
 }
 
 impl IntoApiError for TokenServiceError {

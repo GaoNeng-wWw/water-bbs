@@ -1,6 +1,6 @@
 
 use chrono::{Duration, Utc};
-use jose::{JsonWebKey, Jwt, UntypedAdditionalProperties, format::{Compact, DecodeFormat}, jwk::{JwkSigner, JwkVerifier}, jws::{Signer, Unverified}, jwt::Claims, policy::{Checkable, StandardPolicy}};
+use josekit::jwt::{self, JwtPayload};
 use serde_json::{Map, Value};
 
 use crate::domain::{ar::auth_session::Token, error::service::token::TokenServiceError, service::token::{ITokenService, IssueTokenRequest}, vo::session::Jti};
@@ -9,26 +9,27 @@ use crate::domain::{ar::auth_session::Token, error::service::token::TokenService
 pub struct JwtService {}
 
 impl ITokenService for JwtService {
-    fn issue_token(&self,request: &IssueTokenRequest, key: &JsonWebKey) -> Result<Token,TokenServiceError>  {
+    fn issue_token(&self,request: &IssueTokenRequest, key: &josekit::jwk::Jwk) -> Result<Token,TokenServiceError>  {
         let jti = Jti::build();
         let key = key.clone();
-        if !key.is_signing_key() {
-            return Err(TokenServiceError::RequireSignKey)
-        }
-        let policy = StandardPolicy::default();
-        let mut signer: JwkSigner = key
-            .check(policy)
-            .map_err(|_| TokenServiceError::InvalidKey)?
-            .try_into()
-            .map_err(|_| TokenServiceError::InvalidKey)?;
-        let claims:Claims<Map<String, Value>> = request.clone().into();
+        let mut header = josekit::jws::JwsHeader::new();
+        header.set_token_type("jwt");
 
-        let jwt = Jwt::builder_jwt()
-            .build(claims)
-            .map_err(|err| TokenServiceError::InvalidHeader { cause: err.to_string() })?;
-        let signed_jwt = jwt.sign(&mut signer)
-            .map_err(|err| TokenServiceError::Sign { cause: err.to_string() })?;
-        let token = signed_jwt.to_string();
+        let signer = josekit::jws::RS256.signer_from_jwk(&key)
+            .map_err(|err| TokenServiceError::CanNotCreateSigner { cause: err.to_string() })?;
+
+        let payload_map = serde_json::to_value(request.clone())
+            .map_err(|err| TokenServiceError::SerializeFail { cause: err.to_string() })?;
+
+        let mut payload = JwtPayload::new();
+        if let Value::Object(mut map) = payload_map {
+            map.insert("jti".to_owned(), Value::String(jti.to_string()));
+            let payload_handle = josekit::jwt::JwtPayload::from_map(map)
+                .map_err(|err| TokenServiceError::SerializeFail { cause: err.to_string() })?;
+            payload = payload_handle;
+        }
+        let token = jwt::encode_with_signer(&payload,&header,&signer)
+            .map_err(|err| TokenServiceError::SignTokenFail { cause: err.to_string() })?;
 
         let jwt_ar = Token {
             jti,
@@ -38,7 +39,7 @@ impl ITokenService for JwtService {
             created_at: Utc::now(),
             revoked_at: None,
         };
-        
+    
         Ok(jwt_ar)
     }
 
@@ -50,52 +51,19 @@ impl ITokenService for JwtService {
         }
     }
 
-    fn verify_token(&self,token_str: &str, key: &JsonWebKey) -> Result<Token,TokenServiceError>  {
-        if key.is_signing_key() {
-            return Err(TokenServiceError::RequireVerifyKey)
-        }
+    fn verify_token(&self,token_str: &str, key: &josekit::jwk::Jwk) -> Result<Token,TokenServiceError>  {
         let key = key.clone();
-        let policy = StandardPolicy::default();
-        let mut verifier: JwkVerifier = key.check(policy)
-            .map_err(|_| TokenServiceError::InvalidKey)?
-            .try_into()
-            .map_err(|_| TokenServiceError::InvalidKey)?;
-        let encoded: Compact = token_str.parse()
-            .map_err(|_| TokenServiceError::InvalidToken)?;
-        let unverified: Unverified<Jwt<UntypedAdditionalProperties>> = Jwt::decode(encoded)
-            .map_err(|_| TokenServiceError::InvalidToken)?;
-        let verified = unverified.verify(&mut verifier)
-            .map_err(|_| TokenServiceError::InvalidSignature)?;
-        let payload = verified.payload();
-        let header = verified.header();
+        let verifier = josekit::jws::RS256.verifier_from_jwk(&key)
+            .map_err(|err| TokenServiceError::CanNotCreateVerifier { cause: err.to_string() })?;
+        
+        let (payload, header) = josekit::jwt::decode_with_verifier(token_str, &verifier)
+            .map_err(|err| TokenServiceError::VerifyFail)?;
 
-        let mut token_data = payload.additional.clone();
-        
+        let claims = payload.claims_set();
+        let mut token_data = claims.clone();
         token_data.insert("token".to_string(), token_str.into());
-        
-        let token = serde_json::from_value::<Token>(Value::Object(token_data))
+        let token:Token = serde_json::from_value(Value::Object(token_data))
             .map_err(|err| TokenServiceError::DeserializeFail { cause: err.to_string() })?;
         Ok(token)
-    }
-}
-
-
-impl From<IssueTokenRequest> for Claims<Map<String, Value>> {
-    fn from(req: IssueTokenRequest) -> Self {
-
-        let additional = req.meta.iter().map(|(k, v)| {
-            (k.clone(), serde_json::Value::String(v.clone()))
-        }).collect();
-        let exp_at = Utc::now() + Duration::seconds(req.ttl);
-        Claims {
-            additional,
-            issuer: Some(req.issuer.clone()),
-            subject: Some(req.sub.to_string()),
-            audience: None,
-            expiration: Some(exp_at.timestamp() as u64),
-            not_before: None,
-            issued_at: Some(Utc::now().timestamp() as u64),
-            jwt_id: Some(Jti::build().to_string()),
-        }
     }
 }

@@ -68,7 +68,7 @@ pub async fn startup(){
     let account_repo = Arc::new(AccountRepo::new(db, redis.clone()));
     let session_repo = Arc::new(SessionRepo::new(redis.clone()));
 
-    let bus = event_startup(100, session_repo).await;
+    let bus = event_startup(100, session_repo.clone()).await;
 
     let loader = RedisConfigLoader::new(redis.clone());
     let provider = RedisFeaturesProvider::new(Arc::new(loader));
@@ -95,11 +95,11 @@ pub async fn startup(){
         policy_provider: Arc::new(provider),
         verify_code_service: Arc::new(verify_code_service),
         event_bus: bus,
-        session_repo,
-        jwk: todo!(),
+        session_repo: session_repo,
+        jwk: Arc::new(josekit::jwk::Jwk::generate_rsa_key(4096).unwrap())
     };
-    let app = axum::Router::new()
-    .with_state(state);
+    let app = axum::Router::new();
+    // .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 

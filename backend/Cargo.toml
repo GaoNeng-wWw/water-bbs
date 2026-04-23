@@ -13,7 +13,6 @@ members = [
 anyhow = "1.0.102"
 axum = "0.8.9"
 fred = "10.1.0"
-jose-jws = "0.1.2"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 thiserror = "2.0.18"
@@ -25,7 +24,6 @@ sea-orm-migration = { version = "2.0.0-rc.38", features = ["runtime-tokio", "sql
 anyhow.workspace = true
 axum.workspace = true
 fred = { workspace = true, features = ["i-hexpire"] }
-jose-jws.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
@@ -43,7 +41,7 @@ lettre = "0.11.21"
 derive_builder = "0.20.2"
 tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
-jose = { version = "0.0.2", features = ["crypto-ring"] }
+josekit = "0.10.3"
 
 [profile.dev]
 opt-level = 0        # 不进行优化，编译速度最快

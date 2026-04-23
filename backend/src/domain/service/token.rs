@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
 use async_trait::async_trait;
-use jose::JsonWebKey;
+use serde::Serialize;
 
 use crate::domain::{ar::auth_session::{Token, TokenType}, error::service::token::TokenServiceError, vo::account_id::AccountId};
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct IssueTokenRequest {
     pub sub: AccountId,
     pub token_type: TokenType,
@@ -16,7 +16,7 @@ pub struct IssueTokenRequest {
 
 #[async_trait]
 pub trait ITokenService {
-    fn issue_token(&self, request: &IssueTokenRequest, key: &JsonWebKey) -> Result<Token, TokenServiceError>;
+    fn issue_token(&self, request: &IssueTokenRequest, key: &josekit::jwk::Jwk) -> Result<Token, TokenServiceError>;
     fn revoke_token(&self, token: &Token) -> Result<Token, TokenServiceError>;
-    fn verify_token(&self, token_str: &str, key: &JsonWebKey) -> Result<Token, TokenServiceError>;
+    fn verify_token(&self, token_str: &str, key: &josekit::jwk::Jwk) -> Result<Token, TokenServiceError>;
 }

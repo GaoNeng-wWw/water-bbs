@@ -1,7 +1,6 @@
 use std::{collections::HashMap, sync::Arc};
 
 use chrono::{Duration, Utc};
-use jose::JsonWebKey;
 
 use crate::{application::auth::error::AuthServiceError, domain::{ar::{account::Identity, auth_session::{AuthSessionBuilder, UserSession}}, repo::{account::IAccountRepo, session::ISessionRepo}, service::token::{ITokenService, IssueTokenRequest}, vo::session::SessionId}};
 
@@ -24,7 +23,7 @@ pub async fn handler(
     repo: Arc<dyn IAccountRepo>,
     token_service: Arc<dyn ITokenService>,
     session_repo: Arc<dyn ISessionRepo>,
-    key: Arc<JsonWebKey>
+    key: Arc<josekit::jwk::Jwk>
 ) -> Result<LoginResponse, AuthServiceError> {
     let account = repo.find_account_id_by_ident(
         &Identity {
