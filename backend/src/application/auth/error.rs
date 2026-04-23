@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::domain::{ar::account::AccountDomainError, error::{IntoApiError, config::PolicyError, repo::RepositoryError}, service::verify_code::VerifyCodeServiceError};
+use crate::{domain::{ar::account::AccountDomainError, error::{IntoApiError, config::PolicyError, repo::RepositoryError}, service::verify_code::VerifyCodeServiceError}, infra::error::InfraError};
 
 #[derive(thiserror::Error, Debug, Clone, Serialize)]
 pub enum RegistoryError {
@@ -42,17 +42,25 @@ impl IntoApiError for RegistoryError {
 }
 
 #[derive(thiserror::Error, Debug, Clone, Serialize)]
-pub enum AccountServiceError {
+pub enum AuthServiceError {
     #[error(transparent)]
     RegistoryError(#[from] RegistoryError),
     #[error("POLICY_ERROR")]
     PolicyError(#[from] PolicyError),
     #[error("CAPTCHA_REQUIRE")]
     CaptchaRequire,
+    #[error("CERT_INCONSISTENT")]
+    CertInconsistent,
     #[error("INVITE_CODE_REQUIRE")]
     InviteCodeRequire,
     #[error("UNSUPPORTED_IDENT_TYPE")]
     UnsupportedIdentType { ident_type: String },
+    #[error("CERT_NOT_FOUND")]
+    CertNotFound { cert_type: String },
+    #[error("IDENT_NOT_FOUND")]
+    IdentNotFound { ident_type: String },
+    #[error("UNVERIFIED_IDENTIFIER")]
+    UnverifiedIdentifier { iden_type: String, ident_value: String },
     #[error("ACCOUNT_NOT_FOUND")]
     AccountNotFound,
     #[error(transparent)]
@@ -62,22 +70,35 @@ pub enum AccountServiceError {
     #[error(transparent)]
     TokenServiceError(#[from] crate::domain::error::service::token::TokenServiceError),
     #[error(transparent)]
-    SessionDomainError(#[from] crate::domain::error::auth_session::SessionError)
+    SessionDomainError(#[from] crate::domain::error::auth_session::SessionError),
+    #[error("MFA_REQURIE")]
+    MfaRequire,
+    #[error("MFA_REJECT")]
+    MfaReject,
+    #[error(transparent)]
+    InfraError(#[from] InfraError),
 }
 
-impl IntoApiError for AccountServiceError {
+impl IntoApiError for AuthServiceError {
     fn status_code(&self) -> u16 {
         match self {
-            AccountServiceError::RegistoryError(registory_error) => registory_error.status_code(),
-            AccountServiceError::PolicyError(policy_error) => policy_error.status_code(),
-            AccountServiceError::CaptchaRequire => 400,
-            AccountServiceError::InviteCodeRequire => 400,
-            AccountServiceError::UnsupportedIdentType { .. } => 400,
-            AccountServiceError::AccountNotFound => 404,
-            AccountServiceError::RepoError(repository_error) => repository_error.status_code(),
-            AccountServiceError::DomainError(account_domain_error) => account_domain_error.status_code(),
-            AccountServiceError::TokenServiceError(token_service_error) => token_service_error.status_code(),
-            AccountServiceError::SessionDomainError(err) => err.status_code()
+            AuthServiceError::RegistoryError(registory_error) => registory_error.status_code(),
+            AuthServiceError::PolicyError(policy_error) => policy_error.status_code(),
+            AuthServiceError::CaptchaRequire => 400,
+            AuthServiceError::InviteCodeRequire => 400,
+            AuthServiceError::UnsupportedIdentType { .. } => 400,
+            AuthServiceError::AccountNotFound => 404,
+            AuthServiceError::RepoError(repository_error) => repository_error.status_code(),
+            AuthServiceError::DomainError(account_domain_error) => account_domain_error.status_code(),
+            AuthServiceError::TokenServiceError(token_service_error) => token_service_error.status_code(),
+            AuthServiceError::SessionDomainError(err) => err.status_code(),
+            AuthServiceError::MfaRequire => 403,
+            AuthServiceError::CertNotFound { cert_type } => 404,
+            AuthServiceError::CertInconsistent => 403,
+            AuthServiceError::InfraError(infra_error) => infra_error.status_code(),
+            AuthServiceError::MfaReject => 400,
+            AuthServiceError::IdentNotFound { ident_type } => 404,
+            AuthServiceError::UnverifiedIdentifier { iden_type, ident_value } => 400,
         }
     }
 
@@ -87,16 +108,23 @@ impl IntoApiError for AccountServiceError {
     
     fn cause(&self) -> Option<serde_json::Value> {
         match self {
-            AccountServiceError::CaptchaRequire => None,
-            AccountServiceError::InviteCodeRequire => None,
-            AccountServiceError::AccountNotFound => None,
-            AccountServiceError::UnsupportedIdentType { .. } => Some(serde_json::json!(self)),
-            AccountServiceError::RegistoryError(registory_error) => registory_error.cause(),
-            AccountServiceError::PolicyError(policy_error) => policy_error.cause(),
-            AccountServiceError::RepoError(repository_error) => repository_error.cause(),
-            AccountServiceError::DomainError(account_domain_error) => account_domain_error.cause(),
-            AccountServiceError::TokenServiceError(token_service_error) => token_service_error.cause(),
-            AccountServiceError::SessionDomainError(err) => err.cause()
+            AuthServiceError::CaptchaRequire => None,
+            AuthServiceError::InviteCodeRequire => None,
+            AuthServiceError::AccountNotFound => None,
+            AuthServiceError::UnsupportedIdentType { .. } => Some(serde_json::json!(self)),
+            AuthServiceError::RegistoryError(registory_error) => registory_error.cause(),
+            AuthServiceError::PolicyError(policy_error) => policy_error.cause(),
+            AuthServiceError::RepoError(repository_error) => repository_error.cause(),
+            AuthServiceError::DomainError(account_domain_error) => account_domain_error.cause(),
+            AuthServiceError::TokenServiceError(token_service_error) => token_service_error.cause(),
+            AuthServiceError::SessionDomainError(err) => err.cause(),
+            AuthServiceError::MfaRequire => None,
+            AuthServiceError::CertNotFound { .. } => Some(serde_json::json!(self)),
+            AuthServiceError::CertInconsistent => None,
+            AuthServiceError::InfraError(infra_error) => infra_error.cause(),
+            AuthServiceError::MfaReject => None,
+            AuthServiceError::IdentNotFound { .. } => None,
+            AuthServiceError::UnverifiedIdentifier { .. } => None,
         }
     }
 }

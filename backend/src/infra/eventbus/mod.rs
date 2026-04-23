@@ -1,10 +1,11 @@
 use tokio::sync::broadcast;
 use tracing::info;
 
-use crate::domain::{error::handler::HandlerError, event::DomainEvent};
+use crate::{domain::{error::handler::HandlerError, event::DomainEvent}, infra::eventbus::error::EventBusError};
 use std::sync::Arc;
 
 pub mod in_memory_event_bus;
+pub mod error;
 
 // 事件处理
 #[async_trait::async_trait]
@@ -15,7 +16,8 @@ pub trait EventHandler: Send + Sync {
 
 // 事件总线，专注于分发
 pub trait EventBus: Send + Sync {
-    fn publish(&self, event: DomainEvent);
+    fn publish(&self, event: DomainEvent) -> Result<usize, EventBusError>;
+    fn publish_auto_try(&self, event: DomainEvent, tries: Option<i32>) -> Result<usize, EventBusError>;
     fn subscribe(&self) -> broadcast::Receiver<Arc<DomainEvent>>;
 }
 

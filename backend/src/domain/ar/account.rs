@@ -130,6 +130,27 @@ impl Account {
             }
         });
     }
+    pub fn update_cert(
+        &mut self,
+        cert_type: &str,
+        cert_value: &str,
+        confirm_value: &str
+    ) -> Result<(), AccountDomainError>{
+        self.updated_at = Utc::now();
+        
+        let old_cert = self.find_cert(&cert_type).ok_or(AccountDomainError::CanNotFindCert)?;
+        if !old_cert.check(&cert_type, confirm_value) {
+            return Err(AccountDomainError::CertInconsistent);
+        }
+        self.cert.iter_mut().for_each(|i| {
+            if i.cert_type == cert_type {
+                i.cert_value = cert_value.to_owned()
+            }
+        });
+
+        Ok(())
+
+    }
     pub fn add_identity(&mut self, identity: Identity) {
         self.updated_at = Utc::now();
         self.identity.push(identity);
@@ -138,13 +159,17 @@ impl Account {
         self.updated_at = Utc::now();
         self.cert.push(cert);
     }
-    pub fn find_identity(&self, ident_type: &str) -> Vec<&Identity> {
+    pub fn find_identity(&self, ident_type: &str) -> Option<Identity> {
         self.identity.iter().filter(|i| i.ident_type == ident_type)
         .collect::<Vec<_>>()
+        .first()
+        .cloned().cloned()
     }
-    pub fn find_cert(&self, cert_type: &str) -> Vec<&Cert> {
+    pub fn find_cert(&self, cert_type: &str) -> Option<Cert> {
         self.cert.iter().filter(|c| c.cert_type == cert_type)
         .collect::<Vec<_>>()
+        .first()
+        .cloned().cloned()
     }
     // 检查标识符
     pub fn check_identity(&self, ident_type: &str, ident_value: &str) -> Result<(), AccountDomainError> {
@@ -197,4 +222,5 @@ impl Account {
         self.deleted_at = Some(Utc::now());
         Ok(())
     }
+
 }

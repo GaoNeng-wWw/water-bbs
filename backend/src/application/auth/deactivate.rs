@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AccountServiceError, domain::{ar::account::Identity, event::{DomainEvent, EventEnvelope}, repo::{account::IAccountRepo, session::ISessionRepo}}, infra::eventbus::EventBus};
+use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, event::{DomainEvent, EventEnvelope}, repo::{account::IAccountRepo, session::ISessionRepo}}, infra::eventbus::EventBus};
 
 pub struct Request {
     pub ident_type: String,
@@ -12,7 +12,7 @@ pub async fn handle(
     repo: Arc<dyn IAccountRepo>,
     session_repo: Arc<dyn ISessionRepo>,
     event_bus: Arc<dyn EventBus>
-) -> Result<(), AccountServiceError> {
+) -> Result<(), AuthServiceError> {
     let account = repo.find_account_id_by_ident(
         &Identity {
             ident_type: req.ident_type,
@@ -22,10 +22,10 @@ pub async fn handle(
         }
     )
     .await?;
-    let account_id = account.ok_or(AccountServiceError::AccountNotFound)?;
+    let account_id = account.ok_or(AuthServiceError::AccountNotFound)?;
     // 一定存在, 不然account_id是怎么找到的
     let mut account = repo.get_account(&account_id).await?
-        .ok_or(AccountServiceError::AccountNotFound)?;
+        .ok_or(AuthServiceError::AccountNotFound)?;
     let _ = account.deactivate()?;
     repo.update_account(&account).await?;
     let sessions = session_repo.find_session(&account_id).await?;

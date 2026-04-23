@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Arc};
 use chrono::{Duration, Utc};
 use jose::JsonWebKey;
 
-use crate::{application::auth::error::AccountServiceError, domain::{ar::{account::Identity, auth_session::{AuthSessionBuilder, UserSession}}, repo::{account::IAccountRepo, session::ISessionRepo}, service::token::{ITokenService, IssueTokenRequest}, vo::session::SessionId}};
+use crate::{application::auth::error::AuthServiceError, domain::{ar::{account::Identity, auth_session::{AuthSessionBuilder, UserSession}}, repo::{account::IAccountRepo, session::ISessionRepo}, service::token::{ITokenService, IssueTokenRequest}, vo::session::SessionId}};
 
 #[derive(Clone, Debug)]
 pub struct LoginRequest {
@@ -25,7 +25,7 @@ pub async fn handler(
     token_service: Arc<dyn ITokenService>,
     session_repo: Arc<dyn ISessionRepo>,
     key: Arc<JsonWebKey>
-) -> Result<LoginResposne, AccountServiceError> {
+) -> Result<LoginResposne, AuthServiceError> {
     let account = repo.find_account_id_by_ident(
         &Identity {
             id: uuid::Uuid::now_v7(),
@@ -36,18 +36,18 @@ pub async fn handler(
     )
     .await
     .map_err(|err| {
-        AccountServiceError::RepoError(err)
+        AuthServiceError::RepoError(err)
     })?;
     if account.is_none() {
-        return Err(AccountServiceError::AccountNotFound)
+        return Err(AuthServiceError::AccountNotFound)
     }
     let account_id = account.unwrap();
     let account = repo.get_account(&account_id).await
         .map_err(|err| {
-        AccountServiceError::RepoError(err)
+        AuthServiceError::RepoError(err)
     })?;
     if account.is_none() {
-        return Err(AccountServiceError::AccountNotFound)
+        return Err(AuthServiceError::AccountNotFound)
     }
     let account = account.unwrap();
     let account_id = account.id;

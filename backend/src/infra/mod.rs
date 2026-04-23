@@ -6,3 +6,4 @@ pub mod config;
 pub mod notification;
 pub mod eventbus;
 pub mod token;
+pub mod error;

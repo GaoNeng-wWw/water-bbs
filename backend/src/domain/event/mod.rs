@@ -4,6 +4,7 @@ use uuid::Uuid;
 
 pub mod verification_code_sent_event;
 pub mod session;
+pub mod auth;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct EventEnvelope<T> {
@@ -25,4 +26,5 @@ impl<T> EventEnvelope<T> {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum DomainEvent {
     Session(EventEnvelope<session::SessionDomainEvent>),
+    Auth(EventEnvelope<auth::AuthDomainEvent>)
 }

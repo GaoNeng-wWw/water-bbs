@@ -4,7 +4,7 @@ use derive_builder::Builder;
 
 use crate::{
     application::auth::{
-        error::AccountServiceError,
+        error::AuthServiceError,
         registor::{RegisterRequest, Registor, RegistorContext},
     },
     domain::{
@@ -33,15 +33,15 @@ pub async fn handle(
     repo: Arc<dyn IAccountRepo + Send + Sync>,
     verify_code: Arc<VerifyCodeService>,
     policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,
-) -> Result<(), AccountServiceError> {
+) -> Result<(), AuthServiceError> {
     let features = policy_provider.get_features().await?;
 
     if !features.can_register(req.invite_code.as_deref(), req.captcha.as_deref()) {
         if features.enable_captcha && !req.captcha.is_some() {
-            return Err(AccountServiceError::CaptchaRequire);
+            return Err(AuthServiceError::CaptchaRequire);
         }
         if features.enable_invite && !req.invite_code.is_some() {
-            return Err(AccountServiceError::InviteCodeRequire);
+            return Err(AuthServiceError::InviteCodeRequire);
         }
     }
 
@@ -66,7 +66,7 @@ pub async fn handle(
         }
     }
     if !ok {
-        return Err(AccountServiceError::UnsupportedIdentType { ident_type: req.ident_type });
+        return Err(AuthServiceError::UnsupportedIdentType { ident_type: req.ident_type });
     }
 
     Ok(())
