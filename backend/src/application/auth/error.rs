@@ -43,6 +43,8 @@ impl IntoApiError for RegistoryError {
 
 #[derive(thiserror::Error, Debug, Clone, Serialize)]
 pub enum AuthServiceError {
+    #[error("SESSION_NOT_FOUND")]
+    SessionNotFound,
     #[error(transparent)]
     RegistoryError(#[from] RegistoryError),
     #[error("POLICY_ERROR")]
@@ -75,6 +77,10 @@ pub enum AuthServiceError {
     MfaRequire,
     #[error("MFA_REJECT")]
     MfaReject,
+    #[error("REQUIRE_ACCESS_TOKEN")]
+    RequireAccessToken,
+    #[error("REQUIRE_REFRESH_TOKEN")]
+    RequireRefreshToken,
     #[error(transparent)]
     InfraError(#[from] InfraError),
 }
@@ -99,6 +105,9 @@ impl IntoApiError for AuthServiceError {
             AuthServiceError::MfaReject => 400,
             AuthServiceError::IdentNotFound { ident_type } => 404,
             AuthServiceError::UnverifiedIdentifier { iden_type, ident_value } => 400,
+            AuthServiceError::SessionNotFound => 404,
+            AuthServiceError::RequireAccessToken => 400,
+            AuthServiceError::RequireRefreshToken => 400,
         }
     }
 
@@ -125,6 +134,9 @@ impl IntoApiError for AuthServiceError {
             AuthServiceError::MfaReject => None,
             AuthServiceError::IdentNotFound { .. } => None,
             AuthServiceError::UnverifiedIdentifier { .. } => None,
+            AuthServiceError::SessionNotFound => None,
+            AuthServiceError::RequireAccessToken => None,
+            AuthServiceError::RequireRefreshToken => None,
         }
     }
 }

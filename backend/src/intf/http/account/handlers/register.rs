@@ -20,8 +20,8 @@ pub struct RegisterDTO {
 pub struct RegisterResponse {}
 
 pub async fn handler(
-    Json(req): Json<RegisterDTO>,
     State(state): State<AppState>,
+    Json(req): Json<RegisterDTO>,
 ) -> AppResult<()> {
     let request = Request {
         ident_type: req.identifier_type,
@@ -32,7 +32,7 @@ pub async fn handler(
         invite_code: req.invite_code,
         captcha: req.captcha,
     };
-    let strategies: Vec<Arc<dyn Registor>> = vec![Arc::new(application::auth::registor::mail::MailRegistor {}),];
+    let strategies: Vec<Arc<dyn Registor + Send + Sync>> = vec![Arc::new(application::auth::registor::mail::MailRegistor {}),];
     
     let repo = state.account_repo.clone();
     
@@ -45,5 +45,5 @@ pub async fn handler(
     )
     .await
     .map_err(|err| {http_exception!(err.status_code(), err.message(), err.cause())})?;
-    Ok(())
+    Ok(Json(()))
 }

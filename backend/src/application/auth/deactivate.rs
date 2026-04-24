@@ -38,7 +38,7 @@ pub async fn handle(
                 events.push(
                     DomainEvent::Session(
                         EventEnvelope::new(
-                            crate::domain::event::session::SessionDomainEvent::SessionRevoked { session_id: id.clone(), account_id: account_id.clone() }
+                            crate::domain::event::session::SessionDomainEvent::UserSessionRevoked { session_id: id.clone(), account_id: account_id.clone() }
                         )
                     )
                 );

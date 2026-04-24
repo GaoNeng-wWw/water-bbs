@@ -16,10 +16,10 @@ impl SessionRevoked {
 #[async_trait::async_trait]
 impl EventHandler for SessionRevoked {
     async fn precheck(&self, event: &DomainEvent) -> bool {
-        matches!(event, DomainEvent::Session(env) if matches!(env.payload, SessionDomainEvent::SessionRevoked { .. }))
+        matches!(event, DomainEvent::Session(env) if matches!(env.payload, SessionDomainEvent::UserSessionRevoked { .. }))
     }
     async fn handle(&self, event: &DomainEvent) -> Result<(), HandlerError> {
-        let SessionDomainEvent::SessionRevoked {session_id, account_id} = match event {
+        let SessionDomainEvent::UserSessionRevoked {session_id, account_id} = match event {
             DomainEvent::Session(EventEnvelope { payload, .. }) => payload,
             _ => unreachable!(),
         };

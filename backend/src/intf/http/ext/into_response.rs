@@ -9,7 +9,7 @@ pub trait Exception {
 }
 
 pub struct AppError(pub Box<dyn Exception + Send + Sync>);
-pub type AppResult<T> = Result<T, AppError>;
+pub type AppResult<T> = Result<Json<T>, AppError>;
 
 impl IntoResponse for AppError {
     fn into_response(self) -> axum::response::Response {

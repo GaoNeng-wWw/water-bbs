@@ -34,6 +34,7 @@ impl ITokenService for JwtService {
         let jwt_ar = Token {
             jti,
             token,
+            sub: request.sub.clone(),
             token_type: request.token_type.clone(),
             ttl: request.ttl,
             created_at: Utc::now(),

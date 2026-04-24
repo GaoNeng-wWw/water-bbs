@@ -31,7 +31,7 @@ impl EventHandler for CertUpdated {
             for ss in sessions.sessions {
                 let ev = DomainEvent::Session(
                     EventEnvelope::new(
-                        SessionDomainEvent::SessionRevoked { session_id: ss.id, account_id: account_id.clone() }
+                        SessionDomainEvent::UserSessionRevoked { session_id: ss.id, account_id: account_id.clone() }
                     )
                 );
                 event_box.push(ev);

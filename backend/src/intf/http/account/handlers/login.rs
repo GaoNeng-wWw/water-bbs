@@ -19,9 +19,9 @@ pub struct LoginResponse {
     pub refresh_token: String,
 }
 
-pub async fn handle(
-    Json(req): Json<LoginDTO>,
+pub async fn handler(
     State(state): State<AppState>,
+    Json(req): Json<LoginDTO>,
 ) -> AppResult<LoginResponse> {
     let token_service = Arc::new(JwtService {});
     let repo = state.account_repo;
@@ -36,9 +36,9 @@ pub async fn handle(
     .await
     .map_err(|err| http_exception!(err.status_code(), err.message(), err.cause()))?;
     Ok(
-        LoginResponse {
+        Json(LoginResponse {
             access_token: token.access_token,
             refresh_token: token.refresh_token,
-        }
+        })
     )
 }

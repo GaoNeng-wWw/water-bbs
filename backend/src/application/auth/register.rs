@@ -29,7 +29,7 @@ pub struct Request {
 
 pub async fn handle(
     req: Request,
-    strategies: Vec<Arc<dyn Registor>>,
+    strategies: Vec<Arc<dyn Registor + Send + Sync>>,
     repo: Arc<dyn IAccountRepo + Send + Sync>,
     verify_code: Arc<VerifyCodeService>,
     policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,

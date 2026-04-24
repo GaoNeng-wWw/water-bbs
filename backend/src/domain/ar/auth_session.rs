@@ -3,19 +3,20 @@ use chrono::{DateTime, Duration, Utc};
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum TokenType {
     Refresh,
     Access,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, Builder)]
+#[derive(Clone, Debug, Deserialize, Serialize, Builder, PartialEq, Eq)]
 pub struct Token {
     #[builder(default=Jti::build())]
     pub jti: Jti,
     pub token: String,
     pub token_type: TokenType,
     pub ttl: i64,
+    pub sub: AccountId,
     pub created_at: DateTime<Utc>,
     pub revoked_at: Option<DateTime<Utc>>,
 }
@@ -86,7 +87,18 @@ impl UserSession {
         }
         self.sessions.push(session);
     }
-
+    pub fn revoke_session_by_access_token(
+        &mut self,
+        access_token: &Token
+    ) -> Result<(), SessionError>{
+        let session = self.sessions
+            .iter_mut()
+            .find(|s| s.access_token == access_token.clone())
+            .ok_or(SessionError::SessionNotFound { id: "".to_string() })?;
+        session.access_token.revoke()?;
+        session.refresh_token.revoke()?;
+        Ok(())
+    }
     pub fn revoke_session(&mut self, session_id: &SessionId) -> Result<(), SessionError> {
         let session = self.sessions
             .iter_mut().find(|s| s.id == *session_id)

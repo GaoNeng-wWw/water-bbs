@@ -5,7 +5,7 @@ use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use tracing::{info, level_filters::LevelFilter};
 
-use crate::{application::session::events::session_revoked::SessionRevoked, domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}}, intf::http::ext::state::AppState};
+use crate::{application::session::events::user_session_revoked::SessionRevoked, domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}, token::jwt::JwtService}, intf::http::{self, ext::state::AppState}};
 
 #[tracing::instrument(name="redis", skip_all, fields(url=%url))]
 async fn startup_redis(
@@ -53,7 +53,14 @@ pub async fn event_startup(
     bus
 }
 
-pub async fn startup(){
+pub struct StartupConfigure {
+    pub db_url: String,
+    pub redis_url: String,
+}
+
+pub async fn startup(
+    config: StartupConfigure,
+){
 
     tracing_subscriber::fmt()
         .with_max_level(LevelFilter::INFO) 
@@ -63,8 +70,8 @@ pub async fn startup(){
     
     info!("Starting application initialization...");
 
-    let db = setup_database("sqlite://water_bbs.db").await.unwrap();
-    let redis= startup_redis("redis://localhost:6379").await.unwrap();
+    let db = setup_database(&config.db_url).await.unwrap();
+    let redis= startup_redis(&config.redis_url).await.unwrap();
     let account_repo = Arc::new(AccountRepo::new(db, redis.clone()));
     let session_repo = Arc::new(SessionRepo::new(redis.clone()));
 
@@ -96,10 +103,12 @@ pub async fn startup(){
         verify_code_service: Arc::new(verify_code_service),
         event_bus: bus,
         session_repo: session_repo,
-        jwk: Arc::new(josekit::jwk::Jwk::generate_rsa_key(4096).unwrap())
+        jwk: Arc::new(josekit::jwk::Jwk::generate_rsa_key(4096).unwrap()),
+        token_service: Arc::new(JwtService {})
     };
-    let app = axum::Router::new();
-    // .with_state(state);
+    let app = axum::Router::new()
+        .nest("/auth", http::account::route())
+        .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 

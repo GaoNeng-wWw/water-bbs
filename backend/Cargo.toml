@@ -17,12 +17,12 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 thiserror = "2.0.18"
 tokio = { version = "1.52.1", features = ["full"] }
-sea-orm = { version = "2.0.0-rc.38", features = [ "sqlx-sqlite", "with-chrono", "macros", "with-uuid", "with-json", "runtime-tokio"] }
+sea-orm = { version = "2.0.0-rc.38", features = [ "sqlx-sqlite", "with-chrono", "macros", "with-uuid", "with-json", "runtime-tokio-rustls"] }
 sea-orm-migration = { version = "2.0.0-rc.38", features = ["runtime-tokio", "sqlx-sqlite"] }
 
 [dependencies]
 anyhow.workspace = true
-axum.workspace = true
+axum = { workspace = true, features = ["macros"] }
 fred = { workspace = true, features = ["i-hexpire"] }
 serde.workspace = true
 serde_json.workspace = true
@@ -32,18 +32,22 @@ sea-orm.workspace = true
 sea-orm-migration.workspace = true
 nutype = { version = "0.6.2", features = ["derive_unsafe", "serde"] }
 uuid = { version = "1.23.1", features = ["serde", "v7"] }
-bcrypt = "0.19.0"
 async-trait = "0.1.89"
 chrono = "0.4.44"
 rand = "0.10.1"
 sea-orm-cli = "1.1.20"
-lettre = "0.11.21"
+lettre = { version="0.11.21", features = ["rustls-tls"]}
 derive_builder = "0.20.2"
 tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
-josekit = "0.10.3"
+josekit = { version = "0.10.3" }
+axum-extra = { version = "0.12.6", features = ["typed-header"] }
+headers = "0.4.1"
+mockall = "0.14.0"
+argon2 = "0.5.3"
 
 [profile.dev]
 opt-level = 0        # 不进行优化，编译速度最快
 debug = true         # 保留调试信息
 incremental = true   # 开启增量编译
+

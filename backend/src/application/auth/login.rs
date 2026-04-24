@@ -20,9 +20,9 @@ pub struct LoginResponse {
 
 pub async fn handler(
     req: &LoginRequest,
-    repo: Arc<dyn IAccountRepo>,
-    token_service: Arc<dyn ITokenService>,
-    session_repo: Arc<dyn ISessionRepo>,
+    repo: Arc<dyn IAccountRepo + Send + Sync>,
+    token_service: Arc<dyn ITokenService + Send + Sync>,
+    session_repo: Arc<dyn ISessionRepo + Send + Sync>,
     key: Arc<josekit::jwk::Jwk>
 ) -> Result<LoginResponse, AuthServiceError> {
     let account = repo.find_account_id_by_ident(
