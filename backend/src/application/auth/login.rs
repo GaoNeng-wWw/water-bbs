@@ -101,5 +101,4 @@ pub async fn handler(
         access_token: at.token,
         refresh_token: rt.token,
     })
-    
 }

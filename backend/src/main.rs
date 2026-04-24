@@ -13,8 +13,7 @@ pub mod application;
 
 #[tokio::main]
 async fn main() {
-    // intf::http::startup::startup(
-    //     StartupConfigure { db_url: "sqlite://water_bbs.db".to_owned(), redis_url: "redis://localhost:6379".to_owned() }
-    // ).await;
-    print!("hello world")
+    intf::http::startup::startup(
+        StartupConfigure { db_url: "sqlite://water_bbs.db".to_owned(), redis_url: "redis://localhost:6379".to_owned() }
+    ).await;
 }
