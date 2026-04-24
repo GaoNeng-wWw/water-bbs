@@ -4,7 +4,7 @@ use derive_builder::Builder;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, repo::account::IAccountRepo, service::verify_code::VerifyCodeService}};
+use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, repo::account::IAccountRepo, service::verify_code::IVerifyCodeService}};
 
 #[derive(Clone, Debug, Deserialize, Builder)]
 pub struct VerifyIdentRequest {
@@ -16,7 +16,7 @@ pub struct VerifyIdentRequest {
 pub async fn handle(
     req: &VerifyIdentRequest,
     account_repo: Arc<dyn IAccountRepo>,
-    verify_service: Arc<VerifyCodeService>,
+    verify_service: Arc<dyn IVerifyCodeService + Send + Sync>,
 ) -> Result<(), AuthServiceError>{
     let account_id = account_repo.find_account_id_by_ident(&Identity {
         id: Uuid::nil(),

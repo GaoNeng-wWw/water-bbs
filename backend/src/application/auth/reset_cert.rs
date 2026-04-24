@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, event::{EventEnvelope, auth::AuthDomainEvent}, repo::account::IAccountRepo, service::verify_code::VerifyCodeService}, infra::{error::InfraError, eventbus::EventBus}};
+use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, event::{EventEnvelope, auth::AuthDomainEvent}, repo::account::IAccountRepo, service::verify_code::{IVerifyCodeService, VerifyCodeService}}, infra::{error::InfraError, eventbus::EventBus}};
 
 #[derive(Clone,Debug)]
 pub struct ResetCertRequest {
@@ -16,7 +16,7 @@ pub async fn handle(
     req: ResetCertRequest,
     account_repo: Arc<dyn IAccountRepo>,
     bus: Arc<dyn EventBus>,
-    verify_code_service: Arc<VerifyCodeService>
+    verify_code_service: Arc<dyn IVerifyCodeService + Send + Sync>
 ) -> Result<(), AuthServiceError>{
     let mfa_code = req.mfa_code.ok_or_else(|| AuthServiceError::MfaRequire)?;
     let account_id = account_repo.find_account_id_by_ident(&Identity {

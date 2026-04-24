@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, domain::service::verify_code::{Channel, VerifyCodeService}, infra::error::InfraError, shared};
+use crate::{application::auth::error::AuthServiceError, domain::service::verify_code::{Channel, IVerifyCodeService}, infra::error::InfraError, shared};
 
 #[derive(Clone, Debug)]
 pub struct RequestCodeRequest {
@@ -10,7 +10,7 @@ pub struct RequestCodeRequest {
 
 pub async fn handle(
     req: &RequestCodeRequest,
-    verify_code: Arc<VerifyCodeService>
+    verify_code: Arc<dyn IVerifyCodeService + Send + Sync>
 ) -> Result<(),AuthServiceError>{
     let channel = match req.ident_type.as_ref() {
         "email" | "Email" | "Mail" | "mail" => {

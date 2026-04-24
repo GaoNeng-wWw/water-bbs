@@ -35,6 +35,7 @@ impl IntoApiError for MailError {
 }
 
 #[async_trait::async_trait]
+#[mockall::automock]
 pub trait Mailer {
     async fn send(&self, mail: &Mail) -> Result<bool, MailError>;
 }

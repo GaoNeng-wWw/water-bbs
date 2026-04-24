@@ -23,6 +23,7 @@ impl Features {
 }
 
 #[async_trait::async_trait]
+#[mockall::automock]
 pub trait IFeaturePolicyProvider {
     async fn get_features(&self) -> Result<Features, PolicyError>;
     async fn put_features(&self, features: &Features) -> Result<(), PolicyError>;

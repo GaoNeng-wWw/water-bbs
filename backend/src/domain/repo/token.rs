@@ -4,6 +4,7 @@ use uuid::Uuid;
 use crate::domain::{ar::auth_session::AuthSession, error::repo::RepositoryError};
 
 #[async_trait]
+#[mockall::automock]
 pub trait SessionRepository {
     // 存储新生成的 RT
     async fn save_session(&self, session: &AuthSession) -> Result<(), RepositoryError>;

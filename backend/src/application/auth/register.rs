@@ -10,7 +10,7 @@ use crate::{
     domain::{
         config::features::IFeaturePolicyProvider,
         repo::account::IAccountRepo,
-        service::verify_code::VerifyCodeService,
+        service::verify_code::{IVerifyCodeService, VerifyCodeService},
     },
 };
 
@@ -31,7 +31,7 @@ pub async fn handle(
     req: Request,
     strategies: Vec<Arc<dyn Registor + Send + Sync>>,
     repo: Arc<dyn IAccountRepo + Send + Sync>,
-    verify_code: Arc<VerifyCodeService>,
+    verify_code: Arc<dyn IVerifyCodeService + Send + Sync>,
     policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,
 ) -> Result<(), AuthServiceError> {
     let features = policy_provider.get_features().await?;

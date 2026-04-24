@@ -15,6 +15,7 @@ pub struct IssueTokenRequest {
 }
 
 #[async_trait]
+#[mockall::automock]
 pub trait ITokenService {
     fn issue_token(&self, request: &IssueTokenRequest, key: &josekit::jwk::Jwk) -> Result<Token, TokenServiceError>;
     fn revoke_token(&self, token: &Token) -> Result<Token, TokenServiceError>;

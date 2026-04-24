@@ -9,12 +9,14 @@ pub mod error;
 
 // 事件处理
 #[async_trait::async_trait]
+#[mockall::automock]
 pub trait EventHandler: Send + Sync {
     async fn precheck(&self, event: &DomainEvent) -> bool;
     async fn handle(&self, event: &DomainEvent) -> Result<(), HandlerError>;
 }
 
 // 事件总线，专注于分发
+#[mockall::automock]
 pub trait EventBus: Send + Sync {
     fn publish(&self, event: DomainEvent) -> Result<usize, EventBusError>;
     fn publish_auto_try(&self, event: DomainEvent, tries: Option<i32>) -> Result<usize, EventBusError>;

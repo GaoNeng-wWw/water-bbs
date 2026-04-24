@@ -4,6 +4,7 @@ use crate::{domain::{ar::account::{Account, Identity}, error::repo::RepositoryEr
 
 
 #[async_trait::async_trait]
+#[mockall::automock]
 pub trait IAccountRepo: Send + Sync {
     async fn incr(&self) -> Result<(), RepositoryError>;
     async fn decr(&self) -> Result<(), RepositoryError>;

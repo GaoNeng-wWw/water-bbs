@@ -25,7 +25,7 @@ sea-orm-migration = { version = "2.0.0-rc.38", features = ["runtime-tokio", "sql
 [dependencies]
 anyhow.workspace = true
 axum = { workspace = true, features = ["macros"] }
-fred = { workspace = true, features = ["i-hexpire"] }
+fred = { workspace = true, features = ["i-hexpire", "mocks"] }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
@@ -45,11 +45,15 @@ tracing-subscriber = "0.3.23"
 josekit = { version = "0.10.3" }
 axum-extra = { version = "0.12.6", features = ["typed-header"] }
 headers = "0.4.1"
-mockall = "0.14.0"
 argon2 = "0.5.3"
+mockall = "0.14.0"
+axum-test = "20.0.0"
 
 [profile.dev]
 opt-level = 0        # 不进行优化，编译速度最快
 debug = true         # 保留调试信息
 incremental = true   # 开启增量编译
+
+[dev-dependencies]
+axum-test = "20.0.0"
 

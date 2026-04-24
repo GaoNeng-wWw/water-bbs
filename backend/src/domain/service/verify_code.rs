@@ -48,10 +48,23 @@ impl IntoApiError for VerifyCodeServiceError {
     }
 }
 
+#[async_trait::async_trait]
+#[mockall::automock]
+pub trait IVerifyCodeService {
+    async fn send_code(&self,channel: Channel,target: &str,code: &str) -> Result<(), VerifyCodeServiceError>;
+    async fn verify_code(&self, target: &str, code: &str) -> Result<(), VerifyCodeServiceError>;
+}
+
 #[derive(Clone, Debug)]
 pub struct VerifyCodeService {
     tx: tokio::sync::broadcast::Sender<VerificationCodeSentEvent>,
     redis: Pool
+}
+
+impl VerifyCodeService {
+    pub fn new(tx: tokio::sync::broadcast::Sender<VerificationCodeSentEvent>, redis: Pool) -> Self {
+        Self { tx, redis }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -59,14 +72,12 @@ pub enum Channel {
     Email,
 }
 
-impl VerifyCodeService {
-    pub fn new(tx: tokio::sync::broadcast::Sender<VerificationCodeSentEvent>, redis: Pool) -> Self {
-        Self { tx, redis }
-    }
+#[async_trait::async_trait]
+impl IVerifyCodeService for VerifyCodeService {
     
     // 发布验证码
     // 通过指定频道
-    pub async fn send_code(
+    async fn send_code(
         &self,
         channel: Channel,
         target: &str,
@@ -95,7 +106,7 @@ impl VerifyCodeService {
 
         Ok(())
     }
-    pub async fn verify_code(&self, target: &str, code: &str) -> Result<(), VerifyCodeServiceError> {
+    async fn verify_code(&self, target: &str, code: &str) -> Result<(), VerifyCodeServiceError> {
         let stored_code:Option<String> = self.redis.get(format!("verify_code:{}:{}", target, code))
         .await
         .map_err(|_| VerifyCodeServiceError::InfraError)?;
