@@ -1,6 +1,6 @@
 pub mod mail;
 
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use crate::{
     application::auth::error::RegistoryError,
@@ -11,6 +11,7 @@ use crate::{
 
 #[derive(Clone)]
 pub struct RegisterRequest {
+    pub meta: HashMap<String, serde_json::Value>,
     pub ident_type: String,
     pub ident_value: String,
     pub cert_type: String,

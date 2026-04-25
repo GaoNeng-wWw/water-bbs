@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use derive_builder::Builder;
 
@@ -50,12 +50,19 @@ pub async fn handle(
         verify_code,
         policy_provider,
     };
+    let mut meta = HashMap::new();
+    if features.enable_register_captcha {
+        if let Some(code) = req.captcha {
+            meta.insert("code".into(), code.into());
+        }
+    }
     let req = RegisterRequest {
         ident_type: req.ident_type,
         ident_value: req.ident_value,
         cert_type: req.cert_type,
         cert_value: req.cert_value,
         name: req.username,
+        meta
     };
     let mut ok = false;
     for strategy in strategies {

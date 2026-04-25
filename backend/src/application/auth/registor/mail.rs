@@ -5,10 +5,8 @@ use crate::{
     },
     domain::{
         ar::account::{Account, Cert, Identity},
-        service::verify_code::Channel,
         vo::{account_id::AccountId, money::Money, profile::Profile},
     },
-    shared::random::generator,
 };
 
 // 邮箱注册器
@@ -22,6 +20,12 @@ impl Registor for MailRegistor {
 
     async fn perform_registration(&self, request: &RegisterRequest, context: &RegistorContext) -> Result<(), RegistoryError> {
         let features = context.policy_provider.get_features().await?;
+        if features.enable_register_captcha {
+            let code = request.meta.get("code");
+            if let Some(code_str) = code {
+                context.verify_code.verify_code(&request.ident_value, &code_str.to_string()).await?;
+            }
+        }
         let ident = Identity {
             id: uuid::Uuid::now_v7(),
             ident_type: request.ident_type.clone(),
@@ -52,10 +56,7 @@ impl Registor for MailRegistor {
             deleted_at: None,
         };
         context.repo.create_account(&account).await?;
-        if features.enable_register_captcha {
-            let code_val = generator::digital(8);
-            context.verify_code.send_code(Channel::Email, request.ident_value.as_str(), &code_val).await?;
-        }
+        
         Ok(())
     }
 }
