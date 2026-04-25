@@ -43,7 +43,7 @@ pub async fn handle(
     }
     let cert = account.find_cert(&req.cert_type)
         .ok_or(AuthServiceError::CertNotFound { cert_type: req.cert_type.clone() })?;
-    if !cert.check(&req.cert_type, &req.old_value_cert) {
+    if !cert.check(&req.old_value_cert)? {
         return Err(AuthServiceError::CertInconsistent);
     }
     account.update_cert(&req.cert_type, &req.cert_value, &req.old_value_cert)?;

@@ -14,6 +14,8 @@ pub enum RegistoryError {
     PolicyError(#[from] PolicyError),
     #[error(transparent)]
     VerifyCodeError(#[from] VerifyCodeServiceError),
+    #[error(transparent)]
+    AccountDomainError(#[from] AccountDomainError),
 }
 
 
@@ -25,6 +27,7 @@ impl IntoApiError for RegistoryError {
             RegistoryError::RepositoryError(..) => 500,
             RegistoryError::PolicyError(policy_error) => policy_error.status_code(),
             RegistoryError::VerifyCodeError(verify_code_service_error) => verify_code_service_error.status_code(),
+            RegistoryError::AccountDomainError(account_domain_error) => account_domain_error.status_code(),
         }
     }
     fn message(&self) -> String {
@@ -37,6 +40,7 @@ impl IntoApiError for RegistoryError {
             RegistoryError::RepositoryError(repository_error) => repository_error.cause(),
             RegistoryError::PolicyError(policy_error) => policy_error.cause(),
             RegistoryError::VerifyCodeError(verify_code_service_error) => verify_code_service_error.cause(),
+            RegistoryError::AccountDomainError(account_domain_error) => account_domain_error.cause(),
         }
     }
 }
@@ -83,6 +87,8 @@ pub enum AuthServiceError {
     RequireRefreshToken,
     #[error(transparent)]
     InfraError(#[from] InfraError),
+    #[error("PASSWORD_OR_EMAIL_ERROR")]
+    PasswordOrEmailError,
 }
 
 impl IntoApiError for AuthServiceError {
@@ -99,15 +105,16 @@ impl IntoApiError for AuthServiceError {
             AuthServiceError::TokenServiceError(token_service_error) => token_service_error.status_code(),
             AuthServiceError::SessionDomainError(err) => err.status_code(),
             AuthServiceError::MfaRequire => 403,
-            AuthServiceError::CertNotFound { cert_type } => 404,
+            AuthServiceError::CertNotFound { .. } => 404,
             AuthServiceError::CertInconsistent => 403,
             AuthServiceError::InfraError(infra_error) => infra_error.status_code(),
             AuthServiceError::MfaReject => 400,
-            AuthServiceError::IdentNotFound { ident_type } => 404,
-            AuthServiceError::UnverifiedIdentifier { iden_type, ident_value } => 400,
+            AuthServiceError::IdentNotFound { .. } => 404,
+            AuthServiceError::UnverifiedIdentifier { .. } => 400,
             AuthServiceError::SessionNotFound => 404,
             AuthServiceError::RequireAccessToken => 400,
             AuthServiceError::RequireRefreshToken => 400,
+            AuthServiceError::PasswordOrEmailError => 400,
         }
     }
 
@@ -137,6 +144,7 @@ impl IntoApiError for AuthServiceError {
             AuthServiceError::SessionNotFound => None,
             AuthServiceError::RequireAccessToken => None,
             AuthServiceError::RequireRefreshToken => None,
+            AuthServiceError::PasswordOrEmailError => None,
         }
     }
 }

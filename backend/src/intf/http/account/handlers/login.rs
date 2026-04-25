@@ -1,9 +1,7 @@
-use std::sync::Arc;
-
 use axum::{Json, extract::State};
 use serde::{Deserialize, Serialize};
 
-use crate::{http_exception, application::{self, auth::login::LoginRequest}, domain::error::IntoApiError, infra::token::jwt::JwtService, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{http_exception, application::{self, auth::login::LoginRequest}, domain::error::IntoApiError, intf::http::ext::{into_response::AppResult, state::AppState}};
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct LoginDTO {
@@ -23,7 +21,6 @@ pub async fn handler(
     State(state): State<AppState>,
     Json(req): Json<LoginDTO>,
 ) -> AppResult<LoginResponse> {
-    let token_service = Arc::new(JwtService {});
     let repo = state.account_repo;
     let session_repo = state.session_repo;
     
@@ -32,7 +29,7 @@ pub async fn handler(
         ident_value: req.ident_value,
         cert_type: req.cert_type,
         cert_value: req.cert_value,
-    }, repo, token_service, session_repo, state.jwk)
+    }, repo, state.token_service, session_repo, state.event_bus, state.jwk)
     .await
     .map_err(|err| http_exception!(err.status_code(), err.message(), err.cause()))?;
     Ok(

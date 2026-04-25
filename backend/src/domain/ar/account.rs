@@ -1,3 +1,4 @@
+use argon2::{Argon2, PasswordHasher, PasswordVerifier, password_hash::{SaltString, rand_core::OsRng}};
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 use uuid::Uuid;
@@ -18,11 +19,16 @@ pub enum AccountDomainError {
     CertInconsistent,
     #[error("ACCOUNT_ALREADY_DEACTIVATED")]
     AccountAlreadyDeactivated,
+    #[error("CREATE_CERT_ERROR")]
+    CreateCertError,
 }
 
 impl IntoApiError for AccountDomainError {
     fn status_code(&self) -> u16 {
-        400
+        match self {
+            AccountDomainError::CreateCertError => 500,
+            _ => 400
+        }
     }
     fn message(&self) -> String {
         self.to_string()
@@ -36,6 +42,7 @@ impl IntoApiError for AccountDomainError {
             AccountDomainError::IdentityInconsistent => None,
             AccountDomainError::CertInconsistent => None,
             AccountDomainError::AccountAlreadyDeactivated => None,
+            AccountDomainError::CreateCertError => None,
         }
     }
 }
@@ -58,7 +65,7 @@ impl Identity {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct Cert {
     pub id: Uuid,
     pub cert_type: String,
@@ -66,8 +73,22 @@ pub struct Cert {
 }
 
 impl Cert {
-    pub fn check(&self, cert_type: &str, cert_value: &str) -> bool {
-        self.cert_type == cert_type && self.cert_value == cert_value
+    pub fn new(id: Uuid, cert_type: String, cert_value: String) -> Self {
+        Self { id, cert_type, cert_value }
+    }
+    
+    pub fn try_new(cert_type: String, cert_value: String) -> Result<Self, AccountDomainError> {
+        let salt = SaltString::generate(OsRng);
+        let argon2 = Argon2::default();
+        let hash = argon2.hash_password(cert_value.as_bytes(), &salt)
+            .map_err(|_| AccountDomainError::CreateCertError)?;
+        Ok(Self { id: Uuid::now_v7(), cert_type, cert_value: hash.to_string()})
+    }
+    
+    pub fn check(&self, plain_value: &str) -> Result<bool, AccountDomainError> {
+        let parsed_hash = argon2::PasswordHash::new(&self.cert_value)
+            .map_err(|_| AccountDomainError::CreateCertError)?;
+        Ok(Argon2::default().verify_password(plain_value.as_bytes(), &parsed_hash).is_ok())
     }
 }
 
@@ -139,12 +160,14 @@ impl Account {
         self.updated_at = Utc::now();
         
         let old_cert = self.find_cert(&cert_type).ok_or(AccountDomainError::CanNotFindCert)?;
-        if !old_cert.check(&cert_type, confirm_value) {
+        if !old_cert.check(confirm_value)? {
             return Err(AccountDomainError::CertInconsistent);
         }
+        let new_cert = Cert::try_new(cert_type.to_string(), cert_value.to_string())?;
+
         self.cert.iter_mut().for_each(|i| {
             if i.cert_type == cert_type {
-                i.cert_value = cert_value.to_owned()
+                i.cert_value = new_cert.cert_value.clone();
             }
         });
 
@@ -189,17 +212,20 @@ impl Account {
         if !cert_exists {
             return Err(AccountDomainError::CanNotFindCert);
         }
-        if self.cert.iter().any(|c| c.check(cert_type, cert_value)) {
-            Ok(())
-        } else {
-            Err(AccountDomainError::CertInconsistent)
+
+        for cert in &self.cert {
+            if cert.check(cert_value)? {
+                return Ok(());
+            }
         }
+
+        Err(AccountDomainError::CertInconsistent)
     }
     // 验证凭证
     pub fn approve_cert(&mut self, cert_id: &Uuid) -> Result<bool, AccountDomainError> {
         let cert = self.cert.iter_mut().find(|c| c.id == *cert_id);
-        if let Some(cert) = cert {
-            Ok(cert.check(&cert.cert_type, &cert.cert_value))
+        if let Some(_) = cert {
+            Ok(true)
         } else {
             Err(AccountDomainError::CanNotFindCert)
         }

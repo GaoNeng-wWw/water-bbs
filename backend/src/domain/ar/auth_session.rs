@@ -1,6 +1,7 @@
-use crate::domain::{error::auth_session::SessionError, vo::{account_id::AccountId, session::{Jti, SessionId}}};
+use crate::domain::{error::auth_session::SessionError, event::{DomainEvent, EventEnvelope, session::SessionDomainEvent}, vo::{account_id::AccountId, session::{Jti, SessionId}}};
 use chrono::{DateTime, Duration, Utc};
 use derive_builder::Builder;
+use fred::socket2::Domain;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -59,6 +60,8 @@ pub struct UserSession {
     pub sessions: Vec<AuthSession>,
     #[builder(default = 3)]
     pub session_limit: u32,
+
+    pub inbox: Vec<DomainEvent>,
 }
 
 impl UserSession {
@@ -70,6 +73,13 @@ impl UserSession {
         self.sessions.retain(|s| {
             if s.is_expire() {
                 // 如果过期，放入已过期列表并从主列表中移除
+                self.inbox.push(
+                    DomainEvent::Session(
+                        EventEnvelope::new(
+                            SessionDomainEvent::Expired { session_id: s.id.clone(), account_id: s.account_id.clone(), }
+                        )
+                    )
+                );
                 expired_sessions.push(s.clone());
                 false
             } else {
@@ -83,6 +93,13 @@ impl UserSession {
         self.gc();
         if self.sessions.len() >= self.session_limit as usize {
             self.sessions.sort_by_key(|s| s.create_at);
+            self.inbox.push(
+                DomainEvent::Session(
+                    EventEnvelope::new(
+                        SessionDomainEvent::Expired { session_id: self.sessions[0].id.clone(), account_id: self.account_id.clone() }
+                    )
+                )
+            );
             self.sessions.remove(0);
         }
         self.sessions.push(session);

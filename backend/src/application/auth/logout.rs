@@ -27,7 +27,7 @@ pub async fn handler(
     let mut user_session = session_repo.find_session(&verify_res.sub).await?
         .ok_or_else(|| AuthServiceError::SessionNotFound)?; 
     user_session.revoke_session_by_access_token(&verify_res)?;
-    event_bus.publish(
+    let _ =event_bus.publish(
         crate::domain::event::DomainEvent::Session(
             EventEnvelope::new(
                 crate::domain::event::session::SessionDomainEvent::UserSessionRevoked { session_id: user_session.id, account_id: verify_res.sub }

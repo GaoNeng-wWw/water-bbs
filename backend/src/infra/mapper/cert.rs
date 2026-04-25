@@ -3,11 +3,8 @@ use uuid::Uuid;
 use crate::{domain::ar::account::Cert, infra::entity::cert as cert_entity};
 
 pub fn to_domain(model: &cert_entity::Model) -> Cert {
-    Cert {
-        id: model.id,
-        cert_type: model.cert_type.clone(),
-        cert_value: model.cert_value.clone()
-    }
+    Cert::new(model.id, model.cert_type.clone(), model.cert_value.clone())
+
 }
 pub fn to_model(domain: &Cert, account_id: Uuid) -> cert_entity::ActiveModel {
     cert_entity::ActiveModel {

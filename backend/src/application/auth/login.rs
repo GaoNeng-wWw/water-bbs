@@ -2,7 +2,7 @@ use std::{collections::HashMap, sync::Arc};
 
 use chrono::{Duration, Utc};
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::{account::Identity, auth_session::{AuthSessionBuilder, UserSession}}, repo::{account::IAccountRepo, session::ISessionRepo}, service::token::{ITokenService, IssueTokenRequest}, vo::session::SessionId}};
+use crate::{application::auth::error::AuthServiceError, domain::{ar::{account::Identity, auth_session::{AuthSessionBuilder, UserSession}}, repo::{account::IAccountRepo, session::ISessionRepo}, service::token::{ITokenService, IssueTokenRequest}, vo::session::SessionId}, infra::eventbus::EventBus};
 
 #[derive(Clone, Debug)]
 pub struct LoginRequest {
@@ -23,7 +23,8 @@ pub async fn handler(
     repo: Arc<dyn IAccountRepo + Send + Sync>,
     token_service: Arc<dyn ITokenService + Send + Sync>,
     session_repo: Arc<dyn ISessionRepo + Send + Sync>,
-    key: Arc<josekit::jwk::Jwk>
+    event_bus: Arc<dyn EventBus + Send + Sync>,
+    key: Arc<josekit::jwk::Jwk>,
 ) -> Result<LoginResponse, AuthServiceError> {
     let account = repo.find_account_id_by_ident(
         &Identity {
@@ -49,6 +50,9 @@ pub async fn handler(
         return Err(AuthServiceError::AccountNotFound)
     }
     let account = account.unwrap();
+    if account.check_cert(req.cert_type.as_str(), &req.cert_value).is_err() {
+        return Err(AuthServiceError::PasswordOrEmailError)
+    }
     let account_id = account.id;
     let at = token_service.issue_token(
         &IssueTokenRequest {
@@ -93,8 +97,13 @@ pub async fn handler(
                 sessions: vec![],
                 // 读取一下 features, 但这里先写死
                 session_limit: 3,
+                inbox: vec![],
             }
         );
+    let events = &user_session.inbox;
+    for event in events {
+        let _ = event_bus.publish(event.clone());
+    }
     user_session.add_session(session);
     session_repo.upsert(&user_session).await?;
     Ok(LoginResponse {

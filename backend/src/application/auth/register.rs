@@ -10,7 +10,7 @@ use crate::{
     domain::{
         config::features::IFeaturePolicyProvider,
         repo::account::IAccountRepo,
-        service::verify_code::{IVerifyCodeService, VerifyCodeService},
+        service::verify_code::{IVerifyCodeService},
     },
 };
 

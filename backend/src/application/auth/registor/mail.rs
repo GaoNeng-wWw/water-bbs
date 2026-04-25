@@ -32,11 +32,7 @@ impl Registor for MailRegistor {
         if account_exists {
             return Err(RegistoryError::AccountExists);
         }
-        let cert = Cert {
-            id: uuid::Uuid::now_v7(),
-            cert_type: request.cert_type.clone(),
-            cert_value: request.cert_value.clone(),
-        };
+        let cert = Cert::try_new(request.cert_type.clone(), request.cert_value.clone())?;
         let profile = Profile {
             id: uuid::Uuid::now_v7(),
             name: request.name.clone(),

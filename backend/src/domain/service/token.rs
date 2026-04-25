@@ -11,7 +11,7 @@ pub struct IssueTokenRequest {
     pub token_type: TokenType,
     pub ttl: i64,
     pub issuer: String,
-    pub meta: HashMap<String, String>
+    pub meta: HashMap<String, String>,
 }
 
 #[async_trait]
