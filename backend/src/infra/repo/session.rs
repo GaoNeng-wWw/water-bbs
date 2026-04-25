@@ -61,6 +61,11 @@ impl ISessionRepo for SessionRepo {
         let _:() = pipeline.exec(false).await.map_err(error_mapper)?;
         Ok(session.id.clone())
     }
+    async fn revoke_user_session(&self, account_id: &AccountId) -> Result<(), RepositoryError> {
+        let key = user_session_list(account_id);
+        let _:() = self.db.del(key).await.map_err(error_mapper)?;
+        Ok(())
+    }
     async fn revoke(&self, account_id: &AccountId, session_id: &SessionId) -> Result<Option<AuthSession>, RepositoryError>{
         let key = user_session_list(account_id);
 
