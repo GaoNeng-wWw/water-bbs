@@ -5,7 +5,7 @@ use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use tracing::{info, level_filters::LevelFilter};
 
-use crate::{application::session::events::user_session_revoked::SessionRevoked, domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}, token::jwt::JwtService}, intf::http::{self, ext::state::AppState}};
+use crate::{application::{self, session::events::user_session_revoked::SessionRevoked}, domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService}, infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}, token::jwt::JwtService}, intf::http::{self, ext::state::AppState}};
 
 #[tracing::instrument(name="redis", skip_all, fields(url=%url))]
 async fn startup_redis(
@@ -104,7 +104,10 @@ pub async fn startup(
         event_bus: bus,
         session_repo: session_repo,
         jwk: Arc::new(josekit::jwk::Jwk::generate_rsa_key(4096).unwrap()),
-        token_service: Arc::new(JwtService {})
+        token_service: Arc::new(JwtService {}),
+        strategy: vec![
+            Arc::new(application::auth::registor::mail::MailRegistor {})
+        ],
     };
     let app = axum::Router::new()
         .nest("/auth", http::account::route())

@@ -1,9 +1,7 @@
-use std::sync::Arc;
-
 use axum::{Json, extract::State};
 use serde::{Deserialize, Serialize};
 
-use crate::{application::{self, auth::{register::Request, registor::Registor}}, domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{application::{self, auth::register::Request}, domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
 
 #[derive(Clone,Debug,Deserialize,Serialize)]
 pub struct RegisterDTO {
@@ -32,13 +30,12 @@ pub async fn handler(
         invite_code: req.invite_code,
         captcha: req.captcha,
     };
-    let strategies: Vec<Arc<dyn Registor + Send + Sync>> = vec![Arc::new(application::auth::registor::mail::MailRegistor {}),];
     
     let repo = state.account_repo.clone();
     
     let _ = application::auth::register::handle(
         request,
-        strategies,
+        state.strategy,
         repo,
         state.verify_code_service.clone(),
         state.policy_provider.clone(),

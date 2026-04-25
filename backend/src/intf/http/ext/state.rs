@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{domain::{config::features::IFeaturePolicyProvider, repo::{account::IAccountRepo, session::ISessionRepo}, service::{token::ITokenService, verify_code::{IVerifyCodeService, VerifyCodeService}}}, infra::eventbus::EventBus};
+use crate::{application::auth::registor::Registor, domain::{config::features::IFeaturePolicyProvider, repo::{account::IAccountRepo, session::ISessionRepo}, service::{token::ITokenService, verify_code::{IVerifyCodeService, VerifyCodeService}}}, infra::eventbus::EventBus};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -11,5 +11,6 @@ pub struct AppState {
     pub policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,
     pub verify_code_service: Arc<dyn IVerifyCodeService + Send + Sync>,
     pub token_service: Arc<dyn ITokenService + Send + Sync>,
+    pub strategy: Vec<Arc<dyn Registor + Send + Sync>>,
     pub jwk: Arc<josekit::jwk::Jwk>,
 }
