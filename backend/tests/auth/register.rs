@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::shared;
 use axum::Router;
 use axum_test::TestServer;
-use backend::{application::auth::registor::MockRegistor, domain::{config::features::{Features, MockIFeaturePolicyProvider}, repo::account::MockIAccountRepo, service::verify_code::MockIVerifyCodeService}, intf::http::account::handlers::register::RegisterDTO};
+use backend::{application::auth::registor::MockRegistor, domain::{config::features::{Features, MockIFeaturePolicyProvider}, repo::account::MockIAccountRepo, service::verify_code::MockIVerifyCodeService}, intf::http::auth::handlers::register::RegisterDTO};
 
 
 #[tokio::test]
@@ -53,7 +53,7 @@ async fn test_register_with_captcha() {
 
     let state = ctx.to_state().await;
     let router = Router::new()
-        .nest("/auth", backend::intf::http::account::route())
+        .nest("/auth", backend::intf::http::auth::route())
         .with_state(state);
     let server = TestServer::new(router);
 
@@ -113,7 +113,7 @@ async fn test_register_without_invite_and_captcha() {
 
     let state = ctx.to_state().await;
     let router = Router::new()
-        .nest("/auth", backend::intf::http::account::route())
+        .nest("/auth", backend::intf::http::auth::route())
         .with_state(state);
     let server = TestServer::new(router);
 

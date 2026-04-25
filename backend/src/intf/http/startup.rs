@@ -110,7 +110,7 @@ pub async fn startup(
         ],
     };
     let app = axum::Router::new()
-        .nest("/auth", http::account::route())
+        .nest("/auth", http::auth::route())
         .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
