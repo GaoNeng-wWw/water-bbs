@@ -248,5 +248,14 @@ impl Account {
         self.deleted_at = Some(Utc::now());
         Ok(())
     }
-
+    pub fn update_profile(&mut self, profile: Profile) {
+        self.updated_at = Utc::now();
+        let mut _profile = profile.clone();
+        _profile.id = self.profile.id;
+        self.profile = profile;
+    }
+    pub fn remove_cert(&mut self, cert: &Cert) {
+        self.updated_at = Utc::now();
+        self.cert = self.cert.iter().filter(|c| c.cert_type != cert.cert_type).cloned().collect();
+    }
 }

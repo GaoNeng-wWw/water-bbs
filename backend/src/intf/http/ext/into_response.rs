@@ -73,7 +73,7 @@ impl From<HttpException> for AppError {
 
 #[macro_export]
 macro_rules! app_err {
-    ($e:expr) => { AppError(Box::new($e)) };
+    ($e:expr) => { crate::intf::http::ext::into_response::AppError(Box::new($e)) };
 }
 
 #[macro_export]
