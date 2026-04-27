@@ -5,3 +5,15 @@ edition = "2024"
 
 [dependencies]
 domain.workspace=true
+infra.workspace=true
+uuid.workspace=true
+serde.workspace=true
+serde_json.workspace=true
+derive_builder.workspace=true
+josekit.workspace = true
+tokio.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+shared.workspace = true
+async-trait.workspace = true
+mockall.workspace = true

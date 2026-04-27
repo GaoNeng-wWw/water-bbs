@@ -2,8 +2,10 @@ use std::{collections::HashMap, sync::Arc};
 
 use chrono::{Duration, Utc};
 
-use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
+use infra::eventbus::EventBus;
 use domain::prelude::*;
+
+use crate::auth::error::AuthServiceError;
 
 #[derive(Clone, Debug)]
 pub struct LoginRequest {

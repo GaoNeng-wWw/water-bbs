@@ -6,7 +6,7 @@ edition = "2024"
 [workspace]
 members = [
     ".", "application",
-    "domain",
+    "domain", "infra",
     "migration",
     "shared",
 ]
@@ -41,7 +41,7 @@ mockall = "0.14.0"
 axum-test = "20.0.0"
 shared.path = "./shared"
 domain.path = "./domain"
-
+infra.path = "./infra"
 
 [dependencies]
 anyhow.workspace=true
@@ -71,6 +71,7 @@ mockall.workspace=true
 axum-test.workspace=true
 shared.workspace=true
 domain.workspace=true
+infra.workspace=true
 
 
 [profile.dev]

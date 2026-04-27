@@ -3,7 +3,7 @@ pub mod mail;
 use std::{collections::HashMap, sync::Arc};
 
 use crate::{
-    application::auth::error::RegistoryError,
+    auth::error::RegistoryError,
 };
 
 use domain::prelude::*;

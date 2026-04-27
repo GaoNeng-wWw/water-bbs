@@ -2,8 +2,10 @@ use std::sync::Arc;
 
 use josekit::jwk::Jwk;
 
-use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
-
+use crate::{auth::error::AuthServiceError};
+use infra::eventbus::EventBus;
+use infra::error::InfraError::VerifyCodeServiceError;
+use infra::error::InfraError::EventBusError;
 use domain::prelude::*;
 
 #[derive(Clone,Debug)]
@@ -47,7 +49,7 @@ pub async fn handle(
     
     verify_code_service.verify_code(&req.ident_value, &req.mfa_code).await
         .map_err(|err| {
-            return AuthServiceError::InfraError(crate::infra::error::InfraError::VerifyCodeServiceError(err))
+            return AuthServiceError::InfraError(VerifyCodeServiceError(err))
         })?;
 
     
@@ -61,7 +63,7 @@ pub async fn handle(
 
     let _ = bus.publish(event)
         .map_err(|err| {
-            return AuthServiceError::InfraError(crate::infra::error::InfraError::EventBusError(err))
+            return AuthServiceError::InfraError(EventBusError(err))
         })?;
 
     Ok(())

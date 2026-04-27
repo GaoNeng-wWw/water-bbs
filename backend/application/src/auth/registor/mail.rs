@@ -1,5 +1,5 @@
 use crate::{
-    application::auth::{
+    auth::{
         error::RegistoryError,
         registor::{RegisterRequest, Registor, RegistorContext},
     },

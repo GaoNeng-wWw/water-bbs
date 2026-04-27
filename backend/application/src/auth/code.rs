@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, infra::error::InfraError};
+use infra::error::InfraError;
+use crate::auth::error::AuthServiceError;
 use domain::prelude::*;
 
 #[derive(Clone, Debug)]

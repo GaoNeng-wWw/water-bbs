@@ -4,7 +4,8 @@ use derive_builder::Builder;
 use josekit::jwk::Jwk;
 use serde::{Deserialize, Serialize};
 
-use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
+use infra::eventbus::EventBus;
+use crate::auth::error::AuthServiceError;
 use domain::prelude::*;
 
 #[derive(Clone, Debug, Deserialize, Serialize, Builder)]

@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::{infra::error::InfraError};
+use infra::error::InfraError;
 use domain::prelude::*;
 
 #[derive(thiserror::Error, Debug, Clone, Serialize)]

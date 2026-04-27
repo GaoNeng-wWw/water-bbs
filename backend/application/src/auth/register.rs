@@ -2,12 +2,10 @@ use std::{collections::HashMap, sync::Arc};
 
 use derive_builder::Builder;
 
-use crate::{
-    application::auth::{
+use crate::auth::{
         error::AuthServiceError,
         registor::{RegisterRequest, Registor, RegistorContext},
-    },
-};
+    };
 
 use domain::prelude::*;
 

@@ -4,7 +4,7 @@ use derive_builder::Builder;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::{application::auth::error::AuthServiceError};
+use crate::auth::error::AuthServiceError;
 use domain::prelude::*;
 
 #[derive(Clone, Debug, Deserialize, Builder)]

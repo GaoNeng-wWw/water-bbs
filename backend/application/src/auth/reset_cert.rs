@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
+use infra::eventbus::EventBus;
+use crate::auth::error::AuthServiceError;
+use infra::error::InfraError::VerifyCodeServiceError;
 use domain::prelude::*;
 
 #[derive(Clone)]
@@ -40,7 +42,7 @@ pub async fn handle(
     )
         .await
         .map_err(|err| {
-            return AuthServiceError::InfraError(crate::infra::error::InfraError::VerifyCodeServiceError(err))
+            return AuthServiceError::InfraError(VerifyCodeServiceError(err))
         })?;
     let account_id = account_repo.find_account_id_by_ident(
         &Identity {

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError};
+use crate::auth::error::AuthServiceError;
 use domain::prelude::*;
 
 pub struct Request {
