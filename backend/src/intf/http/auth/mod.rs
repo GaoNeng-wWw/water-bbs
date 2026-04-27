@@ -13,5 +13,7 @@ pub fn route() -> Router<AppState> {
         .route("/register", post(handlers::register::handler))
         .route("/logout", delete(handlers::logout::handler))
         .route("/code", post(handlers::send_mail_code::handler))
+        .route("/reset", post(handlers::reset_password::handler))
+        .route("/update", post(handlers::update_password::handler))
 }
 

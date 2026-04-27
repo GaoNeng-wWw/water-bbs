@@ -14,9 +14,10 @@ pub struct ResetCertDTO {
     pub cert_value: String,
 }
 
+#[axum::debug_handler]
 pub async fn handler(
+    State(state): State<AppState>,
     Json(dto): Json<ResetCertDTO>,
-    State(state): State<AppState>
 ) -> AppResult<()> {
     application::auth::reset_cert::handle(
         &ResetCertRequest {

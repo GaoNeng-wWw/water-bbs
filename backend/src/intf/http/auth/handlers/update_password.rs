@@ -1,13 +1,13 @@
 use axum::{Json, extract::State};
 use axum_extra::TypedHeader;
 use headers::{Authorization, authorization::Bearer};
-use serde::Serialize;
+use serde::Deserialize;
 
 use crate::{http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
 use application::{auth::update_cert::UpdateCertRequest};
 use domain::error::IntoApiError;
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Deserialize)]
 pub struct UpdatePasswordBody {
     ident_type: String,
     ident_value: String,
@@ -17,9 +17,9 @@ pub struct UpdatePasswordBody {
     mfa_code: String
 }
 
-pub async fn handle(
-    TypedHeader(auth): TypedHeader<Authorization<Bearer>>,
+pub async fn handler(
     State(state):State<AppState>,
+    TypedHeader(auth): TypedHeader<Authorization<Bearer>>,
     Json(json): Json<UpdatePasswordBody>
 ) -> AppResult<()> {
     let token = auth.token();
