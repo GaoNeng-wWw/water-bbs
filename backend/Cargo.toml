@@ -5,8 +5,9 @@ edition = "2024"
 
 [workspace]
 members = [
-    ".",         # 你的主程序 crate
-    "migration", # 你的迁移 crate
+    ".",
+    "migration",
+    "shared",
 ]
 
 [workspace.dependencies]
@@ -14,24 +15,13 @@ windows-sys = "0.61.2"
 socket2 = "0.6.3"
 anyhow = "1.0.102"
 axum = "0.8.9"
-fred = "10.1.0"
+fred = {version = "10.1.0", features = ["i-hexpire", "mocks"]}
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 thiserror = "2.0.18"
 tokio = { version = "1.52.1", features = ["full"] }
 sea-orm = { version = "2.0.0-rc.38", features = ["sqlx-sqlite", "with-chrono", "macros", "with-uuid", "with-json", "runtime-tokio-native-tls"] }
 sea-orm-migration = { version = "2.0.0-rc.38", features = ["runtime-tokio", "sqlx-sqlite"] }
-
-[dependencies]
-anyhow.workspace = true
-axum = { workspace = true, features = ["macros"] }
-fred = { workspace = true, features = ["i-hexpire", "mocks"] }
-serde.workspace = true
-serde_json.workspace = true
-thiserror.workspace = true
-tokio.workspace = true
-sea-orm.workspace = true
-sea-orm-migration.workspace = true
 nutype = { version = "0.6.2", features = ["derive_unsafe", "serde"] }
 uuid = { version = "1.23.1", features = ["serde", "v7"] }
 async-trait = "0.1.89"
@@ -49,10 +39,41 @@ argon2 = "0.5.3"
 mockall = "0.14.0"
 axum-test = "20.0.0"
 
+
+[dependencies]
+anyhow.workspace=true
+axum.workspace=true
+fred.workspace=true
+serde.workspace=true
+serde_json.workspace=true
+thiserror.workspace=true
+tokio.workspace=true
+sea-orm.workspace=true
+sea-orm-migration.workspace=true
+nutype.workspace=true
+uuid.workspace=true
+async-trait.workspace=true
+chrono.workspace=true
+rand.workspace=true
+sea-orm-cli.workspace=true
+lettre.workspace=true
+derive_builder.workspace=true
+tracing.workspace=true
+tracing-subscriber.workspace=true
+josekit.workspace=true
+axum-extra.workspace=true
+headers.workspace=true
+argon2.workspace=true
+mockall.workspace=true
+axum-test.workspace=true
+shared.path = "./shared"
+
+
 [profile.dev]
 opt-level = 0        # 不进行优化，编译速度最快
 debug = true         # 保留调试信息
 incremental = true   # 开启增量编译
+lto = false
 
 [dev-dependencies]
 axum-test = "20.0.0"

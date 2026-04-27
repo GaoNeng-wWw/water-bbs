@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
+use shared::pagination::{CursorPaginationRequest, CursorPaginationResponse};
 
-use crate::{domain::{ar::account::{Account, Identity}, error::repo::RepositoryError, vo::account_id::AccountId}, shared::pagination::{CursorPaginationRequest, CursorPaginationResponse}};
+use crate::{domain::{ar::account::{Account, Identity}, error::repo::RepositoryError, vo::account_id::AccountId}};
 
 
 #[async_trait::async_trait]

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, domain::service::verify_code::{Channel, IVerifyCodeService}, infra::error::InfraError, shared};
+use crate::{application::auth::error::AuthServiceError, domain::service::verify_code::{Channel, IVerifyCodeService}, infra::error::InfraError};
 
 #[derive(Clone, Debug)]
 pub struct RequestCodeRequest {

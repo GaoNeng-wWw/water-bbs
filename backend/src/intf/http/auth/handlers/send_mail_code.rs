@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::Deserialize;
 
-use crate::{domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}, shared};
+use crate::{domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use shared;
 
 #[derive(Clone, Deserialize)]
 pub struct SendMailCode {

@@ -15,8 +15,8 @@ use crate::{
         entity::{self, identity::Entity},
         mapper,
     },
-    shared::pagination::{CursorPaginationRequest, CursorPaginationResponse},
 };
+use shared::pagination::{CursorPaginationRequest, CursorPaginationResponse};
 
 pub struct AccountRepo {
     db: DatabaseConnection,
