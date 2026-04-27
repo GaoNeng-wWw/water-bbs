@@ -48,6 +48,13 @@ impl Exception for InternalException {
     fn cause(&self) -> Option<serde_json::Value> { None }
 }
 
+pub struct BadRequestException(pub Option<serde_json::Value>);
+impl Exception for BadRequestException {
+    fn status_code(&self) -> StatusCode { StatusCode::BAD_REQUEST }
+    fn message(&self) -> &'static str { "BAD_REQUEST" }
+    fn cause(&self) -> Option<serde_json::Value> { None }
+}
+
 pub struct HttpException(pub u16, pub String, pub Option<serde_json::Value>);
 
 impl Exception for HttpException {
