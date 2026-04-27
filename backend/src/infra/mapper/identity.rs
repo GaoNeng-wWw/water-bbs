@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use crate::{domain::ar::account::Identity, infra::entity::identity as identity_entity};
+use crate::{infra::entity::identity as identity_entity};
+use domain::prelude::*;
 
 pub fn to_domain(model: &identity_entity::Model) -> Identity {
     Identity {

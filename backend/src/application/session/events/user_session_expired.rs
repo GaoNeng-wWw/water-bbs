@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use crate::{domain::{error::handler::HandlerError, event::{DomainEvent, EventEnvelope, session::SessionDomainEvent}, repo::session::ISessionRepo}, infra::eventbus::EventHandler};
+use crate::{infra::eventbus::EventHandler};
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct SessionExpired {

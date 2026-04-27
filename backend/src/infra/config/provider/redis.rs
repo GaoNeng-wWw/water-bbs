@@ -1,6 +1,6 @@
 use fred::prelude::{KeysInterface, Pool};
 
-use crate::domain::{config::loader::Loader, error::config::ConfigLoaderError};
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct RedisConfigLoader {

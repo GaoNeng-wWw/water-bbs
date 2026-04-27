@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::{Deserialize, Serialize};
 
-use crate::{application::{self, auth::register::Request}, domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{application::{self, auth::register::Request}, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use domain::error::IntoApiError;
 
 #[derive(Clone,Debug,Deserialize,Serialize)]
 pub struct RegisterDTO {

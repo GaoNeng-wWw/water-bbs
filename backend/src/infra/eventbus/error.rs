@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::domain::{error::IntoApiError, event::DomainEvent};
+use domain::prelude::*;
 
 #[derive(Clone, Debug, Deserialize, Serialize, thiserror::Error)]
 pub enum EventBusError {

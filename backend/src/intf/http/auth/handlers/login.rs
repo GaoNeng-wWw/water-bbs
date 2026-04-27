@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::{Deserialize, Serialize};
 
-use crate::{http_exception, application::{self, auth::login::LoginRequest}, domain::error::IntoApiError, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{http_exception, application::{self, auth::login::LoginRequest}, intf::http::ext::{into_response::AppResult, state::AppState}};
+use domain::error::IntoApiError;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct LoginDTO {

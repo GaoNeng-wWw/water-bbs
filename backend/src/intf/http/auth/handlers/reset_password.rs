@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::Deserialize;
 
-use crate::{application::{self, auth::reset_cert::ResetCertRequest}, domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{application::{self, auth::reset_cert::ResetCertRequest}, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use domain::error::IntoApiError;
 
 #[derive(Clone, Deserialize)]
 pub struct ResetCertDTO {

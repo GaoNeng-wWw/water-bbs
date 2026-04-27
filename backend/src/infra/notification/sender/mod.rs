@@ -1,4 +1,4 @@
-use crate::domain::{event::verification_code_sent_event::VerificationCodeSentEvent, service::verify_code::{Channel, VerifyCodeServiceError}};
+use domain::prelude::*;
 
 pub mod mail_sender;
 

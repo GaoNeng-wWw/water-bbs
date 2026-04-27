@@ -1,6 +1,6 @@
 use axum::{Json, http::StatusCode, response::IntoResponse};
 
-use crate::domain::error::repo::RepositoryError;
+use domain::error::repo::RepositoryError;
 
 pub trait Exception {
     fn status_code(&self) -> StatusCode;

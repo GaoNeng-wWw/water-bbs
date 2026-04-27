@@ -2,7 +2,8 @@ use std::{collections::HashMap, sync::Arc};
 
 use chrono::{Duration, Utc};
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::{account::Identity, auth_session::{AuthSessionBuilder, UserSession}}, repo::{account::IAccountRepo, session::ISessionRepo}, service::token::{ITokenService, IssueTokenRequest}, vo::session::SessionId}, infra::eventbus::EventBus};
+use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
+use domain::prelude::*;
 
 #[derive(Clone, Debug)]
 pub struct LoginRequest {
@@ -57,7 +58,7 @@ pub async fn handler(
     let at = token_service.issue_token(
         &IssueTokenRequest {
             sub: account_id.clone(),
-            token_type: crate::domain::ar::auth_session::TokenType::Access,
+            token_type: TokenType::Access,
             ttl: Duration::hours(1).num_seconds(),
             issuer: "water-bbs".to_string(),
             meta: HashMap::new(),
@@ -69,7 +70,7 @@ pub async fn handler(
     let rt = token_service.issue_token(
         &IssueTokenRequest {
             sub: account_id.clone(),
-            token_type: crate::domain::ar::auth_session::TokenType::Refresh,
+            token_type: TokenType::Refresh,
             ttl: Duration::days(7).num_seconds(),
             issuer: "water-bbs".to_string(),
             meta: rt_meta,

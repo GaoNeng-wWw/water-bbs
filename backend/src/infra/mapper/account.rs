@@ -1,6 +1,8 @@
-use chrono::{DateTime, Utc};
 
-use crate::{domain::{ar::account::{Account, Cert, Identity}, vo::{account_id::AccountId, money::Money, profile::Profile}}, infra::entity::{account as account_entity, cert as cert_entity, identity as identity_entity}};
+use crate::{infra::entity::account as account_entity};
+
+use domain::prelude::*;
+
 
 pub fn to_domain(
     model: &account_entity::Model,

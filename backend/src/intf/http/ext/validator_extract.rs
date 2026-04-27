@@ -5,9 +5,9 @@ use axum::{
 use serde::de::DeserializeOwned;
 
 use crate::{
-    domain::{error::IntoApiError, validator::ValidateDto},
     intf::http::ext::into_response::{AppError, BadRequestException},
 };
+use domain::{error::IntoApiError, validator::ValidateDto};
 
 pub struct Validated<T>(pub T);
 

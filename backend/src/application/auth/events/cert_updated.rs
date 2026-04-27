@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use crate::{domain::{error::handler::HandlerError, event::{DomainEvent, EventEnvelope, auth::AuthDomainEvent, session::SessionDomainEvent}, repo::session::ISessionRepo}, infra::eventbus::{EventBus, EventHandler}};
+use crate::{infra::eventbus::{EventBus, EventHandler}};
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct CertUpdated {

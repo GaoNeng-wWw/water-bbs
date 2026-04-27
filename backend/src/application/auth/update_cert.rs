@@ -2,7 +2,9 @@ use std::sync::Arc;
 
 use josekit::jwk::Jwk;
 
-use crate::{application::auth::error::AuthServiceError, domain::{event::{DomainEvent, EventEnvelope}, repo::account::IAccountRepo, service::{token::ITokenService, verify_code::IVerifyCodeService}}, infra::eventbus::EventBus};
+use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
+
+use domain::prelude::*;
 
 #[derive(Clone,Debug)]
 pub struct UpdateCertRequest {
@@ -53,7 +55,7 @@ pub async fn handle(
 
     let event = DomainEvent::Auth(
         EventEnvelope::new(
-            crate::domain::event::auth::AuthDomainEvent::UpdateCert { account_id }
+            AuthDomainEvent::UpdateCert { account_id }
         )
     );
 

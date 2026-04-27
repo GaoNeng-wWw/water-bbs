@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, repo::{account::IAccountRepo, session::ISessionRepo}}};
+use crate::{application::auth::error::AuthServiceError};
+use domain::prelude::*;
 
 pub struct Request {
     pub ident_type: String,

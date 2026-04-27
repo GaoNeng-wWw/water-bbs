@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::account::{Cert, Identity}, event::{DomainEvent, EventEnvelope}, repo::account::IAccountRepo, service::verify_code::IVerifyCodeService}, infra::eventbus::EventBus};
+use crate::{application::auth::error::AuthServiceError, infra::eventbus::EventBus};
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct ResetCertRequest {
@@ -63,7 +64,7 @@ pub async fn handle(
         .await?;
     let event = DomainEvent::Auth(
         EventEnvelope::new(
-            crate::domain::event::auth::AuthDomainEvent::UpdateCert { account_id }
+            AuthDomainEvent::UpdateCert { account_id }
         )
     );
     tokio::spawn(async move {

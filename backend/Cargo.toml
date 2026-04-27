@@ -6,6 +6,7 @@ edition = "2024"
 [workspace]
 members = [
     ".",
+    "domain",
     "migration",
     "shared",
 ]
@@ -38,6 +39,8 @@ headers = "0.4.1"
 argon2 = "0.5.3"
 mockall = "0.14.0"
 axum-test = "20.0.0"
+shared.path = "./shared"
+domain.path = "./domain"
 
 
 [dependencies]
@@ -66,7 +69,8 @@ headers.workspace=true
 argon2.workspace=true
 mockall.workspace=true
 axum-test.workspace=true
-shared.path = "./shared"
+shared.workspace=true
+domain.workspace=true
 
 
 [profile.dev]

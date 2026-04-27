@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::domain::{config::{features::{Features, IFeaturePolicyProvider}, loader::Loader}, error::config::PolicyError};
+use domain::prelude::*;
 
 pub struct RedisFeaturesProvider<L: Loader + Send + Sync + 'static> {
     pub loader: Arc<L>,

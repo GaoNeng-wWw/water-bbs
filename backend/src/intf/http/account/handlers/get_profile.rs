@@ -7,8 +7,9 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-    app_err, domain::{error::IntoApiError, vo::account_id::AccountId}, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}
+    app_err, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}
 };
+use domain::{error::IntoApiError, vo::account_id::AccountId};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct GetProfileRequest {

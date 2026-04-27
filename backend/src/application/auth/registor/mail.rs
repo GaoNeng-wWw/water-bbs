@@ -3,11 +3,8 @@ use crate::{
         error::RegistoryError,
         registor::{RegisterRequest, Registor, RegistorContext},
     },
-    domain::{
-        ar::account::{Account, Cert, Identity},
-        vo::{account_id::AccountId, money::Money, profile::Profile},
-    },
 };
+use domain::prelude::*;
 
 // 邮箱注册器
 pub struct MailRegistor;

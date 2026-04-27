@@ -4,10 +4,9 @@ use std::{collections::HashMap, sync::Arc};
 
 use crate::{
     application::auth::error::RegistoryError,
-    domain::{
-        config::features::IFeaturePolicyProvider, repo::account::IAccountRepo, service::{mailer::Mailer, verify_code::{IVerifyCodeService, VerifyCodeService}}
-    },
 };
+
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct RegisterRequest {

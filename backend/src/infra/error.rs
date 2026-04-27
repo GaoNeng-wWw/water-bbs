@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{infra::eventbus::error::EventBusError};
-use crate::domain::{error::IntoApiError, service::verify_code::VerifyCodeServiceError};
+use domain::prelude::*;
 
 #[derive(Clone, Debug, Deserialize, Serialize, thiserror::Error)]
 pub enum InfraError {

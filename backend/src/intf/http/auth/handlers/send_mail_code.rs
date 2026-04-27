@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::Deserialize;
 
-use crate::{domain::error::IntoApiError, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use domain::error::IntoApiError;
 use shared;
 
 #[derive(Clone, Deserialize)]
@@ -15,7 +16,7 @@ pub async fn handler(
     let code = shared::random::generator::digital(8);
     state
         .verify_code_service
-        .send_code(crate::domain::service::verify_code::Channel::Email, &body.target, &code)
+        .send_code(domain::service::verify_code::Channel::Email, &body.target, &code)
         .await
         .map_err(|err| {http_exception!(err.status_code(), err.message(), err.cause())})?;
     Ok(Json(()))

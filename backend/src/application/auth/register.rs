@@ -7,12 +7,9 @@ use crate::{
         error::AuthServiceError,
         registor::{RegisterRequest, Registor, RegistorContext},
     },
-    domain::{
-        config::features::IFeaturePolicyProvider,
-        repo::account::IAccountRepo,
-        service::verify_code::{IVerifyCodeService},
-    },
 };
+
+use domain::prelude::*;
 
 #[derive(Clone, Builder)]
 pub struct Request {

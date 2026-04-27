@@ -1,6 +1,7 @@
 use serde::Serialize;
 
-use crate::{domain::{ar::account::AccountDomainError, error::{IntoApiError, config::PolicyError, repo::RepositoryError}, service::verify_code::VerifyCodeServiceError}, infra::error::InfraError};
+use crate::{infra::error::InfraError};
+use domain::prelude::*;
 
 #[derive(thiserror::Error, Debug, Clone, Serialize)]
 pub enum RegistoryError {
@@ -74,9 +75,9 @@ pub enum AuthServiceError {
     #[error(transparent)]
     DomainError(#[from] AccountDomainError),
     #[error(transparent)]
-    TokenServiceError(#[from] crate::domain::error::service::token::TokenServiceError),
+    TokenServiceError(#[from] TokenServiceError),
     #[error(transparent)]
-    SessionDomainError(#[from] crate::domain::error::auth_session::SessionError),
+    SessionDomainError(#[from] SessionError),
     #[error("MFA_REQURIE")]
     MfaRequire,
     #[error("MFA_REJECT")]

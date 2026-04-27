@@ -1,7 +1,7 @@
 use tokio::sync::broadcast;
-use tracing::info;
 
-use crate::{domain::{error::handler::HandlerError, event::DomainEvent}, infra::eventbus::error::EventBusError};
+use crate::{infra::eventbus::error::EventBusError};
+use domain::prelude::*;
 use std::sync::Arc;
 
 pub mod in_memory_event_bus;

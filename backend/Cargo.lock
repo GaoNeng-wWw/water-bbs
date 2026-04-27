@@ -627,6 +627,7 @@ dependencies = [
  "axum-test",
  "chrono",
  "derive_builder",
+ "domain",
  "fred",
  "headers",
  "josekit",
@@ -1195,6 +1196,27 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.117",
+]
+
+[[package]]
+name = "domain"
+version = "0.1.0"
+dependencies = [
+ "argon2",
+ "async-trait",
+ "chrono",
+ "derive_builder",
+ "fred",
+ "josekit",
+ "mockall",
+ "nutype",
+ "rand 0.10.1",
+ "serde",
+ "serde_json",
+ "shared",
+ "thiserror",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]

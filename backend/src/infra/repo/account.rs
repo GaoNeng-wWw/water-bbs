@@ -4,18 +4,13 @@ use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, IntoActiveModel, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, TransactionTrait
 };
 
-use crate::{
-    domain::{
-        ar::account::{Account, Identity},
-        error::repo::RepositoryError,
-        repo::account::IAccountRepo,
-        vo::{account_id::AccountId, profile::Profile},
-    },
-    infra::{
-        entity::{self, identity::Entity},
+use domain::prelude::*;
+
+
+use crate::infra::{
+        entity::{self},
         mapper,
-    },
-};
+    };
 use shared::pagination::{CursorPaginationRequest, CursorPaginationResponse};
 
 pub struct AccountRepo {

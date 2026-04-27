@@ -1,6 +1,7 @@
 use tokio::sync::Mutex;
 
-use crate::{domain::event::verification_code_sent_event::VerificationCodeSentEvent, infra::notification::sender::NotificationSender};
+use crate::{infra::notification::sender::NotificationSender};
+use domain::prelude::*;
 
 pub struct NotificationDispatcher {
     senders: Vec<Box<dyn NotificationSender>>,

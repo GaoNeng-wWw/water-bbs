@@ -1,12 +1,10 @@
 use lettre::{Message, SmtpTransport, Transport, message::header::ContentType};
 
 use crate::{
-    domain::{
-        event::verification_code_sent_event::VerificationCodeSentEvent,
-        service::verify_code::{Channel, VerifyCodeServiceError},
-    },
     infra::notification::sender::NotificationSender,
 };
+
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct MailSender {

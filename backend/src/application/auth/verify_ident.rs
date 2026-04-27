@@ -4,7 +4,8 @@ use derive_builder::Builder;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::{application::auth::error::AuthServiceError, domain::{ar::account::Identity, repo::account::IAccountRepo, service::verify_code::IVerifyCodeService}};
+use crate::{application::auth::error::AuthServiceError};
+use domain::prelude::*;
 
 #[derive(Clone, Debug, Deserialize, Builder)]
 pub struct VerifyIdentRequest {

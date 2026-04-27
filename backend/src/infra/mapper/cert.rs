@@ -1,6 +1,6 @@
 use uuid::Uuid;
-
-use crate::{domain::ar::account::Cert, infra::entity::cert as cert_entity};
+use crate::{infra::entity::cert as cert_entity};
+use domain::prelude::*;
 
 pub fn to_domain(model: &cert_entity::Model) -> Cert {
     Cert::new(model.id, model.cert_type.clone(), model.cert_value.clone())

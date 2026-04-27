@@ -2,7 +2,8 @@ use std::{ops::Deref, sync::Arc};
 
 use tokio::sync::broadcast;
 
-use crate::{domain::event::DomainEvent, infra::eventbus::{EventBus, error::EventBusError}};
+use crate::{infra::eventbus::{EventBus, error::EventBusError}};
+use domain::prelude::*;
 
 #[derive(Clone)]
 pub struct InMemoryEventBus {

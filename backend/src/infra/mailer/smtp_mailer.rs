@@ -1,6 +1,6 @@
 use lettre::{Message, SmtpTransport, Transport};
 
-use crate::domain::service::mailer::{Mail, MailError, Mailer};
+use domain::prelude::*;
 
 pub struct SmtpMailer {
     pub smtp_client: SmtpTransport,

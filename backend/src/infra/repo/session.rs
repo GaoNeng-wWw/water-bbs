@@ -5,7 +5,7 @@ use derive_builder::Builder;
 use fred::{error::Error, prelude::{HashesInterface, KeysInterface, Pool, TransactionInterface}, types::Map};
 use uuid::Uuid;
 
-use crate::domain::{ar::auth_session::{AuthSession, UserSession, UserSessionBuilder}, error::repo::RepositoryError, repo::session::ISessionRepo, vo::{account_id::AccountId, session::SessionId}};
+use domain::prelude::*;
 
 #[derive(Clone,Debug,Builder)]
 pub struct SessionRepo {

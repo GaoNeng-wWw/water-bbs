@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use crate::{domain::vo::profile::Profile, infra::entity::profile as profile_entity};
+use crate::{infra::entity::profile as profile_entity};
+use domain::prelude::*;
 
 pub fn to_domain(model: &profile_entity::Model) -> Profile {
     Profile {

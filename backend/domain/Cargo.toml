@@ -1,0 +1,21 @@
+[package]
+name = "domain"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+nutype.workspace = true
+uuid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rand.workspace = true
+argon2.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+derive_builder.workspace = true
+shared.workspace = true
+async-trait.workspace=true
+mockall.workspace=true
+josekit.workspace = true
+tokio.workspace = true
+fred.workspace = true

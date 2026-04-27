@@ -4,7 +4,6 @@
 
 use crate::intf::http::startup::StartupConfigure;
 
-pub mod domain;
 pub mod infra; 
 pub mod intf;
 pub mod application;
