@@ -3,11 +3,7 @@
 #![allow(warnings)]
 
 use crate::intf::http::startup::StartupConfigure;
-
-pub mod infra; 
 pub mod intf;
-pub mod application;
-
 
 #[tokio::main]
 async fn main() {

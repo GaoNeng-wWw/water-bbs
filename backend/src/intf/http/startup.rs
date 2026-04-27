@@ -5,11 +5,12 @@ use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use tracing::{info, level_filters::LevelFilter};
 
-use crate::{application::{self, session::events::user_session_revoked::SessionRevoked}, intf::http::{self, ext::state::AppState}};
-use crate::infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}, token::jwt::JwtService};
+use infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}, token::jwt::JwtService};
+use crate::intf::http::{ext::state::AppState};
+use application::{session::events::user_session_revoked::SessionRevoked};
 use domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService};
 
-#[tracing::instrument(name="redis", skip_all, fields(url=%url))]
+#[tracing::instrument(name="red is", skip_all, fields(url=%url))]
 async fn startup_redis(
     url: &str,
 ) -> Result<Pool, Box<dyn std::error::Error>>{
@@ -112,7 +113,7 @@ pub async fn startup(
         ],
     };
     let app = axum::Router::new()
-        .nest("/auth", http::auth::route())
+        .nest("/auth", crate::intf::http::auth::route())
         .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();

@@ -42,6 +42,7 @@ axum-test = "20.0.0"
 shared.path = "./shared"
 domain.path = "./domain"
 infra.path = "./infra"
+application.path = "./application"
 
 [dependencies]
 anyhow.workspace=true
@@ -72,7 +73,7 @@ axum-test.workspace=true
 shared.workspace=true
 domain.workspace=true
 infra.workspace=true
-
+application.workspace=true
 
 [profile.dev]
 opt-level = 0        # 不进行优化，编译速度最快

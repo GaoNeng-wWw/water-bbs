@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use crate::{application::auth::registor::Registor, infra::eventbus::EventBus};
+use infra::eventbus::EventBus;
+use application::auth::registor::Registor;
 use domain::{config::features::IFeaturePolicyProvider, repo::{account::IAccountRepo, session::ISessionRepo}, service::{token::ITokenService, verify_code::{IVerifyCodeService, VerifyCodeService}}};
 
 #[derive(Clone)]

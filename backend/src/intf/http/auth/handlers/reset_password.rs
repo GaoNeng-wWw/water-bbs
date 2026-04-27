@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::Deserialize;
 
-use crate::{application::{self, auth::reset_cert::ResetCertRequest}, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use application::{auth::reset_cert::ResetCertRequest};
 use domain::error::IntoApiError;
 
 #[derive(Clone, Deserialize)]

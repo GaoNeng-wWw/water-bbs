@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{infra::eventbus::EventHandler};
+use infra::eventbus::EventHandler;
 use domain::prelude::*;
 
 #[derive(Clone)]

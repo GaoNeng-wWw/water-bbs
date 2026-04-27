@@ -3,7 +3,8 @@ use axum_extra::TypedHeader;
 use headers::{Authorization, authorization::Bearer};
 use serde::Serialize;
 
-use crate::{application::{self, auth::update_cert::UpdateCertRequest}, http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use application::{auth::update_cert::UpdateCertRequest};
 use domain::error::IntoApiError;
 
 #[derive(Clone, Serialize)]

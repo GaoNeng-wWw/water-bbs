@@ -2,7 +2,9 @@ use axum::{Json, extract::State};
 use headers::{Authorization, authorization::Bearer};
 use axum_extra::TypedHeader;
 
-use crate::{application, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{intf::http::ext::{into_response::AppResult, state::AppState}};
+use application;
+
 
 pub async fn handler(
     TypedHeader(auth): TypedHeader<Authorization<Bearer>>,

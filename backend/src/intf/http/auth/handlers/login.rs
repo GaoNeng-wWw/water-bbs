@@ -1,7 +1,8 @@
 use axum::{Json, extract::State};
 use serde::{Deserialize, Serialize};
 
-use crate::{http_exception, application::{self, auth::login::LoginRequest}, intf::http::ext::{into_response::AppResult, state::AppState}};
+use crate::{http_exception, intf::http::ext::{into_response::AppResult, state::AppState}};
+use application::{auth::login::LoginRequest};
 use domain::error::IntoApiError;
 
 #[derive(Clone, Debug, Deserialize)]
