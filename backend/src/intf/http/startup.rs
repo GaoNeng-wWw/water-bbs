@@ -75,8 +75,9 @@ pub async fn startup(
 
     let db = setup_database(&config.db_url).await.unwrap();
     let redis= startup_redis(&config.redis_url).await.unwrap();
-    let account_repo = Arc::new(AccountRepo::new(db, redis.clone()));
+    let account_repo = Arc::new(AccountRepo::new(db.clone(), redis.clone()));
     let session_repo = Arc::new(SessionRepo::new(redis.clone()));
+    let tag_repo = Arc::new(infra::repo::tag::TagRepo::new(db, redis.clone()));
 
     let bus = event_startup(100, session_repo.clone()).await;
 
@@ -111,8 +112,10 @@ pub async fn startup(
         strategy: vec![
             Arc::new(application::auth::registor::mail::MailRegistor {})
         ],
+        tag_repo,
     };
     let app = axum::Router::new()
+        .nest("/tag", crate::intf::http::tag::route())
         .nest("/auth", crate::intf::http::auth::route())
         .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();

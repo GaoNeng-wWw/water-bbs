@@ -4,6 +4,7 @@ pub mod auth_session;
 pub mod handler;
 pub mod service;
 pub mod validate;
+pub mod ar;
 
 pub mod prelude {
     pub use super::repo::*;

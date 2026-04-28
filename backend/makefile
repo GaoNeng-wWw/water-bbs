@@ -2,13 +2,18 @@
 
 export
 
-OUTPUT_DIR := ./src/infra/entity
+OUTPUT_DIR := ./infra/src/entity
 
 .PHONY: generate-entities
+
+
 generate-entities:
 	@echo "正在从数据库生成 Entity 到 $(OUTPUT_DIR)..."
-	sea-orm-cli generate entity --database-url "$(DATABASE_URL)" --output-dir "$(OUTPUT_DIR)" --with-serde both
+	-sea-orm-cli generate entity --database-url $(DATABASE_URL) --output-dir "$(OUTPUT_DIR)" --with-serde both
 	@echo "生成完成！"
+
+migrate:
+	-sea-orm-cli migrate
 
 .PHONY: clean-entities
 clean-entities:

@@ -93,6 +93,7 @@ enum Tag {
     Id,
     Name,
     CreatedAt,
+    RemovedAt
 }
 
 #[derive(DeriveIden)]
@@ -463,6 +464,7 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .default(Expr::cust("now()")),
                     )
+                    .col(timestamp_with_time_zone(Tag::RemovedAt).null())
                     .primary_key(Index::create().col(Tag::Id))
                     .to_owned(),
             )

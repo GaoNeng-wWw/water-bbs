@@ -2,12 +2,13 @@ use std::sync::Arc;
 
 use infra::eventbus::EventBus;
 use application::auth::registor::Registor;
-use domain::{config::features::IFeaturePolicyProvider, repo::{account::IAccountRepo, session::ISessionRepo}, service::{token::ITokenService, verify_code::{IVerifyCodeService, VerifyCodeService}}};
+use domain::{config::features::IFeaturePolicyProvider, repo::{account::IAccountRepo, session::ISessionRepo, tag::ITagRepo}, service::{token::ITokenService, verify_code::{IVerifyCodeService, VerifyCodeService}}};
 
 #[derive(Clone)]
 pub struct AppState {
     pub account_repo: Arc<dyn IAccountRepo + Send + Sync>,
     pub session_repo: Arc<dyn ISessionRepo + Send + Sync>,
+    pub tag_repo: Arc<dyn ITagRepo + Send + Sync>,
     pub event_bus: Arc<dyn EventBus + Send + Sync>,
     pub redis: Arc<fred::prelude::Pool>,
     pub policy_provider: Arc<dyn IFeaturePolicyProvider + Send + Sync>,
