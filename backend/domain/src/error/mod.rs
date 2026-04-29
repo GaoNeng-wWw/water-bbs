@@ -5,6 +5,7 @@ pub mod handler;
 pub mod service;
 pub mod validate;
 pub mod ar;
+pub mod cqrs;
 
 pub mod prelude {
     pub use super::repo::*;
@@ -13,6 +14,7 @@ pub mod prelude {
     pub use super::handler::*;
     pub use super::service::prelude::*;
     pub use super::validate::*;
+    pub use super::cqrs::*;
     pub use super::IntoApiError;
 }
 

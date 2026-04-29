@@ -36,4 +36,8 @@ impl Post {
         self.touch();
         self.title = title;
     }
+    pub fn update_tag_ids(&mut self, tag_ids: Vec<TagId>) {
+        self.touch();
+        self.tag_ids = tag_ids;
+    }
 }

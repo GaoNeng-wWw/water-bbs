@@ -9,4 +9,7 @@ pub trait ITagRepo {
     async fn list(&self, created_at: Option<DateTime<Utc>>, limit: Option<u64>) -> Result<Vec<Tag>, RepositoryError>;
     async fn count(&self) -> Result<u64, RepositoryError>;
     async fn get(&self, id: &TagId) -> Result<Tag, RepositoryError>;
+    async fn incr_post_count(&self, tag_id: &TagId) -> Result<(), RepositoryError>;
+    async fn decr_post_count(&self, tag_id: &TagId) -> Result<(), RepositoryError>;
+    async fn get_post_total(&self, tag_id: Option<TagId>) -> Result<u32, RepositoryError>;
 }

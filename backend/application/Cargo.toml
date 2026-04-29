@@ -17,3 +17,4 @@ thiserror.workspace = true
 shared.workspace = true
 async-trait.workspace = true
 mockall.workspace = true
+cqrs.workspace = true

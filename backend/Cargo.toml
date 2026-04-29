@@ -5,7 +5,7 @@ edition = "2024"
 
 [workspace]
 members = [
-    ".", "application",
+    ".", "application", "cqrs",
     "domain", "infra",
     "migration",
     "shared",
@@ -43,6 +43,7 @@ shared.path = "./shared"
 domain.path = "./domain"
 infra.path = "./infra"
 application.path = "./application"
+cqrs.path = "./cqrs"
 
 [dependencies]
 anyhow.workspace=true

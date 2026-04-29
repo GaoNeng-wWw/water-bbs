@@ -21,8 +21,35 @@ impl TagRepo {
 
 const TAG_COUNT:&str = "CNT:TAG";
 
+fn post_count_key(tag_id: &TagId) -> String {
+    format!("CNT:POST:{}", tag_id.clone().into_inner())
+}
+fn post_total_key() -> String {
+    format!("CNT:POST")
+}
+
 #[async_trait::async_trait]
 impl ITagRepo for TagRepo {
+    async fn incr_post_count(&self, tag_id: &TagId) -> Result<(), RepositoryError> {
+        self.redis.incr::<(),&str>(post_count_key(tag_id).as_str()).await.map_err(|err| RepositoryError::RedisError { reason: err.to_string() })?;
+        self.redis.incr::<(),&str>(post_total_key().as_str()).await.map_err(|err| RepositoryError::RedisError { reason: err.to_string() })?;
+        Ok(())
+    }
+    async fn decr_post_count(&self, tag_id: &TagId) -> Result<(), RepositoryError> {
+        self.redis.decr::<(),&str>(post_count_key(tag_id).as_str()).await.map_err(|err| RepositoryError::RedisError { reason: err.to_string() })?;
+        Ok(())
+    }
+    async fn get_post_total(&self, tag_id: Option<TagId>) -> Result<u32, RepositoryError> {
+        if tag_id.is_none() {
+            return Ok(self.redis.get::<u32,&str>(post_total_key().as_str()).await.map_err(|err| RepositoryError::RedisError { reason: err.to_string() })?);
+        }
+        let count = self.redis.get::<u32,&str>(
+                post_count_key(
+                    &tag_id.unwrap()
+                ).as_str()
+            ).await.map_err(|err| RepositoryError::RedisError { reason: err.to_string() })?;
+        Ok(count)
+    }
     async fn upsert(&self, tag: &Tag) -> Result<(), RepositoryError> {
         crate::mapper::tag::to_model(tag)
             .save(&self.db)
