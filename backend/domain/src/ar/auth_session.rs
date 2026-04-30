@@ -103,6 +103,12 @@ impl UserSession {
         }
         self.sessions.push(session);
     }
+    pub fn find_token(&self, token: &Token) -> Option<&AuthSession> {
+        let token = token.clone();
+        self.sessions.iter()
+            .find(|s| s.access_token == token)
+            .or(self.sessions.iter().find(|s| s.refresh_token == token))
+    }
     pub fn revoke_session_by_access_token(
         &mut self,
         access_token: &Token

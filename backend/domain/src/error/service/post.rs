@@ -10,6 +10,10 @@ pub enum PostServiceError {
     QueryError(#[from] QueryError),
     #[error("POST_NOT_FOUND")]
     PostNotFound,
+    #[error("ACTOR_NOT_FOUND")]
+    ActorNotFound,
+    #[error("PERMISSION_DENIED")]
+    PermissionDenied,
 }
 
 impl IntoApiError for PostServiceError {
@@ -18,6 +22,8 @@ impl IntoApiError for PostServiceError {
             PostServiceError::RepoError(_) => 500,
             PostServiceError::QueryError(_) => self.status_code(),
             PostServiceError::PostNotFound => 404,
+            PostServiceError::ActorNotFound => 400,
+            PostServiceError::PermissionDenied => 403,
         }
     }
 
@@ -30,6 +36,8 @@ impl IntoApiError for PostServiceError {
             PostServiceError::RepoError(repository_error) => repository_error.cause(),
             PostServiceError::QueryError(query_error) => query_error.cause(),
             PostServiceError::PostNotFound => None,
+            PostServiceError::ActorNotFound => None,
+            PostServiceError::PermissionDenied => None,
         }
     }
 }

@@ -1,9 +1,10 @@
 use std::sync::Arc;
 
-use domain::{prelude::{IPostRepo, PostId, PostServiceError}, vo::tag_id::TagId};
+use domain::{prelude::{AccountId, IAccountRepo, IPostRepo, PostId, PostServiceError}, vo::tag_id::TagId};
 
 pub struct UpdatePostRequest {
     pub id: PostId,
+    pub account_id: AccountId,
     pub title: Option<String>,
     pub tag_ids: Option<Vec<TagId>>,
 }
@@ -16,14 +17,21 @@ pub struct UpdatePostResponse {
 
 pub async fn handler(
     req: UpdatePostRequest,
+    account_repo: &Arc<dyn IAccountRepo + Send + Sync>,
     post_repo: &Arc<dyn IPostRepo + Send + Sync>,
 ) -> Result<UpdatePostResponse, PostServiceError> {
     let post = post_repo.find_post(&req.id)
-        .await?;
-    if post.is_none() {
-        return Err(PostServiceError::PostNotFound);
+        .await?
+        .ok_or_else(|| PostServiceError::PostNotFound)?;
+    let account = account_repo.get_account(&req.account_id)
+        .await?
+        .ok_or_else(|| PostServiceError::ActorNotFound)?;
+
+    if post.author_id != account.id && !account.is_bd(){
+        return Err(PostServiceError::ActorNotFound);
     }
-    let mut post = post.unwrap();
+
+    let mut post = post;
     if post.is_removed() {
         return Err(PostServiceError::PostNotFound);
     }

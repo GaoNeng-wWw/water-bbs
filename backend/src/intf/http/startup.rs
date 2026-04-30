@@ -1,12 +1,13 @@
 use std::{sync::Arc, time::Duration};
 
+use cqrs::query::fetch_profile::FetchProfileContext;
 use fred::{prelude::{Pool, ClientLike, Config, TcpConfig}, types::Builder};
 use lettre::SmtpTransport;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use tracing::{info, level_filters::LevelFilter};
 
 use infra::{config::{policy::redis_features::RedisFeaturesProvider, provider::redis::RedisConfigLoader}, eventbus::{Registry, in_memory_event_bus::InMemoryEventBus}, notification::{dispatcher::NotificationDispatcher, sender::mail_sender::MailSender}, repo::{account::AccountRepo, session::SessionRepo}, token::jwt::JwtService};
-use crate::intf::http::{ext::state::AppState};
+use crate::intf::http::ext::state::{AppState, CQRSState};
 use application::{session::events::user_session_revoked::SessionRevoked};
 use domain::{event::verification_code_sent_event::VerificationCodeSentEvent, repo::session::ISessionRepo, service::verify_code::VerifyCodeService};
 
@@ -56,6 +57,18 @@ pub async fn event_startup(
     bus
 }
 
+#[tracing::instrument(name="cqrs", skip_all)]
+pub async fn startup_cqrs(
+    db: &DatabaseConnection,
+    _redis: &Pool,
+) -> CQRSState {
+    let fetch_profile = FetchProfileContext { database_connect: db.clone() };
+    let state = CQRSState {
+        fetch_profile: Arc::new(fetch_profile),
+    };
+    state
+}
+
 pub struct StartupConfigure {
     pub db_url: String,
     pub redis_url: String,
@@ -77,7 +90,8 @@ pub async fn startup(
     let redis= startup_redis(&config.redis_url).await.unwrap();
     let account_repo = Arc::new(AccountRepo::new(db.clone(), redis.clone()));
     let session_repo = Arc::new(SessionRepo::new(redis.clone()));
-    let tag_repo = Arc::new(infra::repo::tag::TagRepo::new(db, redis.clone()));
+    let tag_repo = Arc::new(infra::repo::tag::TagRepo::new(db.clone(), redis.clone()));
+    let post_repo = Arc::new(infra::repo::post::PostRepo::new(db.clone()));
 
     let bus = event_startup(100, session_repo.clone()).await;
 
@@ -102,7 +116,7 @@ pub async fn startup(
     });
     let state = AppState {
         account_repo,
-        redis: Arc::new(redis),
+        redis: Arc::new(redis.clone()),
         policy_provider: Arc::new(provider),
         verify_code_service: Arc::new(verify_code_service),
         event_bus: bus,
@@ -113,10 +127,13 @@ pub async fn startup(
             Arc::new(application::auth::registor::mail::MailRegistor {})
         ],
         tag_repo,
+        post_repo,
+        cqrs_state: startup_cqrs(&db, &redis.clone()).await,
     };
     let app = axum::Router::new()
         .nest("/tag", crate::intf::http::tag::route())
         .nest("/auth", crate::intf::http::auth::route())
+        .nest("/post", crate::intf::http::post::route())
         .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();

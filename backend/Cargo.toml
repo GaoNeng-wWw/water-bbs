@@ -75,6 +75,7 @@ shared.workspace=true
 domain.workspace=true
 infra.workspace=true
 application.workspace=true
+cqrs.workspace = true
 
 [profile.dev]
 opt-level = 0        # 不进行优化，编译速度最快

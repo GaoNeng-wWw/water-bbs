@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use domain::prelude::{IPostRepo, PostId, PostServiceError};
+use domain::prelude::{AccountId, IAccountRepo, IPostRepo, PostId, PostServiceError};
 
 pub struct RemovePostRequest {
     pub id: PostId,
@@ -8,13 +8,21 @@ pub struct RemovePostRequest {
 
 pub async fn handler(
     req: RemovePostRequest,
+    actor: &AccountId,
+    account_repo: &Arc<dyn IAccountRepo + Send + Sync>,
     post_repo: &Arc<dyn IPostRepo + Send + Sync>,
 ) -> Result<(), PostServiceError> {
-    let post = post_repo.find_post(&req.id).await?;
-    if post.is_none() || post.as_ref().unwrap().is_removed() {
+    let post = post_repo.find_post(&req.id).await?
+        .ok_or_else(|| PostServiceError::PostNotFound)?;
+    if post.is_removed() {
         return Err(PostServiceError::PostNotFound);
     }
-    let mut post = post.unwrap();
+    let account = account_repo.get_account(actor).await?
+        .ok_or_else(|| PostServiceError::ActorNotFound)?;
+    if post.author_id != account.id && !account.is_bd() {
+        return Err(PostServiceError::PermissionDenied);
+    }
+    let mut post = post;
     post.remove()
         .map_err(|_| {
             PostServiceError::PostNotFound

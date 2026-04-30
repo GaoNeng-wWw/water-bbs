@@ -5,21 +5,24 @@ use domain::{
     repo::tag::ITagRepo,
     vo::tag_id::TagId,
 };
+use serde::{Serialize};
 use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub struct ListPostRequest {
     pub tag_id: Option<Uuid>,
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub post_id: Option<Uuid>,
     pub limit: Option<u64>,
 }
 
+#[derive(Clone, Serialize)]
 pub struct PostAuthorSummary {
     pub account_id: AccountId,
     pub name: String,
     pub bio: Option<String>,
     pub avatar: Option<String>,
 }
+#[derive(Clone, Serialize)]
 pub struct PostInfo {
     pub id: PostId,
     pub title: String,
@@ -27,8 +30,10 @@ pub struct PostInfo {
     pub created_at: chrono::DateTime<chrono::Utc>,
 }
 
+#[derive(Clone, Serialize)]
 pub struct ListPostResponse {
     pub posts: Vec<PostInfo>,
+    pub next_post_id: Option<PostId>,
     pub total: u32,
 }
 
@@ -48,7 +53,7 @@ where
     let posts = post_repo
         .list_post(
             req.tag_id.map(|id| TagId::new(id)),
-            req.created_at,
+            req.post_id.map(|id| PostId::new(id)),
             req.limit,
         )
         .await?;
@@ -82,5 +87,9 @@ where
     let total = tag_repo
         .get_post_total(req.tag_id.map(|id| TagId::new(id)))
         .await?;
-    Ok(ListPostResponse { posts: data, total })
+    Ok(ListPostResponse {
+        posts: data,
+        next_post_id: posts.last().map(|post| post.id.clone()),
+        total: total,
+    })
 }

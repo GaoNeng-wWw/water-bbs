@@ -659,6 +659,7 @@ dependencies = [
  "axum-extra",
  "axum-test",
  "chrono",
+ "cqrs",
  "derive_builder",
  "domain",
  "fred",

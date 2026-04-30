@@ -258,4 +258,7 @@ impl Account {
         self.updated_at = Utc::now();
         self.cert = self.cert.iter().filter(|c| c.cert_type != cert.cert_type).cloned().collect();
     }
+    pub fn is_bd(&self) -> bool {
+        self.bd
+    }
 }
