@@ -61,6 +61,9 @@ importers:
       water-bbs-migration:
         specifier: workspace:*
         version: link:../water-bbs-migration
+      water-bbs-shared:
+        specifier: workspace:*
+        version: link:../water-bbs-shared
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0

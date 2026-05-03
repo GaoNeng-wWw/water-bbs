@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "es2020",
+    "moduleResolution": "bundler",
     "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -33,7 +33,9 @@
       ],
       "@app/shared/*": [
         "libs/shared/src/*"
-      ]
+      ],
+      "water-bbs-shared": ["../water-bbs-shared/src"],
+      "water-bbs-shared/*": ["../water-bbs-shared/src/*"]
     }
   }
 }

@@ -1,10 +1,10 @@
-import { PersistenceError } from '@app/shared';
 import { Account, AccountID } from '../../domain';
 import { Result } from 'types-ddd';
 import { IAccountRepoistory } from '../../domain/repo/account.repo';
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/mysql';
 import { AccountEntity, IdentEntity } from 'water-bbs-migration';
+import { PersistenceError } from 'water-bbs-shared';
 
 @Injectable()
 export class AccountRepository implements IAccountRepoistory {

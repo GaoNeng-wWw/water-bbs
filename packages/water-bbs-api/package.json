@@ -37,7 +37,8 @@
     "rxjs": "^7.8.1",
     "types-ddd": "^3.11.1",
     "uuid": "^14.0.0",
-    "water-bbs-migration": "workspace:*"
+    "water-bbs-migration": "workspace:*",
+    "water-bbs-shared": "workspace:*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
