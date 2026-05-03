@@ -1,3 +1,2 @@
 packages:
-  - './water-bbs-api'
-  - './water-bbs-migration'
+  - './packages/*'
