@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "declaration": true,
+    "declarationMap": false,
+    "module": "commonjs",
+    "target": "ES2020",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "experimentalDecorators": true
+  },
+  "include": ["migrations/**/*.ts", "entities/index.ts", "entities/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
