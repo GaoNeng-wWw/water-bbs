@@ -1,11 +1,15 @@
 import { Aggregate, Fail, Ok } from 'types-ddd';
 import { Cert, Ident, RoleCode } from '../vo';
 import { DomainError } from '@app/shared';
+import { AccountID } from '../vo/account-id';
+import { Profile } from '../vo/profile';
 
 export type AccountProp = {
+  id: AccountID;
   identities: Ident[];
   certs: Cert[];
   roles: RoleCode[];
+  profile: Profile;
   removed_at?: Date;
 };
 
@@ -30,6 +34,7 @@ export class Account extends Aggregate<AccountProp> {
       return Fail(new DomainError('IDENTIFIER_NOT_FOUND'));
     }
     const identifier = new Ident({
+      id: id.get('id'),
       ident_type: identType,
       ident_value: identValue,
       verified: true,

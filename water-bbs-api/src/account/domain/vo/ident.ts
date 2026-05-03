@@ -1,6 +1,7 @@
 import { ValueObject } from 'types-ddd';
 
 export type IdentProp = {
+  id: string;
   ident_type: string;
   ident_value: string;
   verified: boolean;
