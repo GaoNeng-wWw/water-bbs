@@ -10,6 +10,7 @@ import {
 } from 'water-bbs-migration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { yaml } from '@app/configure';
+import { AccountModule } from './account/account.module';
 
 @Module({
   imports: [
@@ -35,16 +36,7 @@ import { yaml } from '@app/configure';
         dbName: configService.get('database.dbName'),
       }),
     }),
-    // MikroOrmModule.forRoot({
-    //   driver: MySqlDriver,
-    //   entities: [
-    //     AccountEntity,
-    //     RoleEntity,
-    //     PermissionEntity,
-    //     IdentEntity,
-    //     CertEntity,
-    //   ],
-    // }),
+    AccountModule,
   ],
 })
 export class AppModule {}
