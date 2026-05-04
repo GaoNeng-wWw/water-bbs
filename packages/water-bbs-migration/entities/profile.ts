@@ -1,11 +1,11 @@
 import { Entity, PrimaryKey, Property, OneToOne } from '@mikro-orm/decorators/legacy';
 import { BaseMetaEntity } from './meta';
-import { AccountEntity } from './account';
+import { Account } from './account';
 
 @Entity()
-export class ProfileEntity extends BaseMetaEntity {
-  @OneToOne(() => AccountEntity, account => account.profile, { primary: true, owner: true })
-  account!: AccountEntity;
+export class Profile extends BaseMetaEntity {
+  @OneToOne(() => Account, account => account.profile, { primary: true, owner: true })
+  account!: Account;
 
   @Property({ nullable: false, type: 'text' })
   name!: string;
@@ -15,4 +15,21 @@ export class ProfileEntity extends BaseMetaEntity {
 
   @Property({ nullable: true, type: 'text' })
   avatar?: string;
+
+  constructor(
+    account: Account,
+    name: string,
+    bio?: string,
+    avatar?: string,
+  ){
+    super()
+    this.account = account;
+    this.name = name;
+    if (bio) {
+      this.bio = bio;
+    }
+    if (avatar) {
+      this.avatar = avatar;
+    }
+  }
 }

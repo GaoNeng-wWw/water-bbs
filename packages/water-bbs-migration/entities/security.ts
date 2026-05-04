@@ -1,6 +1,6 @@
 import { Entity, PrimaryKey, Property, ManyToOne, Unique, Enum } from '@mikro-orm/decorators/legacy';
 import { v7 } from 'uuid';  
-import { AccountEntity } from './account';
+import { Account } from './account';
 
 export enum IdentEnum {
   EMAIL = 'Email',
@@ -8,7 +8,7 @@ export enum IdentEnum {
 
 @Entity()
 @Unique({ properties: ['identType', 'identValue', 'account'] })
-export class IdentEntity {
+export class Ident {
   @PrimaryKey({ type: 'uuid' })
   id: string = v7();
 
@@ -22,8 +22,21 @@ export class IdentEntity {
   @Property({ default: false })
   verified: boolean = false;
 
-  @ManyToOne(() => AccountEntity)
-  account!: AccountEntity;
+  @ManyToOne(() => Account)
+  account!: Account;
+
+  constructor(
+    data?: Partial<Ident>
+  ){
+    Object.assign(this, data);
+  }
+
+  isVerify(){
+    return this.verified;
+  }
+  verify(){
+    this.verified = true;
+  }
 }
 
 export enum CertEnum {
@@ -31,7 +44,7 @@ export enum CertEnum {
 }
 
 @Entity()
-export class CertEntity {
+export class Cert {
   @PrimaryKey({ type: 'uuid' })
   id: string = v7();
 
@@ -42,6 +55,12 @@ export class CertEntity {
   @Property({ index: true, nullable: false, type: 'char', length: 255 })
   certValue!: string;
 
-  @ManyToOne(() => AccountEntity)
-  account!: AccountEntity;
+  @ManyToOne(() => Account)
+  account!: Account;
+
+  constructor(
+    data?: Partial<Cert>
+  ){
+    Object.assign(this, data);
+  }
 }

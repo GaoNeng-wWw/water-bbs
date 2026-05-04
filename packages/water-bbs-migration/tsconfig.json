@@ -9,7 +9,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "water-bbs-shared": ["./node_modules/water-bbs-shared/src"]
+    }
   },
   "include": ["migrations/**/*.ts", "entities/index.ts", "entities/**/*.ts"],
   "exclude": ["node_modules", "dist"]

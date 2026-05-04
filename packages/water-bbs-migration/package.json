@@ -30,7 +30,8 @@
     "@mikro-orm/sqlite": "^7.0.13",
     "dotenv": "^17.4.2",
     "esno": "^4.8.0",
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.0",
+    "water-bbs-shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.12.2"

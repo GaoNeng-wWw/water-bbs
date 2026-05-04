@@ -1,3 +1,3 @@
-export { AccountEntity, PermissionEntity, RoleEntity } from './account';
-export { CertEntity, IdentEntity } from './security';
-export { ProfileEntity } from './profile';
+export { Account, Permission, Role } from './account';
+export { Cert, Ident, IdentEnum, CertEnum } from './security';
+export { Profile } from './profile';
