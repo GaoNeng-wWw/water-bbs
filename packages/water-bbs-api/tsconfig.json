@@ -34,8 +34,10 @@
       "@app/shared/*": [
         "libs/shared/src/*"
       ],
-      "water-bbs-shared": ["../water-bbs-shared/src"],
-      "water-bbs-shared/*": ["../water-bbs-shared/src/*"]
+      "water-bbs-shared": ["./node_modules/water-bbs-shared/src"],
+      "water-bbs-shared/*": ["./node_modules/water-bbs-shared/src/*"],
+      "water-bbs-migration": ["./node_modules/water-bbs-migration/entities"],
+      "water-bbs-migration/*": ["./node_modules/water-bbs-migration/entities/*"]
     }
   }
 }
