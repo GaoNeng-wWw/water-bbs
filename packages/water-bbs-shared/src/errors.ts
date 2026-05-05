@@ -24,7 +24,7 @@ export type InfrastructureErrorProp = {
   message: string;
   child?: Error | null;
   args?: Record<string, any>;
-}
+};
 
 export class InfrastructureError extends DomainError {
   public readonly code = 500;
@@ -38,7 +38,7 @@ export class InfrastructureError extends DomainError {
 }
 
 export class PersistenceError extends InfrastructureError {
-  constructor(originalError: Error | null=null, args: Record<string, any> = {}) {
+  constructor(originalError: Error | null = null, args: Record<string, any> = {}) {
     const infra = new InfrastructureError('PERSISTENCE_FAILURE', originalError, args);
     super('PERSISTENCE_ERROR', infra, args);
   }
@@ -49,7 +49,6 @@ export class ApplicationService extends AppError {
     super(message, code, child, args);
   }
 }
-
 
 export class ApiError extends AppError {
   constructor(message: string, child?: Error | null, args?: Record<string, any>) {

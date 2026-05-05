@@ -1,4 +1,4 @@
-import { Ok, ValueObject } from 'types-ddd';
+import { Ok, Result, ValueObject } from 'types-ddd';
 import { v7 } from 'uuid';
 
 export type RoleCodeProp = {
@@ -18,7 +18,7 @@ export class RoleId extends ValueObject<RoleIdProp> {
   constructor(prop: RoleIdProp) {
     super(prop);
   }
-  static create() {
+  static create(): Result<RoleId, string, object> {
     return Ok(new RoleId({ value: v7() }));
   }
 }

@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAccountDTO } from './dto/create-account.dto';
 import { Account, Profile } from 'water-bbs-migration';
-import { AccountRegistor } from '../domain';
+import { AccountRegistor, InjectAccountRegistor } from '../domain';
 import { err, isErr, ok } from 'water-bbs-shared';
 import { UnsupportedIdentType } from './errors/unsupported-ident-type';
 
 @Injectable()
 export class AccountService {
-  constructor(private registor: AccountRegistor[]) {}
+  constructor(
+    @InjectAccountRegistor()
+    private registor: AccountRegistor[],
+  ) {}
 
   async createAccount(dto: CreateAccountDTO) {
     const account = new Account();

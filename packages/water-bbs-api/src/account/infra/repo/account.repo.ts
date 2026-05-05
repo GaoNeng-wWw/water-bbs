@@ -54,18 +54,21 @@ export class AccountRepo implements IAccountRepoistory {
       .catch((reason) => err(new PersistenceError(null, { reason })));
   }
   count(): Promise<Result<number, PersistenceError>> {
-    return this.redis
-      .get('CNT:ACCOUNT')
-      .then((val) => ok(val ? Number(val) : 0))
-      .catch((reason) => err(new PersistenceError(null, { reason })));
+    throw '';
+    // return this.redis
+    //   .get('CNT:ACCOUNT')
+    //   .then((val) => ok(val ? Number(val) : 0))
+    //   .catch((reason) => err(new PersistenceError(null, { reason })));
   }
   incr(): Promise<Result<boolean, PersistenceError>> {
+    throw '';
     return this.redis
       .incr('CNT:ACCOUNT')
       .then(() => ok(true))
       .catch((reason) => err(new PersistenceError(null, { reason })));
   }
   decr(): Promise<Result<boolean, PersistenceError>> {
+    throw '';
     return this.redis
       .decr('CNT:ACCOUNT')
       .then(() => ok(true))
