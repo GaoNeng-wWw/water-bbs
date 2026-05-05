@@ -141,8 +141,8 @@ export const matchResult = <T, E, U>(
 ): U => (isOk(res) ? onOk(res.value) : onErr(res.error));
 
 interface PipeOption<T> {
-  isSome: () => boolean;
-  isNone: () => boolean;
+  isSome: () => this is Some<T>;
+  isNone: () => this is None;
   map: <U>(fn: (value: T) => U) => PipeOption<U>;
   andThen: <U>(fn: (value: T) => Option<U>) => PipeOption<U>;
   filter: (predicate: (value: T) => boolean) => PipeOption<T>;
@@ -160,8 +160,8 @@ interface PipeOption<T> {
 }
 
 interface PipeResult<T, E> {
-  isOk: () => boolean;
-  isErr: () => boolean;
+  isOk: () => this is Ok<T>;
+  isErr: () => this is Err<E>;
   map: <U>(fn: (value: T) => U) => PipeResult<U, E>;
   mapErr: <F>(fn: (error: E) => F) => PipeResult<T, F>;
   andThen: <U>(fn: (value: T) => Result<U, E>) => PipeResult<U, E>;
@@ -179,8 +179,8 @@ interface PipeResult<T, E> {
 }
 
 export const pipeOption = <T>(opt: Option<T>): PipeOption<T> => ({
-  isSome: () => isSome(opt),
-  isNone: () => isNone(opt),
+  isSome: (): this is Some<T> => isSome(opt),
+  isNone: (): this is None => isNone(opt),
   map: <U>(fn: (value: T) => U) => pipeOption(mapOption(opt, fn)),
   andThen: <U>(fn: (value: T) => Option<U>) => pipeOption(andThenOption(opt, fn)),
   filter: (predicate: (value: T) => boolean) => pipeOption(filterOption(opt, predicate)),
@@ -197,8 +197,8 @@ export const pipeOption = <T>(opt: Option<T>): PipeOption<T> => ({
   match: <U>(onSome: (value: T) => U, onNone: () => U) => matchOption(opt, onSome, onNone),
 });
 export const pipeResult = <T, E>(res: Result<T, E>): PipeResult<T, E> => ({
-  isOk: () => isOk(res),
-  isErr: () => isErr(res),
+  isOk: (): this is Ok<T> => isOk(res),
+  isErr: (): this is Err<E> => isErr(res),
   map: <U>(fn: (value: T) => U) => pipeResult(mapResult(res, fn)),
   mapErr: <F>(fn: (error: E) => F) => pipeResult(mapErr(res, fn)),
   andThen: <U>(fn: (value: T) => Result<U, E>) => pipeResult(andThenResult(res, fn)),

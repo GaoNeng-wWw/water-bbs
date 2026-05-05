@@ -3,8 +3,9 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { MySqlDriver } from '@mikro-orm/mysql';
 import { Account, Cert, Ident, Permission, Role } from 'water-bbs-migration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { yaml } from '@app/configure';
+import { SingleNode, yaml } from '@app/configure';
 import { AccountModule } from './account/account.module';
+import { RedisModule } from '@nestjs-redisx/core';
 
 @Module({
   imports: [
@@ -23,6 +24,33 @@ import { AccountModule } from './account/account.module';
         password: configService.get('database.password'),
         dbName: configService.get('database.dbName'),
       }),
+    }),
+    RedisModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: any) => {
+        const cfg = configService as ConfigService;
+        if (cfg.get('redis.type') === 'single') {
+          return {
+            clients: {
+              type: 'single',
+              host: cfg.get('redis.host') as string,
+              port: cfg.get('redis.port') as number,
+            },
+            global: {
+              debug: true,
+            },
+          };
+        }
+        return {
+          clients: {
+            type: 'cluster',
+            nodes: cfg.get('redis.nodes') as SingleNode[],
+          },
+          global: {
+            debug: true,
+          },
+        };
+      },
     }),
     AccountModule,
   ],

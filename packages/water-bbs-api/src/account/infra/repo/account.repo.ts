@@ -4,15 +4,13 @@ import { err, ok, PersistenceError, Result } from 'water-bbs-shared';
 import { IAccountRepoistory } from '../../domain/repo/account.repo';
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
-import { InjectRedis } from '@nestjs-redisx/core';
-import Redis from 'ioredis';
+import { RedisService } from '@nestjs-redisx/core';
 
 @Injectable()
 export class AccountRepo implements IAccountRepoistory {
   constructor(
     private readonly em: EntityManager,
-    @InjectRedis()
-    private redis: Redis,
+    private redis: RedisService,
   ) {}
   upsert(account: Account): Promise<Result<boolean, PersistenceError>> {
     return this.em

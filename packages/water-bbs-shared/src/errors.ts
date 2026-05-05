@@ -1,11 +1,11 @@
 export abstract class AppError extends Error {
   constructor(
-    message: string,
-    code: number = 500,
+    public message: string,
+    public code: number = 500,
     public readonly child: Error | null = null,
     public readonly args: Record<string, any> = {},
   ) {
-    super(message, { cause: child ?? undefined });
+    super(message);
     this.name = this.constructor.name;
   }
 
@@ -44,7 +44,7 @@ export class PersistenceError extends InfrastructureError {
   }
 }
 
-export class ApplicationService extends AppError {
+export class ApplicationServiceError extends AppError {
   constructor(message: string, code: number = 500, child?: Error | null, args?: Record<string, any>) {
     super(message, code, child, args);
   }

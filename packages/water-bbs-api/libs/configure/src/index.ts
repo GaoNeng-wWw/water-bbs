@@ -4,9 +4,11 @@ import {
   DatabaseConfigure,
   databaseConfigValidatorSchema,
 } from './configure/database.configure';
+import { RedisConfigure } from './configure/redis.configure';
 
 export type Configure = {
   database: DatabaseConfigure;
+  redis: RedisConfigure;
 };
 
 export const configureSchema = Joi.object<Configure>({
@@ -14,3 +16,6 @@ export const configureSchema = Joi.object<Configure>({
 });
 
 export { yaml };
+
+export * from './configure/database.configure';
+export * from './configure/redis.configure';
