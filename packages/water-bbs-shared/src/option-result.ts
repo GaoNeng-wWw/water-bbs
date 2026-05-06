@@ -11,7 +11,7 @@ export type None = { _tag: typeof NONE_SYMBOL };
 export type Option<T> = Some<T> | None;
 
 export const some = <T>(value: T): Option<T> => ({ _tag: SOME_SYMBOL, value });
-export const none: Option<never> = { _tag: NONE_SYMBOL };
+export const none: None = { _tag: NONE_SYMBOL };
 
 export const isSome = <T>(opt: Option<T>): opt is Some<T> => opt._tag === SOME_SYMBOL;
 export const isNone = <T>(opt: Option<T>): opt is None => opt._tag === NONE_SYMBOL;

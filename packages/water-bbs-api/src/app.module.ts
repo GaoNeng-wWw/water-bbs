@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SingleNode, yaml } from '@app/configure';
 import { AccountModule } from './account/account.module';
 import { RedisModule } from '@nestjs-redisx/core';
+import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { RedisModule } from '@nestjs-redisx/core';
           },
         };
       },
+      plugins: [new RateLimitPlugin()],
     }),
     AccountModule,
   ],

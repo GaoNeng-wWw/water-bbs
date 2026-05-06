@@ -12,8 +12,11 @@ import {
   type IInviteCode,
   InjectInviteCodeRepository,
 } from '../domain/repo/invite-code.repo';
-import { RequireInviteCode } from './errors';
+import { RequireInviteCode, RequrieCaptcha } from './errors';
 import { InvalidInviteCode } from './errors/invalid-invite-code';
+import { CaptchaService } from '@app/captcha/captcha.service';
+import { Channel } from '@app/captcha/domain';
+import { InvalidCaptcha } from './errors/invalid-captcha';
 
 @Injectable()
 export class AccountService {
@@ -24,6 +27,7 @@ export class AccountService {
     private policy: IRegisterPolicy,
     @InjectInviteCodeRepository()
     private codeStore: IInviteCode,
+    private captcha: CaptchaService,
   ) {}
 
   async createAccount(
@@ -35,7 +39,19 @@ export class AccountService {
     if (!registor) {
       return err(new UnsupportedIdentType(dto.ident_type));
     }
-    const requireInviteCode = await this.policy.requireCaptcha();
+    /*
+      get features
+        if enable-invite
+          check invite-code
+          if not valid invite-code
+            throw application_error
+        if enable_captcha
+          check captcha-code
+          if not valid captcha-code
+            throw application_error
+      run registor
+    */
+    const requireInviteCode = await this.policy.requireInviteCode();
     if (isErr(requireInviteCode)) {
       return requireInviteCode;
     }
@@ -53,19 +69,28 @@ export class AccountService {
       }
     }
 
-    /*
-    TODO:
-      get features
-        if enable-invite
-          check invite-code
-          if not valid invite-code
-            throw application_error
-        if enable_captcha
-          check captcha-code
-          if not valid captcha-code
-            throw application_error
-      run registor
-    */
+    const requireCaptcha = await this.policy.requireCaptcha();
+    if (isErr(requireCaptcha)) {
+      return requireCaptcha;
+    }
+    if (unwrapResult(requireCaptcha)) {
+      if (!dto.captcha) {
+        return err(new RequrieCaptcha());
+      }
+      const handle = await this.captcha.verify(
+        dto.captcha,
+        dto.ident_value,
+        Channel.Email,
+      );
+      if (isErr(handle)) {
+        return handle;
+      }
+      const status = unwrapResult(handle);
+      if (!status) {
+        return err(new InvalidCaptcha());
+      }
+    }
+
     const res = await registor.execute({ ...dto, profile });
     if (isErr(res)) {
       return res;

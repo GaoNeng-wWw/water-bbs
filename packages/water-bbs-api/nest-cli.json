@@ -13,6 +13,15 @@
     ]
   },
   "projects": {
+    "captcha": {
+      "type": "library",
+      "root": "libs/captcha",
+      "entryFile": "index",
+      "sourceRoot": "libs/captcha/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/captcha/tsconfig.lib.json"
+      }
+    },
     "configure": {
       "type": "library",
       "root": "libs/configure",

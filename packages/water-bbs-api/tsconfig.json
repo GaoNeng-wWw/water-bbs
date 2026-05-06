@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "es2020",
     "moduleResolution": "bundler",
-    "resolvePackageJsonExports": true,
+    "resolvePackageJsonExports": false,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -22,6 +22,12 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": "./",
     "paths": {
+      "@app/captcha": [
+        "libs/captcha/src"
+      ],
+      "@app/captcha/*": [
+        "libs/captcha/src/*"
+      ],
       "@app/configure": [
         "libs/configure/src"
       ],
@@ -34,10 +40,19 @@
       "@app/shared/*": [
         "libs/shared/src/*"
       ],
-      "water-bbs-shared": ["./node_modules/water-bbs-shared/src"],
-      "water-bbs-shared/*": ["./node_modules/water-bbs-shared/src/*"],
-      "water-bbs-migration": ["./node_modules/water-bbs-migration/entities"],
-      "water-bbs-migration/*": ["./node_modules/water-bbs-migration/entities/*"]
-    }
+      "water-bbs-migration": [
+        "./node_modules/water-bbs-migration/entities"
+      ],
+      "water-bbs-migration/*": [
+        "./node_modules/water-bbs-migration/entities/*"
+      ],
+      "water-bbs-shared": [
+        "./node_modules/water-bbs-shared/src"
+      ],
+      "water-bbs-shared/*": [
+        "./node_modules/water-bbs-shared/src/*"
+      ]
+    },
+    "types": ["jest"]
   }
 }

@@ -13,7 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "vitest run",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -27,20 +27,26 @@
     "@mikro-orm/sqlite": "^7.0.13",
     "@nestjs-modules/mailer": "^2.3.4",
     "@nestjs-redisx/core": "^1.2.0",
+    "@nestjs-redisx/rate-limit": "^1.2.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@node-rs/bcrypt": "^1.10.7",
+    "@swc/core": "^1.15.33",
+    "@vitest/coverage-v8": "3.2.4",
     "ioredis": "^5.10.1",
     "joi": "^18.1.2",
     "js-yaml": "^4.1.1",
     "nodemailer": "^8.0.7",
+    "radashi": "^12.7.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "types-ddd": "^3.11.1",
+    "unplugin-swc": "^1.5.9",
     "uuid": "^14.0.0",
+    "vitest": "^3.2.4",
     "water-bbs-migration": "workspace:*",
     "water-bbs-shared": "workspace:*",
     "zod": "^4.4.3"
@@ -51,6 +57,9 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@suites/di.nestjs": "^3.1.0",
+    "@suites/doubles.vitest": "3.1.0-dev.0",
+    "@suites/unit": "^3.1.0",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/js-yaml": "^4.0.9",
@@ -91,7 +100,11 @@
       "<rootDir>/src/",
       "<rootDir>/libs/"
     ],
+    "transformIgnorePatterns": [
+      "/node_modules/"
+    ],
     "moduleNameMapper": {
+      "^@app/captcha(|/.*)$": "<rootDir>/libs/captcha/src/$1",
       "^@app/configure(|/.*)$": "<rootDir>/libs/configure/src/$1",
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
     }
