@@ -1,8 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAccountDTO } from './dto/create-account.dto';
-import { Account, Profile } from 'water-bbs-migration';
-import { AccountRegistor, InjectAccountRegistor } from '../domain';
-import { err, isErr, ok, unwrapResult } from 'water-bbs-shared';
+import {
+  CreateAccountDTO,
+  CreateAccountResponse,
+} from './dto/create-account.dto';
+import { Account, IdentEnum, Profile } from 'water-bbs-migration';
+import { AccountID, AccountRegistor, InjectAccountRegistor } from '../domain';
+import {
+  err,
+  isErr,
+  ok,
+  pipeResult,
+  unwrapErr,
+  unwrapResult,
+} from 'water-bbs-shared';
 import { UnsupportedIdentType } from './errors/unsupported-ident-type';
 import type { IRegisterPolicy } from '@app/shared';
 import { InjectRegisterPolicy } from '@app/shared';
@@ -17,6 +27,23 @@ import { InvalidInviteCode } from './errors/invalid-invite-code';
 import { CaptchaService } from '@app/captcha/captcha.service';
 import { Channel } from '@app/captcha/domain';
 import { InvalidCaptcha } from './errors/invalid-captcha';
+import {
+  InjectAccountRepository,
+  type IAccountRepoistory,
+} from '../domain/repo/account.repo';
+import { AccountNotFound } from './errors/account-not-found';
+import {
+  UpdateProfileDTO,
+  UpdateProfileResponse,
+} from './dto/update-profile.dto';
+import { ResetPasswordDTO } from './dto/reset-password.dto';
+import { InvalidMfa } from './errors/invalid-mfa';
+import {
+  RemoveAccountDTO,
+  RemoveAccountResponse,
+} from './dto/remove-account.dto';
+import { PublicAccountInfo } from './dto/public-account-info';
+import { GetProfileDTO } from './dto/get-profile.dto';
 
 @Injectable()
 export class AccountService {
@@ -28,29 +55,19 @@ export class AccountService {
     @InjectInviteCodeRepository()
     private codeStore: IInviteCode,
     private captcha: CaptchaService,
+    @InjectAccountRepository()
+    private accountRepository: IAccountRepoistory,
   ) {}
 
   async createAccount(
     dto: CreateAccountDTO,
-  ): Promise<Result<boolean, ApplicationServiceError>> {
+  ): Promise<Result<CreateAccountResponse, ApplicationServiceError>> {
     const account = new Account();
     const profile = new Profile(account, dto.username);
     const registor = this.registor.find((r) => r.valid(dto.ident_type));
     if (!registor) {
       return err(new UnsupportedIdentType(dto.ident_type));
     }
-    /*
-      get features
-        if enable-invite
-          check invite-code
-          if not valid invite-code
-            throw application_error
-        if enable_captcha
-          check captcha-code
-          if not valid captcha-code
-            throw application_error
-      run registor
-    */
     const requireInviteCode = await this.policy.requireInviteCode();
     if (isErr(requireInviteCode)) {
       return requireInviteCode;
@@ -95,6 +112,136 @@ export class AccountService {
     if (isErr(res)) {
       return res;
     }
+    return ok(new CreateAccountResponse(account.id));
+  }
+
+  async removeAccount(
+    dto: RemoveAccountDTO,
+  ): Promise<Result<RemoveAccountResponse, ApplicationServiceError>> {
+    const accountId = new AccountID({ value: dto.id });
+    const res = pipeResult(await this.accountRepository.findOne(accountId));
+    if (res.isErr()) {
+      return err(unwrapErr(res));
+    }
+    const account = res.unwrap();
+    if (!account) {
+      return err(new AccountNotFound());
+    }
+    const removeHandle = pipeResult(account.remove());
+    if (removeHandle.isErr()) {
+      return err(unwrapErr(removeHandle));
+    }
+    const updateResult = pipeResult(
+      await this.accountRepository.upsert(account),
+    );
+    if (updateResult.isErr()) {
+      return updateResult;
+    }
+    return ok(new RemoveAccountResponse(account.id));
+  }
+
+  async updateProfile(id: string, dto: UpdateProfileDTO) {
+    const accountId = new AccountID({ value: id });
+    const res = pipeResult(await this.accountRepository.findOne(accountId));
+    if (res.isErr()) {
+      return err(unwrapErr(res));
+    }
+    const account = res.unwrap();
+    if (!account) {
+      return err(new AccountNotFound());
+    }
+    if (dto.username) {
+      account.profile.name = dto.username;
+    }
+    if (dto.bio) {
+      account.profile.bio = dto.bio;
+    }
+    const updateResult = pipeResult(
+      await this.accountRepository.upsert(account),
+    );
+    if (updateResult.isErr()) {
+      return updateResult;
+    }
+    return ok(
+      new UpdateProfileResponse(
+        account.id,
+        account.profile.name,
+        account.profile.bio,
+      ),
+    );
+  }
+
+  async resetPassword(dto: ResetPasswordDTO) {
+    const account = pipeResult(
+      await this.accountRepository.findByIdentValue(
+        dto.ident_value,
+        IdentEnum.EMAIL,
+      ),
+    );
+
+    if (account.isErr()) {
+      return err(account.unwrapErr());
+    }
+    const accountRes = account.unwrap();
+    if (!accountRes) {
+      return err(new AccountNotFound());
+    }
+    if (!dto.force) {
+      const mfaResult = pipeResult(
+        await this.captcha.verify(dto.mfa_code, accountRes.id, Channel.Email),
+      );
+      if (mfaResult.isErr()) {
+        return err(mfaResult.unwrapErr());
+      }
+      const mfaStatus = mfaResult.unwrap();
+      if (!mfaStatus) {
+        return err(new InvalidMfa());
+      }
+    }
+
+    accountRes.resetPassword(dto.password);
+
+    const updateResult = pipeResult(
+      await this.accountRepository.upsert(accountRes),
+    );
+    if (updateResult.isErr()) {
+      return updateResult;
+    }
     return ok(true);
+  }
+
+  async findAccount(id: string) {
+    const accountId = new AccountID({ value: id });
+    const res = pipeResult(await this.accountRepository.findOne(accountId));
+    if (res.isErr()) {
+      return err(unwrapErr(res));
+    }
+    const account = res.unwrap();
+    if (!account) {
+      return err(new AccountNotFound());
+    }
+    return ok(
+      new PublicAccountInfo(
+        account.id,
+        account.profile.name,
+        account.profile.bio,
+      ),
+    );
+  }
+
+  async getProfile(id: string) {
+    const accountId = new AccountID({ value: id });
+    const res = pipeResult(await this.accountRepository.findOne(accountId));
+    if (res.isErr()) {
+      return err(unwrapErr(res));
+    }
+    const account = res.unwrap();
+    if (!account) {
+      return err(new AccountNotFound());
+    }
+    const profile = account.profile;
+    return ok(
+      new GetProfileDTO(account.id, profile.name, profile.bio, profile.avatar),
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Ok, ValueObject } from 'types-ddd';
+import { ValueObject } from 'types-ddd';
 import { v7 } from 'uuid';
 
 export type AccountIDProp = {
@@ -9,6 +9,6 @@ export class AccountID extends ValueObject<AccountIDProp> {
     super(prop);
   }
   static build() {
-    return Ok(new AccountID({ value: v7() }));
+    return new AccountID({ value: v7() });
   }
 }

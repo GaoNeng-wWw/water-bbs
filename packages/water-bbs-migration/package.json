@@ -28,6 +28,7 @@
     "@mikro-orm/migrations": "^7.0.13",
     "@mikro-orm/mysql": "^7.0.13",
     "@mikro-orm/sqlite": "^7.0.13",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "esno": "^4.8.0",
     "uuid": "^14.0.0",

@@ -10,3 +10,10 @@ export class CreateAccountDTO {
     Object.assign(this, prop);
   }
 }
+
+export class CreateAccountResponse {
+  public account_id: string;
+  constructor(account_id: string) {
+    this.account_id = account_id;
+  }
+}

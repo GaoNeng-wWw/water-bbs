@@ -9,6 +9,10 @@ export const InjectAccountRepository = () => Inject(ACCOUNT_REPO_TOKEN);
 
 export interface IAccountRepoistory {
   upsert(account: Account): Promise<Result<boolean, PersistenceError>>;
+  findByIdentValue(
+    ident_value: string,
+    ident_type: string,
+  ): Promise<Result<Account | null, PersistenceError>>;
   findOne(
     account_id: AccountID,
   ): Promise<Result<Account | null, PersistenceError>>;

@@ -1,6 +1,7 @@
 import { Entity, PrimaryKey, Property, ManyToOne, Unique, Enum } from '@mikro-orm/decorators/legacy';
 import { v7 } from 'uuid';  
 import { Account } from './account';
+import { hashSync } from 'bcryptjs';
 
 export enum IdentEnum {
   EMAIL = 'Email',
@@ -62,5 +63,6 @@ export class Cert {
     data?: Partial<Cert>
   ){
     Object.assign(this, data);
+    this.certValue = hashSync(this.certValue, 10);
   }
 }

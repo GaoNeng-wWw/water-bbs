@@ -1,5 +1,5 @@
 import { AccountID } from 'src/account/domain';
-import { Account } from 'water-bbs-migration';
+import { Account, IdentEnum } from 'water-bbs-migration';
 import { err, ok, PersistenceError, Result } from 'water-bbs-shared';
 import { IAccountRepoistory } from '../../domain/repo/account.repo';
 import { EntityManager } from '@mikro-orm/core';
@@ -19,6 +19,27 @@ export class AccountRepo implements IAccountRepoistory {
       .then(() => ok(true))
       .catch((reason) => err(new PersistenceError(null, { reason })));
   }
+
+  findByIdentValue(
+    ident_type: IdentEnum,
+    ident_value: string,
+  ): Promise<Result<Account | null, PersistenceError>> {
+    return this.em
+      .findOne(
+        Account,
+        {
+          removedAt: null,
+          idents: {
+            identType: { $eq: ident_type },
+            identValue: { $eq: ident_value },
+          },
+        },
+        { cache: true },
+      )
+      .then((res) => ok(res))
+      .catch((reason) => err(new PersistenceError(null, { reason })));
+  }
+
   findOne(
     account_id: AccountID,
   ): Promise<Result<Account | null, PersistenceError>> {
