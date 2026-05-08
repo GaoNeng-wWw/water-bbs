@@ -9,6 +9,8 @@ import { RedisModule } from '@nestjs-redisx/core';
 import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
 import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from '@app/shared';
 
 @Module({
   imports: [
@@ -61,6 +63,12 @@ import { CqrsModule } from '@nestjs/cqrs';
     }),
     AccountModule,
     AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}

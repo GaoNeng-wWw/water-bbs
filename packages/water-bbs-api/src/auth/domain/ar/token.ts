@@ -1,9 +1,16 @@
 import { Aggregate } from 'types-ddd';
 
+export type AccessTokenPayload = {
+  jti: string;
+  sub: string;
+  sessionID: string;
+  tokenType: 'access';
+};
+
 export type RefreshTokenPayload = {
   jti: string;
   sub: string;
-  tokenType: 'access' | 'refresh';
+  tokenType: 'refresh';
   accessTokenID: string;
 };
 
@@ -88,5 +95,11 @@ export class Session extends Aggregate<SessionProps> {
   }
   compareVersion(version: string) {
     return this.get('version') === version;
+  }
+  findToken(tokenID: string) {
+    const tokenPair = this.props.tokenIndex.find(
+      (ti) => ti.accessTokenID === tokenID || ti.refreshTokenID === tokenID,
+    );
+    return tokenPair;
   }
 }

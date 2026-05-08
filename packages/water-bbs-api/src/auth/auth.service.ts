@@ -16,7 +16,7 @@ import {
 import { v4, v7 } from 'uuid';
 import type { ISessionRepo } from './domain/session.repo';
 import { AccountID } from 'src/account/domain';
-import { RefreshTokenPayload, Session } from './domain/ar';
+import { AccessTokenPayload, RefreshTokenPayload, Session } from './domain/ar';
 import { parse } from '@lukeed/ms';
 import { withOptimisticLock } from '@app/shared';
 import { SessionExpired } from './error/session-expired';
@@ -56,7 +56,7 @@ export class AuthService {
     const sessionID = v7();
     const accessTokenID = v7();
     const refreshTokenID = v7();
-    const at = this.jwt.sign(
+    const at = this.jwt.sign<AccessTokenPayload>(
       {
         jti: accessTokenID,
         sub: account.accountID,
@@ -65,7 +65,7 @@ export class AuthService {
       },
       { expiresIn: '15min' },
     );
-    const rt = this.jwt.sign(
+    const rt = this.jwt.sign<RefreshTokenPayload>(
       {
         jti: refreshTokenID,
         sub: account.accountID,
@@ -194,7 +194,7 @@ export class AuthService {
     const newAccessTokenID = v7();
     const refreshTokenID = v7();
     const sessionID = v7();
-    const at = this.jwt.sign(
+    const at = this.jwt.sign<AccessTokenPayload>(
       {
         jti: newAccessTokenID,
         sub: accountID,
@@ -203,7 +203,7 @@ export class AuthService {
       },
       { expiresIn: '15min' },
     );
-    const rt = this.jwt.sign(
+    const rt = this.jwt.sign<RefreshTokenPayload>(
       {
         jti: refreshTokenID,
         sub: accountID,

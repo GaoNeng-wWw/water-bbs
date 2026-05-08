@@ -7,6 +7,9 @@ export const InjectSessionRepo = () => Inject(SESSION_REPO_TOKEN);
 
 export interface ISessionRepo {
   upsert(session: Session): Promise<Result<boolean, PersistenceError>>;
+  findAuthSessionBySessionID(
+    sessionID: string,
+  ): Promise<Result<Option<Session>, PersistenceError>>;
   findAuthSessionByAccountID(
     accountID: AccountID,
   ): Promise<Result<Option<Session>, PersistenceError>>;
