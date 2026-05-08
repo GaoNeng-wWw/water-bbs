@@ -23,6 +23,7 @@ describe(AccountService.name, () => {
   let policy: Mocked<IRegisterPolicy>;
   let codeStore: Mocked<IInviteCode>;
   let captcha: Mocked<CaptchaService>;
+  let accountRepo: Mocked<IAccountRepoistory>;
   const mailRegistorMock: Mocked<AccountRegistor> = {
     valid: vi.fn().mockResolvedValue(false),
     execute: vi.fn().mockResolvedValue(ok(true)),
@@ -35,6 +36,7 @@ describe(AccountService.name, () => {
       policy = unitRef.get(REGISTER_POLICY_TOKEN);
       codeStore = unitRef.get(InviteCodeRepositoryToken);
       captcha = unitRef.get(CaptchaService);
+      accountRepo = unitRef.get(ACCOUNT_REPO_TOKEN);
       (account as any).registor = [mailRegistorMock];
     });
     it('not found any registor', async () => {
@@ -56,6 +58,7 @@ describe(AccountService.name, () => {
       });
       it('Even if the verification code is invalid, no error is returned', async () => {
         captcha.verify.mockResolvedValue(ok(false));
+        accountRepo.incr.mockResolvedValue(ok(true));
         const val = await account.createAccount({
           username: '',
           ident_type: 'email',
@@ -87,6 +90,7 @@ describe(AccountService.name, () => {
 
       it('valid invite-code', async () => {
         codeStore.exists.mockResolvedValue(ok(true));
+        accountRepo.incr.mockResolvedValue(ok(true));
         const val = await account.createAccount({
           username: '',
           ident_type: 'email',
@@ -122,6 +126,7 @@ describe(AccountService.name, () => {
 
       it('valid captcha', async () => {
         captcha.verify.mockResolvedValue(ok(true));
+        accountRepo.incr.mockResolvedValue(ok(true));
         const val = await account.createAccount({
           username: '',
           ident_type: 'email',
@@ -149,7 +154,7 @@ describe(AccountService.name, () => {
     });
     it('not found account', async () => {
       repo.findOne.mockResolvedValue(ok(null));
-      const val = await account.removeAccount('AccountId');
+      const val = await account.removeAccount({ id: 'ACCOUNT_ID' });
       expect(isErr(val)).toBe(true);
       expect(unwrapErr(val)).toBeInstanceOf(AccountNotFound);
     });
@@ -175,7 +180,7 @@ describe(AccountService.name, () => {
       });
       mockAccount.remove = vi.fn(() => err(true));
       repo.findOne.mockResolvedValue(ok(mockAccount as unknown as Account));
-      const val = await account.removeAccount('AccountId');
+      const val = await account.removeAccount({ id: 'AccountId' });
       expect(isErr(val)).toBe(true);
     });
   });

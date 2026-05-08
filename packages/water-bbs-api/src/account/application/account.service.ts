@@ -112,6 +112,10 @@ export class AccountService {
     if (isErr(res)) {
       return res;
     }
+    const incrHandle = await this.accountRepository.incr();
+    if (isErr(incrHandle)) {
+      return err(incrHandle.error);
+    }
     return ok(new CreateAccountResponse(account.id));
   }
 
@@ -136,6 +140,10 @@ export class AccountService {
     );
     if (updateResult.isErr()) {
       return updateResult;
+    }
+    const decrHandle = await this.accountRepository.decr();
+    if (isErr(decrHandle)) {
+      return err(decrHandle.error);
     }
     return ok(new RemoveAccountResponse(account.id));
   }

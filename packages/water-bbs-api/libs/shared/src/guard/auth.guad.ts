@@ -11,7 +11,7 @@ import { AccessTokenPayload, RefreshTokenPayload } from 'src/auth/domain/ar';
 import { TokenAliveQuery } from '../../../../src/auth/queries/token-alive.query';
 import { isErr } from 'water-bbs-shared';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_FLAG } from '../decorator/is-public';
+import { IS_PUBLIC_FLAG } from '../decorator';
 
 export class AuthGuard implements CanActivate {
   constructor(
