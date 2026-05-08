@@ -13,6 +13,8 @@ import {
 } from '@app/shared';
 import { InviteCodeRepositoryToken } from './domain/repo/invite-code.repo';
 import { InviteCodeRepository } from './infra/repo/invite-code.repo';
+import { AccountAliveHandler } from './queries/account-alive.query';
+import { CheckPasswordHandler } from './queries/check-password.query';
 
 @Module({
   controllers: [AccountController],
@@ -41,6 +43,8 @@ import { InviteCodeRepository } from './infra/repo/invite-code.repo';
       useClass: InviteCodeRepository,
     },
     AccountService,
+    AccountAliveHandler,
+    CheckPasswordHandler,
   ],
 })
 export class AccountModule {}

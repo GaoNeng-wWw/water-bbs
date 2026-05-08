@@ -53,6 +53,7 @@
         "./node_modules/water-bbs-shared/src/*"
       ]
     },
-    "types": ["jest"]
+    "types": ["jest"],
+    "strictPropertyInitialization": false,
   }
 }

@@ -1,6 +1,6 @@
 import { Result } from 'water-bbs-shared';
 import { PersistenceError } from 'water-bbs-shared';
-import { Account } from 'water-bbs-migration';
+import { Account, IdentEnum } from 'water-bbs-migration';
 import { AccountID } from '../vo';
 import { Inject } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ export const InjectAccountRepository = () => Inject(ACCOUNT_REPO_TOKEN);
 export interface IAccountRepoistory {
   upsert(account: Account): Promise<Result<boolean, PersistenceError>>;
   findByIdentValue(
-    ident_value: string,
+    ident_value: IdentEnum,
     ident_type: string,
   ): Promise<Result<Account | null, PersistenceError>>;
   findOne(

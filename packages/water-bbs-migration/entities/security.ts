@@ -65,4 +65,7 @@ export class Cert {
     Object.assign(this, data);
     this.certValue = hashSync(this.certValue, 10);
   }
+  comparePassword(plainPassword: string){
+    return this.certValue === hashSync(plainPassword, 10);
+  }
 }

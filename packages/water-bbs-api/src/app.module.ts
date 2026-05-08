@@ -7,6 +7,8 @@ import { SingleNode, yaml } from '@app/configure';
 import { AccountModule } from './account/account.module';
 import { RedisModule } from '@nestjs-redisx/core';
 import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
+import { AuthModule } from './auth/auth.module';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [
@@ -14,18 +16,21 @@ import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
       isGlobal: true,
       load: [yaml],
     }),
+    CqrsModule.forRoot({}),
     MikroOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        driver: MySqlDriver,
-        entities: [Account, Cert, Ident, Permission, Role],
-        host: configService.get('database.host'),
-        port: configService.get('database.port'),
-        user: configService.get('database.username'),
-        password: configService.get('database.password'),
-        dbName: configService.get('database.dbName'),
-      }),
-    }),
+      useFactory: (configService: ConfigService) => {
+        return {
+          driver: MySqlDriver,
+          entities: [Account, Cert, Ident, Permission, Role],
+          host: configService.get('database.host'),
+          port: configService.get('database.port'),
+          user: configService.get('database.username'),
+          password: configService.get('database.password'),
+          dbName: configService.get('database.dbName'),
+        };
+      },
+    } as any),
     RedisModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: any) => {
@@ -55,6 +60,7 @@ import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
       plugins: [new RateLimitPlugin()],
     }),
     AccountModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
