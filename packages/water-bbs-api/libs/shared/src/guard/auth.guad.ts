@@ -52,6 +52,10 @@ export class AuthGuard implements CanActivate {
     if (!alive) {
       throw new HttpException('TOKEN_EXPIRED', HttpStatus.UNAUTHORIZED);
     }
+    req.user = {
+      token: { jti: tokenPayload.jti },
+      account: { id: tokenPayload.sub },
+    };
     return true;
   }
   getToken(authorization: string) {
