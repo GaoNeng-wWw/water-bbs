@@ -1,77 +1,88 @@
-import { err, InfrastructureError, ok } from 'water-bbs-shared';
+import {
+  err,
+  isErr,
+  isOk,
+  ok,
+  PersistenceError,
+  Result,
+} from 'water-bbs-shared';
 
 interface OptimisticLockConfig {
   maxRetries?: number;
   baseDelayMs?: number;
 }
 
-export interface WithOptimisticLockCallback<
-  Source,
-  BeforeModifyReturn,
-  Version,
-  NewVersion,
-  BeforeSetVersionEntity,
-> {
-  readonly load: () => Promise<Source | null>;
-  readonly modify: (
-    entity: Source,
-  ) => Promise<BeforeModifyReturn> | BeforeModifyReturn;
-  readonly save: (
-    oldVersion: Version,
-    entity: BeforeModifyReturn,
-  ) => Promise<NewVersion | null>;
-  readonly getVersion: (cur: Source) => Version;
-  readonly setVersion: (
-    cur: BeforeModifyReturn,
-    version: NewVersion,
-  ) => BeforeSetVersionEntity;
+interface OptimisticLockCallbacks<T, V> {
+  load: () => Promise<Result<T, Error>>;
+  modify: (entity: T) => Promise<Result<T, Error>> | Result<T, Error>;
+  save: (
+    entity: T,
+    oldVersion: V,
+  ) => Promise<Result<V, OptimisticLockConflict>>;
+  getVersion: (entity: T) => V;
+  setVersion: (entity: T, newVersion: V) => T;
 }
 
-export const withOptimisticLock = async <
-  Source,
-  BeforeModifyReturn,
-  Version,
-  NewVersion,
-  BeforeSetVersionEntity,
->(
-  {
-    load,
-    modify,
-    save,
-    getVersion,
-    setVersion,
-  }: WithOptimisticLockCallback<
-    Source,
-    BeforeModifyReturn,
-    Version,
-    NewVersion,
-    BeforeSetVersionEntity
-  >,
-  config: OptimisticLockConfig = {},
-) => {
-  const maxRetries = config.maxRetries || 10;
-  const baseDelayMs = config.baseDelayMs || 100;
+export class CanNotLoadEntry extends PersistenceError {
+  constructor(reason: Error | null, args: Record<string, any>) {
+    super(reason, args);
+    this.message = 'CAN_NOT_LOAD_ENTRY';
+  }
+}
+
+export class OptimisticLockConflict extends PersistenceError {
+  constructor(reason: Error | null, args: Record<string, any>) {
+    super(reason, args);
+    this.message = 'OPTIMISTIC_LOCK_CONFLICT';
+  }
+}
+
+export class Unexcept extends PersistenceError {
+  constructor(reason: Error | null, args: Record<string, any>) {
+    super(reason, args);
+    this.message = 'UNEXCEPT';
+  }
+}
+
+export async function withOptimisticLock<T, V>(
+  callbacks: OptimisticLockCallbacks<T, V>,
+  config?: OptimisticLockConfig,
+): Promise<Result<T, OptimisticLockConflict>> {
+  const maxRetries = config?.maxRetries ?? 10;
+  const baseDelay = config?.baseDelayMs ?? 100;
   let attempt = 0;
+
   while (attempt < maxRetries) {
-    const cur = await load();
-    if (!cur) {
-      return err(new InfrastructureError('CAN_NOT_LOAD_ENTRY'));
+    const loadResult = await callbacks.load();
+    if (isErr(loadResult)) {
+      return err(new CanNotLoadEntry(null, {}));
     }
-    const version = getVersion(cur);
-    const newEntity = await modify(cur);
-    const newVersion = await save(version, newEntity);
-    if (!newVersion) {
-      attempt += 1;
-      // 指数退让
-      const delay = Math.min(Math.random() * baseDelayMs * 2 ** attempt, 2000);
-      await new Promise<true>((resolve) => {
-        return setTimeout(() => {
-          resolve(true);
-        }, delay);
-      });
+    const entity = loadResult.value;
+    const oldVersion = callbacks.getVersion(entity);
+
+    const modifyResult = await callbacks.modify(entity);
+    if (isErr(modifyResult)) {
+      return err(new Unexcept(modifyResult.error, {}));
+    }
+    const newEntity = modifyResult.value;
+
+    const saveResult = await callbacks.save(newEntity, oldVersion);
+    if (isOk(saveResult)) {
+      const finalEntity = callbacks.setVersion(newEntity, saveResult.value);
+      return ok(finalEntity);
+    }
+    // 冲突时重试
+    if (saveResult.error instanceof OptimisticLockConflict) {
+      attempt++;
+      const delay = Math.min(
+        baseDelay * 2 ** attempt + Math.random() * 100,
+        2000,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
       continue;
     }
-    return ok(setVersion(newEntity, newVersion));
+    // 其他保存错误直接失败
+    return err(saveResult.error);
   }
-  return err(new InfrastructureError('OPTIMISTIC_LOCK_CONFLICT', null));
-};
+  return err(new OptimisticLockConflict(null, { retries: maxRetries }));
+}

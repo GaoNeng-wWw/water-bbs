@@ -4,10 +4,10 @@ import { JwtService } from '@nestjs/jwt';
 import { AccountAliveQuery, CheckPasswordQuery } from '../account/queries';
 import { IdentEnum } from 'water-bbs-migration';
 import {
+  ApplicationServiceError,
   err,
   isErr,
   ok,
-  PersistenceError,
   pipeOption,
   pipeResult,
   Result,
@@ -18,8 +18,7 @@ import type { ISessionRepo } from './domain/session.repo';
 import { AccountID } from 'src/account/domain';
 import { AccessTokenPayload, RefreshTokenPayload, Session } from './domain/ar';
 import { parse } from '@lukeed/ms';
-import { withOptimisticLock } from '@app/shared';
-import { SessionExpired } from './error/session-expired';
+import { OptimisticLockConflict, withOptimisticLock } from '@app/shared';
 
 @Injectable()
 export class AuthService {
@@ -39,8 +38,7 @@ export class AuthService {
     }
     const account = res.unwrap();
     if (!account.alive) {
-      //
-      return;
+      return err(new ApplicationServiceError('ACCOUNT_EXPIRED'));
     }
     const id = account.accountID;
     const checkRes = pipeResult(
@@ -51,7 +49,7 @@ export class AuthService {
     }
     const { valid } = checkRes.unwrap();
     if (!valid) {
-      return;
+      return err(new ApplicationServiceError('INVALID_CREDENTIALS'));
     }
     const sessionID = v7();
     const accessTokenID = v7();
@@ -71,97 +69,75 @@ export class AuthService {
         sub: account.accountID,
         tokenType: 'refresh',
         accessTokenID: accessTokenID,
+        sessionID,
       },
       { expiresIn: '1d' },
     );
-    const sessionTTL = parse('15min') ?? 0;
-    const putRes = await withOptimisticLock({
+    const refreshTokenTTL = parse('1d') ?? 0;
+    const putResult = await withOptimisticLock({
       load: async () => {
-        const res = pipeResult(
-          await this.sessionRepo.findAuthSessionByAccountID(
-            new AccountID({ value: account.accountID }),
-          ),
+        const sessionRes = await this.sessionRepo.findAuthSessionByAccountID(
+          new AccountID({ value: account.accountID }),
         );
-        if (res.isErr()) {
-          return err(res.error);
+        if (isErr(sessionRes)) {
+          return sessionRes;
         }
-        return ok(
-          unwrapOr(
-            res.unwrap(),
-            new Session({
-              sid: v7(),
-              status: 'ALIVE',
-              sub: account.accountID,
-              tokenIndex: [],
-              version: v4(),
-            }),
-          ),
+        const session = unwrapOr(
+          sessionRes.value,
+          new Session({
+            sid: sessionID,
+            sub: account.accountID,
+            tokenIndex: [],
+            version: '',
+            status: 'ALIVE',
+          }),
         );
-      },
-      // eslint-disable-next-line @typescript-eslint/require-await
-      modify: async (cur) => {
-        if (isErr(cur)) {
-          return err(cur.error);
-        }
-        const session = cur.value;
-        if (session.total > 5) {
-          session.popFirst();
-        }
-        session.pushToken(accessTokenID, refreshTokenID, sessionTTL);
         return ok(session);
       },
-      save: async (exceptVersion: Result<string, PersistenceError>, cur) => {
-        const newVersion = v4();
-        if (isErr(cur)) {
-          return err(cur.error);
+      modify: (
+        entity: Session,
+      ): Result<Session, Error> | Promise<Result<Session, Error>> => {
+        let session = entity;
+        while (session.total > 5) {
+          session = session.popFirst();
         }
-        if (isErr(exceptVersion)) {
-          return err(exceptVersion.error);
-        }
-        const v = exceptVersion.value;
-        const session = cur.value.setVersion(newVersion);
-        const sessionRes = pipeResult(
-          await this.sessionRepo.saveWithCas(
-            account.accountID,
-            v,
-            session,
-            sessionTTL,
-          ),
+        session = session.pushToken(
+          accessTokenID,
+          refreshTokenID,
+          refreshTokenTTL,
         );
-        if (sessionRes.isErr()) {
-          return err(sessionRes.error);
+        return ok(session);
+      },
+      save: async (
+        entity: Session,
+        oldVersion,
+      ): Promise<Result<string, OptimisticLockConflict>> => {
+        const newVersion = v4();
+        const session = entity.setVersion(newVersion);
+        const res = await this.sessionRepo.saveWithCas(
+          account.accountID,
+          oldVersion,
+          session,
+          -1,
+        );
+        if (isErr(res)) {
+          if (res.error instanceof OptimisticLockConflict) {
+            return res;
+          }
+          return err(new OptimisticLockConflict(res.error, {}));
         }
         return ok(newVersion);
       },
-      getVersion: (cur) => {
-        if (isErr(cur)) {
-          return err(cur.error);
-        }
-        return ok(cur.value.get('version'));
+      getVersion: (entity: Session): string => {
+        return entity.get('version');
       },
-      setVersion: (cur, version) => {
-        if (isErr(cur)) {
-          return err(cur.error);
-        }
-        let versionString = v4();
-        if (version) {
-          if (!isErr(version)) {
-            versionString = version.value;
-          } else {
-            return err(version.error);
-          }
-        }
-        return ok(cur.value.setVersion(versionString));
+      setVersion: (entity: Session, newVersion: string): Session => {
+        return entity.setVersion(newVersion);
       },
     });
-    if (isErr(putRes)) {
-      return err(putRes.error);
+    if (isErr(putResult)) {
+      return putResult;
     }
-    const sessionRes = putRes.value;
-    if (isErr(sessionRes)) {
-      return err(sessionRes.error);
-    }
-
     return ok({ accessToken: at, refreshToken: rt });
   }
 
@@ -189,11 +165,9 @@ export class AuthService {
     return ok(true);
   }
   async refresh(accountID: string, refreshToken: string) {
-    const { jti, accessTokenID } =
-      this.jwt.decode<RefreshTokenPayload>(refreshToken);
+    const { sessionID } = this.jwt.decode<RefreshTokenPayload>(refreshToken);
     const newAccessTokenID = v7();
     const refreshTokenID = v7();
-    const sessionID = v7();
     const at = this.jwt.sign<AccessTokenPayload>(
       {
         jti: newAccessTokenID,
@@ -208,86 +182,73 @@ export class AuthService {
         jti: refreshTokenID,
         sub: accountID,
         tokenType: 'refresh',
-        accessTokenID: accessTokenID,
+        accessTokenID: newAccessTokenID,
+        sessionID,
       },
       { expiresIn: '1d' },
     );
-
-    const sessionTTL = parse('15min') || 0;
-    const handle = await withOptimisticLock({
+    const tokenTTL = parse('1d')!;
+    const putResult = await withOptimisticLock({
       load: async () => {
-        const sessionRes = pipeResult(
-          await this.sessionRepo.findAuthSessionByAccountID(
-            new AccountID({ value: accountID }),
+        const res = await this.sessionRepo.findAuthSessionByAccountID(
+          new AccountID({ value: accountID }),
+        );
+        if (isErr(res)) {
+          return res;
+        }
+        return ok(
+          unwrapOr(
+            res.value,
+            new Session({
+              sid: sessionID,
+              sub: accountID,
+              status: 'ALIVE',
+              tokenIndex: [],
+              version: '',
+            }),
           ),
         );
-        if (sessionRes.isErr()) {
-          return err(sessionRes.error);
+      },
+      modify: function (
+        entity: Session,
+      ): Result<Session, Error> | Promise<Result<Session, Error>> {
+        let session = entity;
+        while (session.total > 5) {
+          session = session.popFirst();
         }
-        const sessionOption = pipeOption(sessionRes.unwrap());
-        if (sessionOption.isNone()) {
-          return err(new SessionExpired());
-        }
-        const session = sessionOption.unwrap();
+        session = session.pushToken(newAccessTokenID, refreshTokenID, tokenTTL);
         return ok(session);
       },
-      modify: (entity) => {
-        if (isErr(entity)) {
-          return err(entity.error);
-        }
-        const session = entity.value
-          .removeTokenByAccessTokenID(accessTokenID)
-          .removeTokenByRefreshTokenID(jti);
-        return ok(session);
-      },
-      save: async (oldVersion: Result<string, any>, entity) => {
-        if (isErr(entity)) {
-          return err(entity.error);
-        }
-        const newVersion = v4();
-        const session = entity.value.setVersion(newVersion);
-        if (isErr(oldVersion)) {
-          return err(oldVersion.error);
-        }
-        const version = oldVersion.value;
-        const handle = pipeResult(
-          await this.sessionRepo.saveWithCas(
-            accountID,
-            version,
-            session,
-            sessionTTL,
-          ),
+      save: async (
+        entity: Session,
+        oldVersion: string,
+      ): Promise<Result<string, OptimisticLockConflict>> => {
+        const version = v4();
+        let session = entity;
+        session = session.setVersion(version);
+        const saveResult = await this.sessionRepo.saveWithCas(
+          accountID,
+          oldVersion,
+          session,
+          -1,
         );
-        if (handle.isErr()) {
-          return err(handle.error);
+        if (isErr(saveResult)) {
+          return saveResult;
         }
-        return ok(newVersion);
+
+        return ok(version);
       },
-      getVersion: (cur): Result<string, any> => {
-        if (isErr(cur)) {
-          return err(cur.error);
-        }
-        return ok(cur.value.get('version'));
+      getVersion: function (entity: Session) {
+        return entity.get('version');
       },
-      setVersion: (cur, version) => {
-        if (isErr(version)) {
-          return err(version.error);
-        }
-        const v = version.value;
-        if (isErr(cur)) {
-          return err(cur.error);
-        }
-        const session = cur.value;
-        session.setVersion(v);
+      setVersion: function (entity: Session, newVersion: string): Session {
+        entity.set('version').to(newVersion);
+        return entity;
       },
     });
-    if (isErr(handle)) {
-      return err(handle.error);
+    if (isErr(putResult)) {
+      return putResult;
     }
-    const runResult = handle.value;
-    if (runResult && isErr(runResult)) {
-      return err(runResult.error);
-    }
-    return { accessToken: at, refreshToken: rt };
+    return ok({ accessToken: at, refreshToken: rt });
   }
 }

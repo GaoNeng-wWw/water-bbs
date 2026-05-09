@@ -19,12 +19,4 @@ export interface ISessionRepo {
     session: Session,
     ttl: number,
   ): Promise<Result<string, PersistenceError>>;
-  removeByAccessTokenID(
-    accountTokenID: string,
-    accessTokenID: string,
-  ): Promise<Result<boolean, PersistenceError>>;
-  removeByRefreshTokenID(
-    refreshTokenID: string,
-    accessTokenID: string,
-  ): Promise<Result<boolean, PersistenceError>>;
 }

@@ -1,4 +1,5 @@
 import { Aggregate } from 'types-ddd';
+import { DomainError, err, ok } from 'water-bbs-shared';
 
 export type AccessTokenPayload = {
   jti: string;
@@ -12,6 +13,7 @@ export type RefreshTokenPayload = {
   sub: string;
   tokenType: 'refresh';
   accessTokenID: string;
+  sessionID: string;
 };
 
 export type TokenIndex = {
@@ -34,14 +36,37 @@ export class Session extends Aggregate<SessionProps> {
     super(props);
   }
 
+  static fromPOJO(data: Record<string, string>, tokenIndex: TokenIndex[]) {
+    const keys = ['sid', 'sub', 'version', 'status'];
+    for (const key of keys) {
+      if (key in data) {
+        continue;
+      }
+      return err(new DomainError('FIELD_MISSING', null, { key }));
+    }
+    const status = data.status.toLowerCase();
+    if (status !== 'alive' && status !== 'revoked') {
+      return err(new DomainError('INVALID_SESSION', null));
+    }
+    return ok(
+      new Session({
+        sid: data.sid,
+        sub: data.sub,
+        status: status.toUpperCase() as 'ALIVE' | 'REVOKED',
+        version: data.version,
+        tokenIndex,
+      }),
+    );
+  }
+
   get total() {
     return this.props.tokenIndex.length;
   }
 
   popFirst() {
     const self = this.clone();
-    const tokenIndex = self.props.tokenIndex.shift();
-    return tokenIndex;
+    self.props.tokenIndex.shift();
+    return self;
   }
   removeTokenByAccessTokenID(accessTokenID: string) {
     const self = this.clone();
@@ -76,7 +101,7 @@ export class Session extends Aggregate<SessionProps> {
         [
           ...this.get('tokenIndex'),
           { accessTokenID, refreshTokenID, createdAt, ttl },
-        ].sort(),
+        ].sort((a, b) => a.createdAt - b.createdAt),
       );
     return self;
   }

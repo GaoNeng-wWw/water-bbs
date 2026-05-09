@@ -16,6 +16,10 @@ export const none: None = { _tag: NONE_SYMBOL };
 export const isSome = <T>(opt: Option<T>): opt is Some<T> => opt._tag === SOME_SYMBOL;
 export const isNone = <T>(opt: Option<T>): opt is None => opt._tag === NONE_SYMBOL;
 
+export const isResult = (res: object): res is Result<unknown, unknown> => {
+  return '__tag' in res && (res.__tag === ERR_SYMBOL || res.__tag === OK_SYMBOL);
+};
+
 export const isErr = <T, E>(res: Result<T, E>): res is Err<E> => {
   return res.__tag === ERR_SYMBOL;
 };
