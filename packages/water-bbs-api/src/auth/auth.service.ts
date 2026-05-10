@@ -14,7 +14,7 @@ import {
   unwrapOr,
 } from 'water-bbs-shared';
 import { v4, v7 } from 'uuid';
-import type { ISessionRepo } from './domain/session.repo';
+import { InjectSessionRepo, type ISessionRepo } from './domain/session.repo';
 import { AccountID } from 'src/account/domain';
 import { AccessTokenPayload, RefreshTokenPayload, Session } from './domain/ar';
 import { parse } from '@lukeed/ms';
@@ -25,6 +25,7 @@ export class AuthService {
   constructor(
     private readonly query: QueryBus,
     private readonly jwt: JwtService,
+    @InjectSessionRepo()
     private readonly sessionRepo: ISessionRepo,
   ) {}
   async login(identType: IdentEnum, identValue: string, certValue: string) {

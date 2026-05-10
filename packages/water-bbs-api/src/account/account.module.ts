@@ -15,6 +15,9 @@ import { InviteCodeRepositoryToken } from './domain/repo/invite-code.repo';
 import { InviteCodeRepository } from './infra/repo/invite-code.repo';
 import { AccountAliveHandler } from './queries/account-alive.query';
 import { CheckPasswordHandler } from './queries/check-password.query';
+import { CaptchaService } from '@app/captcha/captcha.service';
+import { CAPTCHA_REPOSITORY_TOKEN } from '@app/captcha/domain';
+import { CaptchaRepository } from '@app/captcha/infra';
 
 @Module({
   controllers: [AccountController],
@@ -42,6 +45,11 @@ import { CheckPasswordHandler } from './queries/check-password.query';
       provide: InviteCodeRepositoryToken,
       useClass: InviteCodeRepository,
     },
+    {
+      provide: CAPTCHA_REPOSITORY_TOKEN,
+      useValue: CaptchaRepository,
+    },
+    CaptchaService,
     AccountService,
     AccountAliveHandler,
     CheckPasswordHandler,

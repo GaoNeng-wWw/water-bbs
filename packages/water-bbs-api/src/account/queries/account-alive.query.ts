@@ -1,5 +1,8 @@
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
-import type { IAccountRepoistory } from '../domain/repo/account.repo';
+import {
+  InjectAccountRepository,
+  type IAccountRepoistory,
+} from '../domain/repo/account.repo';
 import { IdentEnum } from 'water-bbs-migration';
 import { isErr, ok, PersistenceError, Result } from 'water-bbs-shared';
 export class AccountAliveQuery extends Query<
@@ -19,7 +22,10 @@ export class AccountAliveQuery extends Query<
 
 @QueryHandler(AccountAliveQuery)
 export class AccountAliveHandler implements IQueryHandler<AccountAliveQuery> {
-  constructor(private repository: IAccountRepoistory) {}
+  constructor(
+    @InjectAccountRepository()
+    private repository: IAccountRepoistory,
+  ) {}
 
   async execute(query: AccountAliveQuery) {
     const accountRes = await this.repository.findByIdentValue(

@@ -182,8 +182,8 @@ export class AccountService {
   async resetPassword(dto: ResetPasswordDTO) {
     const account = pipeResult(
       await this.accountRepository.findByIdentValue(
-        dto.ident_value,
         IdentEnum.EMAIL,
+        dto.ident_value,
       ),
     );
 

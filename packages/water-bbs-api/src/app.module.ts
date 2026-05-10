@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@app/shared';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -60,6 +61,9 @@ import { AuthGuard } from '@app/shared';
         };
       },
       plugins: [new RateLimitPlugin()],
+    }),
+    JwtModule.register({
+      global: true,
     }),
     AccountModule,
     AuthModule,

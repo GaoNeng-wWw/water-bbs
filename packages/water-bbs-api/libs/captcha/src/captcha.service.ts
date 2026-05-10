@@ -1,9 +1,14 @@
 import {
-  type IRateLimitService,
   RATE_LIMIT_SERVICE,
+  type IRateLimitService,
 } from '@nestjs-redisx/rate-limit';
 import { Inject, Injectable } from '@nestjs/common';
-import { Captcha, Channel, type CaptchaStore } from './domain';
+import {
+  Captcha,
+  Channel,
+  InjectCaptchaStore,
+  type CaptchaStore,
+} from './domain';
 import {
   ApplicationServiceError,
   err,
@@ -24,6 +29,7 @@ export class CaptchaService {
   constructor(
     @Inject(RATE_LIMIT_SERVICE)
     private rateLimitService: IRateLimitService,
+    @InjectCaptchaStore()
     private captchaRepository: CaptchaStore,
   ) {}
   async sendCaptcha(

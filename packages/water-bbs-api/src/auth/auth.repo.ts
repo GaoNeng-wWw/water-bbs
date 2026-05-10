@@ -12,15 +12,13 @@ import {
   some,
 } from 'water-bbs-shared';
 import { Session, TokenIndex } from './domain/ar';
-import { InjectRedis, RedisService } from '@nestjs-redisx/core';
+import { RedisService } from '@nestjs-redisx/core';
 import { isEmpty } from 'class-validator';
+import { OptimisticLockConflict } from '@app/shared';
 
 @Injectable()
 export class AuthRepo implements ISessionRepo {
-  constructor(
-    @InjectRedis()
-    private redis: RedisService,
-  ) {}
+  constructor(private redis: RedisService) {}
   async upsert(session: Session): Promise<Result<boolean, PersistenceError>> {
     const sub = session.get('sub');
     const sid = session.get('sid');
@@ -99,12 +97,89 @@ export class AuthRepo implements ISessionRepo {
     }
     return this.findAuthSessionBySessionID(sid);
   }
-  saveWithCas(
+  async saveWithCas(
     accountID: string,
-    exceptedVersion: string,
+    expectedVersion: string,
     session: Session,
     ttl: number,
   ): Promise<Result<string, PersistenceError>> {
-    throw new Error('Method not implemented.');
+    const lua = `
+      -- ARGV[1]   : AccountID
+      -- ARGV[2]   : 预期旧版本号 (oldVersion)
+      -- ARGV[3]   : 新版本号 (newVersion)
+      -- ARGV[4]   : 新的 sid
+      -- ARGV[5]   : 新的 sub
+      -- ARGV[6]   : 新的 status
+      -- ARGV[7]   : 新的 tokenIndex (JSON 字符串)
+      -- ARGV[8]   : TTL (秒，-1 表示永不过期)
+
+      local accountID = ARGV[1]
+      local oldVersion = ARGV[2]
+      local newVersion = ARGV[3]
+      local sid = ARGV[4]
+      local sub = ARGV[5]
+      local status = ARGV[6]
+      local tokenIndex = ARGV[7]
+      local ttl = tonumber(ARGV[8])
+
+      local sessionID = redis.call("HGET", "session-map", accountID) or ''
+
+      if sessionID == '' then
+        return 0 -- 找不到session
+      end
+
+      local key = 'session' .. ':' .. sessionID
+
+      -- 获取当前版本号（字段不存在时视为空字符串）
+      local currentVersion = redis.call('HGET', key, 'version') or ''
+
+      if currentVersion == oldVersion then
+          -- 原子更新所有字段（包括版本号）
+          redis.call('HMSET', key,
+              'sid', sid,
+              'sub', sub,
+              'status', status,
+              'version', newVersion,
+              'tokenIndex', tokenIndex
+          )
+          -- 处理过期时间
+          if ttl > 0 then
+              redis.call('EXPIRE', key, ttl)
+          elseif ttl == -1 then
+              redis.call('PERSIST', key)
+          end
+          return 1  -- 成功
+      else
+          return 0  -- 版本冲突
+      end
+    `;
+    const newVersion = session.get('version');
+    const tokenIndexJson = JSON.stringify(session.get('tokenIndex'));
+    const saveResult = await this.redis
+      .eval(
+        lua,
+        [],
+        [
+          accountID,
+          expectedVersion,
+          newVersion,
+          session.get('sid'),
+          session.get('sub'),
+          session.get('status'),
+          tokenIndexJson,
+          ttl.toString(),
+        ],
+      )
+      .then((status) => {
+        if (status) {
+          return ok(true);
+        }
+        return err(new OptimisticLockConflict(null, {}));
+      })
+      .catch((reason) => err(new PersistenceError(reason, {})));
+    if (isErr(saveResult)) {
+      return saveResult;
+    }
+    return ok(newVersion);
   }
 }
