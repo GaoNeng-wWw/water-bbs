@@ -6,16 +6,28 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint ./src"
   },
   "dependencies": {
-    "vue": "^3.5.32"
+    "@vee-validate/zod": "^4.15.1",
+    "motion-v": "^2.2.1",
+    "reka-ui": "^2.9.7",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.32",
+    "vue-router": "^5.0.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@gaonengwww/eslint-config": "^1.0.6",
+    "@iconify-json/line-md": "^1.2.16",
+    "@iconify-json/material-symbols": "^1.2.69",
     "@types/node": "^24.12.2",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
+    "eslint": "^9.39.4",
     "typescript": "~6.0.2",
+    "unocss": "^66.6.8",
     "vite": "^8.0.10",
     "vue-tsc": "^3.2.7"
   }
