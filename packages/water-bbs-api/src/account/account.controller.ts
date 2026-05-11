@@ -20,6 +20,7 @@ import {
 import { GetProfileResponse } from './dto/get-profile.dto';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { RemoveAccountResponse } from './dto/remove-account.dto';
+import { Public, User } from '@app/shared';
 
 @Controller('account')
 export class AccountController {
@@ -46,12 +47,11 @@ export class AccountController {
   @ApiOkResponse({
     type: UpdateProfileResponse,
   })
-  @Patch('profile/:id')
+  @Patch('profile')
   async updateProfile(
-    @Param('id', ParseUUIDPipe) id: string,
+    @User() { account: { id } }: RequestUser,
     @Body() dto: UpdateProfileDTO,
   ) {
-    // TODO: 等Auth写完, 从Request中获取id
     const res = await this.accountService.updateProfile(id, dto);
     if (isErr(res)) {
       return res;
@@ -59,6 +59,8 @@ export class AccountController {
     return res.value;
   }
 
+  // TODO: 移动到AUTH里
+  @Public()
   @ApiCreatedResponse({ type: CreateAccountResponse })
   @Post('register')
   async register(@Body() dto: RegisterDTO) {
@@ -74,9 +76,8 @@ export class AccountController {
   }
 
   @ApiOkResponse({ type: RemoveAccountResponse })
-  // TODO: 鉴权, 需要 ACCOUNT:REMOVE-FORCE
-  @Delete(':id')
-  async delete(@Param('id', ParseUUIDPipe) id: string) {
+  @Delete()
+  async delete(@User() { account: { id } }: RequestUser) {
     const res = await this.accountService.removeAccount(
       new RemoveAccountDTO(id),
     );
@@ -86,17 +87,17 @@ export class AccountController {
     return res.value;
   }
 
-  // 给后台用来重置密码的
-  // TODO: 鉴权, 需要 ACCOUNT:RESET-FORCE
   @Patch('reset-password')
   async resetPassword(@Body() dto: ResetPasswordDTO) {
     const res = await this.accountService.resetPassword({
       ...dto,
-      force: true,
+      force: false,
     });
     if (isErr(res)) {
       return res;
     }
     return res.value;
   }
+
+  // TODO: UPDATE-PASSWORD
 }
