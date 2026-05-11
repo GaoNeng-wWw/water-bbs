@@ -9,24 +9,43 @@ import {
   Post,
 } from '@nestjs/common';
 import { AccountService } from './application';
-import { RegisterDTO } from './dto/register.dto';
+import { CreateAccountResponse, RegisterDTO } from './dto/register.dto';
 import { isErr } from 'water-bbs-shared';
 import { RemoveAccountDTO } from './application/dto/remove-account.dto';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
-import { UpdateProfileDTO } from './dto/update-profile.dto';
+import {
+  UpdateProfileDTO,
+  UpdateProfileResponse,
+} from './dto/update-profile.dto';
+import { GetProfileResponse } from './dto/get-profile.dto';
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { RemoveAccountResponse } from './dto/remove-account.dto';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
+
+  @ApiOkResponse({
+    type: GetProfileResponse,
+  })
   @Get('profile/:id')
   async getProfile(@Param('id', ParseUUIDPipe) id: string) {
     const res = await this.accountService.getProfile(id);
     if (isErr(res)) {
       return res;
     }
-    return res.value;
+    const resp = res.value;
+    return new GetProfileResponse(
+      resp.id,
+      resp.username,
+      resp.bio,
+      resp.avatar,
+    );
   }
 
+  @ApiOkResponse({
+    type: UpdateProfileResponse,
+  })
   @Patch('profile/:id')
   async updateProfile(
     @Param('id', ParseUUIDPipe) id: string,
@@ -40,6 +59,7 @@ export class AccountController {
     return res.value;
   }
 
+  @ApiCreatedResponse({ type: CreateAccountResponse })
   @Post('register')
   async register(@Body() dto: RegisterDTO) {
     const res = await this.accountService.createAccount({
@@ -53,6 +73,7 @@ export class AccountController {
     return res.value;
   }
 
+  @ApiOkResponse({ type: RemoveAccountResponse })
   // TODO: 鉴权, 需要 ACCOUNT:REMOVE-FORCE
   @Delete(':id')
   async delete(@Param('id', ParseUUIDPipe) id: string) {

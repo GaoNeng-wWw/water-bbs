@@ -36,6 +36,7 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.4.2",
     "@node-rs/bcrypt": "^1.10.7",
     "@swc/core": "^1.15.33",
     "@vitest/coverage-v8": "3.2.4",
