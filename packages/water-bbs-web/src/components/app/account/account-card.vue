@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import loginForm from './login-form.vue';
-import { UiDialog, UiDialogContent } from '@/components/ui';
+import { UiDialog, UiDialogContent, UiTab, UiTabItem } from '@/components/ui';
+import { LayoutGroup } from 'motion-v';
+import RegisterForm from './register-form.vue';
 
+const active = ref('');
 const status = ref(false);
 const onClick = () => {
   status.value = true;
@@ -23,7 +26,14 @@ const onClick = () => {
     </div>
     <ui-dialog v-model:open="status">
       <ui-dialog-content>
-        <login-form />
+        <ui-tab v-model="active">
+          <ui-tab-item id="login" label="Login">
+            <login-form />
+          </ui-tab-item>
+          <ui-tab-item id="register" label="Register">
+            <register-form />
+          </ui-tab-item>
+        </ui-tab>
       </ui-dialog-content>
     </ui-dialog>
   </div>

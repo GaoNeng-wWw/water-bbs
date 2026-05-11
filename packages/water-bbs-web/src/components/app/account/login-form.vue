@@ -19,6 +19,8 @@ const model = reactive({ email: '', password: '' });
     <ui-form-item label="Password" name="password" required>
       <ui-input v-model="model.password" password />
     </ui-form-item>
-    <ui-button>Login</ui-button>
+    <ui-button color="primary">
+      Login
+    </ui-button>
   </ui-form>
 </template>

@@ -15,7 +15,7 @@ const showLoading = ref(loading);
 <template>
   <animate-presence :initial="false">
     <motion.button
-      :disabled="!loading || disabled"
+      :disabled="loading || disabled"
       :type="htmlType"
       layout
       :transition="{ type: 'spring' }"

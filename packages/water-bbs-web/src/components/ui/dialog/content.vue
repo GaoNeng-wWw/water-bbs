@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { motion, AnimatePresence, LayoutGroup } from 'motion-v';
 import type { DialogContentEmits, DialogContentProps } from 'reka-ui';
 import { DialogContent, DialogOverlay, DialogPortal, useForwardPropsEmits } from 'reka-ui';
 
@@ -10,26 +11,27 @@ const forwarded = useForwardPropsEmits(props, emits);
 
 <template>
   <dialog-portal force-mount>
-    <Transition
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-      class="transition-all duration-500 ease-in-out">
-      <dialog-overlay class="fixed inset-0 bg-black/50" />
-    </Transition>
-    <Transition
-      enter-from-class="opacity-0 translate-y-5 blur"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-15 blur"
-      class="transition-all duration-300 ease-in-out">
+    <dialog-overlay as-child>
+      <motion.div class="fixed inset-0 bg-black/50" :initial="{ opacity: 0 }" :animate="{ opacity: 1 }" :exit="{ opacity: 0 }" />
+    </dialog-overlay>
+    <animate-presence>
       <dialog-content
         v-bind="forwarded"
-        class="fixed inset-0 p-4 rounded-md bg-warm-100 w-full h-fit left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-none max-w-md max-h-95%"
+        as-child
       >
-        <slot />
+        <motion.div
+          :initial="{ opacity: 0, filter: 'blur(20px)', y: 30, scale: 0.95 }"
+          :animate="{ opacity: 1, filter: 'blur(0px)', y: 0, scale: 1 }"
+          :exit="{ opacity: 0, filter: 'blur(20px)', y: 30, scale: 0.95 }"
+          :transition="{ type: 'tween' }"
+          class="
+            fixed p-4 rounded-md bg-warm-100 w-full h-fit left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-none max-w-md
+            max-h-95%
+          "
+        >
+          <slot />
+        </motion.div>
       </dialog-content>
-    </Transition>
+    </animate-presence>
   </dialog-portal>
 </template>
