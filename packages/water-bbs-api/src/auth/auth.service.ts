@@ -153,8 +153,8 @@ export class AuthService {
     }
     const maybeSession = pipeOption(sessionResult.unwrap());
     if (maybeSession.isNone()) {
-      // 把token加入黑名单
-      // 为什么会存在没有session但是能拿到token的情况
+      // TODO: 把token加入黑名单
+      // TODO: 为什么会存在没有session但是能拿到token的情况
     }
     let session = maybeSession.unwrap();
     session = session.removeTokenByAccessTokenID(accessTokenID);

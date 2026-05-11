@@ -18,9 +18,11 @@ import {
   UpdateProfileResponse,
 } from './dto/update-profile.dto';
 import { GetProfileResponse } from './dto/get-profile.dto';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { RemoveAccountResponse } from './dto/remove-account.dto';
 import { Public, User } from '@app/shared';
+import { UpdatePassword } from './dto/update-password.dto';
+import { AccountID } from './domain';
 
 @Controller('account')
 export class AccountController {
@@ -75,6 +77,7 @@ export class AccountController {
     return res.value;
   }
 
+  @ApiBearerAuth()
   @ApiOkResponse({ type: RemoveAccountResponse })
   @Delete()
   async delete(@User() { account: { id } }: RequestUser) {
@@ -86,7 +89,7 @@ export class AccountController {
     }
     return res.value;
   }
-
+  @ApiBearerAuth()
   @Patch('reset-password')
   async resetPassword(@Body() dto: ResetPasswordDTO) {
     const res = await this.accountService.resetPassword({
@@ -99,5 +102,18 @@ export class AccountController {
     return res.value;
   }
 
-  // TODO: UPDATE-PASSWORD
+  @Patch('password')
+  async updatePassword(
+    @User() { account: { id } }: RequestUser,
+    @Body() dto: UpdatePassword,
+  ) {
+    const res = await this.accountService.updatePassword({
+      accountID: new AccountID({ value: id }),
+      ...dto,
+    });
+    if (isErr(res)){
+      return res;
+    }
+    return res.value;
+  }
 }

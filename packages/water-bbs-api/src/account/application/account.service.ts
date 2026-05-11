@@ -44,6 +44,7 @@ import {
 } from './dto/remove-account.dto';
 import { PublicAccountInfo } from './dto/public-account-info';
 import { GetProfileDTO } from './dto/get-profile.dto';
+import { UpdatePassword } from './dto/update-password.dto';
 
 @Injectable()
 export class AccountService {
@@ -122,6 +123,7 @@ export class AccountService {
   async removeAccount(
     dto: RemoveAccountDTO,
   ): Promise<Result<RemoveAccountResponse, ApplicationServiceError>> {
+    // TODO: 发布领域事件通知删除session
     const accountId = new AccountID({ value: dto.id });
     const res = pipeResult(await this.accountRepository.findOne(accountId));
     if (res.isErr()) {
@@ -179,7 +181,44 @@ export class AccountService {
     );
   }
 
+  async updatePassword(dto: UpdatePassword) {
+    // TODO: 发布领域事件通知删除session
+    const accountRes = await this.accountRepository.findOne(dto.accountID);
+    if (isErr(accountRes)) {
+      return accountRes;
+    }
+    const account = accountRes.value;
+    if (!account) {
+      return err(new AccountNotFound());
+    }
+
+    const mfaResult = pipeResult(
+      // TODO: 后面可能兼容更多的Channel，这里先写Email
+      await this.captcha.verify(dto.mfaCode, account.id, Channel.Email),
+    );
+    if (mfaResult.isErr()) {
+      return err(mfaResult.unwrapErr());
+    }
+    const mfaStatus = mfaResult.unwrap();
+    if (!mfaStatus) {
+      return err(new InvalidMfa());
+    }
+
+    const resetPasswordRes = account.resetPassword(dto.password);
+    if (isErr(resetPasswordRes)) {
+      return resetPasswordRes;
+    }
+    const updateResult = pipeResult(
+      await this.accountRepository.upsert(account),
+    );
+    if (updateResult.isErr()) {
+      return updateResult;
+    }
+    return ok(true);
+  }
+
   async resetPassword(dto: ResetPasswordDTO) {
+    // TODO: 发布领域事件通知删除session
     const account = pipeResult(
       await this.accountRepository.findByIdentValue(
         IdentEnum.EMAIL,
