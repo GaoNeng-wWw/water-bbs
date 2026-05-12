@@ -9,9 +9,10 @@ import { RedisModule } from '@nestjs-redisx/core';
 import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
 import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from '@app/shared';
 import { JwtModule } from '@nestjs/jwt';
+import { ResultInterceptor } from '@app/shared/interceptor';
 
 @Module({
   imports: [
@@ -73,6 +74,10 @@ import { JwtModule } from '@nestjs/jwt';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResultInterceptor
+    }
   ],
 })
 export class AppModule {}

@@ -18,7 +18,11 @@ import {
   UpdateProfileResponse,
 } from './dto/update-profile.dto';
 import { GetProfileResponse } from './dto/get-profile.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import { RemoveAccountResponse } from './dto/remove-account.dto';
 import { Public, User } from '@app/shared';
 import { UpdatePassword } from './dto/update-password.dto';
@@ -111,7 +115,7 @@ export class AccountController {
       accountID: new AccountID({ value: id }),
       ...dto,
     });
-    if (isErr(res)){
+    if (isErr(res)) {
       return res;
     }
     return res.value;
