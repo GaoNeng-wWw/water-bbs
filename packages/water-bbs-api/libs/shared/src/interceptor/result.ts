@@ -1,13 +1,14 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
 import { isObject } from 'class-validator';
 import { Response } from 'express';
 import { map, Observable } from 'rxjs';
-import { isOk, isResult } from 'water-bbs-shared';
+import { AppError, isOk, isResult } from 'water-bbs-shared';
 
 @Injectable()
 export class ResultInterceptor implements NestInterceptor {
@@ -21,7 +22,11 @@ export class ResultInterceptor implements NestInterceptor {
           if (isOk(data)) {
             return isObject(data.value) ? data.value : {};
           }
-          return data.error;
+          const err = data.error as AppError;
+          console.log(data.error);
+          throw new HttpException(err.message, err.code, {
+            cause: err.code >= 499 ? {} : err.cause,
+          });
         }
         if (isObject(data)) {
           return data;

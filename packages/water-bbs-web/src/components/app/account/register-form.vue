@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { accountControllerRegister } from '@/api';
 import { UiForm, UiFormItem, UiInput, UiButton } from '@/components/ui';
 import { reactive } from 'vue';
 import z from 'zod';
@@ -10,13 +11,29 @@ const schema = z.object({
   inviteCode: z.string(),
 });
 
-const model = reactive({ email: '', password: '', captcha: '', inviteCode: '' });
+const model = reactive({ email: '', password: '', captcha: '', inviteCode: '', username: '' });
+
+const onClickRegister = () => {
+  accountControllerRegister({
+    body: {
+      username: model.username,
+      ident_type: 'Email',
+      ident_value: model.email,
+      captcha: model.captcha,
+      invite_code: model.inviteCode,
+      password: model.password,
+    },
+  });
+};
 </script>
 
 <template>
   <div class="w-full">
     <div class="h-fit">
       <ui-form :schema="schema" :inital-value="model">
+        <ui-form-item label="Username" name="username" required>
+          <ui-input v-model="model.username" />
+        </ui-form-item>
         <ui-form-item label="Email" name="email" required>
           <ui-input v-model="model.email" />
         </ui-form-item>
@@ -29,7 +46,7 @@ const model = reactive({ email: '', password: '', captcha: '', inviteCode: '' })
         <ui-form-item label="Invaite Code" name="inviteCode">
           <ui-input v-model="model.inviteCode" />
         </ui-form-item>
-        <ui-button color="primary">
+        <ui-button color="primary" @click="onClickRegister">
           Register
         </ui-button>
       </ui-form>

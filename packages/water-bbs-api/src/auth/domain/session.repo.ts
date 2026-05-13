@@ -1,22 +1,24 @@
 import { Inject } from '@nestjs/common';
-import { Session } from './ar';
-import { Option, PersistenceError, Result } from 'water-bbs-shared';
+import { AccessTokenPayload, RefreshTokenPayload } from './ar';
+import { PersistenceError, Result } from 'water-bbs-shared';
 import { AccountID } from 'src/account/domain';
 export const SESSION_REPO_TOKEN = Symbol('SESSION_REPO_TOKEN');
 export const InjectSessionRepo = () => Inject(SESSION_REPO_TOKEN);
 
 export interface ISessionRepo {
-  upsert(session: Session): Promise<Result<boolean, PersistenceError>>;
-  findAuthSessionBySessionID(
-    sessionID: string,
-  ): Promise<Result<Option<Session>, PersistenceError>>;
-  findAuthSessionByAccountID(
+  disabledToken(
+    tokenId: string,
+    accountId: string,
+  ): Promise<Result<boolean, PersistenceError>>;
+  getTokenTotal(
     accountID: AccountID,
-  ): Promise<Result<Option<Session>, PersistenceError>>;
-  saveWithCas(
+  ): Promise<Result<number, PersistenceError>>;
+  tokenAlive(
     accountID: string,
-    exceptedVersion: string,
-    session: Session,
-    ttl: number,
-  ): Promise<Result<string, PersistenceError>>;
+    tokenID: string,
+  ): Promise<Result<boolean, PersistenceError>>;
+  putToken(
+    accessToken: AccessTokenPayload,
+    refreshToken: RefreshTokenPayload,
+  ): Promise<Result<number, PersistenceError>>;
 }

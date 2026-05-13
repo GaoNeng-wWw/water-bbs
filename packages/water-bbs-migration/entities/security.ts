@@ -1,7 +1,7 @@
 import { Entity, PrimaryKey, Property, ManyToOne, Unique, Enum } from '@mikro-orm/decorators/legacy';
 import { v7 } from 'uuid';  
 import { Account } from './account';
-import { hashSync } from 'bcryptjs';
+import { hashSync, compareSync } from 'bcryptjs';
 
 export enum IdentEnum {
   EMAIL = 'Email',
@@ -66,6 +66,6 @@ export class Cert {
     this.certValue = hashSync(this.certValue, 10);
   }
   comparePassword(plainPassword: string){
-    return this.certValue === hashSync(plainPassword, 10);
+    return compareSync(plainPassword, this.certValue);
   }
 }

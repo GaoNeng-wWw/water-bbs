@@ -2,7 +2,7 @@
   "namespaces": [],
   "tables": [
     {
-      "name": "account_entity",
+      "name": "account",
       "columns": {
         "created_at": {
           "name": "created_at",
@@ -58,7 +58,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "unique": false,
           "length": 36,
           "precision": null,
@@ -102,7 +102,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "account_entity_created_at_index",
+          "keyName": "account_created_at_index",
           "primary": false,
           "unique": false
         },
@@ -112,7 +112,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "account_entity_removed_at_index",
+          "keyName": "account_removed_at_index",
           "primary": false,
           "unique": false
         },
@@ -122,29 +122,30 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "account_entity_role_id_index",
+          "keyName": "account_role_id_index",
           "primary": false,
           "unique": false
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "account_entity_role_id_foreign": {
+        "account_role_id_foreign": {
           "columnNames": [
             "role_id"
           ],
-          "constraintName": "account_entity_role_id_foreign",
-          "localTableName": "account_entity",
+          "constraintName": "account_role_id_foreign",
+          "localTableName": "account",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "role_entity"
+          "referencedTableName": "role",
+          "deleteRule": "set null"
         }
       },
       "comment": ""
     },
     {
-      "name": "cert_entity",
+      "name": "cert",
       "columns": {
         "account_id": {
           "name": "account_id",
@@ -230,7 +231,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "cert_entity_account_id_index",
+          "keyName": "cert_account_id_index",
           "primary": false,
           "unique": false
         },
@@ -240,29 +241,29 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "cert_entity_cert_value_index",
+          "keyName": "cert_cert_value_index",
           "primary": false,
           "unique": false
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "cert_entity_account_id_foreign": {
+        "cert_account_id_foreign": {
           "columnNames": [
             "account_id"
           ],
-          "constraintName": "cert_entity_account_id_foreign",
-          "localTableName": "cert_entity",
+          "constraintName": "cert_account_id_foreign",
+          "localTableName": "cert",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "account_entity"
+          "referencedTableName": "account"
         }
       },
       "comment": ""
     },
     {
-      "name": "ident_entity",
+      "name": "ident",
       "columns": {
         "account_id": {
           "name": "account_id",
@@ -364,7 +365,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "ident_entity_account_id_index",
+          "keyName": "ident_account_id_index",
           "primary": false,
           "unique": false
         },
@@ -376,7 +377,7 @@
           ],
           "composite": true,
           "constraint": true,
-          "keyName": "ident_entity_ident_type_ident_value_account_id_unique",
+          "keyName": "ident_ident_type_ident_value_account_id_unique",
           "primary": false,
           "unique": true
         },
@@ -386,29 +387,29 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "ident_entity_ident_value_index",
+          "keyName": "ident_ident_value_index",
           "primary": false,
           "unique": false
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "ident_entity_account_id_foreign": {
+        "ident_account_id_foreign": {
           "columnNames": [
             "account_id"
           ],
-          "constraintName": "ident_entity_account_id_foreign",
-          "localTableName": "ident_entity",
+          "constraintName": "ident_account_id_foreign",
+          "localTableName": "ident",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "account_entity"
+          "referencedTableName": "account"
         }
       },
       "comment": ""
     },
     {
-      "name": "permission_entity",
+      "name": "permission",
       "columns": {
         "code": {
           "name": "code",
@@ -524,7 +525,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "permission_entity_code_index",
+          "keyName": "permission_code_index",
           "primary": false,
           "unique": false
         },
@@ -534,7 +535,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "permission_entity_created_at_index",
+          "keyName": "permission_created_at_index",
           "primary": false,
           "unique": false
         },
@@ -544,7 +545,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "permission_entity_name_index",
+          "keyName": "permission_name_index",
           "primary": false,
           "unique": false
         },
@@ -554,7 +555,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "permission_entity_removed_at_index",
+          "keyName": "permission_removed_at_index",
           "primary": false,
           "unique": false
         }
@@ -564,7 +565,7 @@
       "comment": ""
     },
     {
-      "name": "profile_entity",
+      "name": "profile",
       "columns": {
         "account_id": {
           "name": "account_id",
@@ -696,7 +697,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "profile_entity_created_at_index",
+          "keyName": "profile_created_at_index",
           "primary": false,
           "unique": false
         },
@@ -706,23 +707,23 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "profile_entity_removed_at_index",
+          "keyName": "profile_removed_at_index",
           "primary": false,
           "unique": false
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "profile_entity_account_id_foreign": {
+        "profile_account_id_foreign": {
           "columnNames": [
             "account_id"
           ],
-          "constraintName": "profile_entity_account_id_foreign",
-          "localTableName": "profile_entity",
+          "constraintName": "profile_account_id_foreign",
+          "localTableName": "profile",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "account_entity",
+          "referencedTableName": "account",
           "updateRule": "cascade",
           "deleteRule": "cascade"
         }
@@ -730,7 +731,7 @@
       "comment": ""
     },
     {
-      "name": "role_entity",
+      "name": "role",
       "columns": {
         "code": {
           "name": "code",
@@ -846,7 +847,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "role_entity_code_index",
+          "keyName": "role_code_index",
           "primary": false,
           "unique": false
         },
@@ -856,7 +857,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "role_entity_created_at_index",
+          "keyName": "role_created_at_index",
           "primary": false,
           "unique": false
         },
@@ -866,7 +867,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "role_entity_name_index",
+          "keyName": "role_name_index",
           "primary": false,
           "unique": false
         },
@@ -876,7 +877,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "role_entity_removed_at_index",
+          "keyName": "role_removed_at_index",
           "primary": false,
           "unique": false
         }
@@ -888,8 +889,8 @@
     {
       "name": "role_permission",
       "columns": {
-        "permission_entity_id": {
-          "name": "permission_entity_id",
+        "permission_id": {
+          "name": "permission_id",
           "type": "varchar(36)",
           "unsigned": false,
           "autoincrement": false,
@@ -904,8 +905,8 @@
           "enumItems": [],
           "mappedType": "string"
         },
-        "role_entity_id": {
-          "name": "role_entity_id",
+        "role_id": {
+          "name": "role_id",
           "type": "varchar(36)",
           "unsigned": false,
           "autoincrement": false,
@@ -924,8 +925,8 @@
       "indexes": [
         {
           "columnNames": [
-            "role_entity_id",
-            "permission_entity_id"
+            "role_id",
+            "permission_id"
           ],
           "composite": true,
           "constraint": true,
@@ -935,50 +936,50 @@
         },
         {
           "columnNames": [
-            "permission_entity_id"
+            "permission_id"
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "role_permission_permission_entity_id_index",
+          "keyName": "role_permission_permission_id_index",
           "primary": false,
           "unique": false
         },
         {
           "columnNames": [
-            "role_entity_id"
+            "role_id"
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "role_permission_role_entity_id_index",
+          "keyName": "role_permission_role_id_index",
           "primary": false,
           "unique": false
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "role_permission_permission_entity_id_foreign": {
+        "role_permission_permission_id_foreign": {
           "columnNames": [
-            "permission_entity_id"
+            "permission_id"
           ],
-          "constraintName": "role_permission_permission_entity_id_foreign",
+          "constraintName": "role_permission_permission_id_foreign",
           "localTableName": "role_permission",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "permission_entity",
+          "referencedTableName": "permission",
           "updateRule": "cascade",
           "deleteRule": "cascade"
         },
-        "role_permission_role_entity_id_foreign": {
+        "role_permission_role_id_foreign": {
           "columnNames": [
-            "role_entity_id"
+            "role_id"
           ],
-          "constraintName": "role_permission_role_entity_id_foreign",
+          "constraintName": "role_permission_role_id_foreign",
           "localTableName": "role_permission",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "role_entity",
+          "referencedTableName": "role",
           "updateRule": "cascade",
           "deleteRule": "cascade"
         }

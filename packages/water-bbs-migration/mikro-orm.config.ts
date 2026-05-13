@@ -1,6 +1,6 @@
 import { defineConfig } from '@mikro-orm/mysql';
 import * as dotenv from 'dotenv';
-import { AccountEntity, IdentEntity, CertEntity, PermissionEntity, RoleEntity, ProfileEntity } from './entities';
+import { Account, Ident, Cert, Permission, Role, Profile } from './entities';
 
 
 import { Migrator } from '@mikro-orm/migrations';
@@ -12,7 +12,7 @@ export default defineConfig({
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 3306),
     user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
+    password: process.env.DB_PASSWORD || 'root',
     dbName: 'water-bbs',
     migrations:{
         path: './migrations',
@@ -21,11 +21,12 @@ export default defineConfig({
         transactional: false,
     },
     entities:[
-        AccountEntity,
-        IdentEntity,
-        CertEntity,
-        PermissionEntity,
-        RoleEntity,
-        ProfileEntity,
-    ]
+        Account,
+        Ident,
+        Cert,
+        Permission,
+        Role,
+        Profile,
+    ],
+    debug: true,
 })

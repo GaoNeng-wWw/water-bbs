@@ -58,10 +58,18 @@ end
 
 redis.register_function("removeToken", removeToken)
 
+
+local function getTokenTotal(accountID)
+  local tokens = 'tokens:{' .. accountID .. '}'
+  local total = redis.call('zcard', tokens)
+  return total
+end
+redis.register_function("getTokenTotal", removeToken)
+
+
 -- 如果当前活跃的rt超出了limit的限制，按照绝对过期时间升序，删除最早的那部分直到 zset 的长度满足 length <= limit
 local function gc(accountID, limit)
-  local tokens = 'tokens:{' .. accountID .. '}'
-  local total  = redis.call('zcard', tokens)
+  local total = getTokenTotal(accountID);
   if total <= limit then return end
 
   local toRemove    = total - limit

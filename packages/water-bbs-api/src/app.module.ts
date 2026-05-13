@@ -13,6 +13,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from '@app/shared';
 import { JwtModule } from '@nestjs/jwt';
 import { ResultInterceptor } from '@app/shared/interceptor';
+import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
 
 @Module({
   imports: [
@@ -42,9 +43,11 @@ import { ResultInterceptor } from '@app/shared/interceptor';
         if (cfg.get('redis.type') === 'single') {
           return {
             clients: {
-              type: 'single',
-              host: cfg.get('redis.host') as string,
-              port: cfg.get('redis.port') as number,
+              default: {
+                type: 'single',
+                host: cfg.get('redis.host') as string,
+                port: cfg.get('redis.port') as number,
+              },
             },
             global: {
               debug: true,
@@ -63,8 +66,20 @@ import { ResultInterceptor } from '@app/shared/interceptor';
       },
       plugins: [new RateLimitPlugin()],
     }),
+    LiaoLiaoRedis.forRootAsync({
+      inject: [ConfigService],
+      useFactory(configService: any) {
+        return {
+          config: {
+            host: configService.get('redis.host'),
+            port: configService.get('redis.port'),
+          },
+        };
+      },
+    }),
     JwtModule.register({
       global: true,
+      secretOrPrivateKey: 'tset-secret',
     }),
     AccountModule,
     AuthModule,
@@ -76,8 +91,8 @@ import { ResultInterceptor } from '@app/shared/interceptor';
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: ResultInterceptor
-    }
+      useClass: ResultInterceptor,
+    },
   ],
 })
 export class AppModule {}

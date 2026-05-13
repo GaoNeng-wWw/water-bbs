@@ -7,11 +7,16 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "openapi-ts": "openapi-ts"
   },
   "dependencies": {
+    "@hey-api/client-axios": "^0.9.1",
     "@vee-validate/zod": "^4.15.1",
+    "axios": "^1.16.0",
     "motion-v": "^2.2.1",
+    "pinia": "^3.0.4",
+    "pinia-plugin-persistedstate": "^4.7.1",
     "reka-ui": "^2.9.7",
     "vee-validate": "^4.15.1",
     "vue": "^3.5.32",
@@ -20,6 +25,8 @@
   },
   "devDependencies": {
     "@gaonengwww/eslint-config": "^1.0.6",
+    "@hey-api/openapi-ts": "0.97.1",
+    "@hey-api/vite-plugin": "0.3.1",
     "@iconify-json/line-md": "^1.2.16",
     "@iconify-json/material-symbols": "^1.2.69",
     "@types/node": "^24.12.2",

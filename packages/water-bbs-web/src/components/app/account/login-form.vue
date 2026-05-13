@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { authControllerLogin } from '@/api';
 import { UiForm, UiFormItem, UiInput, UiButton } from '@/components/ui';
 import { reactive } from 'vue';
 import z from 'zod';
@@ -9,6 +10,22 @@ const schema = z.object({
 });
 
 const model = reactive({ email: '', password: '' });
+
+const onClickLogin = () => {
+  console.log('hello world')
+  authControllerLogin({
+    body: {
+      ident_type: 'Email',
+      ident_value: model.email,
+      cert_value: model.password,
+    },
+  })
+    .then(resp => resp.data)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch(reason => console.log(reason));
+};
 </script>
 
 <template>
@@ -19,7 +36,7 @@ const model = reactive({ email: '', password: '' });
     <ui-form-item label="Password" name="password" required>
       <ui-input v-model="model.password" password />
     </ui-form-item>
-    <ui-button color="primary">
+    <ui-button color="primary" @click="onClickLogin">
       Login
     </ui-button>
   </ui-form>

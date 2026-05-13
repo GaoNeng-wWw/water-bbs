@@ -3,6 +3,8 @@ export type AccessTokenPayload = {
   sub: string;
   sessionID: string;
   tokenType: 'access';
+  iat: number;
+  ttl: number;
 };
 
 export type RefreshTokenPayload = {
@@ -11,6 +13,8 @@ export type RefreshTokenPayload = {
   tokenType: 'refresh';
   accessTokenID: string;
   sessionID: string;
+  iat: number;
+  ttl: number;
 };
 
 export type TokenIndex = {
@@ -19,3 +23,5 @@ export type TokenIndex = {
   createdAt: number;
   ttl: number;
 };
+
+export type Token = AccessTokenPayload | RefreshTokenPayload;

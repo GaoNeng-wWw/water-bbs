@@ -28,15 +28,17 @@ export class AccountRepo implements IAccountRepoistory {
       .findOne(
         Account,
         {
-          removedAt: null,
+          // removedAt: null,
           idents: {
             identType: { $eq: ident_type },
             identValue: { $eq: ident_value },
           },
         },
-        { cache: true },
+        { populate: ['*'] },
       )
-      .then((res) => ok(res))
+      .then((res) => {
+        return ok(res);
+      })
       .catch((reason) => err(new PersistenceError(null, { reason })));
   }
 

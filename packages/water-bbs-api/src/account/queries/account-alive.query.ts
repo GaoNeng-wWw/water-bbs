@@ -29,8 +29,8 @@ export class AccountAliveHandler implements IQueryHandler<AccountAliveQuery> {
 
   async execute(query: AccountAliveQuery) {
     const accountRes = await this.repository.findByIdentValue(
-      IdentEnum.EMAIL,
       query.ident_type,
+      query.ident_value,
     );
     if (isErr(accountRes)) {
       return accountRes;

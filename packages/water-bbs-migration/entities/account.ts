@@ -79,8 +79,8 @@ export class Account extends BaseMetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: string = v7();
 
-  @ManyToOne(() => Role)
-  role!: Role;
+  @ManyToOne(() => Role, {nullable: true})
+  role: Role | null = null;
 
   @OneToOne(() => Profile, profile => profile.account, { owner: false })
   profile!: Profile;

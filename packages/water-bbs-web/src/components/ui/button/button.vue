@@ -9,6 +9,12 @@ const { color = 'info', loading = false, disabled = false, htmlType = 'button' }
   htmlType?: 'button' | 'submit' | 'reset';
 }>();
 
+const emits = defineEmits<{click: [MouseEvent]}>();
+
+const onClick = (ev: MouseEvent) => {
+  emits('click', ev);
+}
+
 const showLoading = ref(loading);
 </script>
 
@@ -32,6 +38,7 @@ const showLoading = ref(loading);
       data-[color='info']:text-warm-foreground
       data-[color='primary']:text-primary-foreground
     "
+      @click="onClick"
     >
       <motion.div layout="position">
         <slot />

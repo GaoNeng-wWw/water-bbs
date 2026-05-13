@@ -1,12 +1,12 @@
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
-import { err, isErr, isNone, ok, Result } from 'water-bbs-shared';
+import { isErr, ok, Result } from 'water-bbs-shared';
 import { PersistenceError } from 'water-bbs-shared';
 import type { ISessionRepo } from '../domain/session.repo';
 
 export class TokenAliveQuery extends Query<Result<boolean, PersistenceError>> {
   constructor(
-    public readonly sid: string,
-    public readonly tokenID: string,
+    public readonly accountId: string,
+    public readonly tokenId: string,
   ) {
     super();
   }
@@ -18,21 +18,13 @@ export class TokenAliveHandler implements IQueryHandler<TokenAliveQuery> {
   async execute(
     query: TokenAliveQuery,
   ): Promise<Result<boolean, PersistenceError>> {
-    const findSessionResult = await this.repo.findAuthSessionBySessionID(
-      query.sid,
+    const tokenAlive = await this.repo.tokenAlive(
+      query.accountId,
+      query.tokenId,
     );
-    if (isErr(findSessionResult)) {
-      return err(findSessionResult.error);
+    if (isErr(tokenAlive)) {
+      return tokenAlive;
     }
-    const maybeSession = findSessionResult.value;
-    if (isNone(maybeSession)) {
-      return ok(false);
-    }
-    const session = maybeSession.value;
-    const tokenPair = session.findToken(query.tokenID);
-    if (!tokenPair) {
-      return ok(false);
-    }
-    return ok(tokenPair.createdAt + tokenPair.ttl > Date.now());
+    return ok(tokenAlive.value);
   }
 }

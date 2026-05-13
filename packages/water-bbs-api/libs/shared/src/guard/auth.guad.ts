@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
+  Injectable,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
@@ -13,6 +14,7 @@ import { isErr } from 'water-bbs-shared';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_FLAG } from '../decorator';
 
+@Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwt: JwtService,
@@ -34,16 +36,15 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
-    const tokenPayload = this.jwt.decode<
+    const tokenPayload = this.jwt.verify<
       AccessTokenPayload | RefreshTokenPayload
     >(token);
     if (tokenPayload.tokenType !== 'access') {
       throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
     }
-    const sessionID = tokenPayload.sessionID;
     const tokenID = tokenPayload.jti;
     const handle = await this.query.execute(
-      new TokenAliveQuery(sessionID, tokenID),
+      new TokenAliveQuery(tokenPayload.sub, tokenID),
     );
     if (isErr(handle)) {
       throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
