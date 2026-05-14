@@ -15,6 +15,7 @@ import { InviteCodeRepositoryToken } from './domain/repo/invite-code.repo';
 import { InviteCodeRepository } from './infra/repo/invite-code.repo';
 import { AccountAliveHandler } from './queries/account-alive.query';
 import { CheckPasswordHandler } from './queries/check-password.query';
+import { FindProfileHandler } from './queries/find-profile.query';
 import { CaptchaService } from '@app/captcha/captcha.service';
 import { CAPTCHA_REPOSITORY_TOKEN } from '@app/captcha/domain';
 import { CaptchaRepository } from '@app/captcha/infra';
@@ -53,6 +54,7 @@ import { CaptchaRepository } from '@app/captcha/infra';
     AccountService,
     AccountAliveHandler,
     CheckPasswordHandler,
+    FindProfileHandler,
   ],
 })
 export class AccountModule {}

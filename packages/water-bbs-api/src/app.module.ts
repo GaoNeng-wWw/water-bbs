@@ -1,7 +1,14 @@
 import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { MySqlDriver } from '@mikro-orm/mysql';
-import { Account, Cert, Ident, Permission, Role } from 'water-bbs-migration';
+import {
+  Account,
+  Cert,
+  Ident,
+  Permission,
+  Post,
+  Role,
+} from 'water-bbs-migration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SingleNode, yaml } from '@app/configure';
 import { AccountModule } from './account/account.module';
@@ -14,6 +21,7 @@ import { AuthGuard } from '@app/shared';
 import { JwtModule } from '@nestjs/jwt';
 import { ResultInterceptor } from '@app/shared/interceptor';
 import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -27,7 +35,7 @@ import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
       useFactory: (configService: ConfigService) => {
         return {
           driver: MySqlDriver,
-          entities: [Account, Cert, Ident, Permission, Role],
+          entities: [Account, Cert, Ident, Permission, Role, Post],
           host: configService.get('database.host'),
           port: configService.get('database.port'),
           user: configService.get('database.username'),
@@ -83,6 +91,7 @@ import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
     }),
     AccountModule,
     AuthModule,
+    PostModule,
   ],
   providers: [
     {

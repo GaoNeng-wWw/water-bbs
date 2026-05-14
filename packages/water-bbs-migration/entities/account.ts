@@ -6,6 +6,7 @@ import { Profile } from './profile';
 import { Cert, CertEnum, Ident, IdentEnum } from './security';
 import { DomainError, err, ok, Result } from 'water-bbs-shared';
 import { hashSync } from 'bcryptjs';
+import { Post } from './post';
 
 @Entity()
 export class Permission extends BaseMetaEntity {
