@@ -75,13 +75,79 @@ export type LoginResponse = {
     refreshToken: string;
 };
 
+export type CreatePostDto = {
+    categoryId: string;
+    title: string;
+    content: string;
+};
+
+export type CreatePostResponse = {
+    postId: string;
+};
+
+export type AuthorSummary = {
+    id: string;
+    name: string;
+    avatar?: string;
+};
+
+export type PostSummary = {
+    id: string;
+    title: string;
+    content: string;
+    author: AuthorSummary;
+};
+
+export type HiddenPostDto = {
+    [key: string]: unknown;
+};
+
+export type HiddenPostResponse = {
+    [key: string]: unknown;
+};
+
+export type CursorPagination = {
+    cursor: string;
+    data: Array<string>;
+    total: number;
+};
+
+export type CreateCategoryDto = {
+    name: string;
+    parent: string;
+};
+
+export type CreateCategoryResponse = {
+    id: string;
+    name: string;
+    hasChildren: boolean;
+    parent: string;
+};
+
+export type UpdateCategoryResponse = {
+    id: string;
+};
+
+export type UpdateCategoryDto = {
+    parent: {
+        [key: string]: unknown;
+    };
+};
+
+export type CategorySummary = {
+    id: string;
+    name: string;
+    parentId: {
+        [key: string]: unknown;
+    };
+    hasChildren: boolean;
+};
+
 export type AccountControllerGetProfileData = {
     body?: never;
-    path: {
-        id: string;
-    };
+    path?: never;
     query?: never;
-    url: '/account/profile/{id}';
+    url: '/account/profile';
 };
 
 export type AccountControllerGetProfileResponses = {
@@ -102,6 +168,21 @@ export type AccountControllerUpdateProfileResponses = {
 };
 
 export type AccountControllerUpdateProfileResponse = AccountControllerUpdateProfileResponses[keyof AccountControllerUpdateProfileResponses];
+
+export type AccountControllerGetAccountProfileData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/account/profile/{id}';
+};
+
+export type AccountControllerGetAccountProfileResponses = {
+    200: GetProfileResponse;
+};
+
+export type AccountControllerGetAccountProfileResponse = AccountControllerGetAccountProfileResponses[keyof AccountControllerGetAccountProfileResponses];
 
 export type AccountControllerRegisterData = {
     body: RegisterDto;
@@ -196,3 +277,144 @@ export type AuthControllerRefreshTokenResponses = {
 };
 
 export type AuthControllerRefreshTokenResponse = AuthControllerRefreshTokenResponses[keyof AuthControllerRefreshTokenResponses];
+
+export type PostControllerGetPostsData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Page size
+         */
+        size: number;
+        /**
+         * Previous post ID
+         */
+        preId: string;
+        /**
+         * Category ID
+         */
+        category: string;
+    };
+    url: '/posts';
+};
+
+export type PostControllerGetPostsResponses = {
+    200: CursorPagination & {
+        data?: Array<PostSummary>;
+    };
+};
+
+export type PostControllerGetPostsResponse = PostControllerGetPostsResponses[keyof PostControllerGetPostsResponses];
+
+export type PostControllerCreatePostData = {
+    body: CreatePostDto;
+    path?: never;
+    query?: never;
+    url: '/posts';
+};
+
+export type PostControllerCreatePostResponses = {
+    /**
+     * Create a new post
+     */
+    201: CreatePostResponse;
+};
+
+export type PostControllerCreatePostResponse = PostControllerCreatePostResponses[keyof PostControllerCreatePostResponses];
+
+export type PostControllerGetPostData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/posts/{id}';
+};
+
+export type PostControllerGetPostResponses = {
+    /**
+     * Get a post summary
+     */
+    200: PostSummary;
+};
+
+export type PostControllerGetPostResponse = PostControllerGetPostResponses[keyof PostControllerGetPostResponses];
+
+export type PostControllerHidePostData = {
+    body: HiddenPostDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/posts/{id}';
+};
+
+export type PostControllerHidePostResponses = {
+    /**
+     * Hide a post.
+     */
+    200: HiddenPostResponse;
+};
+
+export type PostControllerHidePostResponse = PostControllerHidePostResponses[keyof PostControllerHidePostResponses];
+
+export type CategoryControllerListCategoriesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Parent category ID
+         */
+        parent?: string;
+    };
+    url: '/category';
+};
+
+export type CategoryControllerListCategoriesResponses = {
+    200: Array<CategorySummary>;
+};
+
+export type CategoryControllerListCategoriesResponse = CategoryControllerListCategoriesResponses[keyof CategoryControllerListCategoriesResponses];
+
+export type CategoryControllerCreateCategoryData = {
+    body: CreateCategoryDto;
+    path?: never;
+    query?: never;
+    url: '/category';
+};
+
+export type CategoryControllerCreateCategoryResponses = {
+    201: CreateCategoryResponse;
+};
+
+export type CategoryControllerCreateCategoryResponse = CategoryControllerCreateCategoryResponses[keyof CategoryControllerCreateCategoryResponses];
+
+export type CategoryControllerDeleteCategoryData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/category/{id}';
+};
+
+export type CategoryControllerDeleteCategoryResponses = {
+    200: UpdateCategoryResponse;
+};
+
+export type CategoryControllerDeleteCategoryResponse = CategoryControllerDeleteCategoryResponses[keyof CategoryControllerDeleteCategoryResponses];
+
+export type CategoryControllerUpdateCategoryData = {
+    body: UpdateCategoryDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/category/{id}';
+};
+
+export type CategoryControllerUpdateCategoryResponses = {
+    200: UpdateCategoryResponse;
+};
+
+export type CategoryControllerUpdateCategoryResponse = CategoryControllerUpdateCategoryResponses[keyof CategoryControllerUpdateCategoryResponses];

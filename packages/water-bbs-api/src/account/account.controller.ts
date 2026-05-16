@@ -22,6 +22,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { RemoveAccountResponse } from './dto/remove-account.dto';
 import { Public, UseModel, User } from '@app/shared';
@@ -36,9 +37,32 @@ export class AccountController {
   @ApiOkResponse({
     type: GetProfileResponse,
   })
+  @Get('profile')
+  async getProfile(@User() user: RequestUser) {
+    const uid = user.account.id;
+    const res = await this.accountService.getProfile(uid);
+    if (isErr(res)) {
+      return res;
+    }
+    const resp = res.value;
+    return new GetProfileResponse(
+      resp.id,
+      resp.username,
+      resp.bio,
+      resp.avatar,
+    );
+  }
+
+  @Public()
+  @UseModel(GetProfileResponse)
+  @ApiOkResponse({
+    type: GetProfileResponse,
+  })
+  @ApiParam({ name: 'id' })
   @Get('profile/:id')
-  async getProfile(@Param('id', ParseUUIDPipe) id: string) {
-    const res = await this.accountService.getProfile(id);
+  async getAccountProfile(@Param('id') id: string) {
+    const uid = id;
+    const res = await this.accountService.getProfile(uid);
     if (isErr(res)) {
       return res;
     }

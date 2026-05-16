@@ -1,21 +1,66 @@
 <script lang="ts" setup>
 import { motion, AnimatePresence } from 'motion-v';
-import { ref } from 'vue';
+import { tv } from 'tailwind-variants';
+import { computed, ref } from 'vue';
 
-const { color = 'info', loading = false, disabled = false, htmlType = 'button' } = defineProps<{
+const { loading = false, ...props } = defineProps<{
   color?: 'info' | 'primary';
   loading?: boolean;
   disabled?: boolean;
   htmlType?: 'button' | 'submit' | 'reset';
+  shape?: 'solid' | 'ghost';
+  size?: 'sm' | 'md';
+  rounded?: 'sm' | 'md' | 'lg' | 'full';
+  full?: boolean;
+  icon?: boolean;
 }>();
 
-const emits = defineEmits<{click: [MouseEvent]}>();
+const emits = defineEmits<{ click: [MouseEvent] }>();
 
 const onClick = (ev: MouseEvent) => {
   emits('click', ev);
-}
+};
 
 const showLoading = ref(loading);
+
+const style = tv({
+  defaultVariants: {
+    icon: false, full: false,
+    size: 'md', color: 'info', shape: 'ghost', rounded: 'sm',
+  },
+  base: [
+    'text-base transition disabled:cursor-not-allowed disabled:bg-opacity-80',
+    'inline-flex gap-2 items-center w-fit min-w-11 min-h-8 justify-center cursor-pointer',
+  ],
+  variants: {
+    size: {
+      sm: 'min-w-8 min-h-8 p-1',
+      md: 'min-w-10 min-h-10 py-2 px-2 rounded-md cursor-pointer',
+    },
+    full: {
+      true: 'min-w-unset w-full',
+    },
+    icon: {
+      true: 'aspect-ratio-square p-0',
+    },
+    shape: {
+      ghost: 'bg-opacity-0! border-none hover:bg-opacity-40!',
+      solid: 'border bg-opacity-100 hover:bg-opacity-80',
+    },
+    color: {
+      primary: 'bg-primary-500 text-primary-foreground border-none',
+      info: 'bg-warm-200 border-warm-300 text-warm-foreground',
+    },
+    rounded: {
+      sm: 'rounded',
+      md: 'rounded-md',
+      lg: 'rounded-lg',
+      full: 'rounded-full',
+    },
+  },
+});
+const clazz = computed(() => style(props));
+console.log(clazz.value);
 </script>
 
 <template>
@@ -25,22 +70,11 @@ const showLoading = ref(loading);
       :type="htmlType"
       layout
       :transition="{ type: 'spring' }"
-      :data-color="color"
-      class="
-      group
-      disabled:cursor-not-allowed disabled:bg-opacity-80 disabled:text-opacity-50
-
-      flex gap-2 items-center
-      min-w-11 w-fit min-h-8 py-2 px-4 rounded-md cursor-pointer border border-solid border-transparent
-      data-[color='primary']:bg-primary-500
-      data-[color='info']:bg-warm-200 data-[color='info']:border-warm-300
-      text-base
-      data-[color='info']:text-warm-foreground
-      data-[color='primary']:text-primary-foreground
-    "
+      :class="clazz"
+      :initial="false"
       @click="onClick"
     >
-      <motion.div layout="position">
+      <motion.div layout="position" :initial="false">
         <slot />
       </motion.div>
       <motion.div

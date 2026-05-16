@@ -287,11 +287,11 @@ export class AccountService {
 
   async getProfile(id: string) {
     const accountId = new AccountID({ value: id });
-    const res = pipeResult(await this.accountRepository.findOne(accountId));
-    if (res.isErr()) {
-      return err(unwrapErr(res));
+    const res = await this.accountRepository.findOne(accountId);
+    if (isErr(res)) {
+      return res;
     }
-    const account = res.unwrap();
+    const account = res.value;
     if (!account) {
       return err(new AccountNotFound());
     }

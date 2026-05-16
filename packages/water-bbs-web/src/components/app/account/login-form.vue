@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { authControllerLogin } from '@/api';
 import { UiForm, UiFormItem, UiInput, UiButton } from '@/components/ui';
+import { useAccount } from '@/store';
 import { reactive } from 'vue';
 import z from 'zod';
 
@@ -10,9 +11,9 @@ const schema = z.object({
 });
 
 const model = reactive({ email: '', password: '' });
+const accountStore = useAccount();
 
 const onClickLogin = () => {
-  console.log('hello world')
   authControllerLogin({
     body: {
       ident_type: 'Email',
@@ -22,7 +23,10 @@ const onClickLogin = () => {
   })
     .then(resp => resp.data)
     .then((data) => {
-      console.log(data);
+      if (!data) {
+        return;
+      }
+      accountStore.setTokenPair(data.accessToken, data.refreshToken);
     })
     .catch(reason => console.log(reason));
 };

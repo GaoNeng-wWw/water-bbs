@@ -190,3 +190,199 @@ export const LoginResponseSchema = {
         'refreshToken'
     ]
 } as const;
+
+export const CreatePostDTOSchema = {
+    type: 'object',
+    properties: {
+        categoryId: {
+            type: 'string'
+        },
+        title: {
+            type: 'string'
+        },
+        content: {
+            type: 'string'
+        }
+    },
+    required: [
+        'categoryId',
+        'title',
+        'content'
+    ]
+} as const;
+
+export const CreatePostResponseSchema = {
+    type: 'object',
+    properties: {
+        postId: {
+            type: 'string'
+        }
+    },
+    required: [
+        'postId'
+    ]
+} as const;
+
+export const AuthorSummarySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        },
+        avatar: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'name'
+    ]
+} as const;
+
+export const PostSummarySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        title: {
+            type: 'string'
+        },
+        content: {
+            type: 'string'
+        },
+        author: {
+            $ref: '#/components/schemas/AuthorSummary'
+        }
+    },
+    required: [
+        'id',
+        'title',
+        'content',
+        'author'
+    ]
+} as const;
+
+export const HiddenPostDTOSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const HiddenPostResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const CursorPaginationSchema = {
+    type: 'object',
+    properties: {
+        cursor: {
+            type: 'string'
+        },
+        data: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        },
+        total: {
+            type: 'number'
+        }
+    },
+    required: [
+        'cursor',
+        'data',
+        'total'
+    ]
+} as const;
+
+export const CreateCategoryDTOSchema = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string'
+        },
+        parent: {
+            type: 'string'
+        }
+    },
+    required: [
+        'name',
+        'parent'
+    ]
+} as const;
+
+export const CreateCategoryResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        },
+        hasChildren: {
+            type: 'boolean'
+        },
+        parent: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'hasChildren',
+        'parent'
+    ]
+} as const;
+
+export const UpdateCategoryResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
+export const UpdateCategoryDTOSchema = {
+    type: 'object',
+    properties: {
+        parent: {
+            type: 'object'
+        }
+    },
+    required: [
+        'parent'
+    ]
+} as const;
+
+export const CategorySummarySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        },
+        parentId: {
+            type: 'object'
+        },
+        hasChildren: {
+            type: 'boolean'
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'parentId',
+        'hasChildren'
+    ]
+} as const;

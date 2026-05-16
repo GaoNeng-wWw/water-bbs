@@ -21,3 +21,4 @@ export const usePureApi = () => {
     baseURL: '/api',
   });
 };
+export const NOT_PUBLIC_ENDPOINT = useApi();

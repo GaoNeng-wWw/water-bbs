@@ -84,7 +84,10 @@ export class AccountRepo implements IAccountRepoistory {
         { populate: ['profile', 'role', 'idents', 'certs'] },
       )
       .then(ok)
-      .catch((reason) => err(new PersistenceError(reason, { reason })));
+      .catch((reason) => {
+        console.log(reason);
+        return err(new PersistenceError(reason, { reason }));
+      });
   }
   findMany(
     account_id: AccountID,

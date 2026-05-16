@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export const useAccount = defineStore('account', () => {
   const accessToken = ref('');
@@ -8,7 +8,11 @@ export const useAccount = defineStore('account', () => {
     accessToken.value = at;
     refreshToken.value = rt;
   };
-  return { accessToken, refreshToken, setTokenPair };
+  const isLogged = computed(() => !!accessToken.value);
+  return { accessToken, refreshToken, setTokenPair, isLogged };
 }, {
-  persist: true,
+  persist: {
+    storage: localStorage,
+    pick: ['accessToken', 'refreshToken']
+  },
 });

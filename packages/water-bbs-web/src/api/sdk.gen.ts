@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses } from './types.gen';
+import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerHidePostData, PostControllerHidePostResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,9 +18,9 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: Record<string, unknown>;
 };
 
-export const accountControllerGetProfile = <ThrowOnError extends boolean = false>(options: Options<AccountControllerGetProfileData, ThrowOnError>) => (options.client ?? client).get<AccountControllerGetProfileResponses, unknown, ThrowOnError>({
+export const accountControllerGetProfile = <ThrowOnError extends boolean = false>(options?: Options<AccountControllerGetProfileData, ThrowOnError>) => (options?.client ?? client).get<AccountControllerGetProfileResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/account/profile/{id}',
+    url: '/account/profile',
     ...options
 });
 
@@ -32,6 +32,12 @@ export const accountControllerUpdateProfile = <ThrowOnError extends boolean = fa
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+export const accountControllerGetAccountProfile = <ThrowOnError extends boolean = false>(options: Options<AccountControllerGetAccountProfileData, ThrowOnError>) => (options.client ?? client).get<AccountControllerGetAccountProfileResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/account/profile/{id}',
+    ...options
 });
 
 export const accountControllerRegister = <ThrowOnError extends boolean = false>(options: Options<AccountControllerRegisterData, ThrowOnError>) => (options.client ?? client).post<AccountControllerRegisterResponses, unknown, ThrowOnError>({
@@ -84,4 +90,68 @@ export const authControllerRefreshToken = <ThrowOnError extends boolean = false>
     responseType: 'json',
     url: '/auth/refresh',
     ...options
+});
+
+export const postControllerGetPosts = <ThrowOnError extends boolean = false>(options: Options<PostControllerGetPostsData, ThrowOnError>) => (options.client ?? client).get<PostControllerGetPostsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/posts',
+    ...options
+});
+
+export const postControllerCreatePost = <ThrowOnError extends boolean = false>(options: Options<PostControllerCreatePostData, ThrowOnError>) => (options.client ?? client).post<PostControllerCreatePostResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/posts',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const postControllerGetPost = <ThrowOnError extends boolean = false>(options: Options<PostControllerGetPostData, ThrowOnError>) => (options.client ?? client).get<PostControllerGetPostResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/posts/{id}',
+    ...options
+});
+
+export const postControllerHidePost = <ThrowOnError extends boolean = false>(options: Options<PostControllerHidePostData, ThrowOnError>) => (options.client ?? client).patch<PostControllerHidePostResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/posts/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const categoryControllerListCategories = <ThrowOnError extends boolean = false>(options?: Options<CategoryControllerListCategoriesData, ThrowOnError>) => (options?.client ?? client).get<CategoryControllerListCategoriesResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/category',
+    ...options
+});
+
+export const categoryControllerCreateCategory = <ThrowOnError extends boolean = false>(options: Options<CategoryControllerCreateCategoryData, ThrowOnError>) => (options.client ?? client).post<CategoryControllerCreateCategoryResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/category',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const categoryControllerDeleteCategory = <ThrowOnError extends boolean = false>(options: Options<CategoryControllerDeleteCategoryData, ThrowOnError>) => (options.client ?? client).delete<CategoryControllerDeleteCategoryResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/category/{id}',
+    ...options
+});
+
+export const categoryControllerUpdateCategory = <ThrowOnError extends boolean = false>(options: Options<CategoryControllerUpdateCategoryData, ThrowOnError>) => (options.client ?? client).patch<CategoryControllerUpdateCategoryResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/category/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
