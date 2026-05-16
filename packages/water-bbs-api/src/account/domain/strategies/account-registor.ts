@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Profile } from 'water-bbs-migration';
+import { Account, Profile } from 'water-bbs-migration';
 import { DomainError, Result } from 'water-bbs-shared';
 
 export type RegistorProp = {
@@ -7,6 +7,7 @@ export type RegistorProp = {
   ident_value: string;
   cert_type: string;
   cert_value: string;
+  account: Account;
   profile: Profile;
 };
 
@@ -16,5 +17,5 @@ export const InjectAccountRegistor = () =>
 
 export interface AccountRegistor {
   valid(ident_type: string): boolean;
-  execute(prop: RegistorProp): Promise<Result<boolean, DomainError>>;
+  execute(prop: RegistorProp): Promise<Result<Account, DomainError>>;
 }

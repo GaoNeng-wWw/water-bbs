@@ -36,7 +36,6 @@ export class ResultInterceptor implements NestInterceptor {
               : {};
           }
           const err = data.error as AppError;
-          console.log(data.error);
           throw new HttpException(err.message, err.code, {
             cause: err.code >= 499 ? {} : err.cause,
           });

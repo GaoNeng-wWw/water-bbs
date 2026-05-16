@@ -12,12 +12,46 @@ export class AccountRepo implements IAccountRepoistory {
     private readonly em: EntityManager,
     private redis: RedisService,
   ) {}
-  upsert(account: Account): Promise<Result<boolean, PersistenceError>> {
-    return this.em
-      .persist(account)
-      .flush()
-      .then(() => ok(true))
-      .catch((reason) => err(new PersistenceError(null, { reason })));
+  async upsert(account: Account): Promise<Result<boolean, PersistenceError>> {
+    const em = this.em.fork();
+    try {
+      await em.begin();
+
+      // 预加载所有需要操作的关联
+      const existingAccount = await em.findOne(
+        Account,
+        { id: account.id },
+        { populate: ['idents', 'certs', 'profile', 'role'] },
+      );
+      console.log(existingAccount);
+
+      if (!existingAccount) {
+        em.persist(account);
+      } else {
+        if (account.profile) {
+          if (account.profile.name) {
+            existingAccount.profile.name = account.profile.name;
+          }
+          if (account.profile.bio) {
+            existingAccount.profile.bio = account.profile.bio;
+          }
+          if (account.profile.avatar) {
+            existingAccount.profile.avatar = account.profile.avatar;
+          }
+        }
+        if (account.role) {
+          existingAccount.role = account.role;
+        }
+        em.persist(existingAccount);
+      }
+
+      await em.flush();
+      await em.commit();
+      return ok(true);
+    } catch (reason) {
+      await em.rollback();
+      return err(new PersistenceError(reason as Error, { reason }));
+    }
   }
 
   findByIdentValue(
@@ -28,10 +62,9 @@ export class AccountRepo implements IAccountRepoistory {
       .findOne(
         Account,
         {
-          // removedAt: null,
           idents: {
-            identType: { $eq: ident_type },
-            identValue: { $eq: ident_value },
+            identType: ident_type,
+            identValue: ident_value,
           },
         },
         { populate: ['*'] },
@@ -48,11 +81,11 @@ export class AccountRepo implements IAccountRepoistory {
     return this.em
       .findOne(
         Account,
-        { removedAt: null, id: account_id.get('value') },
-        { cache: true },
+        { id: account_id.get('value') },
+        { populate: ['profile', 'role', 'idents', 'certs'] },
       )
-      .then((res) => ok(res))
-      .catch((reason) => err(new PersistenceError(null, { reason })));
+      .then(ok)
+      .catch((reason) => err(new PersistenceError(reason, { reason })));
   }
   findMany(
     account_id: AccountID,

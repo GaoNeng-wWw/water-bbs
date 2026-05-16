@@ -17,7 +17,7 @@ export default defineConfig({
     alias: {
       src: resolve(__dirname, './src'),
       '@app/captcha': resolve(__dirname, 'libs/captcha/src'),
-      '@app/configure': resolve(__dirname, 'libs/shared/src'),
+      '@app/configure': resolve(__dirname, 'libs/configure/src'),
       '@app/shared': resolve(__dirname, 'libs/shared/src'),
     },
   },

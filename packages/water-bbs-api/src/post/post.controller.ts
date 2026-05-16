@@ -20,7 +20,7 @@ import {
 } from '@app/shared';
 import { HiddenPostDTO, HiddenPostResponse } from './dto/hidden-post.dto';
 import { PostSummary } from './entities/post-summary';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 
 @Controller('posts')
 export class PostController {
@@ -64,13 +64,18 @@ export class PostController {
 
   @UseModel(CursorPagination)
   @ApiCursorPaginatedResponse(PostSummary)
+  @ApiQuery({ name: 'category', description: 'Category ID' })
+  @ApiQuery({ name: 'preId', description: 'Previous post ID' })
+  @ApiQuery({ name: 'size', description: 'Page size' })
   @Get('')
-  getDiscussions(
+  getPosts(
     @Query('size', new DefaultValuePipe(10), ParseIntPipe)
     size: number,
     @Query('preId')
     preId?: string,
+    @Query('category')
+    categoryId?: string,
   ) {
-    return this.postService.getPosts(size, preId);
+    return this.postService.getPosts(size, preId, categoryId);
   }
 }

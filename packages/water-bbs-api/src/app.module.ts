@@ -3,6 +3,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { MySqlDriver } from '@mikro-orm/mysql';
 import {
   Account,
+  Category,
   Cert,
   Ident,
   Permission,
@@ -22,6 +23,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ResultInterceptor } from '@app/shared/interceptor';
 import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
 import { PostModule } from './post/post.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import { PostModule } from './post/post.module';
       useFactory: (configService: ConfigService) => {
         return {
           driver: MySqlDriver,
-          entities: [Account, Cert, Ident, Permission, Role, Post],
+          entities: [Account, Cert, Ident, Permission, Role, Post, Category],
           host: configService.get('database.host'),
           port: configService.get('database.port'),
           user: configService.get('database.username'),
@@ -92,6 +94,7 @@ import { PostModule } from './post/post.module';
     AccountModule,
     AuthModule,
     PostModule,
+    CategoryModule,
   ],
   providers: [
     {

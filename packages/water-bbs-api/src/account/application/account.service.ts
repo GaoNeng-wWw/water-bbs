@@ -109,7 +109,7 @@ export class AccountService {
       }
     }
 
-    const res = await registor.execute({ ...dto, profile });
+    const res = await registor.execute({ ...dto, profile, account });
     if (isErr(res)) {
       return res;
     }
@@ -125,22 +125,20 @@ export class AccountService {
   ): Promise<Result<RemoveAccountResponse, ApplicationServiceError>> {
     // TODO: 发布领域事件通知删除session
     const accountId = new AccountID({ value: dto.id });
-    const res = pipeResult(await this.accountRepository.findOne(accountId));
-    if (res.isErr()) {
+    const res = await this.accountRepository.findOne(accountId);
+    if (isErr(res)) {
       return err(unwrapErr(res));
     }
-    const account = res.unwrap();
+    const account = res.value;
     if (!account) {
       return err(new AccountNotFound());
     }
-    const removeHandle = pipeResult(account.remove());
-    if (removeHandle.isErr()) {
-      return err(unwrapErr(removeHandle));
+    const removeHandle = account.remove();
+    if (isErr(removeHandle)) {
+      return removeHandle;
     }
-    const updateResult = pipeResult(
-      await this.accountRepository.upsert(account),
-    );
-    if (updateResult.isErr()) {
+    const updateResult = await this.accountRepository.upsert(account);
+    if (isErr(updateResult)) {
       return updateResult;
     }
     const decrHandle = await this.accountRepository.decr();
@@ -152,11 +150,11 @@ export class AccountService {
 
   async updateProfile(id: string, dto: UpdateProfileDTO) {
     const accountId = new AccountID({ value: id });
-    const res = pipeResult(await this.accountRepository.findOne(accountId));
-    if (res.isErr()) {
+    const res = await this.accountRepository.findOne(accountId);
+    if (isErr(res)) {
       return err(unwrapErr(res));
     }
-    const account = res.unwrap();
+    const account = res.value;
     if (!account) {
       return err(new AccountNotFound());
     }
@@ -166,10 +164,8 @@ export class AccountService {
     if (dto.bio) {
       account.profile.bio = dto.bio;
     }
-    const updateResult = pipeResult(
-      await this.accountRepository.upsert(account),
-    );
-    if (updateResult.isErr()) {
+    const updateResult = await this.accountRepository.upsert(account);
+    if (isErr(updateResult)) {
       return updateResult;
     }
     return ok(

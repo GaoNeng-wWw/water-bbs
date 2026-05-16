@@ -75,8 +75,8 @@ export class PostApplicationService {
     );
   }
 
-  async getPosts(size: number, preId?: string) {
-    const postListRes = await this.repo.listPost(size, preId);
+  async getPosts(size: number, preId?: string, categoryId?: string) {
+    const postListRes = await this.repo.listPost(size, preId, categoryId);
     if (isErr(postListRes)) {
       return postListRes;
     }

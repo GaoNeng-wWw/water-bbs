@@ -15,7 +15,7 @@ export class AuthController {
   @Post('login')
   @ApiCreatedResponse({
     type: LoginResponse,
-    description: 'Login Account. Will retun TokenPair.'
+    description: 'Login Account. Will retun TokenPair.',
   })
   login(@Body() body: LoginDTO) {
     return this.authService.login(

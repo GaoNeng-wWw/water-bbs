@@ -29,8 +29,8 @@ export class MailRegistor implements AccountRegistor {
       ident_type.toLowerCase() === 'mail'
     );
   }
-  async execute(prop: RegistorProp): Promise<Result<boolean, DomainError>> {
-    const acc = new Account();
+  async execute(prop: RegistorProp): Promise<Result<Account, DomainError>> {
+    const acc = prop.account;
     acc.profile = prop.profile;
     const ident = new Ident({
       identType: IdentEnum.EMAIL,
@@ -51,7 +51,7 @@ export class MailRegistor implements AccountRegistor {
     }
     return this.repo
       .upsert(acc)
-      .then((val) => (isErr(val) ? val : ok(true)))
+      .then((val) => (isErr(val) ? val : ok(acc)))
       .catch((reason) =>
         err(new InfrastructureError(null, new PersistenceError(reason), {})),
       );

@@ -60,7 +60,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
   getToken(authorization: string) {
-    const [token] = authorization.split(' ');
+    const [_, token] = authorization.split(' ');
     return token;
   }
 }

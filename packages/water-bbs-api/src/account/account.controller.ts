@@ -24,7 +24,7 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { RemoveAccountResponse } from './dto/remove-account.dto';
-import { Public, User } from '@app/shared';
+import { Public, UseModel, User } from '@app/shared';
 import { UpdatePassword } from './dto/update-password.dto';
 import { AccountID } from './domain';
 
@@ -32,6 +32,7 @@ import { AccountID } from './domain';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
+  @UseModel(GetProfileResponse)
   @ApiOkResponse({
     type: GetProfileResponse,
   })
@@ -66,6 +67,7 @@ export class AccountController {
   }
 
   // TODO: 移动到AUTH里
+  @UseModel(CreateAccountResponse)
   @Public()
   @ApiCreatedResponse({ type: CreateAccountResponse })
   @Post('register')
