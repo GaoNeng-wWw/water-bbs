@@ -12,6 +12,14 @@ export class AuthRepo implements ISessionRepo {
   constructor(private readonly redisService: RedisService) {
     this.redis = this.redisService.getOrThrow();
   }
+  removeAllToken(
+    accountId: string,
+  ): Promise<Result<boolean, PersistenceError>> {
+    return this.redis
+      .fcall('removeAllTokenByAccountId', 0, accountId)
+      .then(() => ok(true))
+      .catch((reason) => err(new PersistenceError(reason, { reason })));
+  }
   async putToken(
     accessToken: AccessTokenPayload,
     refreshToken: RefreshTokenPayload,
@@ -30,7 +38,7 @@ export class AuthRepo implements ISessionRepo {
       .then(() => ok(1))
       .catch((reason) => err(new PersistenceError(reason, { reason })));
   }
-  async disabledToken(
+  async removeToken(
     tokenId: string,
     accountId: string,
   ): Promise<Result<boolean, PersistenceError>> {

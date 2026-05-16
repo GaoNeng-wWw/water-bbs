@@ -45,6 +45,12 @@ import {
 import { PublicAccountInfo } from './dto/public-account-info';
 import { GetProfileDTO } from './dto/get-profile.dto';
 import { UpdatePassword } from './dto/update-password.dto';
+import { CommandBus } from '@nestjs/cqrs';
+import {
+  AccountRemovedCommand,
+  AccountResetPasswordCommand,
+  AccountUpdatedPasswordCommand,
+} from '../domain/command';
 
 @Injectable()
 export class AccountService {
@@ -58,6 +64,7 @@ export class AccountService {
     private captcha: CaptchaService,
     @InjectAccountRepository()
     private accountRepository: IAccountRepoistory,
+    private readonly commandPublisher: CommandBus,
   ) {}
 
   async createAccount(
@@ -123,7 +130,6 @@ export class AccountService {
   async removeAccount(
     dto: RemoveAccountDTO,
   ): Promise<Result<RemoveAccountResponse, ApplicationServiceError>> {
-    // TODO: 发布领域事件通知删除session
     const accountId = new AccountID({ value: dto.id });
     const res = await this.accountRepository.findOne(accountId);
     if (isErr(res)) {
@@ -145,6 +151,9 @@ export class AccountService {
     if (isErr(decrHandle)) {
       return err(decrHandle.error);
     }
+    await this.commandPublisher.execute(
+      new AccountRemovedCommand(accountId.get('value')),
+    );
     return ok(new RemoveAccountResponse(account.id));
   }
 
@@ -178,7 +187,6 @@ export class AccountService {
   }
 
   async updatePassword(dto: UpdatePassword) {
-    // TODO: 发布领域事件通知删除session
     const accountRes = await this.accountRepository.findOne(dto.accountID);
     if (isErr(accountRes)) {
       return accountRes;
@@ -210,11 +218,13 @@ export class AccountService {
     if (updateResult.isErr()) {
       return updateResult;
     }
+    await this.commandPublisher.execute(
+      new AccountUpdatedPasswordCommand(account.id),
+    );
     return ok(true);
   }
 
   async resetPassword(dto: ResetPasswordDTO) {
-    // TODO: 发布领域事件通知删除session
     const account = pipeResult(
       await this.accountRepository.findByIdentValue(
         IdentEnum.EMAIL,
@@ -250,6 +260,9 @@ export class AccountService {
     if (updateResult.isErr()) {
       return updateResult;
     }
+    await this.commandPublisher.execute(
+      new AccountResetPasswordCommand(accountRes.id),
+    );
     return ok(true);
   }
 

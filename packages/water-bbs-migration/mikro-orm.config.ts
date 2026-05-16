@@ -13,7 +13,7 @@ export default defineConfig({
     port: Number(process.env.DB_PORT || 3306),
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'root',
-    dbName: 'water-bbs',
+    dbName: 'water-bbs-test',
     migrations:{
         path: './migrations',
         tableName: 'migrations',

@@ -23,7 +23,6 @@ export class AccountRepo implements IAccountRepoistory {
         { id: account.id },
         { populate: ['idents', 'certs', 'profile', 'role'] },
       );
-      console.log(existingAccount);
 
       if (!existingAccount) {
         em.persist(account);

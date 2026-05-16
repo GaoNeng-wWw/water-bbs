@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "schema:create": "pnpm mikro-orm schema:create --run",
     "migration": "pnpm mikro-orm migration",
     "migration:up": "pnpm mikro-orm migration:up --config mikro-orm.config.ts",
     "migration:down": "pnpm mikro-orm migration:down --config mikro-orm.config.ts",

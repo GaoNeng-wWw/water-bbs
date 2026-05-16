@@ -136,3 +136,11 @@ local function putTokenPair(keys, args)
 end
 
 redis.register_function("putTokenPair", putTokenPair)
+
+
+local function removeAllTokenByAccountId(keys, args)
+  local accountID = args[1];
+  gc(accountID, 0)
+end
+
+redis.register_function("removeAllTokenByAccountId", removeAllTokenByAccountId)

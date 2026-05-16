@@ -97,7 +97,7 @@ export class AuthService {
     if (sessionResult.isErr()) {
       return err(sessionResult.unwrapErr());
     }
-    const disabledResult = await this.sessionRepo.disabledToken(
+    const disabledResult = await this.sessionRepo.removeToken(
       accountID,
       accessTokenID,
     );
@@ -134,7 +134,7 @@ export class AuthService {
     const rt = this.jwt.sign<RefreshTokenPayload>(rtPayload, {
       expiresIn: '1d',
     });
-    const disableResult = await this.sessionRepo.disabledToken(
+    const disableResult = await this.sessionRepo.removeToken(
       sub,
       accessTokenID,
     );

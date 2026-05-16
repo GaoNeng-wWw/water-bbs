@@ -6,10 +6,11 @@ export const SESSION_REPO_TOKEN = Symbol('SESSION_REPO_TOKEN');
 export const InjectSessionRepo = () => Inject(SESSION_REPO_TOKEN);
 
 export interface ISessionRepo {
-  disabledToken(
+  removeToken(
     tokenId: string,
     accountId: string,
   ): Promise<Result<boolean, PersistenceError>>;
+  removeAllToken(accountId: string): Promise<Result<boolean, PersistenceError>>;
   getTokenTotal(
     accountID: AccountID,
   ): Promise<Result<number, PersistenceError>>;

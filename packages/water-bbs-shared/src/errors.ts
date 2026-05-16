@@ -48,7 +48,6 @@ export class ApplicationServiceError extends AppError {
   constructor(message: string, code: number = 500, child?: Error | null, args?: Record<string, any>) {
     super(message, code, child, args);
     this.message = message;
-    console.log(this.message)
   }
 }
 
