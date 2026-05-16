@@ -14,7 +14,7 @@ export class Category extends BaseMetaEntity {
   parentID?: string | null;
 
 
-  @Formula((cols, tables)=>`select count(*) from ${tables.name} as c where c.parent_id=${cols.id} > 0`, {type: 'boolean', persist: false})
+  @Formula((cols, tables)=>`(select count(*) from ${tables.name} as c where c.parent_id = ${cols.id}) > 0`, {type: 'boolean', persist: false})
   hasChildren!: boolean;
 
   constructor(name: string, parent?: string){

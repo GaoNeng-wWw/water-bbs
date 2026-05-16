@@ -13,6 +13,7 @@ import { AppError, isOk, isResult } from 'water-bbs-shared';
 import { USE_MODEL_TOKEN } from '../decorator/use-model';
 import { Reflector } from '@nestjs/core';
 import { plainToInstance } from 'class-transformer';
+import { isArray } from 'radashi';
 
 @Injectable()
 export class ResultInterceptor implements NestInterceptor {
@@ -33,9 +34,10 @@ export class ResultInterceptor implements NestInterceptor {
               ? plainToInstance<object, object>(model, data.value, {
                   excludeExtraneousValues: true,
                 })
-              : {};
+              : data.value;
           }
           const err = data.error as AppError;
+          console.log(err);
           throw new HttpException(err.message, err.code, {
             cause: err.code >= 499 ? {} : err.cause,
           });
@@ -45,7 +47,8 @@ export class ResultInterceptor implements NestInterceptor {
             excludeExtraneousValues: true,
           });
         }
-        return {};
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return data;
       }),
     );
   }

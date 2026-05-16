@@ -9,7 +9,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { ApiCreatedResponse, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import {
   CreateCategoryDTO,
   CreateCategoryResponse,
@@ -53,7 +58,11 @@ export class CategoryController {
 
   @Public()
   @ApiOkResponse({ type: [CategorySummary] })
-  @ApiQuery({ name: 'parent', description: 'Parent category ID' })
+  @ApiQuery({
+    name: 'parent',
+    description: 'Parent category ID',
+    required: false,
+  })
   @Get('')
   async listCategories(@Query('parent') parent?: string) {
     return this.categoryService.listCategories(parent);
