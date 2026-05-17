@@ -1,4 +1,4 @@
-import { inject, warn, type InjectionKey } from 'vue';
+import { inject, provide, warn, type InjectionKey } from 'vue';
 
 export const getContext = <T>(key: InjectionKey<T>) => {
   const ctx = inject(key);
@@ -9,4 +9,7 @@ export const getContext = <T>(key: InjectionKey<T>) => {
     );
   }
   return ctx!;
+};
+export const provideContext = <T>(key: InjectionKey<T>, ctx: T) => {
+  provide(key, ctx);
 };

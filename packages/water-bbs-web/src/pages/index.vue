@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import AccountCard from '../components/app/account/account-card.vue';
+import Sidebar from '@/components/app/shell/sidebar.vue';
 </script>
 
 <template>
   <div class="size-full container mx-auto flex">
-    <div class="w-200px h-full py-4">
-      <account-card />
+    <div class="w-200px h-full py-4 overflow-auto flex flex-col">
+      <sidebar />
     </div>
   </div>
 </template>
