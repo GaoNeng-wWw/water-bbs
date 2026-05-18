@@ -13,33 +13,33 @@ export default defineConfig({
       dts: './types/typed-router.d.ts',
     }),
     vue(),
-    heyApiPlugin({
-      config: {
-        input: 'http://localhost:3100/api-json',
-        output: {
-          path: join(__dirname, './src/api'),
-        },
-        plugins: [
-          {
-            name: '@hey-api/client-axios',
-            baseUrl: '/api',
-          },
-          '@hey-api/schemas',
-          {
-            dates: true,
-            name: '@hey-api/transformers',
-          },
-          {
-            enums: 'javascript',
-            name: '@hey-api/typescript',
-          },
-          {
-            name: '@hey-api/sdk',
-            transformer: true,
-          },
-        ],
-      },
-    }),
+    // heyApiPlugin({
+    //   config: {
+    //     input: 'http://localhost:3100/api-json',
+    //     output: {
+    //       path: join(__dirname, './src/api'),
+    //     },
+    //     plugins: [
+    //       {
+    //         name: '@hey-api/client-axios',
+    //         baseUrl: '/api',
+    //       },
+    //       '@hey-api/schemas',
+    //       {
+    //         dates: true,
+    //         name: '@hey-api/transformers',
+    //       },
+    //       {
+    //         enums: 'javascript',
+    //         name: '@hey-api/typescript',
+    //       },
+    //       {
+    //         name: '@hey-api/sdk',
+    //         transformer: true,
+    //       },
+    //     ],
+    //   },
+    // }),
   ],
   resolve: {
     alias: {
