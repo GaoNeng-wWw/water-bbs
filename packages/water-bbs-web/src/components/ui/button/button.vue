@@ -9,7 +9,7 @@ const { loading = false, ...props } = defineProps<{
   disabled?: boolean;
   htmlType?: 'button' | 'submit' | 'reset';
   shape?: 'solid' | 'ghost';
-  size?: 'sm' | 'md';
+  size?: 'tiny' | 'sm' | 'md';
   rounded?: 'sm' | 'md' | 'lg' | 'full';
   full?: boolean;
   icon?: boolean;
@@ -34,7 +34,8 @@ const style = tv({
   ],
   variants: {
     size: {
-      sm: 'min-w-8 min-h-8 p-1',
+      tiny: 'text-xs min-w-8 min-h-8 p-1 px-2',
+      sm: 'min-w-8 min-h-8 p-1 text-sm',
       md: 'min-w-10 min-h-10 py-2 px-2 rounded-md cursor-pointer',
     },
     full: {
