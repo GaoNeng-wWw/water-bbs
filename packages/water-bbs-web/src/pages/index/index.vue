@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import PostItem from '@/components/ui/post/post-item.vue';
-import PostList from '@/components/ui/post/post-list.vue';
+import { PostItem, PostList } from '@/components/app';
 </script>
 
 <template>
