@@ -8,3 +8,5 @@ export * from './button';
 export * from './tab';
 export * from './popover';
 export * from './collapse';
+export * from './drawer';
+export * from './tiptap';

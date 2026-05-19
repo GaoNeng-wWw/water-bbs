@@ -1,6 +1,9 @@
 <script setup lang="ts">
+
 </script>
 
 <template>
-  <router-view />
+  <div class="w-full flex grow container mx-auto">
+    <router-view />
+  </div>
 </template>

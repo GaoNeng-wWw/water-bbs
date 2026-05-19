@@ -1,9 +1,10 @@
-import { defineConfig, presetWind4, presetIcons } from 'unocss';
+import { defineConfig, presetWind4, presetIcons, presetTypography } from 'unocss';
 
 export default defineConfig({
   presets: [
     presetWind4(),
     presetIcons({ autoInstall: true }),
+    presetTypography()
   ],
   theme: {
     duration: {

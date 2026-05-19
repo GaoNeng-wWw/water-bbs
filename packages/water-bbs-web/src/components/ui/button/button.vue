@@ -13,6 +13,7 @@ const { loading = false, ...props } = defineProps<{
   rounded?: 'sm' | 'md' | 'lg' | 'full';
   full?: boolean;
   icon?: boolean;
+  class?: string;
 }>();
 
 const emits = defineEmits<{ click: [MouseEvent] }>();
@@ -71,7 +72,7 @@ console.log(clazz.value);
       :type="htmlType"
       layout
       :transition="{ type: 'spring' }"
-      :class="clazz"
+      :class="[clazz, props.class]"
       :initial="false"
       @click="onClick"
     >
