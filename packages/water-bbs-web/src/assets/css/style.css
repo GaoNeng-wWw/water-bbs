@@ -196,17 +196,33 @@
 }
 
 html,body,#app {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+html {
+  overflow: auto;
+  height: 100dvh;
+}
+body {
+  height: 100dvh;
+  overflow: auto;
+}
+#app {
+  height: 100%;
+}
+/* html,body,#app {
   padding: 0;
   margin: 0;
   width: 100%;
 }
 html {
-  overflow-y: auto;
   min-height: 100dvh;
 }
 #app, body {
-  min-height: 100dvh;
-}
+  overflow: auto;
+  height: 100dvh;
+} */
 
 
 @keyframes fade-in {

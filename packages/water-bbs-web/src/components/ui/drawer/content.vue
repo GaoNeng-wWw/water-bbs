@@ -6,7 +6,7 @@ const { class: clazz, to } = defineProps<{ class?: string, to?: string}>();
 </script>
 
 <template>
-  <drawer-portal force-mount :to="to">
+  <drawer-portal :to="to">
     <drawer-overlay class="w-full h-full fixed inset-0 z-20 bg-black/40" />
     <drawer-content class="fixed z-30" :class="[clazz]">
       <slot />

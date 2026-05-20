@@ -15,7 +15,7 @@ const editor = new Editor({
   autofocus: true,
   editorProps: {
     attributes: {
-      class: 'outline-none rounded bg-warm-50 h-full',
+      class: 'outline-none rounded bg-warm-50 h-full overflow-auto',
     },
   },
 });
@@ -25,11 +25,11 @@ defineExpose({ getJson });
 </script>
 
 <template>
-  <div class="w-full flex flex-col bg-warm-50 p-2">
+  <div class="w-full h-full flex flex-col bg-warm-50 p-2 rounded">
     <toolbar :editor="editor" />
     <editor-content
       :editor="editor"
-      class="max-w-full! prose prose-warm prose-p:first:mt-0 flex-1 px-2"
+      class="max-w-full! prose prose-warm prose-p:first:mt-0 overflow-auto flex-1 px-2 mt-2"
     />
   </div>
 </template>

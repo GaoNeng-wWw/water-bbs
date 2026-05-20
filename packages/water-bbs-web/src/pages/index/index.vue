@@ -4,7 +4,7 @@ import Sidebar from '@/components/app/shell/sidebar.vue';
 </script>
 
 <template>
-  <div class="w-full">
+  <div class="w-full flex gap-4">
     <div class="w-200px h-[calc(100dvh_-_48px)] py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12">
       <sidebar />
     </div>

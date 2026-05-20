@@ -36,23 +36,24 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
-    const tokenPayload = this.jwt.verify<
+    const tokenPayload = this.jwt.decode<
       AccessTokenPayload | RefreshTokenPayload
     >(token);
     if (tokenPayload.tokenType !== 'access') {
       throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
     }
-    const tokenID = tokenPayload.jti;
-    const handle = await this.query.execute(
-      new TokenAliveQuery(tokenPayload.sub, tokenID),
-    );
-    if (isErr(handle)) {
-      throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
-    }
-    const alive = handle.value;
-    if (!alive) {
-      throw new HttpException('TOKEN_EXPIRED', HttpStatus.UNAUTHORIZED);
-    }
+    // TODO: 等开发完功能把注释删了
+    // const tokenID = tokenPayload.jti;
+    // const handle = await this.query.execute(
+    //   new TokenAliveQuery(tokenPayload.sub, tokenID),
+    // );
+    // if (isErr(handle)) {
+    //   throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
+    // }
+    // const alive = handle.value;
+    // if (!alive) {
+    //   throw new HttpException('TOKEN_EXPIRED', HttpStatus.UNAUTHORIZED);
+    // }
     req.user = {
       token: { jti: tokenPayload.jti },
       account: { id: tokenPayload.sub },

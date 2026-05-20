@@ -32,7 +32,7 @@ const onClick = () => {
       "
           @click="onClick"
         >
-          <div class="size-10 rounded-full bg-red-500" />
+          <div class="size-10 rounded-full bg-red-500 shrink-0" />
           <div class="text-warm-foreground min-w-0">
             <span v-if="!profile">未登录</span>
             <span v-else>{{ profile.username }}</span>

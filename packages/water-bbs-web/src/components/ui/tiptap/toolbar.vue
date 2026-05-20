@@ -14,7 +14,7 @@ const commands: Ref<Command[]> = ref(
   [
     { icon: 'i-material-symbols:format-bold', isActive: () => editor.isActive('bold'), onClick: () => editor.commands.toggleBold() },
     { icon: 'i-material-symbols:format-italic', isActive: () => editor.isActive('italic'), onClick: () => editor.commands.toggleItalic() },
-    { icon: 'i-material-symbols:format-quote', isActive: () => editor.isActive('blockquotes'), onClick: () => editor.commands.toggleItalic() },
+    { icon: 'i-material-symbols:format-quote', isActive: () => editor.isActive('blockquote'), onClick: () => editor.commands.setBlockquote() },
   ],
 );
 </script>

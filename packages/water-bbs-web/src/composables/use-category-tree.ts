@@ -1,28 +1,116 @@
 import { categoryControllerListCategories } from '@/api';
 import { UiCollapse, UiCollapseItem } from '@/components/ui';
-import { computed, h, reactive, type VNode } from 'vue';
+import { computed, h, reactive, readonly, ref, type VNode } from 'vue';
 import { useEventBus, type Callback } from './use-events-bus';
 
-export type TreeNode = {
+export type FlattenTreeNode = {
   id: string;
   name: string;
   hasChildren: boolean;
   parentId: string;
 };
 
-export type Tree = Map<string | null, TreeNode[]>;
+export type FlattenTree = Map<string | null, FlattenTreeNode[]>;
+export type NestTreeNode = {
+  id: string;
+  label: string;
+  children: NestTreeNode[];
+  leaf?: boolean;
+};
+
+export const useNestedCategoryTreeData = () => {
+  const tree = ref<NestTreeNode[]>([]);
+  const nodes = reactive(new Map<string, NestTreeNode>());
+
+  const loadingParents = reactive(new Set<string>());
+  const loadedParents = reactive(new Set<string>());
+
+  const parentVersions = new Map<string, number>();
+
+  const loadData = async (parent?: string) => {
+    const parentKey = parent ?? '__root__';
+    if (loadingParents.has(parentKey) || loadedParents.has(parentKey)) {
+      return;
+    }
+
+    loadingParents.add(parentKey);
+    const version = (parentVersions.get(parentKey) ?? 0) + 1;
+    parentVersions.set(parentKey, version);
+
+    try {
+      const resp = await categoryControllerListCategories({ query: { parent } });
+      const data = resp.data ?? [];
+      if (parentVersions.get(parentKey) !== version) {
+        return;
+      }
+
+      data.forEach((node) => {
+        const treeNode: NestTreeNode = {
+          id: node.id,
+          label: node.name,
+          children: node.hasChildren
+            ? [
+              { id: '__shadow__', label: '__shadow__', children: [], leaf: true },
+            ]
+            : [],
+          leaf: !node.hasChildren,
+        };
+
+        nodes.set(node.id, treeNode);
+
+        if (!node.parentId) {
+          tree.value.push(treeNode);
+        } else {
+          const parentNode = nodes.get(node.parentId as unknown as string);
+          if (!parentNode) {
+            loadedParents.delete(parentKey);
+            return;
+          }
+          parentNode.children = parentNode.children.filter(node => node.id !== '__shadow__');
+          parentNode?.children.push(treeNode);
+        }
+      });
+      loadedParents.add(parentKey);
+    } catch (error) {
+    } finally {
+      loadingParents.delete(parentKey);
+    }
+  };
+  const expand = (parent?: string) => {
+    loadData(parent);
+  };
+
+  const reset = () => {
+    tree.value = [];
+    nodes.clear();
+    loadingParents.clear();
+    loadedParents.clear();
+    parentVersions.clear();
+  };
+
+  const isLoading = (parent?: string) => loadingParents.has(parent ?? '__root__');
+  const isLoaded = (parent?: string) => loadedParents.has(parent ?? '__root__');
+
+  return {
+    tree, // 外部只读
+    expand,
+    reset,
+    isLoading,
+    isLoaded,
+  };
+};
 
 export const useCategoryTree = () => {
-  const tree: Tree = reactive(new Map());
+  const tree: FlattenTree = reactive(new Map());
   const rootNode = computed(() => tree.get(null) ?? []);
   const active = reactive(new Set<string>());
   const expanded = reactive(new Set<string>());
-  const expandedEventBus = useEventBus<TreeNode, void>();
-  const activeBus = useEventBus<TreeNode, void>();
-  const onExpand = (fn: Callback<TreeNode, void>) => {
+  const expandedEventBus = useEventBus<FlattenTreeNode, void>();
+  const activeBus = useEventBus<FlattenTreeNode, void>();
+  const onExpand = (fn: Callback<FlattenTreeNode, void>) => {
     expandedEventBus.on('category-tree.on-expand', fn);
   };
-  const onActive = (fn: Callback<TreeNode, void>) => {
+  const onActive = (fn: Callback<FlattenTreeNode, void>) => {
     activeBus.on('category-tree.on-active', fn);
   };
   const expand = (parentId?: string) => {
@@ -47,7 +135,7 @@ export const useCategoryTree = () => {
       });
   };
 
-  const onClick = async (node: TreeNode) => {
+  const onClick = async (node: FlattenTreeNode) => {
     if (active.size) {
       active.clear();
     }
@@ -64,7 +152,7 @@ export const useCategoryTree = () => {
     }
   };
 
-  const render = (node: TreeNode): VNode => {
+  const render = (node: FlattenTreeNode): VNode => {
     return h(
       UiCollapseItem,
       {
