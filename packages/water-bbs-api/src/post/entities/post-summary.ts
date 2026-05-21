@@ -32,15 +32,22 @@ export class PostSummary {
   @Expose()
   @Type(() => AuthorSummary)
   public readonly author: AuthorSummary;
+  @ApiProperty()
+  @Expose()
+  public readonly createdAt: string;
   constructor(
     id: string,
     title: string,
     content: string,
     author: AuthorSummary,
+    createdAt: Date,
   ) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.author = author;
+    if (createdAt) {
+      this.createdAt = createdAt.toLocaleDateString();
+    }
   }
 }

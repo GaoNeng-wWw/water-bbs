@@ -64,8 +64,8 @@ export class PostController {
 
   @UseModel(CursorPagination)
   @ApiCursorPaginatedResponse(PostSummary)
-  @ApiQuery({ name: 'category', description: 'Category ID' })
-  @ApiQuery({ name: 'preId', description: 'Previous post ID' })
+  @ApiQuery({ name: 'category', description: 'Category ID', required: false })
+  @ApiQuery({ name: 'preId', description: 'Previous post ID', required: false })
   @ApiQuery({ name: 'size', description: 'Page size' })
   @Get('')
   getPosts(

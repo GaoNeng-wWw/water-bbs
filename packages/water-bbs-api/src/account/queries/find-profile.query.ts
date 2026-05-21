@@ -1,4 +1,4 @@
-import { IQueryHandler, Query } from '@nestjs/cqrs';
+import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import { AppError, err, isErr, ok, Result } from 'water-bbs-shared';
 import {
   type IAccountRepoistory,
@@ -15,6 +15,7 @@ export class FindProfileByAccountIDQuery extends Query<
   }
 }
 
+@QueryHandler(FindProfileByAccountIDQuery)
 export class FindProfileHandler implements IQueryHandler<FindProfileByAccountIDQuery> {
   constructor(
     @InjectAccountRepository()

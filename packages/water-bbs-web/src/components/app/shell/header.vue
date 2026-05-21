@@ -10,7 +10,7 @@ const { postTitle, headerTitleVisble } = storeToRefs(siteStore);
 <template>
   <div class="w-full h-16 flex border-b border-warm-300 shrink-0 sticky top-0 bg-warm-50 z-10 items-center">
     <div class="container mx-auto">
-      <div class="w-4xl mx-auto">
+      <div class="max-w-4xl mx-auto px-4 sm:px-0">
         <animate-presence>
           <motion.h1
             v-if="headerTitleVisble"

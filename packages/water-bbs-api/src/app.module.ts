@@ -42,7 +42,7 @@ import { CategoryModule } from './category/category.module';
           port: configService.get('database.port'),
           user: configService.get('database.username'),
           password: configService.get('database.password'),
-          dbName: configService.get('database.dbName'),
+          dbName: configService.get('database.dbName')
         };
       },
     } as any),

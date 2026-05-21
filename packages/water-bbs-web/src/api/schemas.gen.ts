@@ -256,13 +256,17 @@ export const PostSummarySchema = {
         },
         author: {
             $ref: '#/components/schemas/AuthorSummary'
+        },
+        createdAt: {
+            type: 'string'
         }
     },
     required: [
         'id',
         'title',
         'content',
-        'author'
+        'author',
+        'createdAt'
     ]
 } as const;
 

@@ -1,9 +1,14 @@
 <script lang="ts" setup>
 import { UiCollapse } from '@/components/ui';
 import { useCategoryTree } from '@/composables';
-const { roots, expand } = useCategoryTree();
+import { useSiteStore } from '@/store/site.store';
+const { roots, expand, onActive } = useCategoryTree();
+const { setActiveCategory } = useSiteStore();
 
 expand();
+onActive((node) => {
+  setActiveCategory(node.id);
+});
 </script>
 
 <template>

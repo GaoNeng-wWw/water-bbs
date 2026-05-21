@@ -1,6 +1,10 @@
 <script lang="ts" setup>
-import { PostItem, PostList } from '@/components/app';
+import { PostList } from '@/components/app';
 import Sidebar from '@/components/app/shell/sidebar.vue';
+import { useSiteStore } from '@/store/site.store';
+import { storeToRefs } from 'pinia';
+
+const { activeCategory } = storeToRefs(useSiteStore());
 </script>
 
 <template>
@@ -11,30 +15,9 @@ import Sidebar from '@/components/app/shell/sidebar.vue';
     <div class="grow h-full">
       <div class="w-full pl-4 mx-auto flex">
         <div class="w-full grow shrink">
-          <post-list>
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-            <post-item />
-          </post-list>
+          <post-list :category-id="activeCategory" />
         </div>
-        <div class="w-200px h-dvh shrink-0" />
+        <div class="w-200px h-dvh shrink-0 hidden flex-col lg:flex" />
       </div>
     </div>
   </div>

@@ -81,8 +81,9 @@ export class PostRepo {
       .findAndCount(
         Post,
         {
-          id: { $gt: preId },
-          categoryId: { $eq: categoryId },
+          id: preId !== undefined ? { $gt: preId } : { $ne: null },
+          categoryId:
+            categoryId !== undefined ? { $eq: categoryId } : { $ne: null },
         },
         {
           limit,
@@ -99,7 +100,7 @@ export class PostRepo {
         return ok({
           posts,
           total,
-          cursor: posts[posts.length - 1].id,
+          cursor: posts.length ? posts[posts.length - 1].id : '',
         });
       })
       .catch((reason) => err(new PersistenceError(reason)));

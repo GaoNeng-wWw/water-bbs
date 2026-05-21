@@ -72,6 +72,7 @@ export class PostApplicationService {
       post.title,
       post.threads[0].content,
       authorSummary,
+      post.createdAt,
     );
   }
 
@@ -92,7 +93,7 @@ export class PostApplicationService {
         const account = await this.query.execute(
           new FindProfileByAccountIDQuery(authorId),
         );
-        const authorSummary = isErr(account)
+        authorSummary = isErr(account)
           ? new AuthorSummary(authorId, authorId)
           : new AuthorSummary(
               account.value.id,
@@ -105,8 +106,9 @@ export class PostApplicationService {
         new PostSummary(
           post.id,
           post.title,
-          post.threads[0].content,
-          authorSummary!,
+          post.threads[0]?.content ?? '',
+          authorSummary,
+          post.createdAt,
         ),
       );
     }

@@ -9,6 +9,7 @@ setPostTitle('Post Title');
 const title = useTemplateRef('title');
 
 const onScroll = () => {
+  console.log('trigger')
   const rect = title.value?.getBoundingClientRect();
   if (!rect) {
     return;
@@ -24,10 +25,10 @@ const onScroll = () => {
 
 onMounted(() => {
   onScroll();
-  document.addEventListener('scroll', onScroll);
+  document.body.addEventListener('scroll', onScroll);
 });
 onUnmounted(() => {
-  document.removeEventListener('scroll', onScroll);
+  document.body.removeEventListener('scroll', onScroll);
 });
 </script>
 

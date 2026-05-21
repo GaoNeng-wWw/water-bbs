@@ -10,6 +10,7 @@ const onClickReply = () => {
   }
   const content = editor.value.getJson();
 };
+
 </script>
 
 <template>

@@ -101,6 +101,7 @@ export const useNestedCategoryTreeData = () => {
 };
 
 export const useCategoryTree = () => {
+  const nodeRecord = new Map<string, FlattenTreeNode>();
   const tree: FlattenTree = reactive(new Map());
   const rootNode = computed(() => tree.get(null) ?? []);
   const active = reactive(new Set<string>());
@@ -153,6 +154,7 @@ export const useCategoryTree = () => {
   };
 
   const render = (node: FlattenTreeNode): VNode => {
+    nodeRecord.set(node.id, node);
     return h(
       UiCollapseItem,
       {
@@ -202,6 +204,7 @@ export const useCategoryTree = () => {
       .flatMap(k => tree.get(k))
       .filter(node => node !== undefined);
   });
+  const getNode = (id: string) => nodeRecord.get(id);
   const roots = computed(() => rootNode.value.map(render));
-  return { expand, roots, activeNodes, expandedNodes, onExpand, onActive };
+  return { expand, roots, activeNodes, expandedNodes, onExpand, onActive, getNode };
 };

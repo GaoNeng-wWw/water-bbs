@@ -96,6 +96,7 @@ export type PostSummary = {
     title: string;
     content: string;
     author: AuthorSummary;
+    createdAt: string;
 };
 
 export type HiddenPostDto = {
@@ -289,11 +290,11 @@ export type PostControllerGetPostsData = {
         /**
          * Previous post ID
          */
-        preId: string;
+        preId?: string;
         /**
          * Category ID
          */
-        category: string;
+        category?: string;
     };
     url: '/posts';
 };
