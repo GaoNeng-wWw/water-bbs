@@ -3,8 +3,14 @@ import { Editor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import toolbar from './toolbar.vue';
 
+const { content, readonly } = defineProps<{
+  content?: object;
+  readonly?: boolean;
+}>();
+
 const editor = new Editor({
-  content: '',
+  content,
+  editable: !readonly,
   extensions: [
     StarterKit.configure({
       heading: {

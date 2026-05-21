@@ -1,5 +1,11 @@
 <script lang="ts" setup>
-import { UiButton } from '@/components/ui';
+import { UiTiptapEditor } from '@/components/ui';
+
+const {
+  authorName,
+  createdAt,
+  content
+} = defineProps<{authorName: string, createdAt: string, content: object}>();
 </script>
 
 <template>
@@ -9,14 +15,14 @@ import { UiButton } from '@/components/ui';
       <div class="min-w-0 w-full grow flex flex-col gap-2">
         <div class="w-full">
           <p class="text-warm-foreground text-sm">
-            AuthorName
+            {{ authorName }}
           </p>
           <p class="text-sm text-warm-foreground/50">
-            xxxx/xx/xx
+            {{ createdAt }}
           </p>
         </div>
         <div class="w-full text-warm-foreground">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, cupiditate eveniet! Repellendus, reiciendis maxime? Nemo veniam at, eligendi odio non mollitia tenetur a, amet repudiandae dolorum quidem esse consequatur odit?
+          <ui-tiptap-editor :content="content" readonly />
         </div>
       </div>
     </div>

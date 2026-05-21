@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { useSiteStore } from '@/store/site.store';
 import ThreadItem from './thread-item.vue';
-import { onMounted, onUnmounted, useTemplateRef } from 'vue';
+import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
+const {postId,title} = defineProps<{
+  postId: string;
+  title: string;
+}>();
+
 const { setPostTitle, setHeaderTitleVisbility } = useSiteStore();
 
-setPostTitle('Post Title');
+setPostTitle(title);
 
-const title = useTemplateRef('title');
+const titleInstance = useTemplateRef('title');
+
+const posts = ref([]);
 
 const onScroll = () => {
-  console.log('trigger')
-  const rect = title.value?.getBoundingClientRect();
+  console.log('trigger');
+  const rect = titleInstance.value?.getBoundingClientRect();
   if (!rect) {
     return;
   }
@@ -37,14 +44,12 @@ onUnmounted(() => {
     <div class="w-full h-fit bg-warm-50">
       <div class="w-full">
         <h1 ref="title" class="text-3xl text-warm-foreground font-bold mb-5">
-          Post Title
+          {{ title }}
         </h1>
       </div>
     </div>
     <div class="w-full flex flex-col">
-      <thread-item />
-      <thread-item />
-      <thread-item />
+      <!-- <thread-item :author-name="" /> -->
     </div>
   </div>
 </template>
