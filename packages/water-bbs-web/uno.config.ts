@@ -4,7 +4,7 @@ export default defineConfig({
   presets: [
     presetWind4(),
     presetIcons({ autoInstall: true }),
-    presetTypography()
+    presetTypography(),
   ],
   theme: {
     duration: {
@@ -85,5 +85,6 @@ export default defineConfig({
       },
     },
   },
+
   safelist: ['hover:bg-warm-200', 'rotate-90', 'rotate-0', 'pl-2', 'pl-4', 'bg-warm-200/50', 'bg-warm-200/30'],
 });

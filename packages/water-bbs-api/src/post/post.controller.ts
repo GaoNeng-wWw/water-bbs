@@ -13,14 +13,22 @@ import { PostApplicationService } from './post.service';
 import { CreatePostDTO, CreatePostResponse } from './dto/create-post.dto';
 import {
   ApiCursorPaginatedResponse,
+  ApiPaginatedResponse,
   CursorPagination,
+  Pagination,
   Permission,
   UseModel,
   User,
 } from '@app/shared';
 import { HiddenPostDTO, HiddenPostResponse } from './dto/hidden-post.dto';
 import { PostSummary } from './entities/post-summary';
-import { ApiCreatedResponse, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+import { Thread } from './entities/thread';
 
 @Controller('posts')
 export class PostController {
@@ -39,6 +47,20 @@ export class PostController {
       body.content,
       user.account.id,
     );
+  }
+
+  @Get(':id/thread')
+  @UseModel(Pagination)
+  @ApiPaginatedResponse(Thread)
+  @ApiParam({ name: 'id', description: 'PostId', required: true })
+  @ApiQuery({ name: 'page', description: 'Page number', required: false })
+  @ApiQuery({ name: 'size', description: 'Page size' })
+  getThread(
+    @Param('id') id: string,
+    @Query('page', ParseIntPipe, new DefaultValuePipe(1)) page: number,
+    @Query('size', ParseIntPipe, new DefaultValuePipe(10)) size: number,
+  ) {
+    return this.postService.getThread(id, page, size);
   }
 
   @ApiOkResponse({

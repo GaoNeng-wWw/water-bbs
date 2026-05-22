@@ -11,3 +11,5 @@ export * from './collapse';
 export * from './drawer';
 export * from './tiptap';
 export { default as TreeSelect } from './tree-select/index.vue';
+export * from './skeleton';
+export * from './paginaton';

@@ -105,4 +105,27 @@ export class PostRepo {
       })
       .catch((reason) => err(new PersistenceError(reason)));
   }
+  getThreads(postId: string, page: number, limit: number = 10) {
+    return this.em
+      .findAndCount(
+        Thread,
+        {
+          parent: {
+            id: postId,
+          },
+        },
+        {
+          limit,
+          offset: (page - 1) * limit,
+          cache: true,
+          populate: ['authorId'],
+        },
+      )
+      .then(([threads, total]) => {
+        return ok({ threads, total });
+      })
+      .catch((reason) => {
+        return err(new PersistenceError(reason));
+      });
+  }
 }

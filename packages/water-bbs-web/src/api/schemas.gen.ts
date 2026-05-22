@@ -223,6 +223,73 @@ export const CreatePostResponseSchema = {
     ]
 } as const;
 
+export const PaginationSchema = {
+    type: 'object',
+    properties: {
+        total: {
+            type: 'number'
+        },
+        data: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
+    },
+    required: [
+        'total',
+        'data'
+    ]
+} as const;
+
+export const ThreadAuthorSummarySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        },
+        bio: {
+            type: 'string'
+        },
+        avatar: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'bio',
+        'avatar'
+    ]
+} as const;
+
+export const ThreadSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        author: {
+            $ref: '#/components/schemas/ThreadAuthorSummary'
+        },
+        content: {
+            type: 'string'
+        },
+        createdAt: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'author',
+        'content',
+        'createdAt'
+    ]
+} as const;
+
 export const AuthorSummarySchema = {
     type: 'object',
     properties: {

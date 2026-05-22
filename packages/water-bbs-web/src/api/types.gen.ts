@@ -85,6 +85,25 @@ export type CreatePostResponse = {
     postId: string;
 };
 
+export type Pagination = {
+    total: number;
+    data: Array<string>;
+};
+
+export type ThreadAuthorSummary = {
+    id: string;
+    name: string;
+    bio: string;
+    avatar: string;
+};
+
+export type Thread = {
+    id: string;
+    author: ThreadAuthorSummary;
+    content: string;
+    createdAt: string;
+};
+
 export type AuthorSummary = {
     id: string;
     name: string;
@@ -322,6 +341,35 @@ export type PostControllerCreatePostResponses = {
 };
 
 export type PostControllerCreatePostResponse = PostControllerCreatePostResponses[keyof PostControllerCreatePostResponses];
+
+export type PostControllerGetThreadData = {
+    body?: never;
+    path: {
+        /**
+         * PostId
+         */
+        id: string;
+    };
+    query: {
+        /**
+         * Page number
+         */
+        page?: number;
+        /**
+         * Page size
+         */
+        size: number;
+    };
+    url: '/posts/{id}/thread';
+};
+
+export type PostControllerGetThreadResponses = {
+    200: Pagination & {
+        data?: Array<Thread>;
+    };
+};
+
+export type PostControllerGetThreadResponse = PostControllerGetThreadResponses[keyof PostControllerGetThreadResponses];
 
 export type PostControllerGetPostData = {
     body?: never;

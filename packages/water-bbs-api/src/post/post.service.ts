@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PostRepo } from './post.repo';
-import { err, isErr, isOk } from 'water-bbs-shared';
+import { err, isErr, isOk, ok } from 'water-bbs-shared';
 import { QueryBus } from '@nestjs/cqrs';
 import { FindProfileByAccountIDQuery } from '../account/queries';
 import { AuthorSummary, PostSummary } from './entities/post-summary';
-import { CursorPagination } from '@app/shared';
+import { CursorPagination, Pagination } from '@app/shared';
 import { HiddenPostResponse } from './dto/hidden-post.dto';
 import { CreatePostResponse } from './dto/create-post.dto';
 import { PostNotFound } from './errors';
+import { Thread, ThreadAuthorSummary } from './entities/thread';
 
 @Injectable()
 export class PostApplicationService {
@@ -117,5 +118,41 @@ export class PostApplicationService {
       postSummary,
       postListRes.value.total,
     );
+  }
+  async getThread(postId: string, page: number = 1, limit: number = 10) {
+    const threadsResult = await this.repo.getThreads(postId, page, limit);
+    if (isErr(threadsResult)) {
+      return threadsResult;
+    }
+    const payload = threadsResult.value;
+    const threads = payload.threads;
+    const authorSummaryCache = new Map();
+    const resThreads: Thread[] = [];
+    for (const thread of threads) {
+      const authorId = thread.authorId;
+      const authorRes = await this.query.execute(
+        new FindProfileByAccountIDQuery(authorId),
+      );
+      if (isErr(authorRes)) {
+        return authorRes;
+      }
+      const authorValue = authorRes.value;
+      const author = new ThreadAuthorSummary(
+        authorValue.id,
+        authorValue.nick,
+        authorValue.bio,
+        authorValue.avatar,
+      );
+      authorSummaryCache.set(authorValue.id, author);
+      resThreads.push(
+        new Thread(
+          thread.id,
+          author,
+          thread.content,
+          thread.createdAt.toLocaleDateString(),
+        ),
+      );
+    }
+    return ok(new Pagination(payload.total, resThreads));
   }
 }

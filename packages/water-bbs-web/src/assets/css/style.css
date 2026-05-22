@@ -1,4 +1,35 @@
-/* ===== 浅色模式下追加 ===== */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes scale-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; } to { background-position: -200% 0; }
+}
+
 :root {
   --warm-50:  252, 250, 245;
   --warm-100: 245, 242, 236;
@@ -210,46 +241,4 @@ body {
 }
 #app {
   min-height: 100%;
-}
-/* html,body,#app {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
-html {
-  min-height: 100dvh;
-}
-#app, body {
-  overflow: auto;
-  height: 100dvh;
-} */
-
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes scale-fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }

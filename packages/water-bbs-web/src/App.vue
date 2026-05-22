@@ -23,7 +23,9 @@ watch(() => accountStore.isLogged, () => {
   <div class="w-full bg-warm-50">
     <div class="min-h-full w-full mx-auto gap-0 flex flex-col">
       <app-header />
-      <router-view />
+      <suspense>
+        <router-view />
+      </suspense>
     </div>
   </div>
 </template>

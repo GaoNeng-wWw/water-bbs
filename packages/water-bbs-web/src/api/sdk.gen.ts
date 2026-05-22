@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerHidePostData, PostControllerHidePostResponses } from './types.gen';
+import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -106,6 +106,12 @@ export const postControllerCreatePost = <ThrowOnError extends boolean = false>(o
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+export const postControllerGetThread = <ThrowOnError extends boolean = false>(options: Options<PostControllerGetThreadData, ThrowOnError>) => (options.client ?? client).get<PostControllerGetThreadResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/posts/{id}/thread',
+    ...options
 });
 
 export const postControllerGetPost = <ThrowOnError extends boolean = false>(options: Options<PostControllerGetPostData, ThrowOnError>) => (options.client ?? client).get<PostControllerGetPostResponses, unknown, ThrowOnError>({

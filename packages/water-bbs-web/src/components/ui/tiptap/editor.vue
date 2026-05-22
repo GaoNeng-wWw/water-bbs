@@ -32,7 +32,7 @@ defineExpose({ getJson });
 
 <template>
   <div class="w-full h-full flex flex-col bg-warm-50 p-2 rounded">
-    <toolbar :editor="editor" />
+    <toolbar v-if="!readonly" :editor="editor" />
     <editor-content
       :editor="editor"
       class="max-w-full! prose prose-warm prose-p:first:mt-0 overflow-auto flex-1 px-2 mt-2"
