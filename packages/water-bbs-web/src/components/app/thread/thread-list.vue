@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSiteStore } from '@/store/site.store';
 import ThreadItem from './thread-item.vue';
-import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
+import { onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { postControllerGetThread, type Thread } from '@/api';
 import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 import { useRouter } from 'vue-router';
@@ -19,9 +19,8 @@ const titleInstance = useTemplateRef('title');
 
 const threads = ref<Thread[]>([]);
 const total = ref<number | null>(null);
-const SIZE = 10;
-const totalPage = computed(() => total.value ? Math.ceil(total.value / SIZE) : 1);
 const router = useRouter();
+const curPage = ref(1);
 
 const onScroll = () => {
   const rect = titleInstance.value?.getBoundingClientRect();
@@ -55,7 +54,12 @@ const loadPost = (page: number = 1) => {
       total.value = data.total;
     });
 };
-await loadPost();
+watch(curPage, () => {
+  if (curPage.value <= 0) {
+    return;
+  }
+  loadPost(curPage.value);
+}, { immediate: true });
 onMounted(() => {
   onScroll();
   document.body.addEventListener('scroll', onScroll);
@@ -75,7 +79,6 @@ onUnmounted(() => {
         </h1>
       </div>
     </div>
-    <ui-pagination />
     <div class="w-full flex flex-col">
       <thread-item
         v-for="thread in threads"
@@ -83,7 +86,11 @@ onUnmounted(() => {
         :author-name="thread.author.name"
         :content="JSON.parse(thread.content)"
         :created-at="thread.createdAt"
+        :floor="thread.floor"
       />
+    </div>
+    <div class="my-4">
+      <ui-pagination v-if="total" v-model="curPage" :total="total" />
     </div>
   </div>
 </template>

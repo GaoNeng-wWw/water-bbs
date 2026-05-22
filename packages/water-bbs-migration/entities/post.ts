@@ -24,7 +24,7 @@ export class Post extends BaseMetaEntity {
 
   @OneToMany(() => Thread, (thread) => thread.parent)
   threads = new Collection<Thread>(this);
-  @Property({ type: 'uuid', version: true })
+  @Property({ type: 'uuid' })
   version: string;
   @Property({ type: 'int' })
   lastFloor: number = 1;
@@ -52,7 +52,6 @@ export class Post extends BaseMetaEntity {
 
   appendThread(thread: Thread) {
     thread.parent = this;
-    this.lastFloor += 1;
     this.threads.add(thread);
   }
 }
@@ -65,7 +64,6 @@ export class Thread extends BaseMetaEntity {
   @Property({ type: 'text' })
   content!: string;
 
-  // 跨聚合：只存 Account ID
   @Property({ type: 'uuid' })
   authorId!: string;
 
@@ -78,13 +76,14 @@ export class Thread extends BaseMetaEntity {
   @Property({type: 'int'})
   floor: number = 1;
 
-  constructor(content: string, authorId: string, parent: Post) {
+  constructor(content: string, authorId: string, parent: Post, floor?: number) {
     super();
     this.content = content;
     this.authorId = authorId;
     this.parent = parent;
-    this.floor = parent.lastFloor;
+    this.floor = floor ?? parent.lastFloor;
   }
+
 
   addReply(reply: Reply) {
     reply.thread = this;

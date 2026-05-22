@@ -29,6 +29,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { Thread } from './entities/thread';
+import { CreateThread, CreateThreadResponse } from './dto/create-thread.dto';
 
 @Controller('posts')
 export class PostController {
@@ -61,6 +62,20 @@ export class PostController {
     @Query('size', ParseIntPipe, new DefaultValuePipe(10)) size: number,
   ) {
     return this.postService.getThread(id, page, size);
+  }
+
+  @Post(':id/thread')
+  @UseModel(CreateThreadResponse)
+  @ApiCreatedResponse({
+    type: CreateThreadResponse,
+  })
+  @ApiParam({ name: 'id', description: 'PostId', required: true })
+  createThread(
+    @Param('id') id: string,
+    @Body() data: CreateThread,
+    @User() user: RequestUser,
+  ) {
+    return this.postService.createThread(id, data.content, user.account.id);
   }
 
   @ApiOkResponse({

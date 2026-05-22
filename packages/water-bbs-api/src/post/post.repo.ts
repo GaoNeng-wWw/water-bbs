@@ -1,18 +1,27 @@
 import { EntityManager } from '@mikro-orm/core';
+import { RedisService } from '@nestjs-redisx/core';
 import { Injectable } from '@nestjs/common';
 import { Post, Thread } from 'water-bbs-migration';
 import { err, isErr, ok, PersistenceError } from 'water-bbs-shared';
 
 @Injectable()
 export class PostRepo {
-  constructor(private em: EntityManager) {}
-  createPost(
+  constructor(
+    private em: EntityManager,
+    private redis: RedisService,
+  ) {}
+  async createPost(
     categoryId: string,
     title: string,
     content: string,
     authorId: string,
   ) {
     const post = new Post(title, authorId, categoryId);
+    try {
+      await this.redis.incr(`FLOOR:${post.id}`);
+    } catch (error) {
+      return err(new PersistenceError(error as Error));
+    }
     const thread = new Thread(content, authorId, post);
     return this.em
       .transactional((em) => {
@@ -23,9 +32,18 @@ export class PostRepo {
       .then((post) => ok(post))
       .catch((reason) => err(new PersistenceError(reason)));
   }
+  async createThread(thread: Thread, post: Post) {
+    thread.floor = await this.redis.incr(`FLOOR:${post.id}`);
+    return this.em
+      .persist(thread)
+      .flush()
+      .then(ok)
+      .catch((reason) => err(new PersistenceError(reason)));
+  }
   updatePost(post: Post) {
     return this.em
-      .upsert(Post, post)
+      .persist(post)
+      .flush()
       .then(ok)
       .catch((reason) => err(new PersistenceError(reason)));
   }
@@ -119,6 +137,9 @@ export class PostRepo {
           offset: (page - 1) * limit,
           cache: true,
           populate: ['authorId'],
+          orderBy: {
+            floor: 'ASC',
+          },
         },
       )
       .then(([threads, total]) => {

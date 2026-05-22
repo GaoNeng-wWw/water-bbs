@@ -34,15 +34,20 @@ export class Thread {
   @ApiProperty()
   @Expose()
   public createdAt: string;
+  @ApiProperty()
+  @Expose()
+  public floor: number;
   constructor(
     id: string,
     author: ThreadAuthorSummary,
     content: string,
     createdAt: string,
+    floor: number,
   ) {
     this.id = id;
     this.author = author;
     this.content = content;
     this.createdAt = createdAt;
+    this.floor = floor;
   }
 }

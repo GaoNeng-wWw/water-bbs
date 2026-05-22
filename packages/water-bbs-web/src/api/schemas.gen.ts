@@ -290,6 +290,23 @@ export const ThreadSchema = {
     ]
 } as const;
 
+export const CreateThreadSchema = {
+    type: 'object',
+    properties: {
+        content: {
+            type: 'string'
+        }
+    },
+    required: [
+        'content'
+    ]
+} as const;
+
+export const CreateThreadResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
 export const AuthorSummarySchema = {
     type: 'object',
     properties: {

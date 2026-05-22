@@ -9,6 +9,8 @@ import { HiddenPostResponse } from './dto/hidden-post.dto';
 import { CreatePostResponse } from './dto/create-post.dto';
 import { PostNotFound } from './errors';
 import { Thread, ThreadAuthorSummary } from './entities/thread';
+import { Thread as ThreadAR } from 'water-bbs-migration';
+import { CreateThreadResponse } from './dto/create-thread.dto';
 
 @Injectable()
 export class PostApplicationService {
@@ -42,7 +44,7 @@ export class PostApplicationService {
     post.hide(hideReason);
     const hidePostRes = await this.repo.updatePost(post);
     if (isOk(hidePostRes)) {
-      return new HiddenPostResponse(hidePostRes.value.id);
+      return new HiddenPostResponse(post.id);
     }
     return hidePostRes;
   }
@@ -150,9 +152,45 @@ export class PostApplicationService {
           author,
           thread.content,
           thread.createdAt.toLocaleDateString(),
+          thread.floor,
         ),
       );
     }
     return ok(new Pagination(payload.total, resThreads));
+  }
+  async createThread(postId: string, threadContent: string, authorId: string) {
+    const postRes = await this.repo.findById(postId);
+    if (isErr(postRes)) {
+      return postRes;
+    }
+    const post = postRes.value;
+    if (!post) {
+      return err(new PostNotFound());
+    }
+    const authorRes = await this.query.execute(
+      new FindProfileByAccountIDQuery(authorId),
+    );
+    if (isErr(authorRes)) {
+      return authorRes;
+    }
+    const threadAr = new ThreadAR(threadContent, authorId, post);
+    post.appendThread(threadAr);
+    const updateResult = await this.repo.createThread(threadAr, post);
+    if (isErr(updateResult)) {
+      return updateResult;
+    }
+    const thread = new Thread(
+      threadAr.id,
+      new ThreadAuthorSummary(
+        authorId,
+        authorRes.value.nick,
+        authorRes.value.bio,
+        authorRes.value.avatar,
+      ),
+      threadAr.content,
+      threadAr.createdAt.toLocaleDateString(),
+      threadAr.floor
+    );
+    return new CreateThreadResponse(postId, thread);
   }
 }

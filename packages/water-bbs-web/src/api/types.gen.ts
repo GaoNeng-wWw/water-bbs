@@ -104,6 +104,14 @@ export type Thread = {
     createdAt: string;
 };
 
+export type CreateThread = {
+    content: string;
+};
+
+export type CreateThreadResponse = {
+    [key: string]: unknown;
+};
+
 export type AuthorSummary = {
     id: string;
     name: string;
@@ -370,6 +378,24 @@ export type PostControllerGetThreadResponses = {
 };
 
 export type PostControllerGetThreadResponse = PostControllerGetThreadResponses[keyof PostControllerGetThreadResponses];
+
+export type PostControllerCreateThreadData = {
+    body: CreateThread;
+    path: {
+        /**
+         * PostId
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/posts/{id}/thread';
+};
+
+export type PostControllerCreateThreadResponses = {
+    201: CreateThreadResponse;
+};
+
+export type PostControllerCreateThreadResponse = PostControllerCreateThreadResponses[keyof PostControllerCreateThreadResponses];
 
 export type PostControllerGetPostData = {
     body?: never;
