@@ -8,6 +8,7 @@ import { AccountID, AccountRegistor, InjectAccountRegistor } from '../domain';
 import {
   err,
   isErr,
+  isOk,
   ok,
   pipeResult,
   unwrapErr,
@@ -51,6 +52,14 @@ import {
   AccountResetPasswordCommand,
   AccountUpdatedPasswordCommand,
 } from '../domain/command';
+import {
+  InjectStoreEngine,
+  InjectUrlResolver,
+  UnlinkFileReference,
+  type Resolver,
+  type StorageEngine,
+} from '@app/storage';
+import { UpdateAvatarResponse } from '../dto/update-avatar.dto';
 
 @Injectable()
 export class AccountService {
@@ -65,6 +74,10 @@ export class AccountService {
     @InjectAccountRepository()
     private accountRepository: IAccountRepoistory,
     private readonly commandPublisher: CommandBus,
+    @InjectUrlResolver()
+    private readonly fileUrlResolver: Resolver,
+    @InjectStoreEngine()
+    private readonly storage: StorageEngine,
   ) {}
 
   async createAccount(
@@ -296,8 +309,50 @@ export class AccountService {
       return err(new AccountNotFound());
     }
     const profile = account.profile;
+    const avatarUrl = profile.avatar
+      ? await this.fileUrlResolver.getUrl(profile.avatar)
+      : ok('');
     return ok(
-      new GetProfileDTO(account.id, profile.name, profile.bio, profile.avatar),
+      new GetProfileDTO(
+        account.id,
+        profile.name,
+        profile.bio,
+        isOk(avatarUrl) ? avatarUrl.value : '',
+      ),
     );
+  }
+  async uploadAvatar(accountId: string, avatar: Express.Multer.File) {
+    const accountRes = await this.accountRepository.findOne(
+      new AccountID({ value: accountId }),
+    );
+    if (isErr(accountRes)) {
+      return accountRes;
+    }
+    const account = accountRes.value;
+    if (!account) {
+      return err(new AccountNotFound());
+    }
+    const putResult = await this.storage.put(
+      avatar.buffer,
+      avatar.mimetype,
+      avatar.originalname || avatar.filename,
+      avatar.size,
+    );
+    if (isErr(putResult)) {
+      return putResult;
+    }
+    const fileRef = putResult.value;
+    if (account.profile.avatar) {
+      await this.commandPublisher.execute(
+        new UnlinkFileReference(account.profile.avatar),
+      );
+    }
+    account.profile.avatar = fileRef;
+    await this.accountRepository.upsert(account);
+    const urlResult = await this.fileUrlResolver.getUrl(account.profile.avatar);
+    if (isErr(urlResult)) {
+      return urlResult;
+    }
+    return new UpdateAvatarResponse(urlResult.value);
   }
 }

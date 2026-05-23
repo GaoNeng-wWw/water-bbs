@@ -13,6 +13,7 @@ const { loading = false, ...props } = defineProps<{
   rounded?: 'sm' | 'md' | 'lg' | 'full';
   full?: boolean;
   icon?: boolean;
+  // eslint-disable-next-line vue/no-reserved-props
   class?: string;
 }>();
 
@@ -66,19 +67,19 @@ console.log(clazz.value);
 </script>
 
 <template>
-  <animate-presence :initial="false">
-    <motion.button
-      :disabled="loading || disabled"
-      :type="htmlType"
-      layout
-      :transition="{ type: 'spring' }"
-      :class="[clazz, props.class]"
-      :initial="false"
-      @click="onClick"
-    >
-      <motion.div layout="position" :initial="false">
-        <slot />
-      </motion.div>
+  <motion.button
+    :disabled="loading || disabled"
+    :type="htmlType"
+    layout
+    :transition="{ type: 'spring' }"
+    :class="[clazz, props.class]"
+    :initial="false"
+    @click="onClick"
+  >
+    <motion.div layout="position" :initial="false">
+      <slot />
+    </motion.div>
+    <animate-presence :initial="false">
       <motion.div
         v-if="showLoading"
         layout
@@ -87,6 +88,6 @@ console.log(clazz.value);
         :animate="{ opacity: 1, scale: 1 }"
         :exit="{ opacity: 0, scale: 0 }"
       />
-    </motion.button>
-  </animate-presence>
+    </animate-presence>
+  </motion.button>
 </template>

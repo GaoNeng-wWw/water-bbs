@@ -189,7 +189,7 @@ export class PostApplicationService {
       ),
       threadAr.content,
       threadAr.createdAt.toLocaleDateString(),
-      threadAr.floor
+      threadAr.floor,
     );
     return new CreateThreadResponse(postId, thread);
   }

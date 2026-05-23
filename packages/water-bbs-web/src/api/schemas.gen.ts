@@ -150,6 +150,11 @@ export const UpdatePasswordSchema = {
     properties: {}
 } as const;
 
+export const UpdateAvatarResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
 export const LoginDTOSchema = {
     type: 'object',
     properties: {
@@ -280,13 +285,17 @@ export const ThreadSchema = {
         },
         createdAt: {
             type: 'string'
+        },
+        floor: {
+            type: 'number'
         }
     },
     required: [
         'id',
         'author',
         'content',
-        'createdAt'
+        'createdAt',
+        'floor'
     ]
 } as const;
 

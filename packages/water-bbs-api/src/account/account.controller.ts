@@ -4,9 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AccountService } from './application';
 import { CreateAccountResponse, RegisterDTO } from './dto/register.dto';
@@ -28,6 +29,8 @@ import { RemoveAccountResponse } from './dto/remove-account.dto';
 import { Public, UseModel, User } from '@app/shared';
 import { UpdatePassword } from './dto/update-password.dto';
 import { AccountID } from './domain';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateAvatarResponse } from './dto/update-avatar.dto';
 
 @Controller('account')
 export class AccountController {
@@ -145,5 +148,17 @@ export class AccountController {
       return res;
     }
     return res.value;
+  }
+
+  @UseModel(UpdateAvatarResponse)
+  @ApiCreatedResponse({ type: UpdateAvatarResponse })
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('avatar')
+  async uploadAvatar(
+    @User() user: RequestUser,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.accountService.uploadAvatar(user.account.id, file);
   }
 }

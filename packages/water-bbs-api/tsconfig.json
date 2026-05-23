@@ -40,6 +40,12 @@
       "@app/shared/*": [
         "libs/shared/src/*"
       ],
+      "@app/storage": [
+        "libs/storage/src"
+      ],
+      "@app/storage/*": [
+        "libs/storage/src/*"
+      ],
       "water-bbs-migration": [
         "./node_modules/water-bbs-migration/entities"
       ],
@@ -53,7 +59,10 @@
         "./node_modules/water-bbs-shared/src/*"
       ]
     },
-    "types": ["jest"],
-    "strictPropertyInitialization": false,
+    "types": [
+      "jest",
+      "@types/multer"
+    ],
+    "strictPropertyInitialization": false
   }
 }

@@ -58,6 +58,10 @@ export type UpdatePassword = {
     [key: string]: unknown;
 };
 
+export type UpdateAvatarResponse = {
+    [key: string]: unknown;
+};
+
 export type LoginDto = {
     ident_type: 'Email';
     ident_value: string;
@@ -102,6 +106,7 @@ export type Thread = {
     author: ThreadAuthorSummary;
     content: string;
     createdAt: string;
+    floor: number;
 };
 
 export type CreateThread = {
@@ -259,6 +264,19 @@ export type AccountControllerUpdatePasswordData = {
 export type AccountControllerUpdatePasswordResponses = {
     200: unknown;
 };
+
+export type AccountControllerUploadAvatarData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/account/avatar';
+};
+
+export type AccountControllerUploadAvatarResponses = {
+    201: UpdateAvatarResponse;
+};
+
+export type AccountControllerUploadAvatarResponse = AccountControllerUploadAvatarResponses[keyof AccountControllerUploadAvatarResponses];
 
 export type AuthControllerLoginData = {
     body: LoginDto;

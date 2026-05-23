@@ -6,6 +6,7 @@ import {
 } from '../domain/repo/account.repo';
 import { AccountID } from '../domain';
 import { AccountNotFound } from '../application/errors';
+import { InjectUrlResolver, type Resolver } from '@app/storage';
 
 export class FindProfileByAccountIDQuery extends Query<
   Result<{ id: string; nick: string; bio?: string; avatar?: string }, AppError>
@@ -20,6 +21,8 @@ export class FindProfileHandler implements IQueryHandler<FindProfileByAccountIDQ
   constructor(
     @InjectAccountRepository()
     private repo: IAccountRepoistory,
+    @InjectUrlResolver()
+    private resolver: Resolver,
   ) {}
   async execute(
     query: FindProfileByAccountIDQuery,
@@ -38,10 +41,16 @@ export class FindProfileHandler implements IQueryHandler<FindProfileByAccountIDQ
     if (!findResult.value) {
       return err(new AccountNotFound());
     }
+    const url = findResult.value.profile.avatar
+      ? await this.resolver.getUrl(findResult.value.profile.avatar)
+      : ok('');
+    if (isErr(url)) {
+      return url;
+    }
     return ok({
       id: findResult.value.id,
       nick: findResult.value.profile.name,
-      avatar: findResult.value.profile.avatar,
+      avatar: url.value,
       bio: findResult.value.profile.bio,
     });
   }

@@ -5,7 +5,7 @@ import { TreeSelect, UiButton, UiInput } from '@/components/ui';
 import { UiDrawer, UiDrawerContent, UiTiptapEditor } from '@/components/ui';
 import { DrawerHandle } from 'vaul-vue';
 import { useToggle } from '@vueuse/core';
-import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import { useApi, useNestedCategoryTreeData } from '@/composables';
 import type { FlattenNode } from '@/components/ui/tree/tree.prop';
 import { postControllerCreatePost } from '@/api';

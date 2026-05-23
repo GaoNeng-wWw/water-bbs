@@ -19,8 +19,10 @@ import { FindProfileHandler } from './queries/find-profile.query';
 import { CaptchaService } from '@app/captcha/captcha.service';
 import { CAPTCHA_REPOSITORY_TOKEN } from '@app/captcha/domain';
 import { CaptchaRepository } from '@app/captcha/infra';
+import { StorageModule } from '@app/storage';
 
 @Module({
+  imports: [StorageModule],
   controllers: [AccountController],
   providers: [
     MailRegistor,

@@ -9,7 +9,7 @@ const { activeCategory } = storeToRefs(useSiteStore());
 
 <template>
   <div class="w-full flex gap-4">
-    <div class="w-200px h-[calc(100dvh_-_48px)] py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12">
+    <div class="w-250px h-[calc(100dvh_-_48px)] py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12">
       <sidebar />
     </div>
     <div class="grow h-full">

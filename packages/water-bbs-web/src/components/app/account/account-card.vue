@@ -40,13 +40,15 @@ const onClick = () => {
         </div>
       </ui-popover-trigger>
       <ui-popover-content class="w-[--reka-popper-anchor-width] h-fit bg-warm-100 border border-solid border-warm-200 my-2 p-2 rounded" @pointer-down-outside="showProfilePanel = false">
-        <div class="w-full h-fit">
-          <div class="size-16 rounded-full bg-red-500 border-4 border-warm-200" />
-          <p>{{ profile?.username }}</p>
-          <p>{{ profile?.bio }}</p>
-          <div class="w-full py-1.5 px-2 hover:bg-warm-200/50 text-warm-foreground my-2 rounded text-sm cursor-pointer transition">
+        <div class="w-full h-fit space-y-2">
+          <router-link to="/profile/123">
+            <ui-button full size="sm" class="justify-start!">
+              个人中心
+            </ui-button>
+          </router-link>
+          <ui-button full size="sm" class="justify-start!">
             退出登录
-          </div>
+          </ui-button>
         </div>
       </ui-popover-content>
     </ui-popover>

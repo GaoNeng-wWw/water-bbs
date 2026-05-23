@@ -20,7 +20,7 @@ watch(() => accountStore.isLogged, () => {
 </script>
 
 <template>
-  <div class="w-full bg-warm-50">
+  <div class="w-full min-h-dvh bg-warm-50">
     <div class="min-h-full w-full mx-auto gap-0 flex flex-col">
       <app-header />
       <suspense>
