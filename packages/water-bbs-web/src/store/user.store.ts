@@ -4,7 +4,7 @@ import { ref, type Ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
   const profile: Ref<GetProfileResponse | null> = ref(null);
-  const setProfile = (resp: GetProfileResponse) => {
+  const setProfile = (resp: GetProfileResponse | null) => {
     profile.value = resp;
   };
   return { profile, setProfile };

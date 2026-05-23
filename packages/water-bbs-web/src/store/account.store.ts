@@ -8,11 +8,14 @@ export const useAccount = defineStore('account', () => {
     accessToken.value = at;
     refreshToken.value = rt;
   };
+  const logout = () => {
+    setTokenPair('', '');
+  };
   const isLogged = computed(() => !!accessToken.value);
-  return { accessToken, refreshToken, setTokenPair, isLogged };
+  return { accessToken, refreshToken, setTokenPair, isLogged, logout };
 }, {
   persist: {
     storage: localStorage,
-    pick: ['accessToken', 'refreshToken']
+    pick: ['accessToken', 'refreshToken'],
   },
 });

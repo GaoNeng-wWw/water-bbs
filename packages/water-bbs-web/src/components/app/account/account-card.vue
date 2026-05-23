@@ -6,9 +6,15 @@ import RegisterForm from './register-form.vue';
 import { useAccount, useUserStore } from '@/store';
 import { storeToRefs } from 'pinia';
 import { UiPopover, UiPopoverContent, UiPopoverTrigger, UiButton } from '@/components/ui';
+import { authControllerLogout } from '@/api';
+import { NOT_PUBLIC_ENDPOINT } from '@/composables';
+import { useRouter } from 'vue-router';
 
 const { profile } = storeToRefs(useUserStore());
 const { isLogged } = storeToRefs(useAccount());
+const { setProfile } = useUserStore();
+const { logout } = useAccount();
+const router = useRouter();
 const active = ref('');
 const status = ref(false);
 const showProfilePanel = ref(false);
@@ -18,6 +24,16 @@ const onClick = () => {
     return;
   }
   showProfilePanel.value = !showProfilePanel.value;
+};
+const onClickLogout = () => {
+  authControllerLogout({
+    client: NOT_PUBLIC_ENDPOINT,
+  })
+    .finally(() => {
+      logout();
+      setProfile(null);
+      router.replace('/')
+    });
 };
 </script>
 
@@ -46,7 +62,7 @@ const onClick = () => {
               个人中心
             </ui-button>
           </router-link>
-          <ui-button full size="sm" class="justify-start!">
+          <ui-button full size="sm" class="justify-start!" @click="onClickLogout">
             退出登录
           </ui-button>
         </div>

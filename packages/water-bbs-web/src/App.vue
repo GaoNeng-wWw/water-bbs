@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { Toaster } from 'vue-sonner';
+import 'vue-sonner/style.css';
 import { useAccount, useUserStore } from '@/store';
 import { watch } from 'vue';
 import { accountControllerGetProfile } from './api';
@@ -22,6 +24,7 @@ watch(() => accountStore.isLogged, () => {
 <template>
   <div class="w-full min-h-dvh bg-warm-50">
     <div class="min-h-full w-full mx-auto gap-0 flex flex-col">
+      <toaster position="top-center" theme="system" rich-colors />
       <app-header />
       <suspense>
         <router-view />
