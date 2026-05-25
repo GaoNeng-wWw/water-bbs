@@ -9,6 +9,10 @@ import { ref, useTemplateRef } from 'vue';
 import { useApi, useNestedCategoryTreeData } from '@/composables';
 import type { FlattenNode } from '@/components/ui/tree/tree.prop';
 import { postControllerCreatePost } from '@/api';
+import { storeToRefs } from 'pinia';
+import { useAccount } from '@/store';
+
+const { isLogged } = storeToRefs(useAccount());
 
 const [postEditDrawerVisiblity, setVisbility] = useToggle();
 const activeSnapPoint = ref('200px');
@@ -41,7 +45,7 @@ const onClickSend = () => {
 
 <template>
   <div class="w-full h-full py-4 overflow-auto flex flex-col px-4 space-y-8">
-    <div class="w-full h-fit">
+    <div v-if="isLogged" class="w-full h-fit">
       <ui-button full color="primary" shape="solid" rounded="lg" @click="() => setVisbility(true)">
         Publish
       </ui-button>

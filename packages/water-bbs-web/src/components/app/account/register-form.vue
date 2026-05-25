@@ -7,14 +7,13 @@ import z from 'zod';
 const schema = z.object({
   email: z.string(),
   password: z.string(),
-  captcha: z.string(),
-  inviteCode: z.string(),
+  captcha: z.string().optional(),
+  inviteCode: z.string().optional(),
 });
 
 const model = reactive({ email: '', password: '', captcha: '', inviteCode: '', username: '' });
 
 const onClickRegister = () => {
-  console.log(model);
   accountControllerRegister({
     body: {
       username: model.username,
@@ -47,7 +46,7 @@ const onClickRegister = () => {
         <ui-form-item label="Invaite Code" name="inviteCode">
           <ui-input v-model="model.inviteCode" />
         </ui-form-item>
-        <ui-button color="primary" @click="onClickRegister">
+        <ui-button color="primary" html-type="button" @click="onClickRegister">
           Register
         </ui-button>
       </ui-form>

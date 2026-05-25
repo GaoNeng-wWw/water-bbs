@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import loginForm from './login-form.vue';
-import { UiDialog, UiDialogContent, UiTab, UiTabItem } from '@/components/ui';
+import { UiDialog, UiDialogContent, UiTab, UiTabItem, UiAvatar } from '@/components/ui';
 import RegisterForm from './register-form.vue';
 import { useAccount, useUserStore } from '@/store';
 import { storeToRefs } from 'pinia';
@@ -48,9 +48,11 @@ const onClickLogout = () => {
       "
           @click="onClick"
         >
-          <div class="size-10 rounded-full bg-red-500 shrink-0" />
-          <div class="text-warm-foreground min-w-0">
-            <span v-if="!profile">未登录</span>
+          <ui-avatar v-if="profile" :avatar-url="profile?.avatar" :username="profile?.username" size="sm" />
+          <div class="w-full text-warm-foreground min-w-0">
+            <div v-if="!profile" class="w-full flex justify-center">
+              <span>Login</span>
+            </div>
             <span v-else>{{ profile.username }}</span>
           </div>
         </div>
@@ -59,11 +61,11 @@ const onClickLogout = () => {
         <div class="w-full h-fit space-y-2">
           <router-link :to="`/profile/${accountId}`">
             <ui-button full size="sm" class="justify-start!">
-              个人中心
+              Profile
             </ui-button>
           </router-link>
           <ui-button full size="sm" class="justify-start!" @click="onClickLogout">
-            退出登录
+            Logout
           </ui-button>
         </div>
       </ui-popover-content>

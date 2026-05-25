@@ -18,7 +18,7 @@ const {
 }>();
 
 const style = tv({
-  base: 'rounded-full bg-warm-100 border border-solid border-warm-200 data-[editable=true]:cursor-pointer',
+  base: 'rounded-full bg-warm-100 border border-solid border-warm-200 data-[editable=true]:cursor-pointer shrink-0',
   slots: {
     image: 'size-full rounded-full object-cover',
     fallback: 'text-warm-foreground flex size-full items-center justify-center',
@@ -47,10 +47,10 @@ const onClickUpload = () => {
 const onEditorClosed = (data: Blob) => {
   const file = new File([data], 'avatar.png');
   accountControllerUploadAvatar({
-    body: {file},
-    client: NOT_PUBLIC_ENDPOINT
+    body: { file },
+    client: NOT_PUBLIC_ENDPOINT,
   })
-  .then(console.log)
+    .then(console.log);
 };
 
 const onLoadImage = (ev: ProgressEvent<FileReader>) => {
