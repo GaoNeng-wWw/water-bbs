@@ -7,6 +7,7 @@ export const InjectStoreEngine = () => Inject(STORAGE_ENGINE_KEY);
 
 export interface StorageEngine {
   support(fileRef: FileReference): boolean;
+  valid(val: string): boolean;
   put(
     file: Buffer,
     mimeType: string,

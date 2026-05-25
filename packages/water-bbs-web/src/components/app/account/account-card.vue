@@ -11,7 +11,7 @@ import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 import { useRouter } from 'vue-router';
 
 const { profile } = storeToRefs(useUserStore());
-const { isLogged } = storeToRefs(useAccount());
+const { isLogged, accountId } = storeToRefs(useAccount());
 const { setProfile } = useUserStore();
 const { logout } = useAccount();
 const router = useRouter();
@@ -32,7 +32,7 @@ const onClickLogout = () => {
     .finally(() => {
       logout();
       setProfile(null);
-      router.replace('/')
+      router.replace('/');
     });
 };
 </script>
@@ -57,7 +57,7 @@ const onClickLogout = () => {
       </ui-popover-trigger>
       <ui-popover-content class="w-[--reka-popper-anchor-width] h-fit bg-warm-100 border border-solid border-warm-200 my-2 p-2 rounded" @pointer-down-outside="showProfilePanel = false">
         <div class="w-full h-fit space-y-2">
-          <router-link to="/profile/123">
+          <router-link :to="`/profile/${accountId}`">
             <ui-button full size="sm" class="justify-start!">
               个人中心
             </ui-button>

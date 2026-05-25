@@ -58,6 +58,10 @@ export type UpdatePassword = {
     [key: string]: unknown;
 };
 
+export type AvatarUploadDto = {
+    file: Blob | File;
+};
+
 export type UpdateAvatarResponse = {
     [key: string]: unknown;
 };
@@ -266,7 +270,7 @@ export type AccountControllerUpdatePasswordResponses = {
 };
 
 export type AccountControllerUploadAvatarData = {
-    body?: never;
+    body: AvatarUploadDto;
     path?: never;
     query?: never;
     url: '/account/avatar';

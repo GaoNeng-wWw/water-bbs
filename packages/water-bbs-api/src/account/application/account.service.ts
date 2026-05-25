@@ -60,6 +60,8 @@ import {
   type StorageEngine,
 } from '@app/storage';
 import { UpdateAvatarResponse } from '../dto/update-avatar.dto';
+import { ConfigService } from '@nestjs/config';
+import { Configure } from '@app/configure';
 
 @Injectable()
 export class AccountService {
@@ -77,7 +79,8 @@ export class AccountService {
     @InjectUrlResolver()
     private readonly fileUrlResolver: Resolver,
     @InjectStoreEngine()
-    private readonly storage: StorageEngine,
+    private readonly storage: StorageEngine[],
+    private config: ConfigService<Configure>,
   ) {}
 
   async createAccount(
@@ -332,7 +335,13 @@ export class AccountService {
     if (!account) {
       return err(new AccountNotFound());
     }
-    const putResult = await this.storage.put(
+    const storagePolicy = this.config.get('storage').type;
+    console.log(this.config.get('storage')); 
+    const [engine] = this.storage.filter((s) => s.valid(storagePolicy));
+    if (!engine) {
+      // TODO: UNSUPPORTED STORAGE ENGINE
+    }
+    const putResult = await engine.put(
       avatar.buffer,
       avatar.mimetype,
       avatar.originalname || avatar.filename,

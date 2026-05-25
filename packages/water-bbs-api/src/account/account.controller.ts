@@ -21,6 +21,8 @@ import {
 import { GetProfileResponse } from './dto/get-profile.dto';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
@@ -31,6 +33,7 @@ import { UpdatePassword } from './dto/update-password.dto';
 import { AccountID } from './domain';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateAvatarResponse } from './dto/update-avatar.dto';
+import { AvatarUploadDto } from './dto/avatar-upload.dto';
 
 @Controller('account')
 export class AccountController {
@@ -152,6 +155,8 @@ export class AccountController {
 
   @UseModel(UpdateAvatarResponse)
   @ApiCreatedResponse({ type: UpdateAvatarResponse })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: AvatarUploadDto })
   @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('file'))
   @Post('avatar')

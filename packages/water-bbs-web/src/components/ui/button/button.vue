@@ -63,7 +63,6 @@ const style = tv({
   },
 });
 const clazz = computed(() => style(props));
-console.log(clazz.value);
 </script>
 
 <template>

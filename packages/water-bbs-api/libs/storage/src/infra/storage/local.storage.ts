@@ -18,6 +18,9 @@ import { Result, InfrastructureError, ok } from 'water-bbs-shared';
 @Injectable()
 export class LocalStorage implements StorageEngine {
   constructor(private config: ConfigService<Configure, true>) {}
+  valid(val: string): boolean {
+    return val.toLowerCase() === 'local';
+  }
   support(fileRef: FileReference): boolean {
     return fileRef.storageType === 'local';
   }
@@ -30,7 +33,7 @@ export class LocalStorage implements StorageEngine {
     const hash = createHash('sha512').update(file).digest().toString('hex');
     const fileReference = new FileReference(
       hash,
-      fileName,
+      hash,
       size,
       mimeType,
       'local',

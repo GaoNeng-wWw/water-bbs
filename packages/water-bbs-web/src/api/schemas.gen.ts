@@ -150,6 +150,19 @@ export const UpdatePasswordSchema = {
     properties: {}
 } as const;
 
+export const AvatarUploadDtoSchema = {
+    type: 'object',
+    properties: {
+        file: {
+            type: 'string',
+            format: 'binary'
+        }
+    },
+    required: [
+        'file'
+    ]
+} as const;
+
 export const UpdateAvatarResponseSchema = {
     type: 'object',
     properties: {}

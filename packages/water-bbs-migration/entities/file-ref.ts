@@ -2,7 +2,7 @@ import { Embeddable, Property } from "@mikro-orm/decorators/legacy";
 
 @Embeddable()
 export class FileReference {
-  @Property({ type: 'string', index: true, length: 255 })
+  @Property({ type: 'string', length: 255 })
   storageKey: string;
 
   @Property({ type: 'text' })

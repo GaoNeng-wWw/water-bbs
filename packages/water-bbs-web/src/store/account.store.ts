@@ -1,5 +1,16 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { jwtDecode } from 'jwt-decode';
+
+type AccessTokenPayload = {
+  exp: number;
+  iat: number;
+  jti: string;
+  sessionID: string;
+  sub: string;
+  tokenType: string;
+  ttl: number;
+};
 
 export const useAccount = defineStore('account', () => {
   const accessToken = ref('');
@@ -8,11 +19,14 @@ export const useAccount = defineStore('account', () => {
     accessToken.value = at;
     refreshToken.value = rt;
   };
+  const accessTokenPayload = computed(() => accessToken.value ? (jwtDecode<AccessTokenPayload>(accessToken.value)) : null);
+  console.log(accessTokenPayload);
+  const accountId = computed(() => accessTokenPayload.value?.sub);
   const logout = () => {
     setTokenPair('', '');
   };
   const isLogged = computed(() => !!accessToken.value);
-  return { accessToken, refreshToken, setTokenPair, isLogged, logout };
+  return { accessToken, refreshToken, accountId, setTokenPair, isLogged, logout };
 }, {
   persist: {
     storage: localStorage,

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { motion, AnimatePresence, LayoutGroup } from 'motion-v';
+import { motion, AnimatePresence } from 'motion-v';
 import type { DialogContentEmits, DialogContentProps } from 'reka-ui';
 import { DialogContent, DialogOverlay, DialogPortal, useForwardPropsEmits } from 'reka-ui';
 
+type Emits = DialogContentEmits & {
+  finish: [];
+};
+
 const props = defineProps<DialogContentProps>();
-const emits = defineEmits<DialogContentEmits>();
+const emits = defineEmits<Emits>();
 
 const forwarded = useForwardPropsEmits(props, emits);
 </script>
@@ -14,7 +18,7 @@ const forwarded = useForwardPropsEmits(props, emits);
     <dialog-overlay as-child>
       <motion.div class="fixed inset-0 bg-black/50" :initial="{ opacity: 0 }" :animate="{ opacity: 1 }" :exit="{ opacity: 0 }" />
     </dialog-overlay>
-    <animate-presence>
+    <animate-presence @exit-complete="emits('finish')">
       <dialog-content
         v-bind="forwarded"
         as-child

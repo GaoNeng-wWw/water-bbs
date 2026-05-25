@@ -14,6 +14,7 @@ const schema = z.object({
 const model = reactive({ email: '', password: '', captcha: '', inviteCode: '', username: '' });
 
 const onClickRegister = () => {
+  console.log(model);
   accountControllerRegister({
     body: {
       username: model.username,
@@ -38,7 +39,7 @@ const onClickRegister = () => {
           <ui-input v-model="model.email" />
         </ui-form-item>
         <ui-form-item label="Password" name="password" required>
-          <ui-input v-model="model.password" />
+          <ui-input v-model="model.password" password />
         </ui-form-item>
         <ui-form-item label="Captcha" name="captcha">
           <ui-input v-model="model.captcha" />

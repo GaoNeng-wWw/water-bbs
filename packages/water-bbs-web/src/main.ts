@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { router } from './router';
 import './assets/css/style.css';
+import 'vue-advanced-cropper/dist/style.css';
 import 'virtual:uno.css';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';

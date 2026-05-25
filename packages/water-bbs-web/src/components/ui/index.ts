@@ -1,6 +1,6 @@
-import { DialogContent, Dialog, DialogTrigger } from './dialog';
+import { DialogContent, Dialog, DialogTrigger, DialogRenderer } from './dialog';
 
-export { DialogContent as UiDialogContent, Dialog as UiDialog, DialogTrigger as UiDialogTrigger };
+export { DialogContent as UiDialogContent, Dialog as UiDialog, DialogTrigger as UiDialogTrigger, DialogRenderer as UiDialogRenderer };
 
 export * from './form';
 export * from './input';
@@ -13,3 +13,4 @@ export * from './tiptap';
 export { default as TreeSelect } from './tree-select/index.vue';
 export * from './skeleton';
 export * from './paginaton';
+export * from './avatar';
