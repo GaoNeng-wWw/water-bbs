@@ -43,21 +43,20 @@ const onClickLogout = () => {
       <ui-popover-trigger as-child>
         <div
           class="
-        w-full h-fit py-2 px-2 rounded-full min-w-0 flex items-center gap-4 hover:bg-warm-100 cursor-pointer transition duration-default
+        w-full h-fit rounded-full min-w-0 flex items-center gap-4 hover:bg-warm-100 cursor-pointer transition duration-default
         border border-solid hover:border-warm-200 border-transparent
       "
           @click="onClick"
         >
           <ui-avatar v-if="profile" :avatar-url="profile?.avatar" :username="profile?.username" size="sm" />
-          <div class="w-full text-warm-foreground min-w-0">
-            <div v-if="!profile" class="w-full flex justify-center">
+          <div v-else class="w-full text-warm-foreground min-w-0">
+            <div class="w-full flex justify-center">
               <span>Login</span>
             </div>
-            <span v-else>{{ profile.username }}</span>
           </div>
         </div>
       </ui-popover-trigger>
-      <ui-popover-content class="w-[--reka-popper-anchor-width] h-fit bg-warm-100 border border-solid border-warm-200 my-2 p-2 rounded" @pointer-down-outside="showProfilePanel = false">
+      <ui-popover-content class="min-w-fit h-fit bg-warm-100 border border-solid border-warm-200 my-2 p-2 rounded" @pointer-down-outside="showProfilePanel = false">
         <div class="w-full h-fit space-y-2">
           <router-link :to="`/profile/${accountId}`">
             <ui-button full size="sm" class="justify-start!">

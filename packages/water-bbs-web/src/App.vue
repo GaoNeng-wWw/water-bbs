@@ -5,8 +5,7 @@ import { useAccount, useUserStore } from '@/store';
 import { watch } from 'vue';
 import { accountControllerGetProfile } from './api';
 import { NOT_PUBLIC_ENDPOINT } from './composables';
-import AppHeader from './components/app/shell/header.vue';
-import { UiDialogRenderer } from '@/components/ui';
+import { UiDialogRenderer, UiDrawerProvider } from '@/components/ui';
 
 const accountStore = useAccount();
 const userStore = useUserStore();
@@ -27,9 +26,10 @@ watch(() => accountStore.isLogged, () => {
     <div class="min-h-full w-full mx-auto gap-0 flex flex-col">
       <toaster position="top-center" theme="system" rich-colors />
       <ui-dialog-renderer />
-      <app-header />
       <suspense>
-        <router-view />
+        <ui-drawer-provider>
+          <router-view />
+        </ui-drawer-provider>
       </suspense>
     </div>
   </div>

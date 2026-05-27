@@ -17,7 +17,7 @@ watch(data, () => {
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto w-full flex gap-4 pt-8">
+  <div class="max-w-3xl mx-auto w-full flex gap-4 pt-8">
     <ui-avatar :src="avatar" :username="nick" :editable="editable" />
     <div class="grow w-fit flex flex-col h-full overflow-clip text-warm-foreground gap-2">
       <ui-input v-if="editable" v-model="nick" variant="ghost" @blur="() => setField('username', nick)" />

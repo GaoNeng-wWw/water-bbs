@@ -6,6 +6,8 @@ import { useRoute } from 'vue-router';
 import { ProfileContext, ProfileNavBar } from '@/components/app';
 import { useAccountProfile } from '@/composables';
 import type { GetProfileResponse } from '@/api';
+import { ProfileHeader } from '@/components/app/shell';
+import { Layout } from '@/components/ui';
 const emits = defineEmits<{
   update: [GetProfileResponse];
 }>();
@@ -22,9 +24,12 @@ const { profile, patchProfile } = useAccountProfile({
 </script>
 
 <template>
-  <div class="w-full">
-    <profile-context v-model="profile" :editable="editable" @field-update="patchProfile(profile)">
+  <layout>
+    <template #header>
+      <profile-header />
+    </template>
+    <profile-context v-model="profile" class="px-8" :editable="editable" @field-update="patchProfile(profile)">
       <profile-nav-bar />
     </profile-context>
-  </div>
+  </layout>
 </template>

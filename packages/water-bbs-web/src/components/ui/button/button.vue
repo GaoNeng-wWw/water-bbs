@@ -44,7 +44,7 @@ const style = tv({
       true: 'min-w-unset w-full',
     },
     icon: {
-      true: 'aspect-ratio-square p-0',
+      true: 'aspect-ratio-square p-0 size-fit',
     },
     shape: {
       ghost: 'bg-opacity-0! border-none hover:bg-opacity-40!',

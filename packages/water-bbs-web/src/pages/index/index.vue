@@ -1,24 +1,34 @@
 <script lang="ts" setup>
-import { PostList } from '@/components/app';
+import { AnimatePresence, motion } from 'motion-v';
 import Sidebar from '@/components/app/shell/sidebar.vue';
+import { Layout } from '@/components/ui';
 import { useSiteStore } from '@/store/site.store';
 import { storeToRefs } from 'pinia';
+import { HomeHeader } from '@/components/app/shell';
 
-const { activeCategory } = storeToRefs(useSiteStore());
+const siteStore = useSiteStore();
+const { isMobile, sidebarVisbility } = storeToRefs(siteStore);
 </script>
 
 <template>
-  <div class="w-full flex gap-4">
-    <div class="w-250px h-[calc(100dvh_-_48px)] py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12">
-      <sidebar />
-    </div>
-    <div class="grow h-full">
-      <div class="w-full pl-4 mx-auto flex">
-        <div class="w-full grow shrink">
-          <post-list :category-id="activeCategory" />
-        </div>
-        <div class="w-200px h-dvh shrink-0 hidden flex-col lg:flex" />
+  <layout>
+    <template #header>
+      <div class="max-w-[1200px] mx-auto w-full grow">
+        <home-header />
       </div>
+    </template>
+    <div class="max-w-[1200px] mx-auto w-full grow">
+      <animate-presence>
+        <motion.div
+          v-if="sidebarVisbility && !isMobile"
+          class="w-250px overflow-hidden h-[calc(100dvh_-_48px)] py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12"
+          :initial="{ width: '0', opacity: 0 }"
+          :animate="{ width: '250px', opacity: 1 }"
+          :exit="{ width: '0', opacity: 0 }"
+        >
+          <sidebar />
+        </motion.div>
+      </animate-presence>
     </div>
-  </div>
+  </layout>
 </template>

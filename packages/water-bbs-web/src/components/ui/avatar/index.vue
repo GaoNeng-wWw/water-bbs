@@ -113,7 +113,7 @@ watch(() => avatarUrl, () => {
       id="file-upload"
       ref="avatar-upload"
       type="file"
-      class="fixed top-0"
+      class="fixed top-0 hidden"
     >
   </Avatar.Root>
 </template>
