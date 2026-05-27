@@ -1,4 +1,3 @@
-import { UiDrawerContent } from '@/components/ui';
 import { h, markRaw, reactive, type Component } from 'vue';
 
 export type DrawerRenderReturn<T> = {
