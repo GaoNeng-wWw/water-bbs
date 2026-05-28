@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-const {title, id, authorName, createdAt} = defineProps<{
+import { UiAvatar } from '@/components/ui';
+
+const {title, id, authorName, authorId, authorAvatar, createdAt} = defineProps<{
   title: string;
   id: string;
   authorName: string;
-  createdAt: string
+  createdAt: string;
+  authorId: string;
+  authorAvatar: string;
 }>();
 </script>
 
 <template>
   <div class="w-full h-fit py-3 border-b border-warm-200/50 flex gap-2 text-warm-foreground">
-    <div class="size-12 bg-red shrink-0 rounded-full" />
+    <ui-avatar :avatar-url="authorAvatar" :username="authorName" size="sm" />
     <div>
       <router-link
         class="text-base cursor-pointer hover:text-primary-500"

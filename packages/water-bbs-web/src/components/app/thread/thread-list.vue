@@ -72,10 +72,15 @@ onUnmounted(() => {
 <template>
   <div class="w-full mx-auto">
     <div class="w-full h-fit bg-warm-50">
-      <div class="w-full flex items-baseline  mb-5 gap-4">
-        <h1 ref="title" class="text-3xl text-warm-foreground font-bold">
-          {{ title }}
-        </h1>
+      <div class="w-full h-fit flex items-baseline gap-3 border-t border-x border-warm-200/50">
+        <div class="w-full flex gap-3 min-h-16">
+          <div class="w-193px border-r border-warm-200/50 shrink-0 hidden md:block" />
+          <div class="w-full py-3 px-6 md:px-0">
+            <h1 ref="title" class="text-3xl text-warm-foreground font-bold my-auto line-clamp-2">
+              {{ title }}
+            </h1>
+          </div>
+        </div>
       </div>
     </div>
     <div class="w-full flex flex-col">
@@ -83,6 +88,7 @@ onUnmounted(() => {
         v-for="thread in threads"
         :key="thread.id"
         :author-name="thread.author.name"
+        :author-avatar="thread.author.avatar"
         :content="JSON.parse(thread.content)"
         :created-at="thread.createdAt"
         :floor="thread.floor"

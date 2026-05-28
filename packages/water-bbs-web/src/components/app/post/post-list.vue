@@ -54,7 +54,16 @@ const loadMore = useThrottleFn(() => {
 
 <template>
   <div class="w-full h-full">
-    <post-item v-for="data in datas" :id="data.id" :key="data.id" :title="data.title" :author-name="data.author?.name" :created-at="data.createdAt" />
+    <post-item
+      v-for="data in datas"
+      :id="data.id"
+      :key="data.id"
+      :title="data.title"
+      :author-name="data.author?.name"
+      :author-avatar="data.author.avatar ?? ''"
+      :author-id="data.author.id"
+      :created-at="data.createdAt"
+    />
     <div v-element-visibility="loadMore" class="w-full h-px" />
   </div>
 </template>

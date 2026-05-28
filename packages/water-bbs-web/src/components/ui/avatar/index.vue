@@ -25,10 +25,22 @@ const style = tv({
   },
   variants: {
     size: {
-      xs: 'size-8',
-      sm: 'size-12',
-      md: 'size-16',
-      lg: 'size-18',
+      xs: {
+        base: 'size-8',
+        fallback: 'text-xs',
+      },
+      sm: {
+        base: 'size-12',
+        fallback: 'text-sm',
+      },
+      md: {
+        base: 'size-14',
+        fallback: 'text-base',
+      },
+      lg: {
+        base: 'size-18',
+        fallback: 'text-lg'
+      },
     },
   },
 });
@@ -49,7 +61,7 @@ const onEditorClosed = (data: Blob) => {
   accountControllerUploadAvatar({
     body: { file },
     client: NOT_PUBLIC_ENDPOINT,
-  })
+  });
 };
 
 const onLoadImage = (ev: ProgressEvent<FileReader>) => {
@@ -102,7 +114,7 @@ watch(() => avatarUrl, () => {
 </script>
 
 <template>
-  <Avatar.Root :class="clazz.base()" :data-editable="editable ? true : undefined" @click="onClickUpload">
+  <Avatar.Root as="div" :class="clazz.base()" :data-editable="editable ? true : undefined" @click="onClickUpload">
     <Avatar.Image :src="avatarUrl || ''" :class="clazz.image()" />
     <Avatar.Fallback :delay-ms="60" :class="clazz.fallback()" as="div">
       {{ fallback }}
