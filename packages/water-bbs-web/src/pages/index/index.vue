@@ -17,11 +17,11 @@ const { isMobile, sidebarVisbility } = storeToRefs(siteStore);
         <home-header />
       </div>
     </template>
-    <div class="max-w-[1200px] mx-auto w-full grow">
+    <div class="max-w-[1200px] mx-auto w-full grow h-full">
       <animate-presence>
         <motion.div
           v-if="sidebarVisbility && !isMobile"
-          class="w-250px overflow-hidden h-[calc(100dvh_-_48px)] py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12"
+          class="w-250px overflow-hidden h-full py-3 overflow-auto flex-col shrink-0 hidden md:flex border-r border-warm-300 sticky top-12"
           :initial="{ width: '0', opacity: 0 }"
           :animate="{ width: '250px', opacity: 1 }"
           :exit="{ width: '0', opacity: 0 }"

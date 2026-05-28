@@ -22,8 +22,8 @@ watch(() => accountStore.isLogged, () => {
 </script>
 
 <template>
-  <div class="w-full min-h-dvh bg-warm-50">
-    <div class="min-h-full w-full mx-auto gap-0 flex flex-col">
+  <div class="w-full h-dvh bg-warm-50">
+    <div class="h-full w-full mx-auto gap-0 flex flex-col">
       <toaster position="top-center" theme="system" rich-colors />
       <ui-dialog-renderer />
       <suspense>
