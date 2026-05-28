@@ -1,10 +1,13 @@
-import { defineConfig, presetWind4, presetIcons, presetTypography } from 'unocss';
+import { defineConfig, presetWind4, presetIcons, presetTypography, transformerDirectives } from 'unocss';
 
 export default defineConfig({
   presets: [
     presetWind4(),
     presetIcons({ autoInstall: true }),
     presetTypography(),
+  ],
+  transformers: [
+    transformerDirectives(),
   ],
   theme: {
     duration: {

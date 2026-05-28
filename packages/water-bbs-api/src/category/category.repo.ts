@@ -29,7 +29,6 @@ export class CategoryRepo {
         where: {
           parentID: parent,
         },
-        cache: true,
       })
       .then(ok)
       .catch((reason) => err(new PersistenceError(reason)));

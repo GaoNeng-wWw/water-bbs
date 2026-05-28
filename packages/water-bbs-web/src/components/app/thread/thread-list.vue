@@ -73,7 +73,6 @@ onUnmounted(() => {
   <div class="w-full mx-auto">
     <div class="w-full h-fit bg-warm-50">
       <div class="w-full flex items-baseline  mb-5 gap-4">
-        <div class="cursor-pointer size-4 text-warm-foreground i-material-symbols:arrow-back-ios-new" @click="router.back()" />
         <h1 ref="title" class="text-3xl text-warm-foreground font-bold">
           {{ title }}
         </h1>

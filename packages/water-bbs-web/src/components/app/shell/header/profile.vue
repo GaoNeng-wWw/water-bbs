@@ -9,7 +9,7 @@ import Sidebar from '../sidebar.vue';
 
 const siteStore = useSiteStore();
 const screen = useBreakpoints(breakpointsTailwind);
-const {render} = useDrawer();
+const { render } = useDrawer();
 
 const onClickMenuIcon = () => {
   if (!screen.isSmaller('md')) {
@@ -18,8 +18,7 @@ const onClickMenuIcon = () => {
   render(
     h('div', { class: 'w-[200px] h-full overflow-auto' }, [h(Sidebar)]), { direction: 'left' },
   );
-}
-
+};
 </script>
 
 <template>

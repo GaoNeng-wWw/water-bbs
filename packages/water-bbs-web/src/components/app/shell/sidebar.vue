@@ -6,6 +6,9 @@ import { useAccount } from '@/store';
 import { useDrawer } from '@/composables';
 import CreatePostForm from '../post/create-post-form.vue';
 
+const { showCategoryList = false } = defineProps<{
+  showCategoryList?: boolean;
+}>();
 const { isLogged, accountId } = storeToRefs(useAccount());
 const { render } = useDrawer();
 
@@ -31,8 +34,9 @@ const onClickSend = () => {
         </router-link>
       </div>
     </div>
-    <div class="w-full h-auto flex-auto overflow-auto">
-      <category-list />
+    <div v-if="showCategoryList" class="w-full h-auto flex-auto overflow-auto">
+      <p class="text-lg text-warm-foreground">Category</p>
+      <category-list class="px-2" />
     </div>
   </div>
 </template>

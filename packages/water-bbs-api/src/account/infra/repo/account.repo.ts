@@ -85,7 +85,6 @@ export class AccountRepo implements IAccountRepoistory {
       )
       .then(ok)
       .catch((reason) => {
-        console.log(reason);
         return err(new PersistenceError(reason, { reason }));
       });
   }

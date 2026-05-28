@@ -8,7 +8,7 @@ const {title, id, authorName, createdAt} = defineProps<{
 </script>
 
 <template>
-  <div class="w-full h-fit py-3 border-b border-warm-200 flex gap-2 text-warm-foreground">
+  <div class="w-full h-fit py-3 border-b border-warm-200/50 flex gap-2 text-warm-foreground">
     <div class="size-12 bg-red shrink-0 rounded-full" />
     <div>
       <router-link

@@ -13,6 +13,7 @@
   "dependencies": {
     "@hey-api/client-axios": "^0.9.1",
     "@sakhnovkrg/vue-avatar-cropper": "^1.0.2",
+    "@tiptap/markdown": "^3.23.6",
     "@tiptap/pm": "^3.23.4",
     "@tiptap/starter-kit": "^3.23.4",
     "@tiptap/vue-3": "^3.23.4",

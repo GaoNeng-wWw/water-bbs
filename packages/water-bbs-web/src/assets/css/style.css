@@ -163,7 +163,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-      --warm-50:  26, 23, 19;
+  --warm-50:  26, 23, 19;
   --warm-100: 46, 41, 35;
   --warm-200: 79, 72, 64;
   --warm-300: 112, 103, 91;
@@ -240,5 +240,5 @@ body {
   overflow: auto;
 }
 #app {
-  min-height: 100%;
+  height: fit-content;
 }

@@ -12,7 +12,7 @@ onActive((node) => {
 </script>
 
 <template>
-  <div class="w-full px-2">
+  <div class="w-full">
     <ui-collapse>
       <component :is="item" v-for="item in roots" :key="item.key" />
     </ui-collapse>

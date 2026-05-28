@@ -50,7 +50,6 @@ const onEditorClosed = (data: Blob) => {
     body: { file },
     client: NOT_PUBLIC_ENDPOINT,
   })
-    .then(console.log);
 };
 
 const onLoadImage = (ev: ProgressEvent<FileReader>) => {

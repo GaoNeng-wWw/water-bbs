@@ -17,3 +17,4 @@ export * from './skeleton';
 export * from './paginaton';
 export * from './avatar';
 export * from './layout';
+export { default as UiCheckbox } from './checkbox/index.vue';

@@ -20,7 +20,6 @@ export const useAccount = defineStore('account', () => {
     refreshToken.value = rt;
   };
   const accessTokenPayload = computed(() => accessToken.value ? (jwtDecode<AccessTokenPayload>(accessToken.value)) : null);
-  console.log(accessTokenPayload);
   const accountId = computed(() => accessTokenPayload.value?.sub);
   const logout = () => {
     setTokenPair('', '');

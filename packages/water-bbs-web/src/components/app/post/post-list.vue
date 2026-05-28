@@ -20,7 +20,7 @@ const loadData = (preId: string) => {
   postControllerGetPosts({
     client: NOT_PUBLIC_ENDPOINT,
     query: {
-      size: 1000,
+      size: 20,
       preId,
       category: categoryId,
     },

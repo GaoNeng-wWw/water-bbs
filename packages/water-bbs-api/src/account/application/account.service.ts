@@ -336,7 +336,6 @@ export class AccountService {
       return err(new AccountNotFound());
     }
     const storagePolicy = this.config.get('storage').type;
-    console.log(this.config.get('storage')); 
     const [engine] = this.storage.filter((s) => s.valid(storagePolicy));
     if (!engine) {
       // TODO: UNSUPPORTED STORAGE ENGINE

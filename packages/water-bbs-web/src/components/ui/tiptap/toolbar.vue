@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import { UiButton } from '@/components/ui';
+import { UiButton, UiCheckbox } from '@/components/ui';
 import type { Editor } from '@tiptap/vue-3';
-import { ref, type Ref } from 'vue';
+import { inject, ref, type Ref } from 'vue';
+import { EditorContextKey } from './editor.props';
 
-const { editor } = defineProps<{ editor: Editor }>();
+const { editor } = defineProps<{
+  editor: Editor;
+}>();
 
 type Command = {
   icon: string;
@@ -17,6 +20,13 @@ const commands: Ref<Command[]> = ref(
     { icon: 'i-material-symbols:format-quote', isActive: () => editor.isActive('blockquote'), onClick: () => editor.commands.setBlockquote() },
   ],
 );
+
+const source = ref(false);
+const ctx = inject(EditorContextKey)!;
+const onSourceChange = (val: boolean) => {
+  source.value = val;
+  ctx.setSource(val);
+};
 </script>
 
 <template>
@@ -30,6 +40,9 @@ const commands: Ref<Command[]> = ref(
       >
         <div class="size-4 bg-warm-foreground" :class="cmd.icon" />
       </ui-button>
+    </div>
+    <div class="size-fit ml-auto mr-0">
+      <ui-checkbox :model-value="source" label="Code" size="sm" @update:model-value="onSourceChange" />
     </div>
   </div>
 </template>

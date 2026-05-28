@@ -9,12 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import {
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 import {
   CreateCategoryDTO,
   CreateCategoryResponse,

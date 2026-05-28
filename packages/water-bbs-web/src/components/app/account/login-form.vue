@@ -28,7 +28,6 @@ const onClickLogin = () => {
       }
       accountStore.setTokenPair(data.accessToken, data.refreshToken);
     })
-    .catch(reason => console.log(reason));
 };
 </script>
 
