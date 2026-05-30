@@ -20,6 +20,7 @@ import { CaptchaService } from '@app/captcha/captcha.service';
 import { CAPTCHA_REPOSITORY_TOKEN } from '@app/captcha/domain';
 import { CaptchaRepository } from '@app/captcha/infra';
 import { StorageModule } from '@app/storage';
+import { FindProfileBatchQueryHandler } from './queries/find-profile-batch.query';
 
 @Module({
   imports: [StorageModule],
@@ -57,6 +58,7 @@ import { StorageModule } from '@app/storage';
     AccountAliveHandler,
     CheckPasswordHandler,
     FindProfileHandler,
+    FindProfileBatchQueryHandler,
   ],
 })
 export class AccountModule {}

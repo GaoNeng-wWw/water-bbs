@@ -25,6 +25,7 @@ import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
 import { StorageModule } from '@app/storage';
+import { ProposalModule } from './proposal/proposal.module';
 
 @Module({
   imports: [
@@ -96,6 +97,7 @@ import { StorageModule } from '@app/storage';
     AuthModule,
     PostModule,
     CategoryModule,
+    ProposalModule,
   ],
   providers: [
     {

@@ -1,0 +1,52 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+
+export class AuthorProfile {
+  @Expose()
+  id: string;
+  @Expose()
+  name: string;
+  @Expose()
+  avatar?: string;
+  @Expose()
+  bio?: string;
+  constructor(id: string, name: string, avatar?: string, bio?: string) {
+    this.id = id;
+    this.name = name;
+    this.avatar = avatar;
+    this.bio = bio;
+  }
+}
+export class ProposalEntity {
+  @Expose()
+  @ApiProperty()
+  id: string;
+  @Expose()
+  @ApiProperty()
+  author: AuthorProfile;
+  @Expose()
+  @ApiProperty()
+  content: string;
+  @Expose()
+  @ApiProperty({ description: '支持方占比' })
+  yes: number;
+  @Expose()
+  @ApiProperty({ description: '反对方占比' })
+  no: number;
+  constructor(
+    id: string,
+    author: AuthorProfile,
+    content: string,
+    yes: number,
+    no: number,
+  ) {
+    this.id = id;
+    this.content = content;
+    this.yes = yes;
+    this.no = no;
+    this.author = author;
+    this.content = content;
+    this.yes = yes;
+    this.no = no;
+  }
+}

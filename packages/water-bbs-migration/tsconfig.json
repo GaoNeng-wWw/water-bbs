@@ -13,7 +13,8 @@
     "paths": {
       "water-bbs-shared": ["./node_modules/water-bbs-shared/src"],
       "water-bbs-shared/*": ["./node_modules/water-bbs-shared/src/*"],
-    }
+    },
+    "strictPropertyInitialization": false,
   },
   "include": ["migrations/**/*.ts", "entities/index.ts", "entities/**/*.ts"],
   "exclude": ["node_modules", "dist"]
