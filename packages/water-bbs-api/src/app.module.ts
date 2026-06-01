@@ -8,7 +8,10 @@ import {
   Ident,
   Permission,
   Post,
+  Proposals,
   Role,
+  Vote,
+  VoteSlot,
 } from 'water-bbs-migration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SingleNode, yaml } from '@app/configure';
@@ -26,6 +29,7 @@ import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
 import { StorageModule } from '@app/storage';
 import { ProposalModule } from './proposal/proposal.module';
+import { VoteModule } from './vote/vote.module';
 
 @Module({
   imports: [
@@ -39,7 +43,18 @@ import { ProposalModule } from './proposal/proposal.module';
       useFactory: (configService: ConfigService) => {
         return {
           driver: MySqlDriver,
-          entities: [Account, Cert, Ident, Permission, Role, Post, Category],
+          entities: [
+            Account,
+            Cert,
+            Ident,
+            Permission,
+            Role,
+            Post,
+            Category,
+            Proposals,
+            Vote,
+            VoteSlot,
+          ],
           host: configService.get('database.host'),
           port: configService.get('database.port'),
           user: configService.get('database.username'),
@@ -98,6 +113,7 @@ import { ProposalModule } from './proposal/proposal.module';
     PostModule,
     CategoryModule,
     ProposalModule,
+    VoteModule,
   ],
   providers: [
     {

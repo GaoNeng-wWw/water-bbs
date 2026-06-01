@@ -1,5 +1,5 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/mysql';
+import { EntityManager } from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/mysql';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import { Proposals } from 'water-bbs-migration';

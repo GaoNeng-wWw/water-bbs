@@ -103,14 +103,19 @@ export class Vote extends BaseMetaEntity {
     this.action=action;
     this.comment=comment;
   }
-  static create(proposal: Proposals, accountId: string, action: VoteAction, comment?: string){
-    return new Vote(v7(), proposal.id, accountId, action, comment || '');
+  static create(
+    proposalId: string,
+    accountId: string,
+    action: VoteAction,
+    comment?: string
+  ){
+    return new Vote(v7(), proposalId, accountId, action, comment || '');
   }
 }
 
 @Entity()
 export class VoteSlot {
-  @Property({type:'uuid', default: v7()})
+  @PrimaryKey({ type: 'uuid', default: v7() })
   id: string;
   @Property({type: 'uuid'})
   voteId: string;
@@ -120,23 +125,31 @@ export class VoteSlot {
   slot: number;
   @Property({type: 'int'})
   cnt: number = 0;
+  @Enum(() => VoteAction)
+  action: VoteAction;
 
   constructor(
     voteId: string,
     proposalId: string,
     slot: number,
+    action: VoteAction,
   ){
     this.voteId=voteId;
     this.proposalId=proposalId;
     this.slot=slot;
+    this.action = action
   }
 
   static create(
     voteId: string,
     proposalId: string,
     slot: number,
+    action: VoteAction,
   ){
-    return new VoteSlot(voteId, proposalId, slot);
+    return new VoteSlot(voteId, proposalId, slot, action);
+  }
+  static getSlots(){
+    return Math.floor(Math.random() * 32 );
   }
 }
 
