@@ -1,11 +1,16 @@
+import { IAction } from '@app/workflow';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsObject, IsString } from 'class-validator';
 
-export class Action {
+export class Action implements IAction {
   @IsNotEmpty()
   @IsString()
+  @ApiProperty()
   public type: string;
   @IsObject()
+  @ApiProperty()
   public args: Record<string, any>;
   @IsArray({ each: true })
+  @ApiProperty({type: [Action]})
   public children: Action[];
 }

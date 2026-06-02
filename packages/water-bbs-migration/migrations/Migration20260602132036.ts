@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20260529063554 extends Migration {
+export class Migration20260602132036 extends Migration {
 
   override up(): void | Promise<void> {
     this.addSql(`create table \`category\` (\`id\` varchar(36) not null, \`created_at\` datetime not null default current_timestamp, \`updated_at\` datetime null, \`removed_at\` datetime null, \`name\` char(255) not null, \`parent_id\` varchar(36) null, primary key (\`id\`)) default character set utf8mb4 engine = InnoDB;`);
@@ -17,7 +17,7 @@ export class Migration20260529063554 extends Migration {
     this.addSql(`alter table \`post\` add index \`post_created_at_index\` (\`created_at\`);`);
     this.addSql(`alter table \`post\` add index \`post_removed_at_index\` (\`removed_at\`);`);
 
-    this.addSql(`create table \`proposals\` (\`id\` varchar(36) not null default '019e7272-5013-70ff-8529-ba8934dc735d', \`created_at\` datetime not null default current_timestamp, \`updated_at\` datetime null, \`removed_at\` datetime null, \`author_id\` varchar(36) not null, \`command\` text not null, \`start_at\` datetime not null, \`end_at\` datetime not null, \`status\` enum('active','passed','rejected','executed','cancelled') not null default 'active', \`approval_percent\` numeric(5,2) not null default 50, primary key (\`id\`)) default character set utf8mb4 engine = InnoDB;`);
+    this.addSql(`create table \`proposals\` (\`id\` varchar(36) not null default '019e887e-41e8-75df-bc2a-f20785b7cdc8', \`created_at\` datetime not null default current_timestamp, \`updated_at\` datetime null, \`removed_at\` datetime null, \`author_id\` varchar(36) not null, \`content\` text not null default (''), \`command\` text not null, \`start_at\` datetime not null, \`end_at\` datetime not null, \`status\` enum('active','passed','rejected','executed','cancelled') not null default 'active', \`approval_percent\` numeric(5,2) not null default 50, \`reason\` text not null default (''), \`executor_id\` text not null default (''), primary key (\`id\`)) default character set utf8mb4 engine = InnoDB;`);
     this.addSql(`alter table \`proposals\` add index \`proposals_created_at_index\` (\`created_at\`);`);
     this.addSql(`alter table \`proposals\` add index \`proposals_removed_at_index\` (\`removed_at\`);`);
     this.addSql(`alter table \`proposals\` add index \`proposals_author_id_index\` (\`author_id\`);`);
@@ -62,12 +62,14 @@ export class Migration20260529063554 extends Migration {
     this.addSql(`alter table \`reply\` add index \`reply_thread_id_index\` (\`thread_id\`);`);
     this.addSql(`alter table \`reply\` add index \`reply_parent_id_index\` (\`parent_id\`);`);
 
-    this.addSql(`create table \`vote\` (\`id\` varchar(36) not null default '019e7272-5014-7110-9303-119f5cc266ed', \`created_at\` datetime not null default current_timestamp, \`updated_at\` datetime null, \`removed_at\` datetime null, \`proposal_id\` varchar(36) not null, \`account_id\` varchar(36) not null, \`action\` enum('yes','no') not null, \`comment\` text not null default (''), primary key (\`id\`)) default character set utf8mb4 engine = InnoDB;`);
+    this.addSql(`create table \`vote\` (\`id\` varchar(36) not null default '019e887e-41e9-7683-85ad-d37c5c84c184', \`created_at\` datetime not null default current_timestamp, \`updated_at\` datetime null, \`removed_at\` datetime null, \`proposal_id\` varchar(36) not null, \`account_id\` varchar(36) not null, \`action\` enum('yes','no') not null, \`comment\` text not null default (''), primary key (\`id\`)) default character set utf8mb4 engine = InnoDB;`);
     this.addSql(`alter table \`vote\` add index \`vote_created_at_index\` (\`created_at\`);`);
     this.addSql(`alter table \`vote\` add index \`vote_removed_at_index\` (\`removed_at\`);`);
     this.addSql(`alter table \`vote\` add index \`vote_proposal_id_index\` (\`proposal_id\`);`);
     this.addSql(`alter table \`vote\` add index \`vote_account_id_index\` (\`account_id\`);`);
     this.addSql(`alter table \`vote\` add unique \`vote_proposal_id_account_id_unique\` (\`proposal_id\`, \`account_id\`);`);
+
+    this.addSql(`create table \`vote_slot\` (\`id\` varchar(36) not null default '019e887e-41e9-7683-85ad-d437a196108c', \`vote_id\` varchar(36) not null, \`proposal_id\` varchar(36) not null, \`slot\` int not null, \`cnt\` int not null default 0, \`action\` enum('yes','no') not null, primary key (\`id\`)) default character set utf8mb4 engine = InnoDB;`);
 
     this.addSql(`alter table \`account\` add constraint \`account_role_id_foreign\` foreign key (\`role_id\`) references \`role\` (\`id\`) on delete set null;`);
 
@@ -110,6 +112,7 @@ export class Migration20260529063554 extends Migration {
     this.addSql(`drop table if exists \`thread\`;`);
     this.addSql(`drop table if exists \`reply\`;`);
     this.addSql(`drop table if exists \`vote\`;`);
+    this.addSql(`drop table if exists \`vote_slot\`;`);
   }
 
 }

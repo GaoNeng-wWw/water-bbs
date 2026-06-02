@@ -46,6 +46,12 @@
       "@app/storage/*": [
         "libs/storage/src/*"
       ],
+      "@app/workflow": [
+        "libs/workflow/src"
+      ],
+      "@app/workflow/*": [
+        "libs/workflow/src/*"
+      ],
       "water-bbs-migration": [
         "./node_modules/water-bbs-migration/entities"
       ],

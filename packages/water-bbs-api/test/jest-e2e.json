@@ -14,6 +14,7 @@
     "^@app/captcha(|/.*)$": "<rootDir>/../libs/captcha/src/$1",
     "^@app/configure(|/.*)$": "<rootDir>/../libs/configure/src/$1",
     "^@app/shared(|/.*)$": "<rootDir>/../libs/shared/src/$1",
-    "^@app/storage(|/.*)$": "<rootDir>/../libs/storage/src/$1"
+    "^@app/storage(|/.*)$": "<rootDir>/../libs/storage/src/$1",
+    "^@app/workflow(|/.*)$": "<rootDir>/../libs/workflow/src/$1"
   }
 }

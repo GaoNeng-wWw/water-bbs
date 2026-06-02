@@ -30,6 +30,8 @@ import { CategoryModule } from './category/category.module';
 import { StorageModule } from '@app/storage';
 import { ProposalModule } from './proposal/proposal.module';
 import { VoteModule } from './vote/vote.module';
+import { ScheduleModule } from '@nestjs/schedule';
+
 
 @Module({
   imports: [
@@ -114,6 +116,7 @@ import { VoteModule } from './vote/vote.module';
     CategoryModule,
     ProposalModule,
     VoteModule,
+    ScheduleModule.forRoot()
   ],
   providers: [
     {

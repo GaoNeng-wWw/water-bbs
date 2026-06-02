@@ -3,12 +3,16 @@ import { Expose } from 'class-transformer';
 
 export class AuthorProfile {
   @Expose()
+  @ApiProperty()
   id: string;
   @Expose()
+  @ApiProperty()
   name: string;
   @Expose()
+  @ApiProperty()
   avatar?: string;
   @Expose()
+  @ApiProperty()
   bio?: string;
   constructor(id: string, name: string, avatar?: string, bio?: string) {
     this.id = id;

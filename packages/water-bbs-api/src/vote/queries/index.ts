@@ -1,2 +1,5 @@
-export { GetVoteCountHandler } from './get-vote-counts.query';
-export { ListVoteHandler } from './list-votes.query';
+export {
+  GetVoteCountHandler,
+  GetVoteCountQuery,
+} from './get-vote-counts.query';
+export { ListVoteHandler, ListVoteQuery } from './list-votes.query';

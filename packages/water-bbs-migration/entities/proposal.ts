@@ -1,4 +1,5 @@
 import { Entity, Enum, PrimaryKey, Property, Unique } from "@mikro-orm/decorators/legacy";
+import { DomainError, err, ok } from 'water-bbs-shared';
 import { v7 } from "uuid";
 import { BaseMetaEntity } from "./meta";
 
@@ -22,7 +23,7 @@ export class Proposals extends BaseMetaEntity {
 
   @Property({ index: true, type: 'uuid' })
   authorId: string;
-  @Property({ index: true, type: 'text', default: ''})
+  @Property({ type: 'text', default: ''})
   content: string;
 
   // 序列化后的JSON
@@ -41,6 +42,12 @@ export class Proposals extends BaseMetaEntity {
   @Property({ type: 'decimal', precision: 5, scale: 2, default: 50.00 })
   approvalPercent: number;
 
+  @Property({ type: 'text', default: ''})
+  reason: string;
+
+  @Property({ type: 'text', default: ''})
+  executor_id: string;
+
   constructor(
     id: string,
     authorId: string,
@@ -58,6 +65,38 @@ export class Proposals extends BaseMetaEntity {
     this.endAt=endAt;
   }
 
+  run(){
+    if (this.status !== ProposalStatus.Active){
+      return err(new DomainError('PROPOSAL_IS_NOT_ACTIVE'));
+    }
+    this.status = ProposalStatus.Executed;
+    return ok(true);
+  }
+  done(){
+    if (this.status !== ProposalStatus.Executed){
+      return err(new DomainError('PROPOSAL_IS_NOT_EXECUTED'));
+    }
+    this.status = ProposalStatus.Passed;
+    return ok(true);
+  }
+  reject(executor_id?: string, reason?: string){
+    if (this.status !== ProposalStatus.Executed){
+      return err(new DomainError('PROPOSAL_IS_NOT_EXECUTED'));
+    }
+    this.status = ProposalStatus.Rejected;
+    this.reason = reason || '';
+    this.executor_id = executor_id ?? '';
+    return ok(true);
+  }
+  cancel(executor_id: string, reason?: string){
+    if (this.status !== ProposalStatus.Executed){
+      return err(new DomainError('PROPOSAL_IS_NOT_EXECUTED'));
+    }
+    this.status = ProposalStatus.Cancelled;
+    this.reason = reason || '';
+    this.executor_id = executor_id;
+    return ok(true);
+  }
   static create(
     authorId: string,
     comment: string,
