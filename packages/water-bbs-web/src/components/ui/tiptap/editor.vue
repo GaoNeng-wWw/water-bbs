@@ -7,7 +7,7 @@ import { provide, ref } from 'vue';
 import { EditorContextKey } from './editor.props.ts';
 
 const { content, readonly } = defineProps<{
-  content?: object;
+  content?: object | string;
   readonly?: boolean;
   wysiwyg?: boolean;
 }>();

@@ -38,6 +38,7 @@ declare module 'vue-router/auto-routes' {
       | '//'
       | '//post/[id]'
       | '//profile/[id]'
+      | '//proposal/'
     >,
     '//': RouteRecordInfo<
       '//',
@@ -60,6 +61,13 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '//proposal/': RouteRecordInfo<
+      '//proposal/',
+      '/proposal',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
   }
 
   /**
@@ -79,6 +87,7 @@ declare module 'vue-router/auto-routes' {
         | '//'
         | '//post/[id]'
         | '//profile/[id]'
+        | '//proposal/'
       views:
         | 'default'
     }
@@ -97,6 +106,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/profile/[id].vue': {
       routes:
         | '//profile/[id]'
+      views:
+        | never
+    }
+    'src/pages/index/proposal/index.vue': {
+      routes:
+        | '//proposal/'
       views:
         | never
     }
