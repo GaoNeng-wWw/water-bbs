@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ActionHandler, InjectActionHandler } from './action-handler.interface';
+import { IActionHandler, InjectActionHandler } from './action-handler.interface';
 import { IAction } from './action';
 import { DomainError, Err, err, isErr, Result } from 'water-bbs-shared';
 import { CanNotFoundHandlerError } from '../errors/can-not-found-handler';
@@ -9,7 +9,7 @@ import { ValidateFailError } from '../errors/validate-fail';
 export class WorkflowRunner {
   constructor(
     @InjectActionHandler()
-    private handlers: ActionHandler[] = [],
+    private handlers: IActionHandler[] = [],
   ) {}
   async execute<T>(
     action: IAction,

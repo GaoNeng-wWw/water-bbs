@@ -1,6 +1,6 @@
 import { defineConfig } from '@mikro-orm/mysql';
 import * as dotenv from 'dotenv';
-import { Account, Ident, Cert, Permission, Role, Profile, Post, Thread, Reply, Category, FileReference, Proposals, Vote, VoteSlot } from './entities';
+import { Account, Ident, Cert, Permission, Role, Profile, Post, Thread, Reply, Category, FileReference, Proposals, Vote, VoteSlot, Action } from './entities';
 
 
 import { Migrator } from '@mikro-orm/migrations';
@@ -28,7 +28,7 @@ export default defineConfig({
         Role,
         Profile,
         Post, Thread, Reply, Category, FileReference,
-        Proposals, Vote, VoteSlot
+        Proposals, Vote, VoteSlot, Action
     ],
     debug: true,
 })

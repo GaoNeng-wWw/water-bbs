@@ -5,3 +5,4 @@ export { Category } from './categories';
 export { Thread, Post, Reply } from './post';
 export { FileReference } from './file-ref';
 export { Proposals, ProposalStatus, Vote, VoteAction, VoteSlot } from './proposal';
+export { Action } from './action';

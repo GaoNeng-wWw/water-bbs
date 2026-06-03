@@ -3,6 +3,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { MySqlDriver } from '@mikro-orm/mysql';
 import {
   Account,
+  Action,
   Category,
   Cert,
   Ident,
@@ -27,11 +28,10 @@ import { ResultInterceptor } from '@app/shared/interceptor';
 import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
-import { StorageModule } from '@app/storage';
 import { ProposalModule } from './proposal/proposal.module';
 import { VoteModule } from './vote/vote.module';
 import { ScheduleModule } from '@nestjs/schedule';
-
+import { WorkflowModule, WorkflowService } from '@app/workflow';
 
 @Module({
   imports: [
@@ -56,6 +56,7 @@ import { ScheduleModule } from '@nestjs/schedule';
             Proposals,
             Vote,
             VoteSlot,
+            Action,
           ],
           host: configService.get('database.host'),
           port: configService.get('database.port'),
@@ -110,13 +111,26 @@ import { ScheduleModule } from '@nestjs/schedule';
       global: true,
       secretOrPrivateKey: 'tset-secret',
     }),
+    WorkflowModule.forRootAsync({
+      inject: [WorkflowService],
+      useFactory: (workflowService: WorkflowService) => {
+        return {
+          onDisocver(name, schema) {
+            if (!schema) {
+              return Promise.resolve();
+            }
+            return workflowService.save(name, schema);
+          },
+        };
+      },
+    }),
     AccountModule,
     AuthModule,
     PostModule,
     CategoryModule,
     ProposalModule,
     VoteModule,
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
   ],
   providers: [
     {

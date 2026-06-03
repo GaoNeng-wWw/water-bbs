@@ -1,8 +1,51 @@
-import { Module } from '@nestjs/common';
+import {
+  ConfigurableModuleBuilder,
+  Inject,
+  Logger,
+  Module,
+  OnModuleInit,
+} from '@nestjs/common';
 import { WorkflowService } from './workflow.service';
+import { ZodType } from 'zod';
+import { DiscoveryModule, DiscoveryService, Reflector } from '@nestjs/core';
+import { ActionHandlerKey } from './action-handler.decorator';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Action } from 'water-bbs-migration';
+
+export interface WorkflowOptions {
+  onDisocver(name: string, schema?: ZodType): Promise<any>;
+}
+
+export const { MODULE_OPTIONS_TOKEN, ConfigurableModuleClass } =
+  new ConfigurableModuleBuilder<WorkflowOptions>()
+    .setClassMethodName('forRoot')
+    .build();
 
 @Module({
+  imports: [DiscoveryModule, MikroOrmModule.forFeature([Action])],
   providers: [WorkflowService],
   exports: [WorkflowService],
 })
-export class WorkflowModule {}
+export class WorkflowModule
+  extends ConfigurableModuleClass
+  implements OnModuleInit
+{
+  private readonly logger = new Logger('workflow');
+  constructor(
+    private readonly discoveryService: DiscoveryService,
+    private readonly reflector: Reflector,
+    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: WorkflowOptions,
+  ) {
+    super();
+  }
+  async onModuleInit() {
+    const providers = this.discoveryService.getProviders();
+    for (const provider of providers) {
+      const { metatype, instance } = provider;
+      if (metatype && this.reflector.get(ActionHandlerKey, metatype)) {
+        this.logger.log(`Discovered ${metatype.name}`);
+        await this.options.onDisocver(metatype.name, instance['schema']);
+      }
+    }
+  }
+}

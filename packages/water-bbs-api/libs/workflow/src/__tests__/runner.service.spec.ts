@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { WorkflowRunner } from '../domain';
 import {
   ACTION_HANDLER,
-  ActionHandler,
+  IActionHandler,
 } from '../domain/action-handler.interface';
 import { vi } from 'vitest';
 import { DomainError, err, isErr, ok } from 'water-bbs-shared';
@@ -18,7 +18,7 @@ class MockError extends DomainError {
 describe('WorkflowRunner', () => {
   let service: WorkflowRunner;
 
-  const mockAction: ActionHandler = {
+  const mockAction: IActionHandler = {
     name: 'mock',
     validate: vi.fn(),
     run: vi.fn().mockReturnValue(ok(true)),
@@ -71,7 +71,7 @@ describe('WorkflowRunner', () => {
       expect(res.error).toBeInstanceOf(CanNotFoundHandlerError);
     }
   });
-  it.only('Run', async () => {
+  it('Run', async () => {
     mockAction.validate = vi.fn().mockReturnValue({
       ok: true,
       error: null,
@@ -156,7 +156,7 @@ describe('WorkflowRunner', () => {
   });
 
   it('Execute with multiple handlers', async () => {
-    const mockAction2: ActionHandler = {
+    const mockAction2 = {
       name: 'mock2',
       validate: vi.fn().mockReturnValue({
         ok: true,
