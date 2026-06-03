@@ -5,6 +5,8 @@ import {
 } from '../domain/repo/account.repo';
 import { IdentEnum } from 'water-bbs-migration';
 import { isErr, ok, PersistenceError, Result } from 'water-bbs-shared';
+import { RedisService } from '@liaoliaots/nestjs-redis';
+import Redis from 'ioredis';
 export class AccountAliveQuery extends Query<
   Result<
     { alive: false } | { alive: true; accountID: string },
@@ -22,10 +24,14 @@ export class AccountAliveQuery extends Query<
 
 @QueryHandler(AccountAliveQuery)
 export class AccountAliveHandler implements IQueryHandler<AccountAliveQuery> {
+  private readonly redis: Redis;
   constructor(
     @InjectAccountRepository()
     private repository: IAccountRepoistory,
-  ) {}
+    redisService: RedisService,
+  ) {
+    this.redis = redisService.getOrThrow();
+  }
 
   async execute(query: AccountAliveQuery) {
     const accountRes = await this.repository.findByIdentValue(
@@ -39,6 +45,11 @@ export class AccountAliveHandler implements IQueryHandler<AccountAliveQuery> {
     if (!account || account.removedAt) {
       return ok({ alive: false } as const);
     }
+
+    if (await this.redis.exists(`ban:${account.id}`)) {
+      return ok({ alive: false } as const);
+    }
+
     return ok({
       alive: true,
       accountID: account.id,
