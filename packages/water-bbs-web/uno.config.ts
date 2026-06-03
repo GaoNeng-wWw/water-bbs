@@ -17,18 +17,18 @@ export default defineConfig({
     },
     colors: {
       warm: {
-        50: 'rgb(var(--warm-50))',
-        100: 'rgb(var(--warm-100))',
-        200: 'rgb(var(--warm-200))',
-        300: 'rgb(var(--warm-300))',
-        400: 'rgb(var(--warm-400))',
-        500: 'rgb(var(--warm-500))',
-        600: 'rgb(var(--warm-600))',
-        700: 'rgb(var(--warm-700))',
-        800: 'rgb(var(--warm-800))',
-        900: 'rgb(var(--warm-900))',
-        950: 'rgb(var(--warm-950))',
-        foreground: 'rgb(var(--warm-foreground))',
+        50: 'var(--warm-50)',
+        100: 'var(--warm-100)',
+        200: 'var(--warm-200)',
+        300: 'var(--warm-300)',
+        400: 'var(--warm-400)',
+        500: 'var(--warm-500)',
+        600: 'var(--warm-600)',
+        700: 'var(--warm-700)',
+        800: 'var(--warm-800)',
+        900: 'var(--warm-900)',
+        950: 'var(--warm-950)',
+        foreground: 'var(--warm-foreground)',
       },
       primary: {
         50: 'var(--primary-50)',
@@ -89,5 +89,5 @@ export default defineConfig({
     },
   },
 
-  safelist: ['hover:bg-warm-200', 'rotate-90', 'rotate-0', 'pl-2', 'pl-4', 'bg-warm-200/50', 'bg-warm-200/30'],
+  safelist: ['hover:bg-warm-200', 'rotate-90', 'rotate-0', 'pl-2', 'pl-4', 'bg-warm-200/50', 'bg-warm-200/30', 'bg-warm-100'],
 });

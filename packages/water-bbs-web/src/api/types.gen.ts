@@ -180,6 +180,48 @@ export type CategorySummary = {
     hasChildren: boolean;
 };
 
+export type ProposalSummary = {
+    id: string;
+    title: string;
+};
+
+export type AuthorProfile = {
+    id: string;
+    name: string;
+    avatar: string;
+    bio: string;
+};
+
+export type ProposalEntity = {
+    id: string;
+    author: AuthorProfile;
+    content: string;
+    /**
+     * 支持方占比
+     */
+    yes: number;
+    /**
+     * 反对方占比
+     */
+    no: number;
+};
+
+export type Action = {
+    type: string;
+    args: {
+        [key: string]: unknown;
+    };
+    children: Array<Action>;
+};
+
+export type CreateProposal = {
+    workflows: Action;
+};
+
+export type CreateProposalResponse = {
+    id: string;
+};
+
 export type AccountControllerGetProfileData = {
     body?: never;
     path?: never;
@@ -515,3 +557,49 @@ export type CategoryControllerUpdateCategoryResponses = {
 };
 
 export type CategoryControllerUpdateCategoryResponse = CategoryControllerUpdateCategoryResponses[keyof CategoryControllerUpdateCategoryResponses];
+
+export type ProposalControllerListProposalData = {
+    body?: never;
+    path?: never;
+    query: {
+        page: number;
+        size: number;
+    };
+    url: '/proposal';
+};
+
+export type ProposalControllerListProposalResponses = {
+    200: Pagination & {
+        data?: Array<ProposalSummary>;
+    };
+};
+
+export type ProposalControllerListProposalResponse = ProposalControllerListProposalResponses[keyof ProposalControllerListProposalResponses];
+
+export type ProposalControllerCreateProposalData = {
+    body: CreateProposal;
+    path?: never;
+    query?: never;
+    url: '/proposal';
+};
+
+export type ProposalControllerCreateProposalResponses = {
+    201: CreateProposalResponse;
+};
+
+export type ProposalControllerCreateProposalResponse = ProposalControllerCreateProposalResponses[keyof ProposalControllerCreateProposalResponses];
+
+export type ProposalControllerGetProposalData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/proposal/{id}';
+};
+
+export type ProposalControllerGetProposalResponses = {
+    200: ProposalEntity;
+};
+
+export type ProposalControllerGetProposalResponse = ProposalControllerGetProposalResponses[keyof ProposalControllerGetProposalResponses];

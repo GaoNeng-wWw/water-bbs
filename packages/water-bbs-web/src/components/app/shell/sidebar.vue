@@ -29,7 +29,7 @@ const onClickSend = () => {
         <router-link exact-active-class="text-primary-500 font-bold" to="/">
           Home
         </router-link>
-        <router-link exact-active-class="text-primary-500 font-bold" :to="`/profile/${accountId}`">
+        <router-link v-if="isLogged" exact-active-class="text-primary-500 font-bold" :to="`/profile/${accountId}`">
           Profile
         </router-link>
       </div>

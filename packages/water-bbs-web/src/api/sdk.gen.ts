@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses } from './types.gen';
+import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -181,4 +181,35 @@ export const categoryControllerUpdateCategory = <ThrowOnError extends boolean = 
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * 获取提案列表
+ */
+export const proposalControllerListProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerListProposalData, ThrowOnError>) => (options.client ?? client).get<ProposalControllerListProposalResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal',
+    ...options
+});
+
+/**
+ * 创建提案
+ */
+export const proposalControllerCreateProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerCreateProposalData, ThrowOnError>) => (options.client ?? client).post<ProposalControllerCreateProposalResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * 获取提案详情
+ */
+export const proposalControllerGetProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerGetProposalData, ThrowOnError>) => (options.client ?? client).get<ProposalControllerGetProposalResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal/{id}',
+    ...options
 });

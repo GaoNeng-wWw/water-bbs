@@ -48,11 +48,9 @@ const onClickLogout = () => {
       "
           @click="onClick"
         >
-          <ui-avatar v-if="profile" :avatar-url="profile?.avatar" :username="profile?.username" size="sm" />
-          <div v-else class="w-full text-warm-foreground min-w-0">
-            <div class="w-full flex justify-center">
-              <span>Login</span>
-            </div>
+          <ui-avatar v-if="profile" :avatar-url="profile?.avatar" :username="profile?.username" size="xs" />
+          <div v-else class="size-8">
+            <div class="size-full text-warm-foreground i-material-symbols:person" />
           </div>
         </div>
       </ui-popover-trigger>
@@ -69,7 +67,8 @@ const onClickLogout = () => {
         </div>
       </ui-popover-content>
     </ui-popover>
-    <ui-dialog :open="status">
+    <!-- eslint-disable-next-line vue/no-v-model-argument -->
+    <ui-dialog v-model:open="status">
       <ui-dialog-content>
         <ui-tab v-model="active">
           <ui-tab-item id="login" label="Login">

@@ -496,3 +496,120 @@ export const CategorySummarySchema = {
         'hasChildren'
     ]
 } as const;
+
+export const ProposalSummarySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        title: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'title'
+    ]
+} as const;
+
+export const AuthorProfileSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        },
+        avatar: {
+            type: 'string'
+        },
+        bio: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'avatar',
+        'bio'
+    ]
+} as const;
+
+export const ProposalEntitySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        author: {
+            $ref: '#/components/schemas/AuthorProfile'
+        },
+        content: {
+            type: 'string'
+        },
+        yes: {
+            type: 'number',
+            description: '支持方占比'
+        },
+        no: {
+            type: 'number',
+            description: '反对方占比'
+        }
+    },
+    required: [
+        'id',
+        'author',
+        'content',
+        'yes',
+        'no'
+    ]
+} as const;
+
+export const ActionSchema = {
+    type: 'object',
+    properties: {
+        type: {
+            type: 'string'
+        },
+        args: {
+            type: 'object'
+        },
+        children: {
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/Action'
+            }
+        }
+    },
+    required: [
+        'type',
+        'args',
+        'children'
+    ]
+} as const;
+
+export const CreateProposalSchema = {
+    type: 'object',
+    properties: {
+        workflows: {
+            $ref: '#/components/schemas/Action'
+        }
+    },
+    required: [
+        'workflows'
+    ]
+} as const;
+
+export const CreateProposalResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
