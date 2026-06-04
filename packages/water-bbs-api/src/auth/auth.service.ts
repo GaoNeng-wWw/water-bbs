@@ -34,7 +34,7 @@ export class AuthService {
     if (isErr(findAccountRes)) {
       return findAccountRes;
     }
-    const { accountId } = findAccountRes.unwrap();
+    const { accountId } = findAccountRes.value;
     const res = pipeResult(
       await this.query.execute(new AccountAliveQuery(accountId)),
     );

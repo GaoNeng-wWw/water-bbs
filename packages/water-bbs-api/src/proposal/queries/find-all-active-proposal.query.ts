@@ -1,6 +1,6 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { IQueryHandler, Query } from '@nestjs/cqrs';
+import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import { Proposals, ProposalStatus } from 'water-bbs-migration';
 import { AppError, err, ok, PersistenceError, Result } from 'water-bbs-shared';
 
@@ -12,6 +12,7 @@ export class FindAllActiveProposalQuery extends Query<
   }
 }
 
+@QueryHandler(FindAllActiveProposalQuery)
 export class FindAllActiveProposalQueryHandler implements IQueryHandler<FindAllActiveProposalQuery> {
   constructor(
     @InjectRepository(Proposals)

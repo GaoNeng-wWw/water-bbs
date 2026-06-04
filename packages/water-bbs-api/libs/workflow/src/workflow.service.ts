@@ -1,7 +1,7 @@
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { EntityRepository } from '@mikro-orm/mysql';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import Redis from 'ioredis';
 import { Action } from 'water-bbs-migration';
 import z, { ZodType } from 'zod';
@@ -9,6 +9,7 @@ import z, { ZodType } from 'zod';
 @Injectable()
 export class WorkflowService {
   private redis: Redis;
+  private logger: Logger = new Logger('Workflow');
   constructor(
     @InjectRepository(Action)
     private readonly actionRepo: EntityRepository<Action>,
@@ -25,18 +26,20 @@ export class WorkflowService {
     await this.redis.set(`action:${name}`, '1', 'EX', 60);
 
     try {
-      const action = await this.actionRepo.find({ name });
+      const action = await this.actionRepo.findOne({ name });
       if (action) {
         return;
       }
-    } catch {
+    } catch (err) {
+      this.logger.error(err);
       return;
     }
     const plainSchemaObject = z.toJSONSchema(schema);
     const action = Action.create(name, plainSchemaObject);
     try {
       await this.actionRepo.insert(action);
-    } catch {
+    } catch (err) {
+      this.logger.error(err);
       return;
     }
   }

@@ -9,7 +9,7 @@ export class Action {
   name: string;
   @Property({ type: 'json' })
   schema: Record<string, any>
-  @Property({type: 'blob'})
+  @Property({type: 'boolean'})
   active: boolean = true;
 
   constructor(name: string, schema: Record<string, any>, active: boolean = true) {

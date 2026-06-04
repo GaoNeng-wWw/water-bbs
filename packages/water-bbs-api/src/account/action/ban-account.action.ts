@@ -7,7 +7,7 @@ import z from 'zod';
 
 const schema = z.object({
   accountId: z.string(),
-  expiredAt: z.date(),
+  expiredAt: z.iso.datetime(),
   reason: z.string().optional(),
 });
 

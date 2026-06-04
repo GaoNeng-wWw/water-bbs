@@ -59,6 +59,7 @@ import { ActionModule } from './action/action.module';
             VoteSlot,
             Action,
           ],
+          allowGlobalContext: true,
           host: configService.get('database.host'),
           port: configService.get('database.port'),
           user: configService.get('database.username'),

@@ -26,7 +26,7 @@ export class WorkflowRunner {
     if (!isOk) {
       return err(new ValidateFailError(error));
     }
-    let pre: Result<T, DomainError> = await handler.run(param);
+    let pre = (await handler.run(param)) as unknown as Result<T, DomainError>;
     if (!action.children.length) {
       return pre;
     }

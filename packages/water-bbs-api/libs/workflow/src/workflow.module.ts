@@ -30,7 +30,7 @@ export class WorkflowModule
   extends ConfigurableModuleClass
   implements OnModuleInit
 {
-  private readonly logger = new Logger('workflow');
+  private readonly logger = new Logger('Workflow');
   constructor(
     private readonly discoveryService: DiscoveryService,
     private readonly reflector: Reflector,

@@ -21,7 +21,7 @@ import { CAPTCHA_REPOSITORY_TOKEN } from '@app/captcha/domain';
 import { CaptchaRepository } from '@app/captcha/infra';
 import { StorageModule } from '@app/storage';
 import { FindProfileBatchQueryHandler } from './queries/find-profile-batch.query';
-import { BanAccountAction } from './action';
+import { BanAccountAction, UnbanAccountAction } from './action';
 
 @Module({
   imports: [StorageModule],
@@ -61,6 +61,7 @@ import { BanAccountAction } from './action';
     FindProfileHandler,
     FindProfileBatchQueryHandler,
     BanAccountAction,
+    UnbanAccountAction,
   ],
 })
 export class AccountModule {}
