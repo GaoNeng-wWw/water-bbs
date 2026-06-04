@@ -9,7 +9,9 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
 export class AccountAliveQuery extends Query<
   Result<
-    { alive: false } | { alive: true; accountID: string },
+    | { alive: false; reason: 'ACCOUNT_REMOVED' }
+    | { alive: false; reason: 'ACCOUNT_BANNED'; expiredAt: Date }
+    | { alive: true; accountID: string },
     PersistenceError
   >
 > {
@@ -43,16 +45,23 @@ export class AccountAliveHandler implements IQueryHandler<AccountAliveQuery> {
     }
     const account = accountRes.value;
     if (!account || account.removedAt) {
-      return ok({ alive: false } as const);
+      return ok({ alive: false, reason: 'ACCOUNT_REMOVED' } as const);
     }
 
     if (await this.redis.exists(`ban:${account.id}`)) {
-      return ok({ alive: false } as const);
+      const exp = Number(
+        (await this.redis.hget(`ban:${account.id}`, 'expiredAt')) ?? 0,
+      );
+      return ok({
+        alive: false as const,
+        reason: 'ACCOUNT_BANNED',
+        expiredAt: new Date(exp),
+      } as const);
     }
 
     return ok({
       alive: true,
       accountID: account.id,
-    });
+    } as const);
   }
 }
