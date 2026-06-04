@@ -32,6 +32,7 @@ import { ProposalModule } from './proposal/proposal.module';
 import { VoteModule } from './vote/vote.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WorkflowModule, WorkflowService } from '@app/workflow';
+import { ActionModule } from './action/action.module';
 
 @Module({
   imports: [
@@ -131,6 +132,7 @@ import { WorkflowModule, WorkflowService } from '@app/workflow';
     ProposalModule,
     VoteModule,
     ScheduleModule.forRoot(),
+    ActionModule,
   ],
   providers: [
     {
