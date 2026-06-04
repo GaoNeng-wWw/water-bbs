@@ -5,14 +5,16 @@ import Redis from 'ioredis';
 import { DomainError, ok, Result } from 'water-bbs-shared';
 import z from 'zod';
 
+const schema = z.object({
+  accountId: z.string(),
+  expiredAt: z.date(),
+  reason: z.string().optional(),
+});
+
 @ActionHandler()
-export class BanAccountAction implements IActionHandler {
+export class BanAccountAction implements IActionHandler<typeof schema> {
   name: string = 'account.ban';
-  schema = z.object({
-    accountId: z.string(),
-    expiredAt: z.date(),
-    reason: z.string().optional(),
-  });
+  schema = schema;
 
   private readonly redis: Redis;
   constructor(redisService: RedisService) {
@@ -31,7 +33,7 @@ export class BanAccountAction implements IActionHandler {
     }
     return { ok: true, error: undefined };
   }
-  async run<T, E>(args: Record<string, any>): Promise<Result<T, E>> {
+  async run(args: Record<string, any>): Promise<Result<boolean, DomainError>> {
     const accountId = args.accountId.toString();
     const expiredAt: Date = args.expiredAt;
     const reason = args.reason;
@@ -44,6 +46,6 @@ export class BanAccountAction implements IActionHandler {
       expiredAt.getTime() / 1000,
       'NX',
     );
-    return ok(true as T);
+    return ok(true);
   }
 }

@@ -1,7 +1,11 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { AccountAliveQuery, CheckPasswordQuery } from '../account/queries';
+import {
+  AccountAliveQuery,
+  CheckPasswordQuery,
+  FindAccountByIdIdentCertQuery,
+} from '../account/queries';
 import { IdentEnum } from 'water-bbs-migration';
 import {
   ApplicationServiceError,
@@ -24,10 +28,15 @@ export class AuthService {
     private readonly sessionRepo: ISessionRepo,
   ) {}
   async login(identType: IdentEnum, identValue: string, certValue: string) {
+    const findAccountRes = await this.query.execute(
+      new FindAccountByIdIdentCertQuery(identType, identValue, certValue),
+    );
+    if (isErr(findAccountRes)) {
+      return findAccountRes;
+    }
+    const { accountId } = findAccountRes.unwrap();
     const res = pipeResult(
-      await this.query.execute(
-        new AccountAliveQuery(identType, identValue, certValue),
-      ),
+      await this.query.execute(new AccountAliveQuery(accountId)),
     );
     if (res.isErr()) {
       return err(res.unwrapErr());
@@ -35,7 +44,7 @@ export class AuthService {
     const account = res.unwrap();
     if (!account.alive) {
       return err(
-        new ApplicationServiceError('ACCOUNT_NOT_FOUND', HttpStatus.NOT_FOUND),
+        new ApplicationServiceError(account.reason, HttpStatus.NOT_FOUND),
       );
     }
     const id = account.accountID;
