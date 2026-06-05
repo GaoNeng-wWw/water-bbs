@@ -22,7 +22,7 @@ import { RateLimitPlugin } from '@nestjs-redisx/rate-limit';
 import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthGuard } from '@app/shared';
+import { AuthGuard, PermissionGuard, RoleGuard } from '@app/shared';
 import { JwtModule } from '@nestjs/jwt';
 import { ResultInterceptor } from '@app/shared/interceptor';
 import { RedisModule as LiaoLiaoRedis } from '@liaoliaots/nestjs-redis';
@@ -33,6 +33,7 @@ import { VoteModule } from './vote/vote.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WorkflowModule, WorkflowService } from '@app/workflow';
 import { ActionModule } from './action/action.module';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -68,6 +69,19 @@ import { ActionModule } from './action/action.module';
         };
       },
     } as any),
+    MikroOrmModule.forFeature([
+      Account,
+      Cert,
+      Ident,
+      Permission,
+      Role,
+      Post,
+      Category,
+      Proposals,
+      Vote,
+      VoteSlot,
+      Action,
+    ]),
     RedisModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: any) => {
@@ -134,11 +148,20 @@ import { ActionModule } from './action/action.module';
     VoteModule,
     ScheduleModule.forRoot(),
     ActionModule,
+    PermissionModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
     },
     {
       provide: APP_INTERCEPTOR,

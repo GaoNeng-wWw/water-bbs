@@ -28,6 +28,18 @@ export class Account extends BaseMetaEntity {
     super();
   }
 
+  isRole(code: string){
+    if (!this.role) {
+      return false;
+    }
+    return this.role.code === code;
+  }
+  hasPermission(code: string){
+    if (!this.role) {
+      return false;
+    }
+    return this.role.permissions.find(p => p.code === code);
+  }
   addCert(cert: Cert):Result<boolean, DomainError> {
     if (this.findCert(cert.certType)) {
       return err(new DomainError('CERT_ALREADY_EXISTS'));
@@ -101,6 +113,15 @@ export class Permission extends BaseMetaEntity {
     this.code = code;
     this.name = name;
     roles.forEach(r => this.roles.add(r));
+  }
+
+  static create(code: string, name: string){
+    return new Permission(code, name);
+  }
+
+  remove(){
+    this.removedAt = new Date();
+    return ok(true);
   }
 }
 

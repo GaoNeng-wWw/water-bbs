@@ -9,8 +9,6 @@ import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { AccessTokenPayload, RefreshTokenPayload } from 'src/auth/domain/ar';
-import { TokenAliveQuery } from '../../../../src/auth/queries/token-alive.query';
-import { isErr } from 'water-bbs-shared';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_FLAG } from '../decorator';
 
@@ -21,7 +19,7 @@ export class AuthGuard implements CanActivate {
     private query: QueryBus,
     private reflector: Reflector,
   ) {}
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const isPub = this.reflector.get<boolean>(
       IS_PUBLIC_FLAG,
       context.getHandler(),
@@ -61,7 +59,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
   getToken(authorization: string) {
-    const [_, token] = authorization.split(' ');
+    const [, token] = authorization.split(' ');
     return token;
   }
 }
