@@ -22,6 +22,7 @@ import { CaptchaRepository } from '@app/captcha/infra';
 import { StorageModule } from '@app/storage';
 import { FindProfileBatchQueryHandler } from './queries/find-profile-batch.query';
 import { BanAccountAction, UnbanAccountAction } from './action';
+import { FindAccountByIdIdentCertQueryHandler } from './queries/find-account-by-ident-cert.query';
 
 @Module({
   imports: [StorageModule],
@@ -62,6 +63,7 @@ import { BanAccountAction, UnbanAccountAction } from './action';
     FindProfileBatchQueryHandler,
     BanAccountAction,
     UnbanAccountAction,
+    FindAccountByIdIdentCertQueryHandler,
   ],
 })
 export class AccountModule {}

@@ -1,4 +1,4 @@
-import { IQueryHandler, Query } from '@nestjs/cqrs';
+import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import { IdentEnum } from 'water-bbs-migration';
 import { DomainError, err, isErr, ok, Result } from 'water-bbs-shared';
 import {
@@ -23,7 +23,8 @@ export class FindAccountByIdIdentCertQuery extends Query<
   }
 }
 
-export class FindAccountByIdIdentCertQueryResultHandler implements IQueryHandler<FindAccountByIdIdentCertQuery> {
+@QueryHandler(FindAccountByIdIdentCertQuery)
+export class FindAccountByIdIdentCertQueryHandler implements IQueryHandler<FindAccountByIdIdentCertQuery> {
   constructor(
     @InjectAccountRepository()
     private repository: IAccountRepoistory,

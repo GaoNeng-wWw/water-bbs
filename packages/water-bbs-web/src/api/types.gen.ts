@@ -222,6 +222,29 @@ export type CreateProposalResponse = {
     id: string;
 };
 
+export type ActionTotal = {
+    value: number;
+};
+
+export type ActionInfo = {
+    name: string;
+    schema: {
+        [key: string]: unknown;
+    };
+};
+
+export type ActionList = {
+    [key: string]: unknown;
+};
+
+export type UpdateActive = {
+    active: boolean;
+};
+
+export type UpdateActiveResponse = {
+    id: string;
+};
+
 export type AccountControllerGetProfileData = {
     body?: never;
     path?: never;
@@ -603,3 +626,59 @@ export type ProposalControllerGetProposalResponses = {
 };
 
 export type ProposalControllerGetProposalResponse = ProposalControllerGetProposalResponses[keyof ProposalControllerGetProposalResponses];
+
+export type ActionControllerGetActionTotalData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/action/total';
+};
+
+export type ActionControllerGetActionTotalResponses = {
+    200: ActionTotal;
+};
+
+export type ActionControllerGetActionTotalResponse = ActionControllerGetActionTotalResponses[keyof ActionControllerGetActionTotalResponses];
+
+export type ActionControllerGetActionInfoData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/action/{id}';
+};
+
+export type ActionControllerGetActionInfoResponses = {
+    200: ActionInfo;
+};
+
+export type ActionControllerGetActionInfoResponse = ActionControllerGetActionInfoResponses[keyof ActionControllerGetActionInfoResponses];
+
+export type ActionControllerUpdateActiveData = {
+    body: UpdateActive;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/action/{id}';
+};
+
+export type ActionControllerUpdateActiveResponses = {
+    200: UpdateActiveResponse;
+};
+
+export type ActionControllerUpdateActiveResponse = ActionControllerUpdateActiveResponses[keyof ActionControllerUpdateActiveResponses];
+
+export type ActionControllerListActionData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/action';
+};
+
+export type ActionControllerListActionResponses = {
+    200: ActionList;
+};
+
+export type ActionControllerListActionResponse = ActionControllerListActionResponses[keyof ActionControllerListActionResponses];

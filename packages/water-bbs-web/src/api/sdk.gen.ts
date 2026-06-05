@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses } from './types.gen';
+import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, ActionControllerGetActionInfoData, ActionControllerGetActionInfoResponses, ActionControllerGetActionTotalData, ActionControllerGetActionTotalResponses, ActionControllerListActionData, ActionControllerListActionResponses, ActionControllerUpdateActiveData, ActionControllerUpdateActiveResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -211,5 +211,33 @@ export const proposalControllerCreateProposal = <ThrowOnError extends boolean = 
 export const proposalControllerGetProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerGetProposalData, ThrowOnError>) => (options.client ?? client).get<ProposalControllerGetProposalResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/proposal/{id}',
+    ...options
+});
+
+export const actionControllerGetActionTotal = <ThrowOnError extends boolean = false>(options?: Options<ActionControllerGetActionTotalData, ThrowOnError>) => (options?.client ?? client).get<ActionControllerGetActionTotalResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/action/total',
+    ...options
+});
+
+export const actionControllerGetActionInfo = <ThrowOnError extends boolean = false>(options: Options<ActionControllerGetActionInfoData, ThrowOnError>) => (options.client ?? client).get<ActionControllerGetActionInfoResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/action/{id}',
+    ...options
+});
+
+export const actionControllerUpdateActive = <ThrowOnError extends boolean = false>(options: Options<ActionControllerUpdateActiveData, ThrowOnError>) => (options.client ?? client).patch<ActionControllerUpdateActiveResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/action/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const actionControllerListAction = <ThrowOnError extends boolean = false>(options?: Options<ActionControllerListActionData, ThrowOnError>) => (options?.client ?? client).get<ActionControllerListActionResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/action',
     ...options
 });

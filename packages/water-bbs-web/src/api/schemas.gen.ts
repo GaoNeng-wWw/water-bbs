@@ -613,3 +613,60 @@ export const CreateProposalResponseSchema = {
         'id'
     ]
 } as const;
+
+export const ActionTotalSchema = {
+    type: 'object',
+    properties: {
+        value: {
+            type: 'number'
+        }
+    },
+    required: [
+        'value'
+    ]
+} as const;
+
+export const ActionInfoSchema = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string'
+        },
+        schema: {
+            type: 'object'
+        }
+    },
+    required: [
+        'name',
+        'schema'
+    ]
+} as const;
+
+export const ActionListSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const UpdateActiveSchema = {
+    type: 'object',
+    properties: {
+        active: {
+            type: 'boolean'
+        }
+    },
+    required: [
+        'active'
+    ]
+} as const;
+
+export const UpdateActiveResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
