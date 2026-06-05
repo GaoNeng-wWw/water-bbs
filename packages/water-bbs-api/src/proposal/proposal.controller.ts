@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import {
   CreateProposal,
@@ -21,7 +29,10 @@ export class ProposalController {
   @ApiPaginatedResponse(ProposalSummary)
   @UseModel(Pagination)
   @Get('')
-  async listProposal(@Query('page') page: number, @Query('size') size: number) {
+  async listProposal(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('size', ParseIntPipe) size: number,
+  ) {
     return this.proposalService.listProposals(page, size);
   }
 
