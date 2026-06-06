@@ -145,13 +145,15 @@ export class Role extends BaseMetaEntity {
   constructor(
     code: string, name: string,
     permissions: Permission[] = [],
-    accounts: Account
+    account?: Account
   ){
     super();
     this.code = code;
     this.name = name;
     permissions.forEach(p => this.permissions.add(p));
-    this.accounts.add(accounts);
+    if (account){
+      this.accounts.add(account);
+    }
   }
 
   bindPermission(permission: Permission){
@@ -162,5 +164,17 @@ export class Role extends BaseMetaEntity {
   }
   hasPermission(code: string) {
     return this.permissions.find(p => p.code === code) !== undefined;
+  }
+
+  static create(code: string, name: string, permissions: Permission[] = [], account?: Account){
+    return new Role(code, name, permissions, account);
+  }
+
+  remove(){
+    this.removedAt = new Date();
+  }
+
+  setPermission(permissions: Permission[]){
+    this.permissions = new Collection(permissions);
   }
 }

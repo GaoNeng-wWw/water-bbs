@@ -40,6 +40,9 @@ export class PermissionGuard implements CanActivate {
     if (!account || isEmpty(account)) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
+    if (account.hasPermission('*')) {
+      return true;
+    }
     if (requriedPermission.some((item) => !account.hasPermission(item))) {
       throw new HttpException('PERMISSION_DENIED', HttpStatus.FORBIDDEN);
     }

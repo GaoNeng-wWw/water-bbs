@@ -34,6 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { WorkflowModule, WorkflowService } from '@app/workflow';
 import { ActionModule } from './action/action.module';
 import { PermissionModule } from './permission/permission.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -149,6 +150,7 @@ import { PermissionModule } from './permission/permission.module';
     ScheduleModule.forRoot(),
     ActionModule,
     PermissionModule,
+    RoleModule,
   ],
   providers: [
     {
