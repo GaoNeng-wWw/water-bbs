@@ -25,6 +25,7 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiParam,
 } from '@nestjs/swagger';
 import { RemoveAccountResponse } from './dto/remove-account.dto';
@@ -165,5 +166,15 @@ export class AccountController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.accountService.uploadAvatar(user.account.id, file);
+  }
+
+  @Get('permission')
+  @ApiOperation({ summary: '获取用户权限' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: [String],
+  })
+  async getPermission(@User() user: RequestUser) {
+    return this.accountService.getPermission(user.account.id);
   }
 }

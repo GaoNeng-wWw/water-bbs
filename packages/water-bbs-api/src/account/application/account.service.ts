@@ -46,7 +46,7 @@ import {
 import { PublicAccountInfo } from './dto/public-account-info';
 import { GetProfileDTO } from './dto/get-profile.dto';
 import { UpdatePassword } from './dto/update-password.dto';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   AccountRemovedCommand,
   AccountResetPasswordCommand,
@@ -62,7 +62,9 @@ import {
 import { UpdateAvatarResponse } from '../dto/update-avatar.dto';
 import { ConfigService } from '@nestjs/config';
 import { Configure } from '@app/configure';
+import { GetPermissionQuery } from '../queries/get-permission.query';
 
+// TODO: 重构成cqrs
 @Injectable()
 export class AccountService {
   constructor(
@@ -81,7 +83,14 @@ export class AccountService {
     @InjectStoreEngine()
     private readonly storage: StorageEngine[],
     private config: ConfigService<Configure>,
+    private readonly queryBus: QueryBus,
   ) {}
+
+  async getPermission(
+    accountID: string,
+  ): Promise<Result<string[], ApplicationServiceError>> {
+    return this.queryBus.execute(new GetPermissionQuery(accountID));
+  }
 
   async createAccount(
     dto: CreateAccountDTO,
