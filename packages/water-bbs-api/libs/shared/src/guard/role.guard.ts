@@ -23,7 +23,14 @@ export class RoleGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const http = context.switchToHttp();
     const req: Request = http.getRequest();
-    if (!req.user.account) {
+    const requiredRole = this.reflector.get<string>(
+      RoleKey,
+      context.getHandler(),
+    );
+    if (!requiredRole) {
+      return true;
+    }
+    if (!req.user || !req.user.account) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
     const accountId = req.user.account.id;
@@ -32,13 +39,6 @@ export class RoleGuard implements CanActivate {
     });
     if (!account || isEmpty(account)) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
-    }
-    const requiredRole = this.reflector.get<string>(
-      RoleKey,
-      context.getHandler(),
-    );
-    if (!requiredRole) {
-      return true;
     }
     if (!account.isRole(requiredRole)) {
       throw new HttpException('PERMISSION_DENIED', HttpStatus.FORBIDDEN);

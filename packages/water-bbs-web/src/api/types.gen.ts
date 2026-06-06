@@ -161,7 +161,7 @@ export type CreateCategoryResponse = {
     parent: string;
 };
 
-export type UpdateCategoryResponse = {
+export type RemoveCategoryResponse = {
     id: string;
 };
 
@@ -169,6 +169,10 @@ export type UpdateCategoryDto = {
     parent: {
         [key: string]: unknown;
     };
+};
+
+export type UpdateCategoryResponse = {
+    id: string;
 };
 
 export type CategorySummary = {
@@ -243,6 +247,63 @@ export type UpdateActive = {
 
 export type UpdateActiveResponse = {
     id: string;
+};
+
+export type CreatePermissionDto = {
+    code: string;
+    name: string;
+};
+
+export type CreatePermissionResponse = {
+    id: string;
+    code: string;
+    name: string;
+};
+
+export type RemovePermission = {
+    [key: string]: unknown;
+};
+
+export type RemovePermissionResponse = {
+    [key: string]: unknown;
+};
+
+export type PermissionSummary = {
+    [key: string]: unknown;
+};
+
+export type FindPermissionResponse = {
+    id: string;
+    code: string;
+    name: string;
+};
+
+export type CreateRole = {
+    [key: string]: unknown;
+};
+
+export type CreateRoleResponse = {
+    [key: string]: unknown;
+};
+
+export type RemoveRoleResponse = {
+    [key: string]: unknown;
+};
+
+export type UpdateRole = {
+    [key: string]: unknown;
+};
+
+export type UpdateRoleResponse = {
+    [key: string]: unknown;
+};
+
+export type RoleSummary = {
+    [key: string]: unknown;
+};
+
+export type FindRoleResponse = {
+    [key: string]: unknown;
 };
 
 export type AccountControllerGetProfileData = {
@@ -346,6 +407,19 @@ export type AccountControllerUploadAvatarResponses = {
 };
 
 export type AccountControllerUploadAvatarResponse = AccountControllerUploadAvatarResponses[keyof AccountControllerUploadAvatarResponses];
+
+export type AccountControllerGetPermissionData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/account/permission';
+};
+
+export type AccountControllerGetPermissionResponses = {
+    200: Array<string>;
+};
+
+export type AccountControllerGetPermissionResponse = AccountControllerGetPermissionResponses[keyof AccountControllerGetPermissionResponses];
 
 export type AuthControllerLoginData = {
     body: LoginDto;
@@ -561,7 +635,7 @@ export type CategoryControllerDeleteCategoryData = {
 };
 
 export type CategoryControllerDeleteCategoryResponses = {
-    200: UpdateCategoryResponse;
+    200: RemoveCategoryResponse;
 };
 
 export type CategoryControllerDeleteCategoryResponse = CategoryControllerDeleteCategoryResponses[keyof CategoryControllerDeleteCategoryResponses];
@@ -682,3 +756,129 @@ export type ActionControllerListActionResponses = {
 };
 
 export type ActionControllerListActionResponse = ActionControllerListActionResponses[keyof ActionControllerListActionResponses];
+
+export type PermissionControllerRemovePermissionData = {
+    body: RemovePermission;
+    path?: never;
+    query?: never;
+    url: '/permission';
+};
+
+export type PermissionControllerRemovePermissionResponses = {
+    200: RemovePermissionResponse;
+};
+
+export type PermissionControllerRemovePermissionResponse = PermissionControllerRemovePermissionResponses[keyof PermissionControllerRemovePermissionResponses];
+
+export type PermissionControllerListPermissionData = {
+    body?: never;
+    path?: never;
+    query: {
+        page: number;
+        size: number;
+    };
+    url: '/permission';
+};
+
+export type PermissionControllerListPermissionResponses = {
+    200: Pagination & {
+        data?: Array<PermissionSummary>;
+    };
+};
+
+export type PermissionControllerListPermissionResponse = PermissionControllerListPermissionResponses[keyof PermissionControllerListPermissionResponses];
+
+export type PermissionControllerCreatePermissionData = {
+    body: CreatePermissionDto;
+    path?: never;
+    query?: never;
+    url: '/permission';
+};
+
+export type PermissionControllerCreatePermissionResponses = {
+    201: CreatePermissionResponse;
+};
+
+export type PermissionControllerCreatePermissionResponse = PermissionControllerCreatePermissionResponses[keyof PermissionControllerCreatePermissionResponses];
+
+export type PermissionControllerFindPermissionData = {
+    body?: never;
+    path: {
+        code: string;
+    };
+    query?: never;
+    url: '/permission/{code}';
+};
+
+export type PermissionControllerFindPermissionResponses = {
+    200: FindPermissionResponse;
+};
+
+export type PermissionControllerFindPermissionResponse = PermissionControllerFindPermissionResponses[keyof PermissionControllerFindPermissionResponses];
+
+export type RoleControllerListRoleData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/role';
+};
+
+export type RoleControllerListRoleResponses = {
+    200: Pagination & {
+        data?: Array<RoleSummary>;
+    };
+};
+
+export type RoleControllerListRoleResponse = RoleControllerListRoleResponses[keyof RoleControllerListRoleResponses];
+
+export type RoleControllerCreateRoleData = {
+    body: CreateRole;
+    path?: never;
+    query?: never;
+    url: '/role';
+};
+
+export type RoleControllerCreateRoleResponses = {
+    201: CreateRoleResponse;
+};
+
+export type RoleControllerCreateRoleResponse = RoleControllerCreateRoleResponses[keyof RoleControllerCreateRoleResponses];
+
+export type RoleControllerRemoveRoleData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/role/{id}';
+};
+
+export type RoleControllerRemoveRoleResponses = {
+    200: RemoveRoleResponse;
+};
+
+export type RoleControllerRemoveRoleResponse = RoleControllerRemoveRoleResponses[keyof RoleControllerRemoveRoleResponses];
+
+export type RoleControllerUpdateRoleData = {
+    body: UpdateRole;
+    path?: never;
+    query?: never;
+    url: '/role/{id}';
+};
+
+export type RoleControllerUpdateRoleResponses = {
+    200: UpdateRoleResponse;
+};
+
+export type RoleControllerUpdateRoleResponse = RoleControllerUpdateRoleResponses[keyof RoleControllerUpdateRoleResponses];
+
+export type RoleControllerFindRoleData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/role/{code}';
+};
+
+export type RoleControllerFindRoleResponses = {
+    200: FindRoleResponse;
+};
+
+export type RoleControllerFindRoleResponse = RoleControllerFindRoleResponses[keyof RoleControllerFindRoleResponses];

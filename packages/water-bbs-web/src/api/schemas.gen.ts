@@ -449,7 +449,7 @@ export const CreateCategoryResponseSchema = {
     ]
 } as const;
 
-export const UpdateCategoryResponseSchema = {
+export const RemoveCategoryResponseSchema = {
     type: 'object',
     properties: {
         id: {
@@ -470,6 +470,18 @@ export const UpdateCategoryDTOSchema = {
     },
     required: [
         'parent'
+    ]
+} as const;
+
+export const UpdateCategoryResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id'
     ]
 } as const;
 
@@ -669,4 +681,110 @@ export const UpdateActiveResponseSchema = {
     required: [
         'id'
     ]
+} as const;
+
+export const CreatePermissionDtoSchema = {
+    type: 'object',
+    properties: {
+        code: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        }
+    },
+    required: [
+        'code',
+        'name'
+    ]
+} as const;
+
+export const CreatePermissionResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        code: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'code',
+        'name'
+    ]
+} as const;
+
+export const RemovePermissionSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const RemovePermissionResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const PermissionSummarySchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const FindPermissionResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        code: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'code',
+        'name'
+    ]
+} as const;
+
+export const CreateRoleSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const CreateRoleResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const RemoveRoleResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const UpdateRoleSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const UpdateRoleResponseSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const RoleSummarySchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const FindRoleResponseSchema = {
+    type: 'object',
+    properties: {}
 } as const;

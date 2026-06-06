@@ -30,7 +30,7 @@ export class PermissionGuard implements CanActivate {
     }
     const http = context.switchToHttp();
     const req: Request = http.getRequest();
-    if (!req.user.account) {
+    if (!req.user || !req.user.account) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
     const accountId = req.user.account.id;
