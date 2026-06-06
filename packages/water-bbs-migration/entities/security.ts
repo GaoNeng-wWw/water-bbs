@@ -32,6 +32,14 @@ export class Ident {
     Object.assign(this, data);
   }
 
+  static create(
+    identType: IdentEnum,
+    identValue: string,
+    account: Account,
+  ){
+    return new Ident({ identType, identValue, account });
+   }
+
   isVerify(){
     return this.verified;
   }
@@ -65,6 +73,15 @@ export class Cert {
     Object.assign(this, data);
     this.certValue = hashSync(this.certValue, 10);
   }
+
+  static create(
+    certType: CertEnum,
+    certValue: string,
+    account: Account,
+  ){
+    return new Cert({ certType, certValue, account });
+   }
+
   comparePassword(plainPassword: string){
     return compareSync(plainPassword, this.certValue);
   }

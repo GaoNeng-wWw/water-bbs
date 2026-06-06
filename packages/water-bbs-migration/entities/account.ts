@@ -28,6 +28,19 @@ export class Account extends BaseMetaEntity {
     super();
   }
 
+  static create(
+    idents: Ident[],
+    certs: Cert[],
+    role: Role,
+    profile: Profile,
+  ){
+    const account = new Account();
+    account.role = role;
+    account.profile = profile;
+    account.idents = new Collection<Ident>(account);
+    account.certs = new Collection<Cert>(account);
+  }
+
   isRole(code: string){
     if (!this.role) {
       return false;

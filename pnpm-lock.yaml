@@ -230,6 +230,9 @@ importers:
       '@mikro-orm/mysql':
         specifier: ^7.0.13
         version: 7.0.13(@mikro-orm/core@7.0.13)(@types/node@24.12.2)
+      '@mikro-orm/seeder':
+        specifier: 7.0.13
+        version: 7.0.13(@mikro-orm/core@7.0.13)
       '@mikro-orm/sqlite':
         specifier: ^7.0.13
         version: 7.0.13(@mikro-orm/core@7.0.13)
@@ -1429,6 +1432,12 @@ packages:
       '@nestjs/common': ^11.0.5
       '@nestjs/core': ^11.0.5
       reflect-metadata: ^0.1.0 || ^0.2.0
+
+  '@mikro-orm/seeder@7.0.13':
+    resolution: {integrity: sha512-andXFruUz/ED39ir+HiBRvtWvZSt1XgQP057l7H9aoUGvjc+K/doogMtR38qgsrGvg7138ThoV6c/g5CwFqzeA==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.0.13
 
   '@mikro-orm/sql@7.0.13':
     resolution: {integrity: sha512-HPCPHnXBQTDSqpOfKfC3NkanPoqXHnqlrqegkGBoCspzJb2rTBza17PYlk4LsxCMMMNrTaYaa2K7j7NrSrcAFw==}
@@ -9323,6 +9332,10 @@ snapshots:
       '@nestjs/common': 11.1.19(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.19(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.19)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       reflect-metadata: 0.2.2
+
+  '@mikro-orm/seeder@7.0.13(@mikro-orm/core@7.0.13)':
+    dependencies:
+      '@mikro-orm/core': 7.0.13
 
   '@mikro-orm/sql@7.0.13(@mikro-orm/core@7.0.13)':
     dependencies:

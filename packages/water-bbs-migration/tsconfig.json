@@ -15,7 +15,8 @@
       "water-bbs-shared/*": ["./node_modules/water-bbs-shared/src/*"],
     },
     "strictPropertyInitialization": false,
+    "types": ["node"]
   },
-  "include": ["migrations/**/*.ts", "entities/index.ts", "entities/**/*.ts"],
+  "include": ["migrations/**/*.ts", "entities/index.ts", "entities/**/*.ts", "seeders/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
