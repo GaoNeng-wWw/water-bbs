@@ -20,6 +20,7 @@ import {
   UpdateCategoryDTO,
   UpdateCategoryResponse,
 } from './dto/update-category.dto';
+import { RemoveCategoryResponse } from './dto/remove-category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -34,7 +35,7 @@ export class CategoryController {
   }
 
   @Permission('category:remove')
-  @ApiOkResponse({ type: UpdateCategoryResponse })
+  @ApiOkResponse({ type: RemoveCategoryResponse })
   @Delete(':id')
   async deleteCategory(@Param('id') id: string) {
     return this.categoryService.removeCategory(id);

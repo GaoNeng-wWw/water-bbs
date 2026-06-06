@@ -35,6 +35,7 @@ import { WorkflowModule, WorkflowService } from '@app/workflow';
 import { ActionModule } from './action/action.module';
 import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -151,6 +152,7 @@ import { RoleModule } from './role/role.module';
     ActionModule,
     PermissionModule,
     RoleModule,
+    AdminModule,
   ],
   providers: [
     {

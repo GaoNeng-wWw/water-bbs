@@ -1,75 +1,64 @@
 import { Injectable } from '@nestjs/common';
-import { isErr, ok } from 'water-bbs-shared';
-import { CategoryRepo } from './category.repo';
-import { Category } from 'water-bbs-migration';
-import { CategorySummary } from './entities/category-summary.entry';
+import { DomainError, err, isErr, ok } from 'water-bbs-shared';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  CreateCategoryCommand,
+  RemoveCategoryCommand,
+  updateCategoryCommand,
+} from './command';
+import { FindCategoryQuery, ListCategories } from './query';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly categoryRepo: CategoryRepo) {}
+  constructor(
+    private readonly cb: CommandBus,
+    private readonly qb: QueryBus,
+  ) {}
   async createCategory(name: string, parent?: string) {
-    const category = new Category(name, parent);
-    const upsertCategoryRes = await this.categoryRepo.upsert(category);
-    if (isErr(upsertCategoryRes)) {
-      return upsertCategoryRes;
+    const res = await this.cb.execute(new CreateCategoryCommand(name, parent));
+    if (isErr(res)) {
+      return res;
     }
-    return upsertCategoryRes.value;
-  }
-  async removeCategory(id: string) {
-    const categoryRes = await this.categoryRepo.find(id);
-    if (isErr(categoryRes)) {
-      return categoryRes;
+    const { id } = res.value;
+    const findRes = await this.qb.execute(new FindCategoryQuery(id));
+    if (isErr(findRes)) {
+      return findRes;
     }
-    if (!categoryRes.value) {
-      return categoryRes;
-    }
-    const category = categoryRes.value;
-    category.remove();
-    const upsertRes = await this.categoryRepo.upsert(category);
-    if (isErr(upsertRes)) {
-      return upsertRes;
-    }
+    const category = findRes.value!;
     return ok(category);
   }
+  async removeCategory(id: string) {
+    const cmd = new RemoveCategoryCommand(id);
+    const res = await this.cb.execute(cmd);
+    if (isErr(res)) {
+      return res;
+    }
+    return ok(res.value);
+  }
   async updateCategory(id: string, name?: string, parent?: string | null) {
-    const categoryRes = await this.categoryRepo.find(id);
-    if (isErr(categoryRes)) {
-      return categoryRes;
+    const cmd = new updateCategoryCommand(id, name, parent);
+    const res = await this.cb.execute(cmd);
+    if (isErr(res)) {
+      return res;
     }
-    if (!categoryRes.value) {
-      return categoryRes;
+    if (!res.value) {
+      return err(new DomainError('CATEGORY_NOT_FOUND'));
     }
-    const category = categoryRes.value;
-    if (name) {
-      category.name = name;
+    const category = new FindCategoryQuery(id);
+    const findRes = await this.qb.execute(category);
+    if (isErr(findRes)) {
+      return findRes;
     }
-    if (parent !== undefined) {
-      category.parentID = parent;
+    if (!findRes.value) {
+      return err(new DomainError('CATEGORY_NOT_FOUND'));
     }
-    const upsertRes = await this.categoryRepo.upsert(category);
-    if (isErr(upsertRes)) {
-      return upsertRes;
-    }
-    return upsertRes.value;
+    return ok({ id: findRes.value.id });
   }
   findCategory(id: string) {
-    return this.categoryRepo.find(id);
+    return this.qb.execute(new FindCategoryQuery(id));
   }
   async listCategories(parent?: string) {
-    const listRes = await this.categoryRepo.list(parent);
-    if (isErr(listRes)) {
-      return listRes;
-    }
-    const rawItems = listRes.value;
-    const summaries = rawItems.map(
-      (item) =>
-        new CategorySummary(
-          item.id,
-          item.name,
-          item.hasChildren,
-          item.parentID,
-        ),
-    );
-    return summaries;
+    const listRes = await this.qb.execute(new ListCategories(parent));
+    return listRes;
   }
 }

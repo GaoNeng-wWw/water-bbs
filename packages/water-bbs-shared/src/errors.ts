@@ -26,14 +26,14 @@ export type InfrastructureErrorProp = {
   args?: Record<string, any>;
 };
 
-export class InfrastructureError extends DomainError {
+export class InfrastructureError extends AppError {
   public readonly code = 500;
   constructor(
     message: string | null,
     child?: Error | null,
     args?: Record<string, any>,
   ) {
-    super(message || 'INFRASTRUCTURE_ERROR', child ?? null, args ?? {});
+    super(message || 'INFRASTRUCTURE_ERROR', 500, child ?? null, args ?? {});
   }
 }
 
