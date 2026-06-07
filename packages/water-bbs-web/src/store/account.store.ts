@@ -15,6 +15,7 @@ type AccessTokenPayload = {
 export const useAccount = defineStore('account', () => {
   const accessToken = ref('');
   const refreshToken = ref('');
+  const permissions = ref<string[]>([]);
   const setTokenPair = (at: string, rt: string) => {
     accessToken.value = at;
     refreshToken.value = rt;
@@ -23,12 +24,19 @@ export const useAccount = defineStore('account', () => {
   const accountId = computed(() => accessTokenPayload.value?.sub);
   const logout = () => {
     setTokenPair('', '');
+    permissions.value = [];
+  };
+  const setPermissions = (p: string[]) => {
+    permissions.value = p;
+  };
+  const hasPermission = (p: string) => {
+    return permissions.value.includes('*') || permissions.value.includes(p);
   };
   const isLogged = computed(() => !!accessToken.value);
-  return { accessToken, refreshToken, accountId, setTokenPair, isLogged, logout };
+  return { accessToken, refreshToken, accountId, setTokenPair, isLogged, logout, permissions, setPermissions, hasPermission };
 }, {
   persist: {
     storage: localStorage,
-    pick: ['accessToken', 'refreshToken'],
+    pick: ['accessToken', 'refreshToken', 'permissions'],
   },
 });

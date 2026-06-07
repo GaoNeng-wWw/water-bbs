@@ -4,7 +4,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   CreateCategoryCommand,
   RemoveCategoryCommand,
-  updateCategoryCommand,
+  UpdateCategoryCommand,
 } from './command';
 import { FindCategoryQuery, ListCategories } from './query';
 
@@ -36,7 +36,7 @@ export class CategoryService {
     return ok(res.value);
   }
   async updateCategory(id: string, name?: string, parent?: string | null) {
-    const cmd = new updateCategoryCommand(id, name, parent);
+    const cmd = new UpdateCategoryCommand(id, name, parent);
     const res = await this.cb.execute(cmd);
     if (isErr(res)) {
       return res;

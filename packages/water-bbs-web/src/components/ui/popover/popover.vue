@@ -12,6 +12,8 @@ const forwarded = useForwardPropsEmits(props, emits);
   <popover-portal>
     <popover-content
       v-bind="{ ...forwarded, ...$attrs }"
+      position-strategy="fixed"
+      class="min-w-200px text-warm-foreground bg-warm-100 px-2 py-2 rounded border border-solid border-warm-200"
     >
       <slot />
     </popover-content>

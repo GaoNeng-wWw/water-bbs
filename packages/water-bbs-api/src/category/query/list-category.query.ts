@@ -24,7 +24,7 @@ export class ListCategoriesQueryHandler implements IQueryHandler<ListCategories>
       id: item.id,
       name: item.name,
       hasChildren: item.hasChildren,
-      parentID: item.parentID,
+      parentId: item.parentID,
     }));
     return ok(summaries);
   }

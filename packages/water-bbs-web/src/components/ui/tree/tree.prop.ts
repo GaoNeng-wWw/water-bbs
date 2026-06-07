@@ -2,6 +2,7 @@ export type NodeState = { expanded: boolean; disabled: boolean };
 export type NestedNode = {
   id: string;
   label: string;
+  leaf?: boolean;
   children: NestedNode[];
 };
 export type FlattenNode = {

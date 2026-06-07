@@ -420,8 +420,7 @@ export const CreateCategoryDTOSchema = {
         }
     },
     required: [
-        'name',
-        'parent'
+        'name'
     ]
 } as const;
 
@@ -437,15 +436,15 @@ export const CreateCategoryResponseSchema = {
         hasChildren: {
             type: 'boolean'
         },
-        parent: {
-            type: 'string'
+        parentId: {
+            type: 'object',
+            nullable: true
         }
     },
     required: [
         'id',
         'name',
-        'hasChildren',
-        'parent'
+        'hasChildren'
     ]
 } as const;
 
@@ -495,7 +494,8 @@ export const CategorySummarySchema = {
             type: 'string'
         },
         parentId: {
-            type: 'object'
+            type: 'object',
+            nullable: true
         },
         hasChildren: {
             type: 'boolean'
@@ -504,7 +504,6 @@ export const CategorySummarySchema = {
     required: [
         'id',
         'name',
-        'parentId',
         'hasChildren'
     ]
 } as const;

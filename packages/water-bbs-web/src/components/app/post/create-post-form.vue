@@ -10,6 +10,7 @@ const emits = defineEmits<{
   close: [];
 }>();
 const { tree, expand } = useNestedCategoryTreeData();
+console.log(tree);
 expand();
 
 const activeNodes = ref<FlattenNode[]>([]);

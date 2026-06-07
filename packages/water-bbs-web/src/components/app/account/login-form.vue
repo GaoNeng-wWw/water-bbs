@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { authControllerLogin } from '@/api';
+import { accountControllerGetPermission, authControllerLogin } from '@/api';
 import { UiForm, UiFormItem, UiInput, UiButton } from '@/components/ui';
+import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 import { useAccount } from '@/store';
 import { reactive } from 'vue';
 import z from 'zod';
@@ -27,7 +28,10 @@ const onClickLogin = () => {
         return;
       }
       accountStore.setTokenPair(data.accessToken, data.refreshToken);
+      return accountControllerGetPermission({ client: NOT_PUBLIC_ENDPOINT });
     })
+    .then(resp => resp?.data ?? [])
+    .then(permissions => accountStore.setPermissions(permissions));
 };
 </script>
 

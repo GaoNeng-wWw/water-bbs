@@ -8,7 +8,7 @@ export class CategorySummary {
   @ApiProperty()
   @Expose()
   name: string;
-  @ApiProperty()
+  @ApiProperty({ nullable: true, required: false })
   @Expose()
   parentId?: string | null;
   @ApiProperty()

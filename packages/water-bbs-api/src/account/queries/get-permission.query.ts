@@ -20,7 +20,9 @@ export class GetPermissionHandler implements IQueryHandler<GetPermissionQuery> {
   async execute(
     query: GetPermissionQuery,
   ): Promise<Result<string[], AppError>> {
-    const account = await this.accountRepository.findOne(query.accountID);
+    const account = await this.accountRepository.findOne(query.accountID, {
+      populate: ['role.permissions'],
+    });
     if (!account) {
       return err(new AccountNotFound());
     }

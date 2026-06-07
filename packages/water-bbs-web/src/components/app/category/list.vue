@@ -1,20 +1,28 @@
 <script lang="ts" setup>
-import { UiCollapse } from '@/components/ui';
-import { useCategoryTree } from '@/composables';
-import { useSiteStore } from '@/store/site.store';
-const { roots, expand, onActive } = useCategoryTree();
-const { setActiveCategory } = useSiteStore();
+import { UiTree, type FlattenNode } from '@/components/ui';
+import type { NestTreeNode } from '@/composables';
+import { ref, watch } from 'vue';
+const { tree } = defineProps<{
+  tree: NestTreeNode[];
+}>();
+const emit = defineEmits<{
+  expand: [string];
+  clickCategory: [string];
+}>();
 
-expand();
-onActive((node) => {
-  setActiveCategory(node.id);
-});
+const activeNode = ref<FlattenNode[]>([]);
+
+watch(activeNode, () => {
+  emit('clickCategory', activeNode.value[0].id);
+}, { deep: true, flush: 'pre' });
 </script>
 
 <template>
-  <div class="w-full">
-    <ui-collapse>
-      <component :is="item" v-for="item in roots" :key="item.key" />
-    </ui-collapse>
+  <div class="w-full text-warm-foreground">
+    <ui-tree
+      v-model="activeNode"
+      :nodes="tree"
+      @expand="(node) => $emit('expand', node.id)"
+    />
   </div>
 </template>

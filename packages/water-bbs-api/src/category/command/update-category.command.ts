@@ -2,7 +2,7 @@ import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AppError, isErr, ok, Result } from 'water-bbs-shared';
 import { CategoryRepo } from '../category.repo';
 
-export class updateCategoryCommand extends Command<
+export class UpdateCategoryCommand extends Command<
   Result<{ id: string } | null, AppError>
 > {
   constructor(
@@ -14,11 +14,11 @@ export class updateCategoryCommand extends Command<
   }
 }
 
-@CommandHandler(updateCategoryCommand)
-export class updateCategoryCommandHandler implements ICommandHandler<updateCategoryCommand> {
+@CommandHandler(UpdateCategoryCommand)
+export class UpdateCategoryCommandHandler implements ICommandHandler<UpdateCategoryCommand> {
   constructor(private readonly categoryRepo: CategoryRepo) {}
   async execute(
-    command: updateCategoryCommand,
+    command: UpdateCategoryCommand,
   ): Promise<Result<{ id: string } | null, AppError>> {
     const { id, name, parent } = command;
     const categoryRes = await this.categoryRepo.find(id);

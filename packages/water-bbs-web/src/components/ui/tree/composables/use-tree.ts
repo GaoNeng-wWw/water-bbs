@@ -9,6 +9,7 @@ export type UseTreeOptions = {
   activeLimit: number;
   defaultActive: MaybeRefOrGetter<string[]>;
   onExpand?: (node: FlattenNode) => void;
+  onActive?: (nodes: FlattenNode[]) => void;
 };
 
 export const useTree = (
@@ -59,6 +60,9 @@ export const useTree = (
       active.value.shift();
     }
     active.value.push(id);
+    opts.onActive?.(
+      active.value.map(activeId => nodes.get(activeId)!),
+    );
   };
   const isLeaf = (id: string) => {
     return nodes.get(id)!.leaf;
@@ -111,6 +115,6 @@ export const useTree = (
     for (const node of flattenedNodes.value) {
       nodes.set(node.id, node);
     }
-  }, { immediate: true });
+  }, { immediate: true, deep: true });
   return { onClick, flattenLeveledNode, canShow, isLeaf, isExpanded, isActive, toggleActive, activeNodes };
 };

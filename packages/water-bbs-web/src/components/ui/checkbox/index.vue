@@ -41,7 +41,7 @@ const checkbox = tv({
       default: {
         root: [
           'bg-warm-50', 'border-warm-200', 'hover:bg-warm-100',
-          'data-[state:checked]:bg-warm-100',
+          'data-[state=checked]:bg-warm-100',
         ],
         checkIcon: ['text-warm-foreground'],
         label: ['text-warm-foreground'],

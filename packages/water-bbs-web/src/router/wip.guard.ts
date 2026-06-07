@@ -2,11 +2,11 @@ import type { Router } from 'vue-router';
 import { toast } from 'vue-sonner';
 
 export default (router: Router) => {
-  router.beforeEach((to, _, next) => {
-    if (to.meta.wip) {
-      toast.warning('页面正在施工');
-      return;
-    }
-    return next();
-  });
+  // router.beforeEach((to, _, next) => {
+  // if (to.meta.wip) {
+  //   toast.warning('页面正在施工');
+  //   return;
+  // }
+  // return next();
+  // });
 };

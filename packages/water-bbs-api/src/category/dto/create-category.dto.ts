@@ -8,7 +8,7 @@ export class CreateCategoryDTO {
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   parent?: string;
@@ -24,12 +24,12 @@ export class CreateCategoryResponse {
   @ApiProperty()
   @Expose()
   hasChildren: boolean;
-  @ApiProperty()
+  @ApiProperty({ nullable: true, required: false })
   @Expose()
-  parent?: string;
-  constructor(id: string, name: string, parent?: string) {
+  parentId?: string | null;
+  constructor(id: string, name: string, parentId?: string) {
     this.id = id;
     this.name = name;
-    this.parent = parent;
+    this.parentId = parentId;
   }
 }

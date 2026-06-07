@@ -34,9 +34,12 @@ export class PermissionGuard implements CanActivate {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }
     const accountId = req.user.account.id;
-    const account = await this.accountRepository.findOne({
-      id: accountId,
-    });
+    const account = await this.accountRepository.findOne(
+      {
+        id: accountId,
+      },
+      { populate: ['role', 'role.permissions'] },
+    );
     if (!account || isEmpty(account)) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
     }

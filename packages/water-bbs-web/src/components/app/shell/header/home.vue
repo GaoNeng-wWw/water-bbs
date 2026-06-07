@@ -26,7 +26,7 @@ const onClickMenuIcon = () => {
 <template>
   <div class="w-full h-full flex items-center justify-between">
     <div class="size-fit flex items-center justify-between">
-      <animate-presence>
+      <animate-presence :initial="false">
         <motion.div
           v-if="siteStore.sidebarVisbility && !siteStore.isMobile"
           class="w-220px hidden md:block"

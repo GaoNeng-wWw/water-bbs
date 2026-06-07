@@ -30,9 +30,9 @@ const style = tv({
   ],
   variants: {
     size: {
-      sm: 'p-1 rounded',
-      md: 'px-2 py-1 rounded-md',
-      lg: 'px-3 py-2 rounded-lg',
+      sm: 'p-1 rounded text-sm',
+      md: 'px-2 py-1 rounded-md text-md',
+      lg: 'px-3 py-2 rounded-lg text-md',
     },
     color: {
       default: 'bg-warm-100 border-warm-200 hover:border-warm-300',

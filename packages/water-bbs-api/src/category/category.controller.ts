@@ -59,6 +59,7 @@ export class CategoryController {
     description: 'Parent category ID',
     required: false,
   })
+  @UseModel(CategorySummary)
   @Get('')
   async listCategories(@Query('parent') parent?: string) {
     return this.categoryService.listCategories(parent);

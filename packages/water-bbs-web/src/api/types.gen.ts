@@ -151,14 +151,16 @@ export type CursorPagination = {
 
 export type CreateCategoryDto = {
     name: string;
-    parent: string;
+    parent?: string;
 };
 
 export type CreateCategoryResponse = {
     id: string;
     name: string;
     hasChildren: boolean;
-    parent: string;
+    parentId?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 export type RemoveCategoryResponse = {
@@ -178,9 +180,9 @@ export type UpdateCategoryResponse = {
 export type CategorySummary = {
     id: string;
     name: string;
-    parentId: {
+    parentId?: {
         [key: string]: unknown;
-    };
+    } | null;
     hasChildren: boolean;
 };
 

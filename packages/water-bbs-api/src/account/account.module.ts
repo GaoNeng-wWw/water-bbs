@@ -23,9 +23,12 @@ import { StorageModule } from '@app/storage';
 import { FindProfileBatchQueryHandler } from './queries/find-profile-batch.query';
 import { BanAccountAction, UnbanAccountAction } from './action';
 import { FindAccountByIdIdentCertQueryHandler } from './queries/find-account-by-ident-cert.query';
+import { GetPermissionHandler } from './queries/get-permission.query';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Account } from 'water-bbs-migration';
 
 @Module({
-  imports: [StorageModule],
+  imports: [StorageModule, MikroOrmModule.forFeature([Account])],
   controllers: [AccountController],
   providers: [
     MailRegistor,
@@ -64,6 +67,7 @@ import { FindAccountByIdIdentCertQueryHandler } from './queries/find-account-by-
     BanAccountAction,
     UnbanAccountAction,
     FindAccountByIdIdentCertQueryHandler,
+    GetPermissionHandler,
   ],
 })
 export class AccountModule {}

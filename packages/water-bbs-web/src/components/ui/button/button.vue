@@ -37,7 +37,7 @@ const style = tv({
   variants: {
     size: {
       tiny: 'text-xs min-w-8 min-h-8 p-1 px-2',
-      sm: 'min-w-8 min-h-8 p-1 text-sm',
+      sm: 'min-w-8 min-h-9 p-1 text-sm',
       md: 'min-w-10 min-h-10 py-2 px-2 rounded-md cursor-pointer',
     },
     full: {
