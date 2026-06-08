@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { ProposalStatus } from 'water-bbs-migration';
 
 export class ProposalSummary {
   @ApiProperty()
@@ -8,8 +9,12 @@ export class ProposalSummary {
   @ApiProperty()
   @Expose()
   title: string;
-  constructor(id: string, title: string) {
+  @ApiProperty({ enum: ProposalStatus })
+  @Expose()
+  status: ProposalStatus;
+  constructor(id: string, title: string, status: ProposalStatus) {
     this.id = id;
     this.title = title;
+    this.status = status;
   }
 }

@@ -20,7 +20,8 @@ export enum ProposalStatus {
 export class Proposals extends BaseMetaEntity {
   @PrimaryKey({ type: 'uuid', default: v7() })
   id: string;
-
+  @Property({ type: 'text', default: ''})
+  title: string;
   @Property({ index: true, type: 'uuid' })
   authorId: string;
   @Property({ type: 'text', default: ''})
@@ -55,8 +56,10 @@ export class Proposals extends BaseMetaEntity {
     command: string,
     startAt: Date,
     endAt: Date,
+    title: string,
   ){
     super();
+    this.title = title;
     this.id=id;
     this.authorId=authorId;
     this.content=content;
@@ -100,8 +103,8 @@ export class Proposals extends BaseMetaEntity {
   static create(
     authorId: string,
     comment: string,
-    command: string, startAt: Date, endAt: Date){
-    return new Proposals(v7(), authorId, comment, command, startAt, endAt);
+    command: string, startAt: Date, endAt: Date, title: string){
+    return new Proposals(v7(), authorId, comment, command, startAt, endAt, title);
   }
 
   remove(){

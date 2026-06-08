@@ -2,10 +2,12 @@
 import { AnimatePresence, motion } from 'motion-v';
 import Sidebar from '@/components/app/shell/sidebar.vue';
 import { Layout } from '@/components/ui';
-import { ProposalList } from '@/components/app';
+import { AppProposalList } from '@/components/app';
 import { useSiteStore } from '@/store/site.store';
 import { storeToRefs } from 'pinia';
 import { HomeHeader } from '@/components/app/shell';
+import { actionControllerListAction } from '@/api';
+import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 
 const siteStore = useSiteStore();
 const { isMobile, sidebarVisbility } = storeToRefs(siteStore);
@@ -29,8 +31,8 @@ const { isMobile, sidebarVisbility } = storeToRefs(siteStore);
         >
           <sidebar show-category-list />
         </motion.div>
-        <div class="w-full h-full flex">
-          <proposal-list />
+        <div class="max-w-1200px w-full mx-auto py-4 px-4 h-full flex">
+          <app-proposal-list />
         </div>
       </animate-presence>
     </div>

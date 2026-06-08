@@ -35,26 +35,24 @@ declare module 'vue-router/auto-routes' {
       '/',
       Record<never, never>,
       Record<never, never>,
-      | '//post/[id]'
-      | '//profile/[id]'
-      | '//proposal/'
+      | never
     >,
-    '//post/[id]': RouteRecordInfo<
-      '//post/[id]',
+    '/post/[id]': RouteRecordInfo<
+      '/post/[id]',
       '/post/:id',
       { id: ParamValue<true> },
       { id: ParamValue<false> },
       | never
     >,
-    '//profile/[id]': RouteRecordInfo<
-      '//profile/[id]',
+    '/profile/[id]': RouteRecordInfo<
+      '/profile/[id]',
       '/profile/:id',
       { id: ParamValue<true> },
       { id: ParamValue<false> },
       | never
     >,
-    '//proposal/': RouteRecordInfo<
-      '//proposal/',
+    '/proposal/': RouteRecordInfo<
+      '/proposal/',
       '/proposal',
       Record<never, never>,
       Record<never, never>,
@@ -76,27 +74,24 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index.vue': {
       routes:
         | '/'
-        | '//post/[id]'
-        | '//profile/[id]'
-        | '//proposal/'
-      views:
-        | 'default'
-    }
-    'src/pages/index/post/[id].vue': {
-      routes:
-        | '//post/[id]'
       views:
         | never
     }
-    'src/pages/index/profile/[id].vue': {
+    'src/pages/post/[id].vue': {
       routes:
-        | '//profile/[id]'
+        | '/post/[id]'
       views:
         | never
     }
-    'src/pages/index/proposal/index.vue': {
+    'src/pages/profile/[id].vue': {
       routes:
-        | '//proposal/'
+        | '/profile/[id]'
+      views:
+        | never
+    }
+    'src/pages/proposal/index.vue': {
+      routes:
+        | '/proposal/'
       views:
         | never
     }

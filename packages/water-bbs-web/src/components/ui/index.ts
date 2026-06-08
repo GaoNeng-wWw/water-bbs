@@ -17,6 +17,8 @@ export * from './skeleton';
 export * from './paginaton';
 export * from './avatar';
 export * from './layout';
+export * from './tag';
+
 export { default as UiCheckbox } from './checkbox/index.vue';
 export { default as TreeSelect } from './tree-select/index.vue';
 export { default as UiTreeSelect } from './tree-select/index.vue';

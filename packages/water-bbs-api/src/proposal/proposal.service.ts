@@ -24,7 +24,10 @@ export class ProposalService {
       JSON.stringify(dto.workflows),
       dto.content,
       new Date(),
+      // 24h expire
+      // TODO: 后续允许用户自行传入，这里先写死
       new Date(Date.now() + 24 * 60 * 60 * 1000),
+      dto.title,
     );
     return this.proposalRepo
       .upsertProposal(proposal)
@@ -81,7 +84,7 @@ export class ProposalService {
     return ok(
       new Pagination(
         total,
-        proposals.map((p) => new ProposalSummary(p.id, p.content)),
+        proposals.map((p) => new ProposalSummary(p.id, p.title, p.status)),
       ),
     );
   }

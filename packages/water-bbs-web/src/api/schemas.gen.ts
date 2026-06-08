@@ -516,11 +516,22 @@ export const ProposalSummarySchema = {
         },
         title: {
             type: 'string'
+        },
+        status: {
+            type: 'string',
+            enum: [
+                'active',
+                'passed',
+                'rejected',
+                'executed',
+                'cancelled'
+            ]
         }
     },
     required: [
         'id',
-        'title'
+        'title',
+        'status'
     ]
 } as const;
 
@@ -578,38 +589,26 @@ export const ProposalEntitySchema = {
     ]
 } as const;
 
-export const ActionSchema = {
-    type: 'object',
-    properties: {
-        type: {
-            type: 'string'
-        },
-        args: {
-            type: 'object'
-        },
-        children: {
-            type: 'array',
-            items: {
-                $ref: '#/components/schemas/Action'
-            }
-        }
-    },
-    required: [
-        'type',
-        'args',
-        'children'
-    ]
-} as const;
-
 export const CreateProposalSchema = {
     type: 'object',
     properties: {
+        content: {
+            type: 'string'
+        },
         workflows: {
-            $ref: '#/components/schemas/Action'
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        },
+        title: {
+            type: 'string'
         }
     },
     required: [
-        'workflows'
+        'content',
+        'workflows',
+        'title'
     ]
 } as const;
 

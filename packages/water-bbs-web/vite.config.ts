@@ -46,7 +46,7 @@ export default defineConfig({
       '@components': resolve(__dirname, './src/components/'),
       '@': resolve(__dirname, './src/'),
     },
-  },
+  }, 
   server: {
     proxy: {
       '/api': {

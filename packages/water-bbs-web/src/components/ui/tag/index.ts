@@ -1,0 +1,1 @@
+export { default as UiTag } from './index.vue';

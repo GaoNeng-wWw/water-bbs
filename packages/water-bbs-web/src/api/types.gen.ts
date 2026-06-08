@@ -189,6 +189,7 @@ export type CategorySummary = {
 export type ProposalSummary = {
     id: string;
     title: string;
+    status: 'active' | 'passed' | 'rejected' | 'executed' | 'cancelled';
 };
 
 export type AuthorProfile = {
@@ -212,16 +213,10 @@ export type ProposalEntity = {
     no: number;
 };
 
-export type Action = {
-    type: string;
-    args: {
-        [key: string]: unknown;
-    };
-    children: Array<Action>;
-};
-
 export type CreateProposal = {
-    workflows: Action;
+    content: string;
+    workflows: Array<string>;
+    title: string;
 };
 
 export type CreateProposalResponse = {

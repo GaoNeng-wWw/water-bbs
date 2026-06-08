@@ -4,13 +4,18 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 export class CreateProposal {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   public content: string;
   @ApiProperty()
   @IsObject({ each: true })
   @ApiProperty()
-  public workflows: Action;
+  public workflows: Action[];
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  public title: string;
 }
 
 export class CreateProposalResponse {

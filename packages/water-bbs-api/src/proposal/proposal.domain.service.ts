@@ -1,6 +1,6 @@
-import { WorkflowRunner } from '@app/workflow';
+import { IAction, WorkflowRunner } from '@app/workflow';
 import { Proposals, ProposalStatus } from 'water-bbs-migration';
-import { isErr, ok } from 'water-bbs-shared';
+import { err, isErr, ok } from 'water-bbs-shared';
 
 export type VoteResult = { yes: number; no: number };
 
@@ -19,17 +19,15 @@ export class ProposalDomainService {
     }
     const runRes = proposal.run();
     if (isErr(runRes)) {
-      return runRes;
+      return err(runRes.error);
     }
-    const command = JSON.parse(proposal.command);
-    const executeRes = await this.workflowRunner.execute<T>(command);
-    const doneRes = proposal.done();
-    if (isErr(doneRes)) {
-      return doneRes;
+    const actions: IAction[] = JSON.parse(proposal.command);
+    for (const action of actions) {
+      const executeRes = await this.workflowRunner.execute<T>(action);
+      if (isErr(executeRes)) {
+        return err(executeRes.error);
+      }
     }
-    if (isErr(executeRes)) {
-      return executeRes;
-    }
-    return executeRes;
+    return ok(true);
   }
 }

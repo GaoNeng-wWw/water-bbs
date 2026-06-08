@@ -11,6 +11,11 @@ export class Action implements IAction {
   @ApiProperty()
   public args: Record<string, any>;
   @IsArray({ each: true })
-  @ApiProperty({type: [Action]})
-  public children: Action[];
+  @ApiProperty({
+    type: [Action],
+    default: [],
+    nullable: false,
+    required: false,
+  })
+  public children: Action[] = [];
 }

@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants';
 import { computed, ref } from 'vue';
 
 const { loading = false, ...props } = defineProps<{
-  color?: 'info' | 'primary';
+  color?: 'info' | 'primary' | 'success' | 'warning';
   loading?: boolean;
   disabled?: boolean;
   htmlType?: 'button' | 'submit' | 'reset';
@@ -26,33 +26,21 @@ const onClick = (ev: MouseEvent) => {
 const showLoading = ref(loading);
 
 const style = tv({
-  defaultVariants: {
-    icon: false, full: false,
-    size: 'md', color: 'info', shape: 'ghost', rounded: 'sm',
-  },
-  base: [
-    'text-base transition disabled:cursor-not-allowed disabled:bg-opacity-80',
-    'inline-flex gap-2 items-center w-fit min-w-11 min-h-8 justify-center cursor-pointer',
-  ],
+  base: 'inline-flex items-center justify-center transition duration-fast',
   variants: {
-    size: {
-      tiny: 'text-xs min-w-8 min-h-8 p-1 px-2',
-      sm: 'min-w-8 min-h-9 p-1 text-sm',
-      md: 'min-w-10 min-h-10 py-2 px-2 rounded-md cursor-pointer',
+    disabled: {
+      true: 'cursor-not-allowed bg-opacity-50! text-opacity-50! pointer-events-none',
     },
     full: {
-      true: 'min-w-unset w-full',
+      true: 'w-full',
     },
     icon: {
-      true: 'aspect-ratio-square p-0 size-fit',
+      true: 'aspect-square',
     },
-    shape: {
-      ghost: 'bg-opacity-0! border-none hover:bg-opacity-40!',
-      solid: 'border bg-opacity-100 hover:bg-opacity-80',
-    },
-    color: {
-      primary: 'bg-primary-500 text-primary-foreground border-none',
-      info: 'bg-warm-200 border-warm-300 text-warm-foreground',
+    size: {
+      tiny: 'text-xs min-w-8 min-h-8 p-1 px-2 text-sm',
+      sm: 'min-w-8 min-h-9 p-1 text-sm',
+      md: 'min-w-10 min-h-9 py-1 px-3 rounded-md cursor-pointer text-base',
     },
     rounded: {
       sm: 'rounded',
@@ -60,6 +48,57 @@ const style = tv({
       lg: 'rounded-lg',
       full: 'rounded-full',
     },
+    shape: {
+      ghost: 'bg-opacity-0! border-none hover:bg-opacity-40! border-none',
+      solid: 'border bg-opacity-100 hover:bg-opacity-80',
+      flat: '',
+    },
+    color: {
+      primary: '',
+      success: '',
+      info: '',
+      warning: '',
+    },
+  },
+  compoundVariants: [
+    {
+      color: 'primary', shape: 'ghost',
+      className: 'bg-primary-500/0 text-primary-500 hover:bg-primary-500/20',
+    },
+    {
+      color: 'warning', shape: 'ghost',
+      className: 'bg-warning-500/0 text-warning-500 hover:bg-warning-500/20',
+    },
+    {
+      color: 'success', shape: 'ghost',
+      className: 'bg-success-500/0 text-success-500 hover:bg-success-500/20',
+    },
+    {
+      color: 'info', shape: 'ghost',
+      className: 'bg-warm-500/0 text-warm-500 hover:bg-warm-500/20',
+    },
+    {
+      color: 'warning', shape: 'solid',
+      className: 'bg-warning-500 text-warning-foreground hover:bg-warning-400 border-none',
+    },
+    {
+      color: 'primary', shape: 'solid',
+      className: 'bg-primary-500 text-primary-foreground hover:bg-primary-400 border-none',
+    },
+    {
+      color: 'success', shape: 'solid',
+      className: 'bg-success-500 text-success-foreground hover:bg-success-400 border-none',
+    },
+    {
+      color: 'info', shape: 'solid',
+      className: 'bg-warm-500 text-warm-foreground hover:bg-warm-400 border-none',
+    },
+  ],
+  defaultVariants: {
+    size: 'md',
+    color: 'info',
+    shape: 'ghost',
+    rounded: 'sm',
   },
 });
 const clazz = computed(() => style(props));
