@@ -2,7 +2,7 @@
 import { DrawerContent, DrawerPortal, DrawerOverlay, DrawerHandle } from 'vaul-vue';
 import { drawerContextKey, type Direction } from './context.prop';
 import { tv } from 'tailwind-variants';
-import { computed, inject, watch } from 'vue';
+import { computed, inject } from 'vue';
 
 const { class: clazz, to, direction } = defineProps<{
   // eslint-disable-next-line vue/no-reserved-props
@@ -13,8 +13,8 @@ const { class: clazz, to, direction } = defineProps<{
 
 const styles = tv({
   slots: {
-    overlay: 'size-full fixed inset-0 z-20 bg-black/40',
-    content: 'fixed z-30 bg-warm-50 max-h-95dvh overflow-hidden border border-solid border-warm-200 rounded-t-lg p-4',
+    overlay: 'size-full fixed inset-0 z-auto bg-black/40',
+    content: 'fixed z-auto bg-warm-50 max-h-95dvh overflow-hidden border border-solid border-warm-200 rounded-t-lg p-4',
     handle: 'cursor-pointer shrink-0',
   },
   variants: {

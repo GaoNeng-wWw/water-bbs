@@ -10,14 +10,14 @@ const slots = defineSlots();
 const ctx = getContext(CollapseContextKey);
 
 const isActive = computed(() => ctx.currentActive.value.includes(id));
-const onClick = () => ctx.setActive(id)
+const onClick = () => ctx.setActive(id);
 </script>
 
 <template>
   <motion.div class="w-full py-1">
-    <motion.div class="w-full" @click="onClick">
-      <slot :label="label" :active="isActive" name="header">
-        <div class="w-full px-2 py-1 flex justify-between items-center text-warm-foreground cursor-pointer">
+    <motion.div class="w-full" contenteditable="false">
+      <slot :label="label" :active="isActive" name="header" :click="onClick">
+        <div class="w-full px-2 py-1 flex justify-between items-center text-warm-foreground cursor-pointer" @click="onClick">
           <span>{{ label }}</span>
           <div
             :data-active="isActive"

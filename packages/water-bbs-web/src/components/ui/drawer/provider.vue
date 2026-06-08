@@ -41,7 +41,7 @@ const onValueChange = (id: number, val: boolean) => {
     @update:model-value="(val) => onValueChange(d.id, val)"
     @animation-end="(open) => onAnimationEnd(d.id, open)"
   >
-    <content>
+    <content :class="d.class">
       <component :is="d.comp" @close="() => closeDrawer(d.id)" />
     </content>
   </root>

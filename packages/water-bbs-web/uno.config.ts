@@ -89,5 +89,9 @@ export default defineConfig({
     },
   },
 
-  safelist: ['hover:bg-warm-200', 'rotate-90', 'rotate-0', 'pl-2', 'pl-4', 'bg-warm-200/50', 'bg-warm-200/30', 'bg-warm-100', 'ml-4'],
+  safelist: [
+    'hover:bg-warm-200', 'rotate-90', 'rotate-0', 'pl-2', 'pl-4',
+    'bg-warm-200/50', 'bg-warm-200/30', 'bg-warm-100', 'ml-4',
+    'i-material-symbols:format-bold', 'i-material-symbols:format-italic', 'i-material-symbols:expand-more', 'i-material-symbols:arrow-forward-ios-rounded',
+  ],
 });

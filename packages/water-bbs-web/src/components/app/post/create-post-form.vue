@@ -36,7 +36,7 @@ const onClickSend = () => {
 </script>
 
 <template>
-  <div class="w-4xl flex flex-col min-h-64 overflow-auto h-full ">
+  <div class="w-full flex flex-col min-h-64 overflow-auto h-full ">
     <div class="w-full h-fit flex flex-col grow shrink overflow-hidden">
       <div class="w-fit h-fit shrink-0 grow-0 mr-0 ml-auto">
         <ui-button color="primary" shape="solid" @click="onClickSend">

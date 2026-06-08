@@ -15,11 +15,13 @@ export type Drawer = {
   direction?: 'bottom' | 'top' | 'left' | 'right';
   snapPoints: (string | number)[];
   activeSnapPoints?: (string | number | null);
+  class?: string;
 };
 
 export type RenderOptions = {
   direction?: 'bottom' | 'top' | 'left' | 'right';
   snapPoints?: (string | number)[];
+  class?: string;
 };
 
 const drawer: Drawer[] = reactive([]);
@@ -44,6 +46,7 @@ export const useDrawer = () => {
       direction: opts.direction ?? 'bottom',
       snapPoints: opts.snapPoints ?? [],
       activeSnapPoints: opts.snapPoints ? opts.snapPoints[0] : undefined,
+      class: opts.class,
     });
     return p;
   };

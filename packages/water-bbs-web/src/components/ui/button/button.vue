@@ -26,7 +26,7 @@ const onClick = (ev: MouseEvent) => {
 const showLoading = ref(loading);
 
 const style = tv({
-  base: 'inline-flex items-center justify-center transition duration-fast',
+  base: 'inline-flex items-center justify-center transition duration-fast cursor-pointer',
   variants: {
     disabled: {
       true: 'cursor-not-allowed bg-opacity-50! text-opacity-50! pointer-events-none',
@@ -38,8 +38,8 @@ const style = tv({
       true: 'aspect-square',
     },
     size: {
-      tiny: 'text-xs min-w-8 min-h-8 p-1 px-2 text-sm',
-      sm: 'min-w-8 min-h-9 p-1 text-sm',
+      tiny: 'text-xs min-w-7.5 min-h-7.5 p-1 px-2 text-sm',
+      sm: 'min-w-8 min-h-8 p-1 text-sm',
       md: 'min-w-10 min-h-9 py-1 px-3 rounded-md cursor-pointer text-base',
     },
     rounded: {

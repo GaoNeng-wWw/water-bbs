@@ -331,6 +331,9 @@ importers:
       tailwind-variants:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
+      uuid:
+        specifier: ^14.0.0
+        version: 14.0.0
       vaul-vue:
         specifier: ^0.4.1
         version: 0.4.1(reka-ui@2.9.7(vue@3.5.35(typescript@6.0.3)))(vue@3.5.35(typescript@6.0.3))

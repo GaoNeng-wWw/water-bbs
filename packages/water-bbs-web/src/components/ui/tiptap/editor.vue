@@ -4,16 +4,24 @@ import { Markdown } from '@tiptap/markdown';
 import StarterKit from '@tiptap/starter-kit';
 import toolbar from './toolbar.vue';
 import { provide, ref } from 'vue';
-import { EditorContextKey } from './editor.props.ts';
+import { EditorContextKey, type EditorProps } from './editor.props.ts';
+import { bold, italic, Collapse } from './extension';
 
-const { content, readonly } = defineProps<{
-  content?: object | string;
-  readonly?: boolean;
-  wysiwyg?: boolean;
-}>();
+const {
+  content,
+  readonly,
+  wysiwyg = false,
+  extensions = [
+    bold,
+    italic,
+    Collapse,
+  ],
+  contentType = 'json',
+} = defineProps<EditorProps>();
 
 const editor = new Editor({
   content,
+  contentType,
   editable: !readonly,
   extensions: [
     StarterKit.configure({
@@ -22,6 +30,7 @@ const editor = new Editor({
       },
     }),
     Markdown,
+    ...extensions.filter(ext => ext.extension !== null).map(ext => ext.extension!),
   ],
   autofocus: true,
   editorProps: {
@@ -50,6 +59,8 @@ provide(EditorContextKey, {
       );
     }
   },
+  extensions,
+  editor
 });
 </script>
 
@@ -67,7 +78,10 @@ provide(EditorContextKey, {
         max-w-full! prose prose-warm prose-p:first:mt-0 overflow-auto flex-1 group-data-[readonly=false]:px-2 mt-2
       "
     />
-    <textarea v-else v-model="sourceCode" class="
+    <textarea
+      v-else
+      v-model="sourceCode"
+      class="
         max-w-full! prose prose-warm prose-p:first:mt-0 px-2 mt-2 block field-sizing-content resize-y overflow-auto flex-1
         outline-none font-mono
       "
