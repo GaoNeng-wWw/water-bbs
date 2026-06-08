@@ -45,7 +45,15 @@ export class Post extends BaseMetaEntity {
     this.hidden = false;
     this.hiddenReason = null;
   }
+
+  show(){
+    this.hidden = false;
+    this.hiddenReason = null;
+    this.hideAt = null;
+  }
+
   hide(reason: string) {
+    this.hidden = true;
     this.hiddenReason = reason;
     this.hideAt = new Date();
   }
