@@ -6,6 +6,7 @@ import toolbar from './toolbar.vue';
 import { provide, ref } from 'vue';
 import { EditorContextKey, type EditorProps } from './editor.props.ts';
 import { bold, italic, Collapse } from './extension';
+import { Image } from './extension/image/ext.ts';
 
 const {
   content,
@@ -15,6 +16,7 @@ const {
     bold,
     italic,
     Collapse,
+    Image,
   ],
   contentType = 'json',
 } = defineProps<EditorProps>();
@@ -42,10 +44,11 @@ const editor = new Editor({
 
 const getJson = () => editor.getJSON();
 const getMd = () => editor.getMarkdown();
+const getInstance = () => editor;
 const source = ref(false);
 const sourceCode = ref<string | null>(null);
 
-defineExpose({ getJson, getMd });
+defineExpose({ getJson, getMd, getInstance });
 provide(EditorContextKey, {
   setSource: (val: boolean) => {
     source.value = val;
@@ -60,7 +63,7 @@ provide(EditorContextKey, {
     }
   },
   extensions,
-  editor
+  editor,
 });
 </script>
 

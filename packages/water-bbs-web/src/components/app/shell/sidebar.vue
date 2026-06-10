@@ -24,7 +24,7 @@ const { tree, expand, add } = useNestedCategoryTreeData();
 expand();
 
 const onClickSend = () => {
-  render(CreatePostForm, { direction: 'bottom', snapPoints: [0.4, 0.5, 0.95], class: 'max-w-800px w-full'});
+  render(CreatePostForm, { direction: 'bottom', snapPoints: [0.4, 0.5, 0.95, 1.0], class: 'max-w-800px w-full'});
 };
 const onClickSubmit = (model: CreateCategoryModel) => {
   categoryControllerCreateCategory({

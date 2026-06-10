@@ -40,7 +40,7 @@ const {
       </div>
       <div class="p-3 border-warm-200/50 min-w-0 w-full grow flex flex-col gap-2 md:border-l">
         <div class="w-full text-warm-foreground">
-          <ui-tiptap-editor :content="content" readonly />
+          <ui-tiptap-editor :content="content" readonly content-type="markdown" />
         </div>
       </div>
     </div>

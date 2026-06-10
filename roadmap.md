@@ -20,7 +20,7 @@
   - priority: high
   - workload: Hard
   - steps:
-      - [ ] 图片上传
+      - [x] 图片上传
       - [ ] 文件上传
       - [ ] 付费文件
       - [ ] 隐藏 (付费解锁)

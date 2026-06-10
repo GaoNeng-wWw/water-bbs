@@ -241,6 +241,31 @@ export const CreatePostResponseSchema = {
     ]
 } as const;
 
+export const UploadImageRequestSchema = {
+    type: 'object',
+    properties: {
+        file: {
+            type: 'string',
+            format: 'binary'
+        }
+    },
+    required: [
+        'file'
+    ]
+} as const;
+
+export const UploadImageResponseSchema = {
+    type: 'object',
+    properties: {
+        url: {
+            type: 'string'
+        }
+    },
+    required: [
+        'url'
+    ]
+} as const;
+
 export const PaginationSchema = {
     type: 'object',
     properties: {

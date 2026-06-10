@@ -9,9 +9,10 @@ export type EditorContext = {
 
 export const EditorContextKey: InjectionKey<EditorContext> = Symbol('editor.context');
 
-export type Ext = {
+export type Ext<T extends Record<string, any>> = {
   icon: Component | null;
-  extension: AnyExtension | null;
+  extension: T | null;
+  options?: T['options'];
   isActive: ((editor: Editor) => boolean) | (() => void);
   onClick?: ((editor: Editor) => void) | (() => void);
 };
@@ -19,9 +20,9 @@ export type Ext = {
 export type ContentType = 'json' | 'html' | 'markdown';
 
 export type EditorProps = {
-  content: object | string;
+  content?: object | string;
   readonly?: boolean;
   wysiwyg?: boolean;
-  extensions?: Ext[];
+  extensions?: Ext<Record<string, any>>[];
   contentType?: ContentType;
 };

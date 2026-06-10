@@ -2,33 +2,61 @@
 import { TreeSelect, UiButton, UiInput } from '@/components/ui';
 import { UiTiptapEditor } from '@/components/ui';
 import { ref, useTemplateRef } from 'vue';
-import { useApi, useNestedCategoryTreeData } from '@/composables';
+import { NOT_PUBLIC_ENDPOINT, useNestedCategoryTreeData } from '@/composables';
 import type { FlattenNode } from '@/components/ui/tree/tree.prop';
-import { postControllerCreatePost } from '@/api';
+import { postControllerCreatePost, postControllerUploadImage } from '@/api';
+import { base64ToFile } from '@/utils';
 
 const emits = defineEmits<{
   close: [];
 }>();
 const { tree, expand } = useNestedCategoryTreeData();
-console.log(tree);
 expand();
 
 const activeNodes = ref<FlattenNode[]>([]);
 const postTitle = ref('');
 const editor = useTemplateRef('editor');
 const onClickSend = () => {
-  if (!editor.value) {
-    // TODO: toast
+  const instance = editor.value?.getInstance();
+  if (!instance) {
     return;
   }
-  postControllerCreatePost({
-    client: useApi(),
-    body: {
-      categoryId: activeNodes.value[0].id,
-      content: JSON.stringify(editor.value?.getJson()),
-      title: postTitle.value,
-    },
-  })
+  const tr = instance.state.tr;
+  const tasks: Promise<boolean>[] = [];
+  instance.state.doc.descendants((node, pos) => {
+    if (node.type.name === 'image') {
+      const task = base64ToFile(node.attrs.src)
+        .then((file) => {
+          return postControllerUploadImage({
+            client: NOT_PUBLIC_ENDPOINT,
+            body: { file },
+          });
+        })
+        .then(resp => resp.data)
+        .then(data => data ? data.url : '')
+        .then(url => tr.setNodeAttribute(pos, 'src', url))
+        .then(() => true)
+        .catch(() => false);
+      tasks.push(task);
+    }
+  });
+  Promise.all(tasks)
+    .then((results) => {
+      if (results.every(result => result)) {
+        instance.view.dispatch(tr);
+      }
+      return editor.value?.getMd() || '';
+    })
+    .then((md) => {
+      return postControllerCreatePost({
+        client: NOT_PUBLIC_ENDPOINT,
+        body: {
+          categoryId: activeNodes.value[0].id,
+          content: md,
+          title: postTitle.value,
+        },
+      });
+    })
     .then(() => {
       emits('close');
     });

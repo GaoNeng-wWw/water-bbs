@@ -11,12 +11,25 @@ import { PostNotFound } from './errors';
 import { Thread, ThreadAuthorSummary } from './entities/thread';
 import { Thread as ThreadAR } from 'water-bbs-migration';
 import { CreateThreadResponse } from './dto/create-thread.dto';
+import { Configure, Storage } from '@app/configure';
+import { ConfigService } from '@nestjs/config';
+import {
+  InjectStoreEngine,
+  InjectUrlResolver,
+  type Resolver,
+  type StorageEngine,
+} from '@app/storage';
 
 @Injectable()
 export class PostApplicationService {
   constructor(
     private repo: PostRepo,
     private query: QueryBus,
+    @InjectUrlResolver()
+    private readonly fileUrlResolver: Resolver,
+    @InjectStoreEngine()
+    private readonly storage: StorageEngine[],
+    private config: ConfigService<Configure>,
   ) {}
 
   async createPost(
@@ -157,6 +170,27 @@ export class PostApplicationService {
       );
     }
     return ok(new Pagination(payload.total, resThreads));
+  }
+  async uploadImage(file: Express.Multer.File) {
+    const storagePolicy = this.config.get('storage').type;
+    const [engine] = this.storage.filter((s) => s.valid(storagePolicy));
+    if (!engine) {
+      // TODO: UNSUPPORTED STORAGE ENGINE
+    }
+    const putResult = await engine.put(
+      file.buffer,
+      file.mimetype,
+      file.filename,
+      file.size,
+    );
+    if (isErr(putResult)) {
+      return putResult;
+    }
+    const url = await this.fileUrlResolver.getUrl(putResult.value);
+    if (isErr(url)) {
+      return url;
+    }
+    return { url: url.value };
   }
   async createThread(postId: string, threadContent: string, authorId: string) {
     const postRes = await this.repo.findById(postId);

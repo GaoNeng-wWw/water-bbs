@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostApplicationService } from './post.service';
 import { CreatePostDTO, CreatePostResponse } from './dto/create-post.dto';
@@ -23,6 +25,9 @@ import {
 import { HiddenPostDTO, HiddenPostResponse } from './dto/hidden-post.dto';
 import { PostSummary } from './entities/post-summary';
 import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
@@ -30,6 +35,8 @@ import {
 } from '@nestjs/swagger';
 import { Thread } from './entities/thread';
 import { CreateThread, CreateThreadResponse } from './dto/create-thread.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadImageRequest, UploadImageResponse } from './dto/upload-image.dto';
 
 @Controller('posts')
 export class PostController {
@@ -48,6 +55,21 @@ export class PostController {
       body.content,
       user.account.id,
     );
+  }
+
+  @ApiOkResponse({
+    type: UploadImageResponse,
+  })
+  @ApiBody({ type: UploadImageRequest })
+  @UseModel(UploadImageResponse)
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth()
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fieldSize: 1024 * 1024 * 10 } }),
+  )
+  @Post('thread/image')
+  uploadImage(@UploadedFile('file') file: Express.Multer.File) {
+    return this.postService.uploadImage(file);
   }
 
   @Get(':id/thread')

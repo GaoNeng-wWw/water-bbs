@@ -93,6 +93,14 @@ export type CreatePostResponse = {
     postId: string;
 };
 
+export type UploadImageRequest = {
+    file: Blob | File;
+};
+
+export type UploadImageResponse = {
+    url: string;
+};
+
 export type Pagination = {
     total: number;
     data: Array<string>;
@@ -507,6 +515,19 @@ export type PostControllerCreatePostResponses = {
 };
 
 export type PostControllerCreatePostResponse = PostControllerCreatePostResponses[keyof PostControllerCreatePostResponses];
+
+export type PostControllerUploadImageData = {
+    body: UploadImageRequest;
+    path?: never;
+    query?: never;
+    url: '/posts/thread/image';
+};
+
+export type PostControllerUploadImageResponses = {
+    200: UploadImageResponse;
+};
+
+export type PostControllerUploadImageResponse = PostControllerUploadImageResponses[keyof PostControllerUploadImageResponses];
 
 export type PostControllerGetThreadData = {
     body?: never;

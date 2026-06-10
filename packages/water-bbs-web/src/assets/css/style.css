@@ -236,9 +236,32 @@ html {
   height: 100dvh;
 }
 body {
-  height: 100dvh;
   overflow: auto;
+  height: 100dvh;
 }
 #app {
   height: fit-content;
+}
+
+* {
+  scrollbar-color: var(--warm-50) var(--warm-100);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--warm-100);
+}
+::-webkit-scrollbar-track {
+  background: var(--warm-50);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+   border-radius: 5px;
+}
+::-webkit-scrollbar-track-piece {
+  background: var(--warm-50);
 }
