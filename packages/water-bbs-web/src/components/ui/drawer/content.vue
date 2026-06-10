@@ -13,8 +13,8 @@ const { class: clazz, to, direction } = defineProps<{
 
 const styles = tv({
   slots: {
-    overlay: 'size-full fixed inset-0 z-auto bg-black/40',
-    content: 'fixed z-auto bg-warm-50 max-h-95dvh overflow-hidden border border-solid border-warm-200 rounded-t-lg p-4',
+    overlay: 'size-full fixed inset-0 z-9999 bg-black/40',
+    content: 'fixed z-9999 bg-warm-50 max-h-95dvh overflow-hidden border border-solid border-warm-200 rounded-t-lg p-4',
     handle: 'cursor-pointer shrink-0',
   },
   variants: {

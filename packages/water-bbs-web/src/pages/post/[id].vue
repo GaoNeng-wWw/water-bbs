@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { postControllerCreateThread, postControllerGetPost } from '@/api';
+import { postControllerCreateThread, postControllerGetPost, postControllerUploadImage } from '@/api';
 import { PostHeader } from '@/components/app/shell';
 import { ThreadList } from '@/components/app/thread';
 import ThreadListSkeleton from '@/components/app/thread/thread-list.skeleton.vue';
 import { UiTiptapEditor, UiButton, Layout } from '@/components/ui';
 import { NOT_PUBLIC_ENDPOINT } from '@/composables';
+import { base64ToFile } from '@/utils';
+import type { Editor } from '@tiptap/vue-3';
 import { reactive, ref, useTemplateRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -23,19 +25,53 @@ if (data) {
 
 const tasks: any[] = [];
 
+const coverImage = (editor: Editor) => {
+  const tr = editor.state.tr;
+  editor.state.doc.descendants((node, pos) => {
+    if (node.type.name === 'image') {
+      const task = base64ToFile(node.attrs.src)
+        .then((file) => {
+          return postControllerUploadImage({
+            client: NOT_PUBLIC_ENDPOINT,
+            body: { file },
+          });
+        })
+        .then(resp => resp.data)
+        .then(data => data ? data.url : '')
+        .then(url => tr.setNodeAttribute(pos, 'src', url))
+        .then(() => true)
+        .catch(() => false);
+      tasks.push(task);
+    }
+  });
+  return Promise.all(tasks)
+    .then((results) => {
+      if (results.every(result => result)) {
+        editor.view.dispatch(tr);
+      }
+      return true;
+    });
+};
+
 const onClickReply = () => {
   if (!editor.value) {
     return;
   }
-  const content = editor.value.getJson();
-  const cnt = 0;
-  postControllerCreateThread({
-    path: { id: postId.toString() },
-    body: {
-      content: JSON.stringify(content),
-    },
-    client: NOT_PUBLIC_ENDPOINT,
-  });
+  const instance = editor.value.getInstance();
+
+  coverImage(instance)
+    .then(() => {
+      return editor.value!.getMd();
+    })
+    .then((content) => {
+      return postControllerCreateThread({
+        path: { id: postId.toString() },
+        body: {
+          content,
+        },
+        client: NOT_PUBLIC_ENDPOINT,
+      });
+    });
 };
 </script>
 

@@ -89,7 +89,7 @@ onUnmounted(() => {
         :key="thread.id"
         :author-name="thread.author.name"
         :author-avatar="thread.author.avatar"
-        :content="JSON.parse(thread.content)"
+        :content="thread.content"
         :created-at="thread.createdAt"
         :floor="thread.floor"
       />

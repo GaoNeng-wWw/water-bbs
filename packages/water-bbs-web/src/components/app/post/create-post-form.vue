@@ -83,7 +83,7 @@ const onClickSend = () => {
             <p class="mb-2">
               分区
             </p>
-            <tree-select v-model="activeNodes" :data="tree" @expand="(node) => expand(node.id)" />
+            <tree-select class="z-9999" v-model="activeNodes" :data="tree" @expand="(node) => expand(node.id)" />
           </div>
         </div>
         <div class="w-full h-full min-h-0 shrink grow overflow-unset">

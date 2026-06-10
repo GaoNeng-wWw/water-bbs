@@ -3,27 +3,6 @@ import Image from './image.vue';
 import type { NodeViewProps } from '@tiptap/vue-3';
 import type { Component } from 'vue';
 
-declare module '@tiptap/core' {
-  type UploadResult = {
-    ok: true;
-    url: string;
-    error: never;
-  } | {
-    ok: false;
-    error: string;
-    url: never;
-  };
-  type UploadCallback = (file: File) => Promise<UploadResult>;
-  interface UploadOptions {
-    cb: UploadCallback;
-  }
-  interface Commands<ReturnType> {
-    image: {
-      upload: (cb: UploadCallback) => ReturnType;
-    };
-  }
-}
-
 export const ImageNode = Node.create<never>({
   name: 'image',
   group: 'block',

@@ -8,7 +8,7 @@ const {
   content,
   floor,
 } = defineProps<{
-  authorName: string; createdAt: string; content: object; floor: number;
+  authorName: string; createdAt: string; content: object | string; floor: number;
   authorAvatar: string;
 }>();
 </script>

@@ -37,7 +37,7 @@ const editor = new Editor({
   autofocus: true,
   editorProps: {
     attributes: {
-      class: 'outline-none rounded h-full overflow-auto',
+      class: 'outline-none rounded h-full',
     },
   },
 });

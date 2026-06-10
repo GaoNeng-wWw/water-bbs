@@ -10,7 +10,7 @@ import { UiPopover, UiPopoverContent, UiPopoverTrigger } from '../popover';
     <ui-popover-content
       align="start"
       align-flip
-      class="fixed top-0 w-sm h-fit rounded border border-warm-200 bg-warm-100 z-100 text-warm-foreground py2"
+      class="fixed top-0 w-sm h-fit rounded border border-warm-200 bg-warm-100 text-warm-foreground py2 z-999999"
     >
       <slot name="content" />
     </ui-popover-content>

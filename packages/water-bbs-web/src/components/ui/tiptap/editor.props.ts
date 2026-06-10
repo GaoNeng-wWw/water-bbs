@@ -1,9 +1,9 @@
-import type { AnyExtension, Editor } from '@tiptap/vue-3';
+import type { Editor } from '@tiptap/vue-3';
 import type { Component, InjectionKey } from 'vue';
 
 export type EditorContext = {
   setSource: (isSource: boolean) => void;
-  extensions: Ext[];
+  extensions: Ext<Record<string, any>>[];
   editor: Editor;
 };
 
