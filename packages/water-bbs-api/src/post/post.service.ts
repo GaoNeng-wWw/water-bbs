@@ -9,7 +9,7 @@ import { HiddenPostResponse } from './dto/hidden-post.dto';
 import { CreatePostResponse } from './dto/create-post.dto';
 import { PostNotFound } from './errors';
 import { Thread, ThreadAuthorSummary } from './entities/thread';
-import { Thread as ThreadAR } from 'water-bbs-migration';
+import { FileReference, Thread as ThreadAR } from 'water-bbs-migration';
 import { CreateThreadResponse } from './dto/create-thread.dto';
 import { Configure, Storage } from '@app/configure';
 import { ConfigService } from '@nestjs/config';
@@ -19,6 +19,9 @@ import {
   type Resolver,
   type StorageEngine,
 } from '@app/storage';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
+import sharp from 'sharp';
 
 @Injectable()
 export class PostApplicationService {
@@ -30,6 +33,8 @@ export class PostApplicationService {
     @InjectStoreEngine()
     private readonly storage: StorageEngine[],
     private config: ConfigService<Configure>,
+    @InjectRepository(FileReference)
+    private fileReferenceRepo: EntityRepository<FileReference>,
   ) {}
 
   async createPost(
@@ -178,14 +183,16 @@ export class PostApplicationService {
       // TODO: UNSUPPORTED STORAGE ENGINE
     }
     const putResult = await engine.put(
-      file.buffer,
+      await sharp(file.buffer).webp().toBuffer(),
       file.mimetype,
       file.filename,
       file.size,
     );
     if (isErr(putResult)) {
+      console.log(putResult);
       return putResult;
     }
+    await this.fileReferenceRepo.upsert(putResult.value);
     const url = await this.fileUrlResolver.getUrl(putResult.value);
     if (isErr(url)) {
       return url;

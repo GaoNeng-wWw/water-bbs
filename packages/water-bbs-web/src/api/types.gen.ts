@@ -311,6 +311,19 @@ export type FindRoleResponse = {
     [key: string]: unknown;
 };
 
+export type AppControllerGetAssetData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/assets/{id}';
+};
+
+export type AppControllerGetAssetResponses = {
+    200: unknown;
+};
+
 export type AccountControllerGetProfileData = {
     body?: never;
     path?: never;

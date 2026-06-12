@@ -4,11 +4,11 @@ import { PostController } from './post.controller';
 import { PostRepo } from './post.repo';
 import { HiddenPostAction, ShowPostAction } from './actions';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Post } from 'water-bbs-migration';
+import { FileReference, Post } from 'water-bbs-migration';
 import { StorageModule } from '@app/storage';
 
 @Module({
-  imports: [StorageModule, MikroOrmModule.forFeature([Post])],
+  imports: [StorageModule, MikroOrmModule.forFeature([Post, FileReference])],
   controllers: [PostController],
   providers: [
     PostApplicationService,

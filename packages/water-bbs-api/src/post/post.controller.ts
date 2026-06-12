@@ -36,7 +36,10 @@ import {
 import { Thread } from './entities/thread';
 import { CreateThread, CreateThreadResponse } from './dto/create-thread.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadImageRequest, UploadImageResponse } from './dto/upload-image.dto';
+import {
+  UploadImageRequest,
+  UploadImageResponse,
+} from './dto/upload-image.dto';
 
 @Controller('posts')
 export class PostController {

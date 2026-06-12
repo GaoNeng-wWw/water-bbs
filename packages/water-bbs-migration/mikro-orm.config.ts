@@ -1,4 +1,4 @@
-import { defineConfig } from '@mikro-orm/mysql';
+import { defineConfig, TimeType } from '@mikro-orm/mysql';
 import * as dotenv from 'dotenv';
 import { Account, Ident, Cert, Permission, Role, Profile, Post, Thread, Reply, Category, FileReference, Proposals, Vote, VoteSlot, Action } from './entities';
 import { Migrator } from '@mikro-orm/migrations';
@@ -18,10 +18,13 @@ export default defineConfig({
     password: process.env.DB_PASSWORD || 'root',
     dbName: 'water-bbs',
     migrations:{
-        path: './migrations',
-        tableName: 'migrations',
-        pathTs: './migrations',
-        transactional: false,
+      path: './migrations',
+      tableName: 'migrations',
+      pathTs: './migrations',
+      transactional: false,
+      fileName(timestamp, name) {
+        return `migration-${timestamp}-${name}`;
+      },
     },
     entities:[
         Account,

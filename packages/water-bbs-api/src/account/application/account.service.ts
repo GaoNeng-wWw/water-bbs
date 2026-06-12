@@ -63,6 +63,8 @@ import { UpdateAvatarResponse } from '../dto/update-avatar.dto';
 import { ConfigService } from '@nestjs/config';
 import { Configure } from '@app/configure';
 import { GetPermissionQuery } from '../queries/get-permission.query';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/mysql';
 
 // TODO: 重构成cqrs
 @Injectable()
@@ -82,6 +84,8 @@ export class AccountService {
     private readonly fileUrlResolver: Resolver,
     @InjectStoreEngine()
     private readonly storage: StorageEngine[],
+    @InjectRepository(Profile)
+    private profileRepository: EntityRepository<Profile>,
     private config: ConfigService<Configure>,
     private readonly queryBus: QueryBus,
   ) {}
@@ -366,6 +370,7 @@ export class AccountService {
     }
     account.profile.avatar = fileRef;
     await this.accountRepository.upsert(account);
+    await this.profileRepository.upsert(account.profile);
     const urlResult = await this.fileUrlResolver.getUrl(account.profile.avatar);
     if (isErr(urlResult)) {
       return urlResult;

@@ -2,9 +2,9 @@ import { Entity, PrimaryKey, Property, OneToOne, Index, Embedded } from '@mikro-
 import { BaseMetaEntity } from './meta';
 import { Account } from './account';
 import { FileReference } from './file-ref';
+import { Cascade } from '@mikro-orm/core';
 
 @Entity()
-@Index({ properties: ['avatar.storageKey'] })
 export class Profile extends BaseMetaEntity {
   @OneToOne(() => Account, account => account.profile, { primary: true, owner: true })
   account!: Account;
@@ -15,7 +15,7 @@ export class Profile extends BaseMetaEntity {
   @Property({ nullable: true, type: 'text' })
   bio?: string;
 
-  @Embedded(() => FileReference, { nullable: true })
+  @OneToOne(() => FileReference, { nullable: true, owner: true, eager: true, cascade: [Cascade.PERSIST, Cascade.REMOVE]})
   avatar?: FileReference;
 
   constructor(

@@ -52,6 +52,7 @@
     "radashi": "^12.7.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "sharp": "^0.35.0",
     "types-ddd": "^3.11.1",
     "unplugin-swc": "^1.5.9",
     "uuid": "^14.0.0",

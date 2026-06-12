@@ -39,7 +39,7 @@ const style = tv({
       },
       lg: {
         base: 'size-18',
-        fallback: 'text-lg'
+        fallback: 'text-lg',
       },
     },
   },
@@ -115,8 +115,8 @@ watch(() => avatarUrl, () => {
 
 <template>
   <Avatar.Root as="div" :class="clazz.base()" :data-editable="editable ? true : undefined" @click="onClickUpload">
-    <Avatar.Image :src="avatarUrl || ''" :class="clazz.image()" />
-    <Avatar.Fallback :delay-ms="60" :class="clazz.fallback()" as="div">
+    <Avatar.Image :src="avatarUrl ?? ''" :class="clazz.image()" />
+    <Avatar.Fallback :delay-ms="200" :class="clazz.fallback()" as="div">
       {{ fallback }}
     </Avatar.Fallback>
     <input

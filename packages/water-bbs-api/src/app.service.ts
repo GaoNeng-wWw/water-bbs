@@ -5,7 +5,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileReference } from 'water-bbs-migration';
-import { isErr } from 'water-bbs-shared';
+import { isErr, ok } from 'water-bbs-shared';
 
 @Injectable()
 export class AppSerivce {
@@ -17,7 +17,7 @@ export class AppSerivce {
     private readonly fileReferenceRepo: EntityRepository<FileReference>,
   ) {}
 
-  async getAssert(id: string) {
+  async getAsset(id: string) {
     const storageType = this.config.get('storage').type;
     const [engine] = this.storage.filter((s) => s.valid(storageType));
     if (!engine) {
@@ -28,10 +28,9 @@ export class AppSerivce {
       throw new HttpException('ASSERT_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
     const data = await engine.load(asset);
-    if (isErr(data) || !data.value) {
+    if (isErr(data)) {
       return data;
     }
-    const buf = data.value;
-    return buf;
+    return ok({ data, asset });
   }
 }

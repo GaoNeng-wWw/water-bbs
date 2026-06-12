@@ -43,14 +43,15 @@ export class LocalStorage implements StorageEngine {
     if (!existsSync(fullPath)) {
       mkdirSync(fullPath);
     }
-    writeFileSync(join(fullPath, `${hash}.$ `), file);
+    console.log(join(fullPath, `${hash}`));
+    writeFileSync(join(fullPath, `${hash}`), file)
     return Promise.resolve(ok(fileReference));
   }
   remove(file: FileReference): Promise<Result<boolean, InfrastructureError>> {
     const hash = file.name;
     const storage = this.config.get<Storage>('storage');
     const fullPath = join(__dirname, storage.path, hash);
-    if (!execSync(fullPath)) {
+    if (!existsSync(fullPath)) {
       return Promise.resolve(ok(true));
     }
     unlinkSync(fullPath);
@@ -62,7 +63,7 @@ export class LocalStorage implements StorageEngine {
     const hash = file.name;
     const storage = this.config.get<Storage>('storage');
     const fullPath = join(__dirname, storage.path, hash);
-    if (!execSync(fullPath)) {
+    if (!existsSync(fullPath)) {
       return Promise.resolve(ok(null));
     }
     const buf = readFileSync(fullPath);

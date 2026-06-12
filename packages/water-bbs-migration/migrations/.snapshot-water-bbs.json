@@ -483,6 +483,116 @@
       "comment": ""
     },
     {
+      "name": "file_reference",
+      "columns": {
+        "mime_type": {
+          "name": "mime_type",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 255,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 65535,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "text"
+        },
+        "size": {
+          "name": "size",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "integer"
+        },
+        "storage_key": {
+          "name": "storage_key",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": 255,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "storage_type": {
+          "name": "storage_type",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 255,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "storage_key"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "storage_key"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "file_reference_storage_key_index",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "comment": ""
+    },
+    {
       "name": "ident",
       "columns": {
         "account_id": {
@@ -1035,54 +1145,6 @@
           "enumItems": [],
           "mappedType": "string"
         },
-        "avatar_mime_type": {
-          "name": "avatar_mime_type",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "unique": false,
-          "length": 255,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "enumItems": [],
-          "mappedType": "string"
-        },
-        "avatar_name": {
-          "name": "avatar_name",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "unique": false,
-          "length": 65535,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "enumItems": [],
-          "mappedType": "text"
-        },
-        "avatar_size": {
-          "name": "avatar_size",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "unique": false,
-          "length": null,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "enumItems": [],
-          "mappedType": "integer"
-        },
         "avatar_storage_key": {
           "name": "avatar_storage_key",
           "type": "varchar(255)",
@@ -1090,23 +1152,7 @@
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "unique": false,
-          "length": 255,
-          "precision": null,
-          "scale": null,
-          "default": null,
-          "comment": null,
-          "enumItems": [],
-          "mappedType": "string"
-        },
-        "avatar_storage_type": {
-          "name": "avatar_storage_type",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "unique": false,
+          "unique": true,
           "length": 255,
           "precision": null,
           "scale": null,
@@ -1212,10 +1258,10 @@
             "avatar_storage_key"
           ],
           "composite": false,
-          "constraint": false,
-          "keyName": "profile_avatar_storage_key_index",
+          "constraint": true,
+          "keyName": "profile_avatar_storage_key_unique",
           "primary": false,
-          "unique": false
+          "unique": true
         },
         {
           "columnNames": [
@@ -1252,6 +1298,18 @@
           "referencedTableName": "account",
           "updateRule": "cascade",
           "deleteRule": "cascade"
+        },
+        "profile_avatar_storage_key_foreign": {
+          "columnNames": [
+            "avatar_storage_key"
+          ],
+          "constraintName": "profile_avatar_storage_key_foreign",
+          "localTableName": "profile",
+          "referencedColumnNames": [
+            "storage_key"
+          ],
+          "referencedTableName": "file_reference",
+          "deleteRule": "set null"
         }
       },
       "comment": ""
@@ -1382,7 +1440,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019e9185-df47-715d-a7cf-c9aae36edf92'",
+          "default": "'019eb551-5063-73c7-94b6-830a6411ee33'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -1456,6 +1514,22 @@
             "cancelled"
           ],
           "mappedType": "enum"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 65535,
+          "precision": null,
+          "scale": null,
+          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "text"
         },
         "updated_at": {
           "name": "updated_at",
@@ -2259,7 +2333,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019e9185-df48-708c-aeea-7911dbec76fb'",
+          "default": "'019eb551-5064-7033-9035-0c1af8d7968f'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -2429,7 +2503,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019e9185-df48-708c-aeea-7dbb600b92a3'",
+          "default": "'019eb551-5064-7033-9035-13f79cf042ec'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"

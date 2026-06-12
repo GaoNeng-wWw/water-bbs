@@ -6,6 +6,7 @@ import {
   Action,
   Category,
   Cert,
+  FileReference,
   Ident,
   Permission,
   Post,
@@ -36,6 +37,9 @@ import { ActionModule } from './action/action.module';
 import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
 import { AdminModule } from './admin/admin.module';
+import { AppController } from './app.controller';
+import { AppSerivce } from './app.service';
+import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
 
 @Module({
   imports: [
@@ -83,6 +87,7 @@ import { AdminModule } from './admin/admin.module';
       Vote,
       VoteSlot,
       Action,
+      FileReference
     ]),
     RedisModule.forRootAsync({
       inject: [ConfigService],
@@ -171,6 +176,14 @@ import { AdminModule } from './admin/admin.module';
       provide: APP_INTERCEPTOR,
       useClass: ResultInterceptor,
     },
+    {
+      provide: STORAGE_ENGINE_KEY,
+      useFactory: (...deps) => deps,
+      inject: [LocalStorage],
+    },
+    LocalStorage,
+    AppSerivce,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

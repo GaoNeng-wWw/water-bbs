@@ -25,10 +25,10 @@ import { BanAccountAction, UnbanAccountAction } from './action';
 import { FindAccountByIdIdentCertQueryHandler } from './queries/find-account-by-ident-cert.query';
 import { GetPermissionHandler } from './queries/get-permission.query';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Account } from 'water-bbs-migration';
+import { Account, Profile } from 'water-bbs-migration';
 
 @Module({
-  imports: [StorageModule, MikroOrmModule.forFeature([Account])],
+  imports: [StorageModule, MikroOrmModule.forFeature([Account, Profile])],
   controllers: [AccountController],
   providers: [
     MailRegistor,
