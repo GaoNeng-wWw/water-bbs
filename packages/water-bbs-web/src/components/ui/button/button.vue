@@ -93,11 +93,27 @@ const style = tv({
       color: 'info', shape: 'solid',
       className: 'bg-warm-500 text-warm-foreground hover:bg-warm-400 border-none',
     },
+    {
+      color: 'info', shape: 'flat',
+      className: 'text-warm-foreground hover:bg-warm-100 border-none',
+    },
+    {
+      color: 'primary', shape: 'flat',
+      className: 'text-primary-foreground hover:bg-primary-100 border-none',
+    },
+    {
+      color: 'success', shape: 'flat',
+      className: 'text-success-foreground hover:bg-success-100 border-none',
+    },
+    {
+      color: 'warning', shape: 'flat',
+      className: 'text-warning-foreground hover:bg-warning-100 border-none',
+    },
   ],
   defaultVariants: {
     size: 'md',
     color: 'info',
-    shape: 'ghost',
+    shape: 'flat',
     rounded: 'sm',
   },
 });

@@ -2,6 +2,7 @@
 import { AnimatePresence, motion } from 'motion-v';
 import { useSiteStore } from '@/store/site.store';
 import { useRouter } from 'vue-router';
+import { UiButton } from '@/components/ui';
 
 const router = useRouter();
 
@@ -10,7 +11,9 @@ const site = useSiteStore();
 
 <template>
   <div class="w-full h-[50px] flex items-center gap-4">
-    <div class="cursor-pointer size-5 text-warm-foreground i-material-symbols:arrow-back-ios-new" @click="router.back()" />
+    <ui-button icon size="sm" @click="router.back()">
+      <div class="cursor-pointer text-warm-foreground i-material-symbols:arrow-back-ios-new" />
+    </ui-button>
     <animate-presence>
       <motion.h1
         v-if="site.headerTitleVisble"

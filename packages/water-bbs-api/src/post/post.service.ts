@@ -1,40 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { PostRepo } from './post.repo';
-import { err, isErr, isOk, ok } from 'water-bbs-shared';
-import { QueryBus } from '@nestjs/cqrs';
-import { FindProfileByAccountIDQuery } from '../account/queries';
-import { AuthorSummary, PostSummary } from './entities/post-summary';
-import { CursorPagination, Pagination } from '@app/shared';
-import { HiddenPostResponse } from './dto/hidden-post.dto';
-import { CreatePostResponse } from './dto/create-post.dto';
-import { PostNotFound } from './errors';
-import { Thread, ThreadAuthorSummary } from './entities/thread';
-import { FileReference, Thread as ThreadAR } from 'water-bbs-migration';
-import { CreateThreadResponse } from './dto/create-thread.dto';
-import { Configure, Storage } from '@app/configure';
-import { ConfigService } from '@nestjs/config';
-import {
-  InjectStoreEngine,
-  InjectUrlResolver,
-  type Resolver,
-  type StorageEngine,
-} from '@app/storage';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
-import sharp from 'sharp';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreatePostCommand } from './commands/create-post.command';
+import { HidePostCommand } from './commands/hide-post.command';
+import { UploadImageCommand } from './commands/upload-image.command';
+import { CreateThreadCommand } from './commands/create-thread.command';
+import { GetPostSummaryQuery } from './queries/get-post-summary.query';
+import { GetPostsQuery } from './queries/get-posts.query';
+import { GetThreadQuery } from './queries/get-thread.query';
 
 @Injectable()
 export class PostApplicationService {
   constructor(
-    private repo: PostRepo,
     private query: QueryBus,
-    @InjectUrlResolver()
-    private readonly fileUrlResolver: Resolver,
-    @InjectStoreEngine()
-    private readonly storage: StorageEngine[],
-    private config: ConfigService<Configure>,
-    @InjectRepository(FileReference)
-    private fileReferenceRepo: EntityRepository<FileReference>,
+    private commandBus: CommandBus,
   ) {}
 
   async createPost(
@@ -43,195 +21,31 @@ export class PostApplicationService {
     content: string,
     actor: string,
   ) {
-    const post = await this.repo.createPost(categoryId, title, content, actor);
-    if (isOk(post)) {
-      return new CreatePostResponse(post.value.id);
-    }
-    return post;
+    return this.commandBus.execute(
+      new CreatePostCommand(categoryId, title, content, actor),
+    );
   }
 
   async hidePost(postId: string, hideReason: string) {
-    const postRes = await this.repo.findById(postId);
-    if (isErr(postRes)) {
-      return postRes;
-    }
-    const post = postRes.value;
-    if (!post) {
-      return err(new PostNotFound());
-    }
-    post.hide(hideReason);
-    const hidePostRes = await this.repo.updatePost(post);
-    if (isOk(hidePostRes)) {
-      return new HiddenPostResponse(post.id);
-    }
-    return hidePostRes;
+    return this.commandBus.execute(new HidePostCommand(postId, hideReason));
   }
 
   async getPostSummary(id: string) {
-    const postRes = await this.repo.findById(id);
-    if (isErr(postRes)) {
-      return postRes;
-    }
-    const post = postRes.value;
-    if (!post) {
-      return err(new PostNotFound());
-    }
-    const findProfileResult = await this.query.execute(
-      new FindProfileByAccountIDQuery(post.authorId),
-    );
-    if (isErr(findProfileResult)) {
-      return findProfileResult;
-    }
-    const profile = findProfileResult.value;
-    const authorSummary = new AuthorSummary(
-      profile.id,
-      profile.nick,
-      profile.avatar,
-    );
-    return new PostSummary(
-      post.id,
-      post.title,
-      post.threads[0].content,
-      authorSummary,
-      post.createdAt,
-    );
+    return this.query.execute(new GetPostSummaryQuery(id));
   }
 
   async getPosts(size: number, preId?: string, categoryId?: string) {
-    const postListRes = await this.repo.listPost(size, preId, categoryId);
-    if (isErr(postListRes)) {
-      return postListRes;
-    }
-    const posts = postListRes.value.posts;
-    const postSummary: PostSummary[] = [];
-    const authorSummaryCache = new Map<string, AuthorSummary>();
-    for (const post of posts) {
-      const authorId = post.authorId;
-      let authorSummary: AuthorSummary | null = null;
-      if (authorSummaryCache.has(authorId)) {
-        authorSummary = authorSummaryCache.get(authorId)!;
-      } else {
-        const account = await this.query.execute(
-          new FindProfileByAccountIDQuery(authorId),
-        );
-        authorSummary = isErr(account)
-          ? new AuthorSummary(authorId, authorId)
-          : new AuthorSummary(
-              account.value.id,
-              account.value.nick,
-              account.value.avatar,
-            );
-        authorSummaryCache.set(authorId, authorSummary);
-      }
-      postSummary.push(
-        new PostSummary(
-          post.id,
-          post.title,
-          post.threads[0]?.content ?? '',
-          authorSummary,
-          post.createdAt,
-        ),
-      );
-    }
-    return new CursorPagination(
-      postListRes.value.cursor,
-      postSummary,
-      postListRes.value.total,
-    );
+    return this.query.execute(new GetPostsQuery(size, preId, categoryId));
   }
   async getThread(postId: string, page: number = 1, limit: number = 10) {
-    const threadsResult = await this.repo.getThreads(postId, page, limit);
-    if (isErr(threadsResult)) {
-      return threadsResult;
-    }
-    const payload = threadsResult.value;
-    const threads = payload.threads;
-    const authorSummaryCache = new Map();
-    const resThreads: Thread[] = [];
-    for (const thread of threads) {
-      const authorId = thread.authorId;
-      const authorRes = await this.query.execute(
-        new FindProfileByAccountIDQuery(authorId),
-      );
-      if (isErr(authorRes)) {
-        return authorRes;
-      }
-      const authorValue = authorRes.value;
-      const author = new ThreadAuthorSummary(
-        authorValue.id,
-        authorValue.nick,
-        authorValue.bio,
-        authorValue.avatar,
-      );
-      authorSummaryCache.set(authorValue.id, author);
-      resThreads.push(
-        new Thread(
-          thread.id,
-          author,
-          thread.content,
-          thread.createdAt.toLocaleDateString(),
-          thread.floor,
-        ),
-      );
-    }
-    return ok(new Pagination(payload.total, resThreads));
+    return this.query.execute(new GetThreadQuery(postId, page, limit));
   }
   async uploadImage(file: Express.Multer.File) {
-    const storagePolicy = this.config.get('storage').type;
-    const [engine] = this.storage.filter((s) => s.valid(storagePolicy));
-    if (!engine) {
-      // TODO: UNSUPPORTED STORAGE ENGINE
-    }
-    const putResult = await engine.put(
-      await sharp(file.buffer).webp().toBuffer(),
-      file.mimetype,
-      file.filename,
-      file.size,
-    );
-    if (isErr(putResult)) {
-      console.log(putResult);
-      return putResult;
-    }
-    await this.fileReferenceRepo.upsert(putResult.value);
-    const url = await this.fileUrlResolver.getUrl(putResult.value);
-    if (isErr(url)) {
-      return url;
-    }
-    return { url: url.value };
+    return this.commandBus.execute(new UploadImageCommand(file));
   }
   async createThread(postId: string, threadContent: string, authorId: string) {
-    const postRes = await this.repo.findById(postId);
-    if (isErr(postRes)) {
-      return postRes;
-    }
-    const post = postRes.value;
-    if (!post) {
-      return err(new PostNotFound());
-    }
-    const authorRes = await this.query.execute(
-      new FindProfileByAccountIDQuery(authorId),
+    return this.commandBus.execute(
+      new CreateThreadCommand(postId, threadContent, authorId),
     );
-    if (isErr(authorRes)) {
-      return authorRes;
-    }
-    const threadAr = new ThreadAR(threadContent, authorId, post);
-    post.appendThread(threadAr);
-    const updateResult = await this.repo.createThread(threadAr, post);
-    if (isErr(updateResult)) {
-      return updateResult;
-    }
-    const thread = new Thread(
-      threadAr.id,
-      new ThreadAuthorSummary(
-        authorId,
-        authorRes.value.nick,
-        authorRes.value.bio,
-        authorRes.value.avatar,
-      ),
-      threadAr.content,
-      threadAr.createdAt.toLocaleDateString(),
-      threadAr.floor,
-    );
-    return new CreateThreadResponse(postId, thread);
   }
 }
