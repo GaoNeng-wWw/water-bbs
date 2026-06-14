@@ -18,7 +18,6 @@ import {
   ApiPaginatedResponse,
   CursorPagination,
   Pagination,
-  Permission,
   UseModel,
   User,
 } from '@app/shared';
@@ -117,11 +116,19 @@ export class PostController {
     type: HiddenPostResponse,
     description: 'Hide a post.',
   })
-  @Permission('post:hidden')
   @UseModel(HiddenPostResponse)
   @Patch(':id')
-  hidePost(@Param('id') id: string, @Body() body: HiddenPostDTO) {
-    return this.postService.hidePost(id, body.reason);
+  hidePost(
+    @Param('id') id: string,
+    @Body() body: HiddenPostDTO,
+    @User() user: RequestUser,
+  ) {
+    return this.postService.hidePost(
+      id,
+      body.reason,
+      user.account.id,
+      body.due,
+    );
   }
 
   @UseModel(CursorPagination)

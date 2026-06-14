@@ -5,7 +5,7 @@ import { onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { postControllerGetThread, type Thread } from '@/api';
 import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 import { useRouter } from 'vue-router';
-import { UiPagination } from '@/components/ui';
+import ReportPostButton from '@/components/app/post/report-post-button.vue';
 const { postId, title } = defineProps<{
   postId: string;
   title: string;
@@ -75,10 +75,11 @@ onUnmounted(() => {
       <div class="w-full h-fit flex items-baseline gap-3 border-t border-x border-warm-200/50">
         <div class="w-full flex gap-3 min-h-16">
           <div class="w-193px border-r border-warm-200/50 shrink-0 hidden md:block" />
-          <div class="w-full py-3 px-6 md:px-0">
+          <div class="w-full py-3 px-3 flex items-center justify-between">
             <h1 ref="title" class="text-3xl text-warm-foreground font-bold my-auto line-clamp-2">
               {{ title }}
             </h1>
+            <report-post-button :id="postId" />
           </div>
         </div>
       </div>

@@ -14,9 +14,12 @@ export const schema = z.object({
   id: z.string(),
 });
 
+export type ShowPostActionSchema = z.infer<typeof schema>;
+export const showPostActionName = 'post.show';
+
 @ActionHandler()
-export class ShowPostAction implements IActionHandler<typeof schema> {
-  async run({ id }: { id: string }): Promise<Result<unknown, unknown>> {
+export class ShowPostAction implements IActionHandler<ShowPostActionSchema> {
+  async run({ id }: ShowPostActionSchema): Promise<Result<unknown, unknown>> {
     const post = await this.postRepository.findOne({ id }, { cache: true });
     if (!post) {
       return err(new DomainError('POST_NOT_FOUND'));

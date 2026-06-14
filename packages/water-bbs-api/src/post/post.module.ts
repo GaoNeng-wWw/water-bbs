@@ -17,6 +17,8 @@ import {
   GetPostsHandler,
   GetThreadHandler,
 } from './queries';
+import { CreateShowPostProposalCommandHandler } from './commands/create-show-post-proposal.command';
+import { CreateHidePostProposalCommandHandler } from './commands/create-hide-post-proposal.command';
 
 @Module({
   imports: [StorageModule, MikroOrmModule.forFeature([Post, FileReference])],
@@ -33,6 +35,8 @@ import {
     GetPostSummaryHandler,
     GetPostsHandler,
     GetThreadHandler,
+    CreateShowPostProposalCommandHandler,
+    CreateHidePostProposalCommandHandler,
   ],
 })
 export class PostModule {}

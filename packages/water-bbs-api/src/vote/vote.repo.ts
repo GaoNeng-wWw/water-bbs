@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/core';
 import { Vote, VoteAction, VoteSlot } from 'water-bbs-migration';
 import { err, ok, PersistenceError } from 'water-bbs-shared';
+import { isEmpty } from 'radashi';
 
 @Injectable()
 export class VoteRepository {
@@ -57,12 +58,12 @@ export class VoteRepository {
     return qb
       .select([raw('sum(cnt) as cnt')])
       .where({ proposalId, action })
-      .getSingleResult()
+      .execute('get')
       .then((result) => {
-        if (!result) {
+        if (!result || isEmpty(result.cnt)) {
           return ok(0);
         }
-        return ok(result.cnt);
+        return ok(result.cnt ?? 0);
       })
       .catch((reason) => err(new PersistenceError(reason)));
   }

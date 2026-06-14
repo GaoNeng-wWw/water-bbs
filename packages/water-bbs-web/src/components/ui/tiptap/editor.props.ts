@@ -22,7 +22,8 @@ export type ContentType = 'json' | 'html' | 'markdown';
 export type EditorProps = {
   content?: object | string;
   readonly?: boolean;
-  wysiwyg?: boolean;
+  style?: boolean;
   extensions?: Ext<Record<string, any>>[];
   contentType?: ContentType;
+  toolbar?: boolean;
 };

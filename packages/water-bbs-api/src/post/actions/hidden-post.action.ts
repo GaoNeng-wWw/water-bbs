@@ -10,15 +10,19 @@ import { Post } from 'water-bbs-migration';
 import { DomainError, err, ok, Result } from 'water-bbs-shared';
 import z from 'zod';
 
-const schema = z.object({
+export const hidePostActionSchema = z.object({
   id: z.string(),
   reason: z.string().optional(),
 });
 
+export const hidePostActionType = 'post.hide' as const;
+
 @ActionHandler()
-export class HiddenPostAction implements IActionHandler<typeof schema> {
+export class HiddenPostAction implements IActionHandler<
+  typeof hidePostActionSchema
+> {
   validate(args: Record<string, any>): ValidateResult {
-    const result = schema.safeParse(args);
+    const result = hidePostActionSchema.safeParse(args);
     if (!result.success) {
       return { ok: false, error: new InvalidArguments(result.error) };
     }
@@ -35,12 +39,12 @@ export class HiddenPostAction implements IActionHandler<typeof schema> {
     if (!post) {
       return err(new DomainError('POST_NOT_FOUND'));
     }
-    post.hide(reason ?? '');
+    post.hide(reason ?? '', undefined, true);
     await this.repo.upsert(post);
     return ok({ id: post.id });
   }
   name?: string | undefined;
-  schema: typeof schema = schema;
+  schema: typeof hidePostActionSchema = hidePostActionSchema;
   constructor(
     @InjectRepository(Post)
     private readonly repo: EntityRepository<Post>,

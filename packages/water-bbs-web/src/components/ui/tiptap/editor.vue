@@ -3,7 +3,7 @@ import { Editor, EditorContent } from '@tiptap/vue-3';
 import { Markdown } from '@tiptap/markdown';
 import StarterKit from '@tiptap/starter-kit';
 import toolbar from './toolbar.vue';
-import { provide, ref } from 'vue';
+import { computed, provide, ref } from 'vue';
 import { EditorContextKey, type EditorProps } from './editor.props.ts';
 import { bold, italic, Collapse } from './extension';
 import { Image } from './extension/image/ext.ts';
@@ -11,7 +11,7 @@ import { Image } from './extension/image/ext.ts';
 const {
   content,
   readonly,
-  wysiwyg = false,
+  style = true,
   extensions = [
     bold,
     italic,
@@ -19,6 +19,7 @@ const {
     Image,
   ],
   contentType = 'json',
+  toolbar: enableToolbar = true,
 } = defineProps<EditorProps>();
 
 const editor = new Editor({
@@ -69,13 +70,13 @@ provide(EditorContextKey, {
 
 <template>
   <div :data-readonly="readonly" class="w-full h-full flex flex-col rounded grow group data-[readonly=false]:p-2">
-    <div v-if="!readonly" class="w-full h-fit shrink-0 min-h-0 border-b border-warm-200/50 pb-2">
+    <div v-if="!readonly && enableToolbar" class="w-full h-fit shrink-0 min-h-0 border-b border-warm-200/50 pb-2">
       <toolbar
         :editor="editor"
       />
     </div>
     <editor-content
-      v-if="!source"
+      v-if="!source && style"
       :editor="editor"
       class="
         max-w-full! prose prose-warm prose-p:first:mt-0 overflow-auto flex-1 group-data-[readonly=false]:px-2 mt-2

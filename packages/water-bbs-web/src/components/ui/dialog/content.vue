@@ -7,6 +7,7 @@ type Emits = DialogContentEmits & {
   finish: [];
 };
 
+
 const props = defineProps<DialogContentProps>();
 const emits = defineEmits<Emits>();
 
@@ -29,8 +30,8 @@ const forwarded = useForwardPropsEmits(props, emits);
           :exit="{ opacity: 0, filter: 'blur(20px)', y: 30, scale: 0.95 }"
           :transition="{ type: 'tween' }"
           class="
-            fixed z-20 p-4 rounded-md bg-warm-50 w-full h-fit left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-none max-w-md
-            max-h-95%
+            fixed z-20 p-4 rounded-md bg-warm-50 w-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-none max-w-md
+            max-h-95vh h-fit flex flex-col
           "
         >
           <slot />

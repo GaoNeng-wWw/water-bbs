@@ -1,9 +1,15 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class HiddenPostDTO {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   reason: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsDateString()
+  due: Date;
 }
 
 export class HiddenPostResponse {

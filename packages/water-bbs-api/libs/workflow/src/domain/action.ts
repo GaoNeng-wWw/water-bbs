@@ -1,5 +1,5 @@
-export interface IAction {
+export interface IAction<Schema extends Record<string, any> = any> {
   type: string;
-  args: Record<string, any>;
-  children: IAction[];
+  args: Schema;
+  children: IAction<any>[];
 }

@@ -7,6 +7,7 @@ import { CreateThreadCommand } from './commands/create-thread.command';
 import { GetPostSummaryQuery } from './queries/get-post-summary.query';
 import { GetPostsQuery } from './queries/get-posts.query';
 import { GetThreadQuery } from './queries/get-thread.query';
+import { CreateHidePostProposalCommand } from './commands/create-hide-post-proposal.command';
 
 @Injectable()
 export class PostApplicationService {
@@ -26,8 +27,15 @@ export class PostApplicationService {
     );
   }
 
-  async hidePost(postId: string, hideReason: string) {
-    return this.commandBus.execute(new HidePostCommand(postId, hideReason));
+  async hidePost(postId: string, hideReason: string, actor: string, due: Date) {
+    const hideResult = await this.commandBus.execute(
+      new HidePostCommand(postId, hideReason, due, false),
+    );
+    await this.commandBus.execute(
+      new CreateHidePostProposalCommand(postId, hideReason, actor, due),
+    );
+
+    return hideResult;
   }
 
   async getPostSummary(id: string) {

@@ -144,7 +144,8 @@ export type PostSummary = {
 };
 
 export type HiddenPostDto = {
-    [key: string]: unknown;
+    reason: string;
+    due: Date;
 };
 
 export type HiddenPostResponse = {
@@ -198,6 +199,11 @@ export type ProposalSummary = {
     id: string;
     title: string;
     status: 'active' | 'passed' | 'rejected' | 'executed' | 'cancelled';
+    yes: number;
+    no: number;
+    total: number;
+    createdAt: string;
+    endAt: string;
 };
 
 export type AuthorProfile = {

@@ -993,6 +993,22 @@
           "enumItems": [],
           "mappedType": "datetime"
         },
+        "hide_due": {
+          "name": "hide_due",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
         "id": {
           "name": "id",
           "type": "varchar(36)",
@@ -1440,7 +1456,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eb551-5063-73c7-94b6-830a6411ee33'",
+          "default": "'019ec4a4-3367-770e-80f8-a50a1a4358d9'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -2333,7 +2349,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eb551-5064-7033-9035-0c1af8d7968f'",
+          "default": "'019ec4a4-3369-72e9-98b1-7cbad6c977dd'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -2503,7 +2519,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eb551-5064-7033-9035-13f79cf042ec'",
+          "default": "'019ec4a4-3369-72e9-98b1-82a914d8e056'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"

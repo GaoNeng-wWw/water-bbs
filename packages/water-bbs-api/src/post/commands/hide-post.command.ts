@@ -3,6 +3,7 @@ import { PostRepo } from '../post.repo';
 import { HiddenPostResponse } from '../dto/hidden-post.dto';
 import { PostNotFound } from '../errors';
 import { DomainError, err, isErr, isOk, ok, Result } from 'water-bbs-shared';
+import { isEmpty } from 'class-validator';
 
 export class HidePostCommand extends Command<
   Result<HiddenPostResponse, DomainError>
@@ -10,6 +11,8 @@ export class HidePostCommand extends Command<
   constructor(
     public readonly postId: string,
     public readonly hideReason: string,
+    public readonly due: Date = new Date(),
+    public readonly permanent: boolean = false,
   ) {
     super();
   }
@@ -26,10 +29,10 @@ export class HidePostCommandHandler implements ICommandHandler<HidePostCommand> 
       return postRes;
     }
     const post = postRes.value;
-    if (!post) {
+    if (!post || isEmpty(post)) {
       return err(new PostNotFound());
     }
-    post.hide(command.hideReason);
+    post.hide(command.hideReason, command.due, command.permanent);
     const hidePostRes = await this.repo.updatePost(post);
     if (isOk(hidePostRes)) {
       return ok(new HiddenPostResponse(post.id));

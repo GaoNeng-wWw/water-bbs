@@ -403,7 +403,19 @@ export const PostSummarySchema = {
 
 export const HiddenPostDTOSchema = {
     type: 'object',
-    properties: {}
+    properties: {
+        reason: {
+            type: 'string'
+        },
+        due: {
+            format: 'date-time',
+            type: 'string'
+        }
+    },
+    required: [
+        'reason',
+        'due'
+    ]
 } as const;
 
 export const HiddenPostResponseSchema = {
@@ -551,12 +563,32 @@ export const ProposalSummarySchema = {
                 'executed',
                 'cancelled'
             ]
+        },
+        yes: {
+            type: 'number'
+        },
+        no: {
+            type: 'number'
+        },
+        total: {
+            type: 'number'
+        },
+        createdAt: {
+            type: 'string'
+        },
+        endAt: {
+            type: 'string'
         }
     },
     required: [
         'id',
         'title',
-        'status'
+        'status',
+        'yes',
+        'no',
+        'total',
+        'createdAt',
+        'endAt'
     ]
 } as const;
 

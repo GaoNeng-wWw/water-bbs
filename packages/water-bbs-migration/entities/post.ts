@@ -5,7 +5,17 @@ import { Collection } from "@mikro-orm/core";
 
 @Filter({
   name: 'notHidden',
-  cond: { hidden: false },
+  cond: {
+    $and: [
+      { hidden: false },
+      {
+        $or: [
+          {hideDue: null},
+          {hideDue: { $lte: new Date() }}
+        ]
+      }
+    ]
+  },
   default: true
 })
 @Entity()
@@ -34,6 +44,8 @@ export class Post extends BaseMetaEntity {
   hiddenReason: string | null = null;
   @Property({type: 'datetime', nullable: true})
   hideAt: Date | null = null
+  @Property({type: 'datetime', nullable: true})
+  hideDue: Date | null = null
 
 
   constructor(title: string, authorId: string, categoryId: string) {
@@ -52,10 +64,11 @@ export class Post extends BaseMetaEntity {
     this.hideAt = null;
   }
 
-  hide(reason: string) {
-    this.hidden = true;
+  hide(reason: string, due: Date = new Date(), permanent: boolean = false) {
+    this.hidden = permanent;
     this.hiddenReason = reason;
     this.hideAt = new Date();
+    this.hideDue = due;
   }
 
   appendThread(thread: Thread) {
