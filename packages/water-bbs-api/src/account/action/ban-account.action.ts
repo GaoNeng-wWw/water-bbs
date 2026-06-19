@@ -13,12 +13,15 @@ const schema = z.object({
 
 @ActionHandler()
 export class BanAccountAction implements IActionHandler<typeof schema> {
-  name: string = 'account.ban';
+  type: string = 'account.ban';
   schema = schema;
 
   private readonly redis: Redis;
   constructor(redisService: RedisService) {
     this.redis = redisService.getOrThrow();
+  }
+  getName(): string {
+    return this.type;
   }
 
   validate(

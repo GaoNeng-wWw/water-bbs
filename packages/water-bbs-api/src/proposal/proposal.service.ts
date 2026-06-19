@@ -6,6 +6,12 @@ import { CreateVoteCommand } from '../vote/commands/create-vote.command';
 import { CreateProposalCommand } from './command/create-proposal.command';
 import { GetProposalQuery } from './queries/get-proposal.query';
 import { ListProposalsQuery } from './queries/list-proposals.query';
+import { ListProposalCommentQuery } from 'src/vote/queries';
+import { isErr } from 'water-bbs-shared';
+import { Pagination } from '@app/shared';
+import { CreateProposalCommentCommand } from './command';
+import { CreateProposalCommentDto } from './dto/create-proposal-comment.dto';
+import { FindProposalCommentsQuery } from './queries';
 
 @Injectable()
 export class ProposalService {
@@ -37,5 +43,33 @@ export class ProposalService {
   }
   async listProposals(page: number, size: number) {
     return this.queryBus.execute(new ListProposalsQuery(page, size));
+  }
+  async listProposalVotes(id: string, page: number = 1, size: number = 10) {
+    const resp = await this.queryBus.execute(
+      new ListProposalCommentQuery(id, page, size),
+    );
+    if (isErr(resp)) {
+      return resp;
+    }
+    const { data, total } = resp.value;
+    return new Pagination(total, data);
+  }
+  createProposalComment(
+    proposalId: string,
+    dto: CreateProposalCommentDto,
+    authorId: string,
+  ) {
+    return this.commandBus.execute(
+      new CreateProposalCommentCommand(proposalId, dto.content, authorId),
+    );
+  }
+  async findProposalComments(
+    proposalId: string,
+    page: number = 1,
+    size: number = 10,
+  ) {
+    return this.queryBus.execute(
+      new FindProposalCommentsQuery(proposalId, page, size),
+    );
   }
 }

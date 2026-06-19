@@ -15,7 +15,7 @@ export const hidePostActionSchema = z.object({
   reason: z.string().optional(),
 });
 
-export const hidePostActionType = 'post.hide' as const;
+export const hidePostActionType = 'HiddenPostAction' as const;
 
 @ActionHandler()
 export class HiddenPostAction implements IActionHandler<
@@ -43,7 +43,10 @@ export class HiddenPostAction implements IActionHandler<
     await this.repo.upsert(post);
     return ok({ id: post.id });
   }
-  name?: string | undefined;
+  public type: string = hidePostActionType;
+  getName(): string {
+    return this.type;
+  }
   schema: typeof hidePostActionSchema = hidePostActionSchema;
   constructor(
     @InjectRepository(Post)

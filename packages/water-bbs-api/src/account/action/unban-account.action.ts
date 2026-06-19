@@ -26,6 +26,9 @@ export class UnbanAccountAction implements IActionHandler<
   ) {
     this.redis = redisService.getOrThrow();
   }
+  getName(): string {
+    return this.type;
+  }
   validate(args: Record<string, any>): ValidateResult {
     const result = this.schema.safeParse(args);
     if (result.success) {
@@ -47,6 +50,6 @@ export class UnbanAccountAction implements IActionHandler<
     await this.redis.del(`ban:${accountId}`);
     return ok(true);
   }
-  name: string;
+  type: string = 'UnbanAccount';
   schema: ZodType = unbanAccountSchema;
 }

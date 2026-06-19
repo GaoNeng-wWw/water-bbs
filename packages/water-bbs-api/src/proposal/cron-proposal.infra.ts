@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ExecuteProposalCommand } from './command';
@@ -8,15 +8,17 @@ import { GetVoteCountQuery } from '../vote/queries';
 
 @Injectable()
 export class CronProposalRunner {
+  private readonly logger = new Logger();
   constructor(
     private readonly qb: QueryBus,
     private readonly cb: CommandBus,
   ) {}
 
-  @Cron(CronExpression.EVERY_30_MINUTES)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async run() {
     const proposals = await this.qb.execute(new FindAllActiveProposalQuery());
     if (isErr(proposals)) {
+      this.logger.error(proposals.error);
       return proposals;
     }
     for (const proposal of proposals.value) {
@@ -24,6 +26,7 @@ export class CronProposalRunner {
         new GetVoteCountQuery(proposal.id),
       );
       if (isErr(voteTotal)) {
+        this.logger.error(voteTotal.error);
         return voteTotal;
       }
       const runRes = await this.cb.execute(
@@ -34,6 +37,7 @@ export class CronProposalRunner {
         ),
       );
       if (isErr(runRes)) {
+        this.logger.error(runRes.error);
         return runRes;
       }
     }

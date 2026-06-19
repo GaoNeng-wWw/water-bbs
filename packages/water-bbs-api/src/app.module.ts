@@ -10,6 +10,7 @@ import {
   Ident,
   Permission,
   Post,
+  ProposalComment,
   Proposals,
   Role,
   Vote,
@@ -32,7 +33,6 @@ import { CategoryModule } from './category/category.module';
 import { ProposalModule } from './proposal/proposal.module';
 import { VoteModule } from './vote/vote.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { WorkflowModule, WorkflowService } from '@app/workflow';
 import { ActionModule } from './action/action.module';
 import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
@@ -65,6 +65,7 @@ import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
             Vote,
             VoteSlot,
             Action,
+            ProposalComment,
           ],
           allowGlobalContext: true,
           host: configService.get('database.host'),
@@ -87,7 +88,8 @@ import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
       Vote,
       VoteSlot,
       Action,
-      FileReference
+      FileReference,
+      ProposalComment,
     ]),
     RedisModule.forRootAsync({
       inject: [ConfigService],
@@ -133,19 +135,6 @@ import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
     JwtModule.register({
       global: true,
       secretOrPrivateKey: 'tset-secret',
-    }),
-    WorkflowModule.forRootAsync({
-      inject: [WorkflowService],
-      useFactory: (workflowService: WorkflowService) => {
-        return {
-          onDisocver(name, schema) {
-            if (!schema) {
-              return Promise.resolve();
-            }
-            return workflowService.save(name, schema);
-          },
-        };
-      },
     }),
     AccountModule,
     AuthModule,

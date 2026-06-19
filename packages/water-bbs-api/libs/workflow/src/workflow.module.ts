@@ -11,6 +11,8 @@ import { DiscoveryModule, DiscoveryService, Reflector } from '@nestjs/core';
 import { ActionHandlerKey } from './action-handler.decorator';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Action } from 'water-bbs-migration';
+import { WorkflowRunner } from './domain';
+import { ActionRegistryService } from './action-registry.service';
 
 export interface WorkflowOptions {
   onDisocver(name: string, schema?: ZodType): Promise<any>;
@@ -23,8 +25,8 @@ export const { MODULE_OPTIONS_TOKEN, ConfigurableModuleClass } =
 
 @Module({
   imports: [DiscoveryModule, MikroOrmModule.forFeature([Action])],
-  providers: [WorkflowService],
-  exports: [WorkflowService],
+  providers: [WorkflowService, WorkflowRunner, ActionRegistryService],
+  exports: [WorkflowService, WorkflowRunner],
 })
 export class WorkflowModule
   extends ConfigurableModuleClass

@@ -17,6 +17,19 @@ export class VoteRepository {
     private em: EntityManager,
   ) {}
 
+  findVoteByActor(proposalId: string, actorId: string) {
+    return this.em
+      .find(
+        Vote,
+        {
+          accountId: actorId,
+          proposalId,
+        },
+        { cache: true },
+      )
+      .then(ok)
+      .catch((reason) => err(new PersistenceError(reason)));
+  }
   create(vote: Vote) {
     return this.em
       .transactional(async (em) => {
@@ -63,7 +76,11 @@ export class VoteRepository {
         if (!result || isEmpty(result.cnt)) {
           return ok(0);
         }
-        return ok(result.cnt ?? 0);
+        return ok(
+          typeof result.cnt === 'number'
+            ? result.cnt
+            : (Number.parseInt(result.cnt) ?? 0),
+        );
       })
       .catch((reason) => err(new PersistenceError(reason)));
   }

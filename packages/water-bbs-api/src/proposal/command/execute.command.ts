@@ -9,6 +9,7 @@ import {
 } from 'water-bbs-shared';
 import { ProposalDomainService } from '../proposal.domain.service';
 import { ProposalRepository } from '../proposal.repo';
+import { Logger } from '@nestjs/common';
 
 export class ExecuteProposalCommand extends Command<Result<boolean, AppError>> {
   constructor(
@@ -22,6 +23,7 @@ export class ExecuteProposalCommand extends Command<Result<boolean, AppError>> {
 
 @CommandHandler(ExecuteProposalCommand)
 export class ExecuteProposalHandler implements ICommandHandler<ExecuteProposalCommand> {
+  private readonly logger = new Logger();
   constructor(
     private readonly proposalDomainService: ProposalDomainService,
     private readonly proposalRepository: ProposalRepository,
@@ -33,6 +35,7 @@ export class ExecuteProposalHandler implements ICommandHandler<ExecuteProposalCo
       command.id,
     );
     if (isErr(proposalResult)) {
+      this.logger.error(proposalResult.error);
       return proposalResult;
     }
     const proposal = proposalResult.value;
@@ -45,10 +48,13 @@ export class ExecuteProposalHandler implements ICommandHandler<ExecuteProposalCo
       command.no,
     );
     if (isErr(runResult)) {
+      this.logger.error(runResult.error);
       return runResult;
     }
+    proposal.done();
     const upsertRes = await this.proposalRepository.upsertProposal(proposal);
     if (isErr(upsertRes)) {
+      this.logger.error(upsertRes.error);
       return upsertRes;
     }
     return ok(true);

@@ -27,7 +27,7 @@ export class ProposalEntity {
   id: string;
   @Expose()
   @ApiProperty()
-  author: AuthorProfile;
+  title: string;
   @Expose()
   @ApiProperty()
   content: string;
@@ -39,7 +39,7 @@ export class ProposalEntity {
   no: number;
   constructor(
     id: string,
-    author: AuthorProfile,
+    title: string,
     content: string,
     yes: number,
     no: number,
@@ -48,7 +48,7 @@ export class ProposalEntity {
     this.content = content;
     this.yes = yes;
     this.no = no;
-    this.author = author;
+    this.title = title;
     this.content = content;
     this.yes = yes;
     this.no = no;

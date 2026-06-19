@@ -39,10 +39,13 @@ export class UpdateActionActiveAction implements IActionHandler<typeof schema> {
     await this.repo.upsert(action);
     return ok({ id: action.id });
   }
-  name: string = 'action.updateActive';
+  type: string = 'action.updateActive';
   schema: typeof schema = schema;
   constructor(
     @InjectRepository(Action)
     private readonly repo: EntityRepository<Action>,
   ) {}
+  getName(): string {
+    return this.type;
+  }
 }

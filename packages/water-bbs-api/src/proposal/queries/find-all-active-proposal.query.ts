@@ -23,6 +23,9 @@ export class FindAllActiveProposalQueryHandler implements IQueryHandler<FindAllA
       .findAll({
         where: {
           status: ProposalStatus.Active,
+          endAt: {
+            $lte: new Date(),
+          },
         },
         cache: true,
       })

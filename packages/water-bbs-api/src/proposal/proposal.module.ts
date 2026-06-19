@@ -2,20 +2,46 @@ import { Module } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import { ProposalController } from './proposal.controller';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Proposals, Vote, VoteSlot } from 'water-bbs-migration';
+import {
+  ProposalComment,
+  Proposals,
+  Vote,
+  VoteSlot,
+} from 'water-bbs-migration';
 import { ProposalRepository } from './proposal.repo';
 import {
   FindAllActiveProposalQueryHandler,
+  FindProposalComments,
   GetProposalHandler,
   ListProposalsHandler,
 } from './queries';
-import { ExecuteProposalHandler, CreateProposalHandler } from './command';
+import {
+  ExecuteProposalHandler,
+  CreateProposalHandler,
+  CreateProposalComment,
+} from './command';
 import { ProposalDomainService } from './proposal.domain.service';
 import { CronProposalRunner } from './cron-proposal.infra';
 import { VoteRepository } from '../vote/vote.repo';
+import { WorkflowModule, WorkflowService } from '@app/workflow';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Proposals, Vote, VoteSlot])],
+  imports: [
+    WorkflowModule.forRootAsync({
+      inject: [WorkflowService],
+      useFactory: (workflowService: WorkflowService) => {
+        return {
+          onDisocver(name, schema) {
+            if (!schema) {
+              return Promise.resolve();
+            }
+            return workflowService.save(name, schema);
+          },
+        };
+      },
+    }),
+    MikroOrmModule.forFeature([Proposals, Vote, VoteSlot, ProposalComment]),
+  ],
   controllers: [ProposalController],
   providers: [
     VoteRepository,
@@ -28,6 +54,8 @@ import { VoteRepository } from '../vote/vote.repo';
     CreateProposalHandler,
     ProposalDomainService,
     CronProposalRunner,
+    CreateProposalComment,
+    FindProposalComments,
   ],
 })
 export class ProposalModule {}

@@ -3,7 +3,7 @@ import { VoteRepository } from './vote.repo';
 import { Vote, VoteAction } from 'water-bbs-migration';
 import { isErr, ok } from 'water-bbs-shared';
 import { CreateVoteDTO } from './dto/create-vote.dto';
-import { VoteAuthor, VoteResponse } from './dto/list-vote.dto';
+import { VoteAuthor, VoteComment } from './dto/list-vote.dto';
 import { QueryBus } from '@nestjs/cqrs';
 import { FindProfileByAccountIDQuery } from 'src/account/queries';
 
@@ -51,7 +51,7 @@ export class VoteService {
     }
     const { data, total } = listRes.value;
     const authorCache = new Map<string, VoteAuthor>();
-    const votes: VoteResponse[] = [];
+    const votes: VoteComment[] = [];
     for (const vote of data) {
       const accountId = vote.accountId;
       if (!authorCache.has(accountId)) {
@@ -72,11 +72,7 @@ export class VoteService {
         }
       }
       const profile = authorCache.get(accountId)!;
-      const ret = new VoteResponse(
-        profile,
-        vote.comment,
-        vote.createdAt.toLocaleString(),
-      );
+      const ret = new VoteComment(profile, vote.createdAt.toLocaleString());
       votes.push(ret);
     }
     return ok({ votes, total });

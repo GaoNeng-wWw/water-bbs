@@ -1,14 +1,16 @@
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import { AppError, isErr, ok, Result } from 'water-bbs-shared';
 import { VoteService } from '../vote.service';
-import { VoteResponse } from '../dto/list-vote.dto';
+import { VoteComment } from '../dto/list-vote.dto';
 
-export type ListVoteResponse = {
-  data: VoteResponse[];
+export type ListProposalCommentResponse = {
+  data: VoteComment[];
   total: number;
 };
 
-export class ListVoteQuery extends Query<Result<ListVoteResponse, AppError>> {
+export class ListProposalCommentQuery extends Query<
+  Result<ListProposalCommentResponse, AppError>
+> {
   constructor(
     public proposalId: string,
     public page: number = 1,
@@ -18,12 +20,12 @@ export class ListVoteQuery extends Query<Result<ListVoteResponse, AppError>> {
   }
 }
 
-@QueryHandler(ListVoteQuery)
-export class ListVoteHandler implements IQueryHandler<ListVoteQuery> {
+@QueryHandler(ListProposalCommentQuery)
+export class ListProposalComment implements IQueryHandler<ListProposalCommentQuery> {
   constructor(private service: VoteService) {}
   async execute(
-    query: ListVoteQuery,
-  ): Promise<Result<ListVoteResponse, AppError>> {
+    query: ListProposalCommentQuery,
+  ): Promise<Result<ListProposalCommentResponse, AppError>> {
     const res = await this.service.listVotes(
       query.proposalId,
       query.page,

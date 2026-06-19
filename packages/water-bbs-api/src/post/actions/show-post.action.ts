@@ -42,7 +42,10 @@ export class ShowPostAction implements IActionHandler<ShowPostActionSchema> {
     };
   }
 
-  name?: string | undefined;
+  type: string = showPostActionName;
+  getName(): string {
+    return this.type;
+  }
   schema = schema;
 
   constructor(

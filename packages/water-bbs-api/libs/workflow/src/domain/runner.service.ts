@@ -1,24 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import {
-  IActionHandler,
-  InjectActionHandler,
-} from './action-handler.interface';
+import { Injectable, Logger } from '@nestjs/common';
 import { IAction } from './action';
 import { DomainError, Err, err, isErr, Result } from 'water-bbs-shared';
 import { CanNotFoundHandlerError } from '../errors/can-not-found-handler';
 import { ValidateFailError } from '../errors/validate-fail';
+import { ActionRegistryService } from '../action-registry.service';
 
 @Injectable()
 export class WorkflowRunner {
-  constructor(
-    @InjectActionHandler()
-    private handlers: IActionHandler<unknown>[] = [],
-  ) {}
+  private readonly logger: Logger = new Logger();
+  constructor(private registry: ActionRegistryService) {}
   async execute<T>(
     action: IAction,
     param: Record<string, any> = {},
   ): Promise<Result<T, DomainError>> {
-    const [handler] = this.handlers.filter((h) => h.name === action.type);
+    const [handler] = this.registry.getHandler(action.type);
     if (!handler) {
       return err(new CanNotFoundHandlerError());
     }

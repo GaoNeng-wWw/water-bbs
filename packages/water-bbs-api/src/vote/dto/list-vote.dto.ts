@@ -22,17 +22,15 @@ export class VoteAuthor {
   }
 }
 
-export class VoteResponse {
+export class VoteComment {
   @Expose()
   public readonly author: VoteAuthor;
   @Expose()
-  public readonly content: string;
-  @Expose()
   public readonly createdAt: string;
 
-  constructor(author: VoteAuthor, content: string, createdAt: string) {
+  constructor(author: VoteAuthor, createdAt: string) {
     this.author = author;
-    this.content = content;
+
     this.createdAt = createdAt;
   }
 }

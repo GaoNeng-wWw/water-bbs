@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { VoteAction } from 'water-bbs-migration';
 
@@ -12,6 +13,7 @@ export class CreateVoteDTO {
 
 export class CreateVoteResponse {
   @Expose()
+  @ApiProperty()
   public readonly voteId: string;
   constructor(voteId: string) {
     this.voteId = voteId;

@@ -1,10 +1,13 @@
 import { IAction, WorkflowRunner } from '@app/workflow';
+import { Injectable, Logger } from '@nestjs/common';
 import { Proposals, ProposalStatus } from 'water-bbs-migration';
 import { err, isErr, ok } from 'water-bbs-shared';
 
 export type VoteResult = { yes: number; no: number };
 
+@Injectable()
 export class ProposalDomainService {
+  private readonly logger = new Logger();
   constructor(private workflowRunner: WorkflowRunner) {}
   canRun(proposal: Proposals, voteResult: VoteResult) {
     return (
@@ -22,12 +25,20 @@ export class ProposalDomainService {
       return err(runRes.error);
     }
     const actions: IAction[] = JSON.parse(proposal.command);
+    this.logger.log(`${proposal.id} start`);
     for (const action of actions) {
-      const executeRes = await this.workflowRunner.execute<T>(action);
+      this.logger.log(`${action.type} Running`);
+      const executeRes = await this.workflowRunner.execute<T>(
+        action,
+        action.args,
+      );
       if (isErr(executeRes)) {
+        this.logger.error(executeRes.error);
         return err(executeRes.error);
       }
+      this.logger.log(`${action.type} Done`);
     }
+    this.logger.log(`${proposal.id} done`);
     return ok(true);
   }
 }

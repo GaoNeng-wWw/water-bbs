@@ -19,6 +19,6 @@ export type ValidateResult =
 export type IActionHandler<Schema> = {
   validate(args: Record<string, any>): ValidateResult;
   run(args: z.infer<Schema>): Promise<Result<unknown, unknown>>;
-  name?: string;
+  type: string;
   schema: ZodType;
 };

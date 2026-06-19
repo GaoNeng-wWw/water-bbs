@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { VoteService } from './vote.service';
 import { CreateVoteHandler } from './commands/create-vote.command';
-import { GetVoteCountHandler, ListVoteHandler } from './queries';
+import { GetVoteCountHandler, ListProposalComment } from './queries';
 import { Vote, VoteSlot } from 'water-bbs-migration';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { VoteRepository } from './vote.repo';
@@ -13,7 +13,7 @@ import { VoteRepository } from './vote.repo';
     VoteService,
     CreateVoteHandler,
     GetVoteCountHandler,
-    ListVoteHandler,
+    ListProposalComment,
   ],
 })
 export class VoteModule {}

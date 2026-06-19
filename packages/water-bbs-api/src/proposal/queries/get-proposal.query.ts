@@ -7,9 +7,8 @@ import {
   ok,
   Result,
 } from 'water-bbs-shared';
-import { FindProfileByAccountIDQuery } from '../../account/queries';
 import { GetVoteCountQuery } from '../../vote/queries/get-vote-counts.query';
-import { AuthorProfile, ProposalEntity } from '../entity/propsal.entity';
+import { ProposalEntity } from '../entity/propsal.entity';
 import { ProposalRepository } from '../proposal.repo';
 
 export class GetProposalQuery extends Query<Result<ProposalEntity, AppError>> {
@@ -35,18 +34,6 @@ export class GetProposalHandler implements IQueryHandler<GetProposalQuery> {
     if (!res.value) {
       return err(new DomainError('PROPOSAL_NOT_FOUND'));
     }
-    const profile = await this.queryBus.execute(
-      new FindProfileByAccountIDQuery(res.value.authorId),
-    );
-    if (isErr(profile)) {
-      return profile;
-    }
-    const authorProfile = new AuthorProfile(
-      profile.value.id,
-      profile.value.nick,
-      profile.value.avatar,
-      profile.value.bio,
-    );
     const voteCount = await this.queryBus.execute(
       new GetVoteCountQuery(query.id),
     );
@@ -55,7 +42,7 @@ export class GetProposalHandler implements IQueryHandler<GetProposalQuery> {
     }
     const { yes, no } = voteCount.value;
     return ok(
-      new ProposalEntity(query.id, authorProfile, res.value.content, yes, no),
+      new ProposalEntity(query.id, res.value.title, res.value.reason, yes, no),
     );
   }
 }

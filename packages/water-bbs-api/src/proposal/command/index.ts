@@ -6,3 +6,7 @@ export {
   CreateProposalCommand,
   CreateProposalHandler,
 } from './create-proposal.command';
+export {
+  CreateProposalCommentCommand,
+  CreateProposalComment,
+} from './create-proposal-comment.command';
