@@ -7,6 +7,7 @@ import { computed, provide, ref } from 'vue';
 import { EditorContextKey, type EditorProps } from './editor.props.ts';
 import { bold, italic, Collapse } from './extension';
 import { Image } from './extension/image/ext.ts';
+import { base64ToFile } from '@/utils';
 
 const {
   content,
@@ -20,6 +21,7 @@ const {
   ],
   contentType = 'json',
   toolbar: enableToolbar = true,
+  fileUpload,
 } = defineProps<EditorProps>();
 
 const editor = new Editor({
@@ -46,10 +48,34 @@ const editor = new Editor({
 const getJson = () => editor.getJSON();
 const getMd = () => editor.getMarkdown();
 const getInstance = () => editor;
+const coverImage = () => {
+  const tr = editor.state.tr;
+  const tasks: Promise<boolean>[] = [];
+  editor.state.doc.descendants((node, pos) => {
+    if (node.type.name === 'image') {
+      const task = base64ToFile(node.attrs.src)
+        .then((file) => {
+          return fileUpload?.(file);
+        })
+        .then(data => data?.ok ? data.url : '')
+        .then(url => tr.setNodeAttribute(pos, 'src', url))
+        .then(() => true)
+        .catch(() => false);
+      tasks.push(task);
+    }
+  });
+  return Promise.all(tasks)
+    .then((results) => {
+      if (results.every(result => result)) {
+        editor.view.dispatch(tr);
+      }
+      return true;
+    });
+};
 const source = ref(false);
 const sourceCode = ref<string | null>(null);
 
-defineExpose({ getJson, getMd, getInstance });
+defineExpose({ getJson, getMd, getInstance, coverImage });
 provide(EditorContextKey, {
   setSource: (val: boolean) => {
     source.value = val;

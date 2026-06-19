@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import { Account, Ident, Cert, Permission, Role, Profile, Post, Thread, Reply, Category, FileReference, Proposals, Vote, VoteSlot, Action } from './entities';
 import { Migrator } from '@mikro-orm/migrations';
 import { SeedManager } from '@mikro-orm/seeder';
+import { ProposalComment } from './entities/proposal';
 
 dotenv.config({ path: process.env.DOTENV_PATH || '.env' });
 
@@ -34,7 +35,7 @@ export default defineConfig({
         Role,
         Profile,
         Post, Thread, Reply, Category, FileReference,
-        Proposals, Vote, VoteSlot, Action
+        Proposals, Vote, VoteSlot, Action, ProposalComment
     ],
     debug: true,
 })

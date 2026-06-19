@@ -18,7 +18,13 @@ export type Ext<T extends Record<string, any>> = {
 };
 
 export type ContentType = 'json' | 'html' | 'markdown';
-
+export type UploadResult = {
+  ok: true;
+  url: string;
+} | {
+  ok: false;
+  reason: string;
+};
 export type EditorProps = {
   content?: object | string;
   readonly?: boolean;
@@ -26,4 +32,5 @@ export type EditorProps = {
   extensions?: Ext<Record<string, any>>[];
   contentType?: ContentType;
   toolbar?: boolean;
+  fileUpload?: (file: File) => Promise<UploadResult>;
 };

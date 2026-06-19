@@ -1331,6 +1331,177 @@
       "comment": ""
     },
     {
+      "name": "proposal_comment",
+      "columns": {
+        "account_id": {
+          "name": "account_id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "action": {
+          "name": "action",
+          "type": "enum('yes','no')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 3,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [
+            "yes",
+            "no"
+          ],
+          "mappedType": "enum"
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 65535,
+          "precision": null,
+          "scale": null,
+          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "text"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "CURRENT_TIMESTAMP",
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": "'019ecee3-d4cd-7646-b139-2e93b4166894'",
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "proposal_id": {
+          "name": "proposal_id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "removed_at": {
+          "name": "removed_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "created_at"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "proposal_comment_created_at_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "removed_at"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "proposal_comment_removed_at_index",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "comment": ""
+    },
+    {
       "name": "proposals",
       "columns": {
         "approval_percent": {
@@ -1456,7 +1627,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ec4a4-3367-770e-80f8-a50a1a4358d9'",
+          "default": "'019ecee3-d4c6-769d-97dd-cb1f0c25ef70'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -2306,22 +2477,6 @@
           ],
           "mappedType": "enum"
         },
-        "comment": {
-          "name": "comment",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "unique": false,
-          "length": 65535,
-          "precision": null,
-          "scale": null,
-          "default": "'_utf8mb4\\\\\\'\\\\\\''",
-          "comment": null,
-          "enumItems": [],
-          "mappedType": "text"
-        },
         "created_at": {
           "name": "created_at",
           "type": "datetime",
@@ -2349,7 +2504,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ec4a4-3369-72e9-98b1-7cbad6c977dd'",
+          "default": "'019ecee3-d4cc-7590-8e32-a2403d3905e9'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -2519,7 +2674,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ec4a4-3369-72e9-98b1-82a914d8e056'",
+          "default": "'019ecee3-d4cc-7590-8e32-a54cc44e8046'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"

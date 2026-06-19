@@ -4,5 +4,5 @@ export { Profile } from './profile';
 export { Category } from './categories';
 export { Thread, Post, Reply } from './post';
 export { FileReference } from './file-ref';
-export { Proposals, ProposalStatus, Vote, VoteAction, VoteSlot } from './proposal';
+export { Proposals, ProposalStatus, Vote, VoteAction, VoteSlot, ProposalComment } from './proposal';
 export { Action } from './action';

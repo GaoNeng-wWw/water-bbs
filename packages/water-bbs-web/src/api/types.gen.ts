@@ -206,16 +206,9 @@ export type ProposalSummary = {
     endAt: string;
 };
 
-export type AuthorProfile = {
-    id: string;
-    name: string;
-    avatar: string;
-    bio: string;
-};
-
 export type ProposalEntity = {
     id: string;
-    author: AuthorProfile;
+    title: string;
     content: string;
     /**
      * 支持方占比
@@ -235,6 +228,41 @@ export type CreateProposal = {
 
 export type CreateProposalResponse = {
     id: string;
+};
+
+export type VoteComment = {
+    [key: string]: unknown;
+};
+
+export type CreateVote = {
+    content: string;
+    action: 'yes' | 'no';
+};
+
+export type CreateVoteResponse = {
+    voteId: string;
+};
+
+export type CreateProposalCommentDto = {
+    content: string;
+};
+
+export type CreateProposalCommandResponse = {
+    commentId: string;
+};
+
+export type CommentAuthor = {
+    id: string;
+    nick: string;
+    avatar: string;
+};
+
+export type ProposalComment = {
+    commentId: string;
+    content: string;
+    author: CommentAuthor;
+    createdAt: Date;
+    action: 'yes' | 'no';
 };
 
 export type ActionTotal = {
@@ -696,7 +724,13 @@ export type ProposalControllerListProposalData = {
     body?: never;
     path?: never;
     query: {
+        /**
+         * 页码
+         */
         page: number;
+        /**
+         * 每页数量
+         */
         size: number;
     };
     url: '/proposal';
@@ -726,6 +760,9 @@ export type ProposalControllerCreateProposalResponse = ProposalControllerCreateP
 export type ProposalControllerGetProposalData = {
     body?: never;
     path: {
+        /**
+         * 提案ID
+         */
         id: string;
     };
     query?: never;
@@ -737,6 +774,89 @@ export type ProposalControllerGetProposalResponses = {
 };
 
 export type ProposalControllerGetProposalResponse = ProposalControllerGetProposalResponses[keyof ProposalControllerGetProposalResponses];
+
+export type ProposalControllerGetProposalVotesData = {
+    body?: never;
+    path: {
+        /**
+         * 提案ID
+         */
+        id: string;
+    };
+    query: {
+        page: number;
+        size: number;
+    };
+    url: '/proposal/{id}/votes';
+};
+
+export type ProposalControllerGetProposalVotesResponses = {
+    200: Pagination;
+};
+
+export type ProposalControllerGetProposalVotesResponse = ProposalControllerGetProposalVotesResponses[keyof ProposalControllerGetProposalVotesResponses];
+
+export type ProposalControllerVoteProposalData = {
+    body: CreateVote;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/proposal/{id}/vote';
+};
+
+export type ProposalControllerVoteProposalResponses = {
+    201: CreateVoteResponse;
+};
+
+export type ProposalControllerVoteProposalResponse = ProposalControllerVoteProposalResponses[keyof ProposalControllerVoteProposalResponses];
+
+export type ProposalControllerCreateProposalCommentData = {
+    body: CreateProposalCommentDto;
+    path: {
+        /**
+         * 提案ID
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/proposal/{id}/comment';
+};
+
+export type ProposalControllerCreateProposalCommentResponses = {
+    201: CreateProposalCommandResponse;
+};
+
+export type ProposalControllerCreateProposalCommentResponse = ProposalControllerCreateProposalCommentResponses[keyof ProposalControllerCreateProposalCommentResponses];
+
+export type ProposalControllerListProposalCommentsData = {
+    body?: never;
+    path: {
+        /**
+         * 提案ID
+         */
+        id: string;
+    };
+    query: {
+        /**
+         * 页码
+         */
+        page: number;
+        /**
+         * 每页数量
+         */
+        size: number;
+    };
+    url: '/proposal/{id}/comments';
+};
+
+export type ProposalControllerListProposalCommentsResponses = {
+    200: Pagination & {
+        data?: Array<ProposalComment>;
+    };
+};
+
+export type ProposalControllerListProposalCommentsResponse = ProposalControllerListProposalCommentsResponses[keyof ProposalControllerListProposalCommentsResponses];
 
 export type ActionControllerGetActionTotalData = {
     body?: never;

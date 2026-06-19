@@ -2,7 +2,8 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetPermissionData, AccountControllerGetPermissionResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, ActionControllerGetActionInfoData, ActionControllerGetActionInfoResponses, ActionControllerGetActionTotalData, ActionControllerGetActionTotalResponses, ActionControllerListActionData, ActionControllerListActionResponses, ActionControllerUpdateActiveData, ActionControllerUpdateActiveResponses, AppControllerGetAssetData, AppControllerGetAssetResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PermissionControllerCreatePermissionData, PermissionControllerCreatePermissionResponses, PermissionControllerFindPermissionData, PermissionControllerFindPermissionResponses, PermissionControllerListPermissionData, PermissionControllerListPermissionResponses, PermissionControllerRemovePermissionData, PermissionControllerRemovePermissionResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, PostControllerUploadImageData, PostControllerUploadImageResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses, RoleControllerCreateRoleData, RoleControllerCreateRoleResponses, RoleControllerFindRoleData, RoleControllerFindRoleResponses, RoleControllerListRoleData, RoleControllerListRoleResponses, RoleControllerRemoveRoleData, RoleControllerRemoveRoleResponses, RoleControllerUpdateRoleData, RoleControllerUpdateRoleResponses } from './types.gen';
+import { proposalControllerListProposalCommentsResponseTransformer } from './transformers.gen';
+import type { AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetPermissionData, AccountControllerGetPermissionResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, ActionControllerGetActionInfoData, ActionControllerGetActionInfoResponses, ActionControllerGetActionTotalData, ActionControllerGetActionTotalResponses, ActionControllerListActionData, ActionControllerListActionResponses, ActionControllerUpdateActiveData, ActionControllerUpdateActiveResponses, AppControllerGetAssetData, AppControllerGetAssetResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PermissionControllerCreatePermissionData, PermissionControllerCreatePermissionResponses, PermissionControllerFindPermissionData, PermissionControllerFindPermissionResponses, PermissionControllerListPermissionData, PermissionControllerListPermissionResponses, PermissionControllerRemovePermissionData, PermissionControllerRemovePermissionResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, PostControllerUploadImageData, PostControllerUploadImageResponses, ProposalControllerCreateProposalCommentData, ProposalControllerCreateProposalCommentResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerGetProposalVotesData, ProposalControllerGetProposalVotesResponses, ProposalControllerListProposalCommentsData, ProposalControllerListProposalCommentsResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses, ProposalControllerVoteProposalData, ProposalControllerVoteProposalResponses, RoleControllerCreateRoleData, RoleControllerCreateRoleResponses, RoleControllerFindRoleData, RoleControllerFindRoleResponses, RoleControllerListRoleData, RoleControllerListRoleResponses, RoleControllerRemoveRoleData, RoleControllerRemoveRoleResponses, RoleControllerUpdateRoleData, RoleControllerUpdateRoleResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -233,6 +234,42 @@ export const proposalControllerCreateProposal = <ThrowOnError extends boolean = 
 export const proposalControllerGetProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerGetProposalData, ThrowOnError>) => (options.client ?? client).get<ProposalControllerGetProposalResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/proposal/{id}',
+    ...options
+});
+
+export const proposalControllerGetProposalVotes = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerGetProposalVotesData, ThrowOnError>) => (options.client ?? client).get<ProposalControllerGetProposalVotesResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal/{id}/votes',
+    ...options
+});
+
+export const proposalControllerVoteProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerVoteProposalData, ThrowOnError>) => (options.client ?? client).post<ProposalControllerVoteProposalResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal/{id}/vote',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const proposalControllerCreateProposalComment = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerCreateProposalCommentData, ThrowOnError>) => (options.client ?? client).post<ProposalControllerCreateProposalCommentResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal/{id}/comment',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * 获取提案评论列表
+ */
+export const proposalControllerListProposalComments = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerListProposalCommentsData, ThrowOnError>) => (options.client ?? client).get<ProposalControllerListProposalCommentsResponses, unknown, ThrowOnError>({
+    responseTransformer: proposalControllerListProposalCommentsResponseTransformer,
+    responseType: 'json',
+    url: '/proposal/{id}/comments',
     ...options
 });
 

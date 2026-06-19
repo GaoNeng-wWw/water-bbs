@@ -592,38 +592,14 @@ export const ProposalSummarySchema = {
     ]
 } as const;
 
-export const AuthorProfileSchema = {
-    type: 'object',
-    properties: {
-        id: {
-            type: 'string'
-        },
-        name: {
-            type: 'string'
-        },
-        avatar: {
-            type: 'string'
-        },
-        bio: {
-            type: 'string'
-        }
-    },
-    required: [
-        'id',
-        'name',
-        'avatar',
-        'bio'
-    ]
-} as const;
-
 export const ProposalEntitySchema = {
     type: 'object',
     properties: {
         id: {
             type: 'string'
         },
-        author: {
-            $ref: '#/components/schemas/AuthorProfile'
+        title: {
+            type: 'string'
         },
         content: {
             type: 'string'
@@ -639,7 +615,7 @@ export const ProposalEntitySchema = {
     },
     required: [
         'id',
-        'author',
+        'title',
         'content',
         'yes',
         'no'
@@ -678,6 +654,120 @@ export const CreateProposalResponseSchema = {
     },
     required: [
         'id'
+    ]
+} as const;
+
+export const VoteCommentSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
+export const CreateVoteSchema = {
+    type: 'object',
+    properties: {
+        content: {
+            type: 'string'
+        },
+        action: {
+            type: 'string',
+            enum: [
+                'yes',
+                'no'
+            ]
+        }
+    },
+    required: [
+        'content',
+        'action'
+    ]
+} as const;
+
+export const CreateVoteResponseSchema = {
+    type: 'object',
+    properties: {
+        voteId: {
+            type: 'string'
+        }
+    },
+    required: [
+        'voteId'
+    ]
+} as const;
+
+export const CreateProposalCommentDtoSchema = {
+    type: 'object',
+    properties: {
+        content: {
+            type: 'string'
+        }
+    },
+    required: [
+        'content'
+    ]
+} as const;
+
+export const CreateProposalCommandResponseSchema = {
+    type: 'object',
+    properties: {
+        commentId: {
+            type: 'string'
+        }
+    },
+    required: [
+        'commentId'
+    ]
+} as const;
+
+export const CommentAuthorSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        nick: {
+            type: 'string'
+        },
+        avatar: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'nick',
+        'avatar'
+    ]
+} as const;
+
+export const ProposalCommentSchema = {
+    type: 'object',
+    properties: {
+        commentId: {
+            type: 'string'
+        },
+        content: {
+            type: 'string'
+        },
+        author: {
+            $ref: '#/components/schemas/CommentAuthor'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string'
+        },
+        action: {
+            type: 'string',
+            enum: [
+                'yes',
+                'no'
+            ]
+        }
+    },
+    required: [
+        'commentId',
+        'content',
+        'author',
+        'createdAt',
+        'action'
     ]
 } as const;
 

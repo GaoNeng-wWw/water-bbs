@@ -7,8 +7,8 @@ import { UiTiptapEditor, UiButton, Layout } from '@/components/ui';
 import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 import { base64ToFile } from '@/utils';
 import type { Editor } from '@tiptap/vue-3';
-import { reactive, ref, useTemplateRef } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { reactive, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 
 const editor = useTemplateRef('editor');
 const route = useRoute();
@@ -17,6 +17,7 @@ const state = reactive({
   title: '',
   postId: route.params.id.toString(),
 });
+
 const { data } = await postControllerGetPost({ path: { id: postId.toString() }, client: NOT_PUBLIC_ENDPOINT });
 if (data) {
   state.title = data.title;

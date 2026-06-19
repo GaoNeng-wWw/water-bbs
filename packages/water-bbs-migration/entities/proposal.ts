@@ -127,31 +127,24 @@ export class Vote extends BaseMetaEntity {
   @Enum(() => VoteAction)
   action: VoteAction;
 
-  @Property({type: 'text', default: ''})
-  // 回复
-  comment: string;
-
   constructor(
     id: string,
     proposalId: string,
     accountId: string,
     action: VoteAction,
-    comment: string,
   ){
     super();
     this.id=id;
     this.proposalId=proposalId;
     this.accountId=accountId;
     this.action=action;
-    this.comment=comment;
   }
   static create(
     proposalId: string,
     accountId: string,
     action: VoteAction,
-    comment?: string
   ){
-    return new Vote(v7(), proposalId, accountId, action, comment || '');
+    return new Vote(v7(), proposalId, accountId, action);
   }
 }
 
@@ -166,7 +159,7 @@ export class VoteSlot {
   @Property({type: 'int'})
   slot: number;
   @Property({type: 'int'})
-  cnt: number = 0;
+  cnt: number = 1;
   @Enum(() => VoteAction)
   action: VoteAction;
 
@@ -192,6 +185,44 @@ export class VoteSlot {
   }
   static getSlots(){
     return Math.floor(Math.random() * 32 );
+  }
+}
+
+@Entity()
+export class ProposalComment extends BaseMetaEntity {
+  @PrimaryKey({ type: 'uuid', default: v7() })
+  id: string;
+  @Property({type: 'uuid'})
+  proposalId: string;
+  @Property({type: 'uuid'})
+  accountId: string;
+  @Property({type: 'text', default: ''})
+  comment: string;
+  @Enum(() => VoteAction)
+  @Property({type: 'text', default: '', nullable: true})
+  action?: VoteAction;
+
+  constructor(
+    id: string,
+    proposalId: string,
+    accountId: string,
+    comment: string,
+    action?: VoteAction,
+  ){
+    super();
+    this.id=id;
+    this.proposalId=proposalId;
+    this.accountId=accountId;
+    this.comment=comment;
+    this.action=action;
+  }
+  static build(
+    proposalId: string,
+    accountId: string,
+    comment: string,
+    action?: VoteAction,
+  ){
+    return new ProposalComment(v7(), proposalId, accountId, comment, action);
   }
 }
 
