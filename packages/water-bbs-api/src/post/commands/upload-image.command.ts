@@ -5,12 +5,13 @@ import { EntityRepository } from '@mikro-orm/core';
 import {
   InjectStoreEngine,
   InjectUrlResolver,
+  UnsupportedStorageEngine,
   type Resolver,
   type StorageEngine,
 } from '@app/storage';
 import { Configure } from '@app/configure';
 import { FileReference } from 'water-bbs-migration';
-import { DomainError, isErr, ok, Result } from 'water-bbs-shared';
+import { DomainError, err, isErr, ok, Result } from 'water-bbs-shared';
 import sharp from 'sharp';
 
 export type UploadImageResult = { url: string };
@@ -40,7 +41,7 @@ export class UploadImageCommandHandler implements ICommandHandler<UploadImageCom
     const storagePolicy = this.config.get('storage').type;
     const [engine] = this.storage.filter((s) => s.valid(storagePolicy));
     if (!engine) {
-      // TODO: UNSUPPORTED STORAGE ENGINE
+      return err(new UnsupportedStorageEngine());
     }
     const putResult = await engine.put(
       await sharp(command.file.buffer).webp().toBuffer(),
@@ -49,7 +50,6 @@ export class UploadImageCommandHandler implements ICommandHandler<UploadImageCom
       command.file.size,
     );
     if (isErr(putResult)) {
-      console.log(putResult);
       return putResult;
     }
     await this.fileReferenceRepo.upsert(putResult.value);

@@ -101,6 +101,38 @@ export type UploadImageResponse = {
     url: string;
 };
 
+export type UploadFileRequest = {
+    file: Array<Blob | File>;
+    cost: number;
+    threadId: string;
+};
+
+export type UploadFileResponse = {
+    urls: string;
+};
+
+export type UnlockedStateDto = {
+    unlocked: true;
+    url: string;
+    fileName: string;
+    mimeType: string;
+};
+
+export type LockedStateDto = {
+    unlocked: false;
+    cost: number;
+    fileName: string;
+    mimeType: string;
+};
+
+export type ListResourceResponse = {
+    resources: Array<({
+        unlocked: true;
+    } & UnlockedStateDto) | ({
+        unlocked: false;
+    } & LockedStateDto)>;
+};
+
 export type Pagination = {
     total: number;
     data: Array<string>;
@@ -575,6 +607,34 @@ export type PostControllerUploadImageResponses = {
 };
 
 export type PostControllerUploadImageResponse = PostControllerUploadImageResponses[keyof PostControllerUploadImageResponses];
+
+export type PostControllerUploadResourceData = {
+    body: UploadFileRequest;
+    path?: never;
+    query?: never;
+    url: '/posts/thread/resource';
+};
+
+export type PostControllerUploadResourceResponses = {
+    200: UploadFileResponse;
+};
+
+export type PostControllerUploadResourceResponse = PostControllerUploadResourceResponses[keyof PostControllerUploadResourceResponses];
+
+export type PostControllerListResourcesData = {
+    body?: never;
+    path?: never;
+    query: {
+        'thread-id': string;
+    };
+    url: '/posts/{id}/resource';
+};
+
+export type PostControllerListResourcesResponses = {
+    200: ListResourceResponse;
+};
+
+export type PostControllerListResourcesResponse = PostControllerListResourcesResponses[keyof PostControllerListResourcesResponses];
 
 export type PostControllerGetThreadData = {
     body?: never;

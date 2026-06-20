@@ -6,3 +6,4 @@ export { Thread, Post, Reply } from './post';
 export { FileReference } from './file-ref';
 export { Proposals, ProposalStatus, Vote, VoteAction, VoteSlot, ProposalComment } from './proposal';
 export { Action } from './action';
+export { Resource, ResourceOwnerMap } from './resource';

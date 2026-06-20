@@ -1411,7 +1411,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ecee3-d4cd-7646-b139-2e93b4166894'",
+          "default": "'019ee4f6-fcd2-702f-b380-38fc532e6184'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -1627,7 +1627,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ecee3-d4c6-769d-97dd-cb1f0c25ef70'",
+          "default": "'019ee4f6-fcd1-71df-a260-e98bacfba369'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -1991,6 +1991,198 @@
           "referencedTableName": "thread"
         }
       },
+      "comment": ""
+    },
+    {
+      "name": "resource",
+      "columns": {
+        "cost": {
+          "name": "cost",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "0",
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "integer"
+        },
+        "file_reference_id": {
+          "name": "file_reference_id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "subject": {
+          "name": "subject",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "file_reference_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "resource_file_reference_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "subject"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "resource_subject_index",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "comment": ""
+    },
+    {
+      "name": "resource_owner_map",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "owner": {
+          "name": "owner",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "varchar(36)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 36,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "owner"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "resource_owner_map_owner_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "resource_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "resource_owner_map_resource_id_index",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
       "comment": ""
     },
     {
@@ -2504,7 +2696,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ecee3-d4cc-7590-8e32-a2403d3905e9'",
+          "default": "'019ee4f6-fcd2-702f-b380-3007f5a0f13a'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -2658,7 +2850,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "0",
+          "default": "1",
           "comment": null,
           "enumItems": [],
           "mappedType": "integer"
@@ -2674,7 +2866,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ecee3-d4cc-7590-8e32-a54cc44e8046'",
+          "default": "'019ee4f6-fcd2-702f-b380-35b9d17b18f4'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"

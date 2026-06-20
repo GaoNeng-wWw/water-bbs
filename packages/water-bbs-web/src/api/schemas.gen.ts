@@ -266,6 +266,127 @@ export const UploadImageResponseSchema = {
     ]
 } as const;
 
+export const UploadFileRequestSchema = {
+    type: 'object',
+    properties: {
+        file: {
+            type: 'array',
+            items: {
+                type: 'string',
+                format: 'binary'
+            }
+        },
+        cost: {
+            type: 'number'
+        },
+        threadId: {
+            type: 'string'
+        }
+    },
+    required: [
+        'file',
+        'cost',
+        'threadId'
+    ]
+} as const;
+
+export const UploadFileResponseSchema = {
+    type: 'object',
+    properties: {
+        urls: {
+            type: 'string'
+        }
+    },
+    required: [
+        'urls'
+    ]
+} as const;
+
+export const UnlockedStateDtoSchema = {
+    type: 'object',
+    properties: {
+        unlocked: {
+            type: 'boolean',
+            enum: [
+                true
+            ]
+        },
+        url: {
+            type: 'string',
+            example: 'https://example.com/resource'
+        },
+        fileName: {
+            type: 'string'
+        },
+        mimeType: {
+            type: 'string'
+        }
+    },
+    required: [
+        'unlocked',
+        'url',
+        'fileName',
+        'mimeType'
+    ]
+} as const;
+
+export const LockedStateDtoSchema = {
+    type: 'object',
+    properties: {
+        unlocked: {
+            type: 'boolean',
+            enum: [
+                false
+            ]
+        },
+        cost: {
+            type: 'number',
+            example: 10
+        },
+        fileName: {
+            type: 'string'
+        },
+        mimeType: {
+            type: 'string'
+        }
+    },
+    required: [
+        'unlocked',
+        'cost',
+        'fileName',
+        'mimeType'
+    ]
+} as const;
+
+export const ListResourceResponseSchema = {
+    type: 'object',
+    properties: {
+        resources: {
+            type: 'array',
+            items: {
+                oneOf: [
+                    {
+                        $ref: '#/components/schemas/UnlockedStateDto'
+                    },
+                    {
+                        $ref: '#/components/schemas/LockedStateDto'
+                    }
+                ],
+                discriminator: {
+                    propertyName: 'unlocked',
+                    mapping: {
+                        true: '#/components/schemas/UnlockedStateDto',
+                        false: '#/components/schemas/LockedStateDto'
+                    }
+                }
+            }
+        }
+    },
+    required: [
+        'resources'
+    ]
+} as const;
+
 export const PaginationSchema = {
     type: 'object',
     properties: {

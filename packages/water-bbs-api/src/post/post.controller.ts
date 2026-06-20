@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { PostApplicationService } from './post.service';
@@ -39,6 +40,8 @@ import {
   UploadImageRequest,
   UploadImageResponse,
 } from './dto/upload-image.dto';
+import { UploadFileRequest, UploadFileResponse } from './dto/upload-file.dto';
+import { ListResourceResponse } from './dto/list-resource.dto';
 
 @Controller('posts')
 export class PostController {
@@ -72,6 +75,34 @@ export class PostController {
   @Post('thread/image')
   uploadImage(@UploadedFile('file') file: Express.Multer.File) {
     return this.postService.uploadImage(file);
+  }
+
+  @ApiBody({ type: UploadFileRequest })
+  @ApiOkResponse({ type: UploadFileResponse })
+  @Post('thread/resource')
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth()
+  @UseInterceptors(
+    FileInterceptor('files', {
+      limits: { fieldSize: 1024 * 1024 * 10, files: 1 },
+    }),
+  )
+  uploadResource(
+    @UploadedFiles() files: Express.Multer.File,
+    @Body() body: UploadFileRequest,
+  ) {
+    return this.postService.uploadResource(files, body.cost, body.threadId);
+  }
+
+  @UseModel(ListResourceResponse)
+  @ApiOkResponse({ type: ListResourceResponse })
+  @ApiQuery({ name: 'thread-id', type: 'string' })
+  @Get(':id/resource')
+  listResources(
+    @Query('thread-id') threadId: string,
+    @User() user: RequestUser,
+  ) {
+    return this.postService.listResource(threadId, user.account.id);
   }
 
   @Get(':id/thread')

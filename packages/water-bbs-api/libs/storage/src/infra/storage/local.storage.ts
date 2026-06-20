@@ -2,7 +2,6 @@ import { Configure, Storage } from '@app/configure';
 import { StorageEngine } from '@app/storage/domain';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { execSync } from 'child_process';
 import { createHash } from 'crypto';
 import {
   existsSync,
@@ -33,7 +32,7 @@ export class LocalStorage implements StorageEngine {
     const hash = createHash('sha512').update(file).digest().toString('hex');
     const fileReference = new FileReference(
       hash,
-      hash,
+      fileName,
       size,
       mimeType,
       'local',
@@ -44,7 +43,7 @@ export class LocalStorage implements StorageEngine {
       mkdirSync(fullPath);
     }
     console.log(join(fullPath, `${hash}`));
-    writeFileSync(join(fullPath, `${hash}`), file)
+    writeFileSync(join(fullPath, `${hash}`), file);
     return Promise.resolve(ok(fileReference));
   }
   remove(file: FileReference): Promise<Result<boolean, InfrastructureError>> {

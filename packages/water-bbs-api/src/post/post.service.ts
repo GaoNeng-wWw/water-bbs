@@ -8,6 +8,9 @@ import { GetPostSummaryQuery } from './queries/get-post-summary.query';
 import { GetPostsQuery } from './queries/get-posts.query';
 import { GetThreadQuery } from './queries/get-thread.query';
 import { CreateHidePostProposalCommand } from './commands/create-hide-post-proposal.command';
+import { isErr } from 'water-bbs-shared';
+import { UploadFileCommand } from './commands/upload-file.command';
+import { GetThreadResourcesQuery } from './queries';
 
 @Injectable()
 export class PostApplicationService {
@@ -51,9 +54,25 @@ export class PostApplicationService {
   async uploadImage(file: Express.Multer.File) {
     return this.commandBus.execute(new UploadImageCommand(file));
   }
+  async uploadResource(
+    file: Express.Multer.File,
+    cost: number,
+    threadId: string,
+  ) {
+    const uploadTasks = await this.commandBus.execute(
+      new UploadFileCommand(file, cost, threadId),
+    );
+    if (isErr(uploadTasks)) {
+      return uploadTasks;
+    }
+    return { url: uploadTasks.value.url };
+  }
   async createThread(postId: string, threadContent: string, authorId: string) {
     return this.commandBus.execute(
       new CreateThreadCommand(postId, threadContent, authorId),
     );
+  }
+  async listResource(threadId: string, visitor: string) {
+    return this.query.execute(new GetThreadResourcesQuery(threadId, visitor));
   }
 }

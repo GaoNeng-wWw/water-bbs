@@ -19,7 +19,6 @@ const titleInstance = useTemplateRef('title');
 
 const threads = ref<Thread[]>([]);
 const total = ref<number | null>(null);
-const router = useRouter();
 const curPage = ref(1);
 
 const onScroll = () => {
@@ -93,6 +92,7 @@ onUnmounted(() => {
         :content="thread.content"
         :created-at="thread.createdAt"
         :floor="thread.floor"
+        :id="thread.id"
       />
     </div>
     <div class="my-4">

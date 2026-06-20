@@ -1,16 +1,28 @@
 <script lang="ts" setup>
+import { postControllerListResources } from '@/api';
 import { UiAvatar, UiTiptapEditor } from '@/components/ui';
+import { NOT_PUBLIC_ENDPOINT } from '@/composables';
 
 const {
   authorName,
   authorAvatar,
   createdAt,
   content,
-  floor,
+  id,
 } = defineProps<{
   authorName: string; createdAt: string; content: object | string; floor: number;
-  authorAvatar: string;
+  authorAvatar: string; id: string;
 }>();
+
+// TODO: 等wallet后端写完
+// postControllerListResources({
+//   query: {
+//     'thread-id': id,
+//   },
+//   client: NOT_PUBLIC_ENDPOINT,
+// })
+//   .then(resp => resp.data?.resources ?? [])
+//   .then(resources => resources.map(r => r.))
 </script>
 
 <template>
