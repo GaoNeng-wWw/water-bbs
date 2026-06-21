@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, OneToOne, Index, Embedded } from '@mikro-orm/decorators/legacy';
+import { Entity, Property, OneToOne } from '@mikro-orm/decorators/legacy';
 import { BaseMetaEntity } from './meta';
 import { Account } from './account';
 import { FileReference } from './file-ref';
