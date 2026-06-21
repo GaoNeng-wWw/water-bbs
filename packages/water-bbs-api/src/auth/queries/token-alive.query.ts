@@ -16,7 +16,7 @@ export class TokenAliveQuery extends Query<Result<boolean, PersistenceError>> {
 export class TokenAliveHandler implements IQueryHandler<TokenAliveQuery> {
   constructor(
     @InjectSessionRepo()
-    private repo: ISessionRepo
+    private repo: ISessionRepo,
   ) {}
   async execute(
     query: TokenAliveQuery,

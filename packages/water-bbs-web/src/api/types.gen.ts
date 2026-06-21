@@ -40,7 +40,7 @@ export type RegisterDto = {
     invite_code: string;
 };
 
-export type CreateAccountResponse = {
+export type RegisterResponse = {
     account_id: string;
 };
 
@@ -439,7 +439,7 @@ export type AccountControllerRegisterData = {
 };
 
 export type AccountControllerRegisterResponses = {
-    201: CreateAccountResponse;
+    201: RegisterResponse;
 };
 
 export type AccountControllerRegisterResponse = AccountControllerRegisterResponses[keyof AccountControllerRegisterResponses];

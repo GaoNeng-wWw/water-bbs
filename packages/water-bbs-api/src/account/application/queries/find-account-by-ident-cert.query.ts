@@ -4,8 +4,8 @@ import { DomainError, err, isErr, ok, Result } from 'water-bbs-shared';
 import {
   type IAccountRepoistory,
   InjectAccountRepository,
-} from '../domain/repo/account.repo';
-import { AccountNotFound } from '../application/errors';
+} from '../../domain/repo/account.repo';
+import { AccountNotFound } from '../errors';
 
 export type FindAccountByIdIdentCertQueryResult = {
   accountId: string;

@@ -7,4 +7,7 @@ export {
   ListProposalsQuery,
   ListProposalsHandler,
 } from './list-proposals.query';
-export { FindProposalCommentsQuery, FindProposalComments } from './find-proposal-comments.query';
+export {
+  FindProposalCommentsQuery,
+  FindProposalComments,
+} from './find-proposal-comments.query';

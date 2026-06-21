@@ -12,7 +12,7 @@ import {
 import { ProposalRepository } from '../proposal.repo';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { isEmpty } from 'class-validator';
-import { FindProfileBatchQuery } from 'src/account/queries';
+import { FindProfileBatchQuery } from 'src/account/application/queries';
 import { CommentAuthor } from '../dto/list-proposal-comments.dto';
 import { ProposalComment as ProposalCommentDto } from '../dto/list-proposal-comments.dto';
 

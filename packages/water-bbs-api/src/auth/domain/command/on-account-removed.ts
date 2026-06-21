@@ -10,7 +10,7 @@ export class OnAccountRemovedHandler implements ICommandHandler<
 > {
   constructor(
     @InjectSessionRepo()
-    private readonly authRepository: ISessionRepo
+    private readonly authRepository: ISessionRepo,
   ) {}
   async execute(command: AccountRemovedCommand) {
     return this.authRepository.removeAllToken(command.accountId);

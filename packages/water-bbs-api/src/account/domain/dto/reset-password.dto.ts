@@ -14,4 +14,5 @@ export class ResetPasswordDTO {
   @IsNotEmpty()
   @ApiProperty({})
   mfa_code!: string;
+  force?: boolean;
 }

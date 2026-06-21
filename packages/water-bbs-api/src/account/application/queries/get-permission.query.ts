@@ -3,7 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import { Account } from 'water-bbs-migration';
 import { AppError, err, ok, Result } from 'water-bbs-shared';
-import { AccountNotFound } from '../application/errors';
+import { AccountNotFound } from '../errors';
 
 export class GetPermissionQuery extends Query<Result<string[], AppError>> {
   constructor(public readonly accountID: string) {

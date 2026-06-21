@@ -101,7 +101,7 @@ export const RegisterDTOSchema = {
     ]
 } as const;
 
-export const CreateAccountResponseSchema = {
+export const RegisterResponseSchema = {
     type: 'object',
     properties: {
         account_id: {

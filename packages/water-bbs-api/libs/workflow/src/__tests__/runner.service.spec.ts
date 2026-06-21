@@ -107,7 +107,7 @@ describe('WorkflowRunner', () => {
     });
 
     expect(isErr(res)).toBe(false);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+
     expect(mockAction.run).toHaveBeenCalledTimes(2);
   });
 
@@ -151,7 +151,7 @@ describe('WorkflowRunner', () => {
     );
 
     expect(isErr(res)).toBe(false);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+
     expect(mockAction.run).toHaveBeenCalledWith(testParam);
   });
 
@@ -184,7 +184,7 @@ describe('WorkflowRunner', () => {
     });
 
     expect(isErr(res)).toBe(false);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+
     expect(mockAction2.run).toHaveBeenCalled();
   });
 
@@ -218,7 +218,7 @@ describe('WorkflowRunner', () => {
     });
 
     expect(isErr(res)).toBe(false);
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+
     expect(mockAction.run).toHaveBeenCalledTimes(3);
   });
 });

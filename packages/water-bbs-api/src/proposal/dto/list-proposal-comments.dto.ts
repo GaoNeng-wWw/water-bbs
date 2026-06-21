@@ -28,7 +28,7 @@ export class ProposalComment {
   @Expose()
   @Transform(({ value }: { value: Date }) => value.toISOString())
   createdAt: Date;
-  @ApiProperty({enum: ()=>VoteAction})
+  @ApiProperty({ enum: () => VoteAction })
   @Expose()
   action?: VoteAction;
 }

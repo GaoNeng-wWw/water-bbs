@@ -7,7 +7,7 @@ import {
 import { QueryBus } from '@nestjs/cqrs';
 import { DomainError, err, isErr, ok, Result } from 'water-bbs-shared';
 import z, { ZodType } from 'zod';
-import { AccountAliveQuery } from '../queries';
+import { AccountAliveQuery } from '../application/queries';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
 

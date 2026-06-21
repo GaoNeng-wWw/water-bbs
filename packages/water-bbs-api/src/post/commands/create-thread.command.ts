@@ -5,7 +5,7 @@ import {
   QueryBus,
 } from '@nestjs/cqrs';
 import { PostRepo } from '../post.repo';
-import { FindProfileByAccountIDQuery } from '../../account/queries';
+import { FindProfileByAccountIDQuery } from '../../account/application/queries';
 import { PostNotFound } from '../errors';
 import { CreateThreadResponse } from '../dto/create-thread.dto';
 import { Thread, ThreadAuthorSummary } from '../entities/thread';

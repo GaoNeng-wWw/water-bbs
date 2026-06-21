@@ -7,3 +7,10 @@ export class RemoveAccountResponse {
     this.account_id = account_id;
   }
 }
+
+export class RemoveAccountDTO {
+  public id: string;
+  constructor(id: string) {
+    this.id = id;
+  }
+}

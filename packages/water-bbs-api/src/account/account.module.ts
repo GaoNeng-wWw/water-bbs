@@ -13,19 +13,27 @@ import {
 } from '@app/shared';
 import { InviteCodeRepositoryToken } from './domain/repo/invite-code.repo';
 import { InviteCodeRepository } from './infra/repo/invite-code.repo';
-import { AccountAliveHandler } from './queries/account-alive.query';
-import { CheckPasswordHandler } from './queries/check-password.query';
-import { FindProfileHandler } from './queries/find-profile.query';
+import { AccountAliveHandler } from './application/queries/account-alive.query';
+import { CheckPasswordHandler } from './application/queries/check-password.query';
+import { FindProfileHandler } from './application/queries/find-profile.query';
 import { CaptchaService } from '@app/captcha/captcha.service';
 import { CAPTCHA_REPOSITORY_TOKEN } from '@app/captcha/domain';
 import { CaptchaRepository } from '@app/captcha/infra';
 import { StorageModule } from '@app/storage';
-import { FindProfileBatchQueryHandler } from './queries/find-profile-batch.query';
+import { FindProfileBatchQueryHandler } from './application/queries/find-profile-batch.query';
 import { BanAccountAction, UnbanAccountAction } from './action';
-import { FindAccountByIdIdentCertQueryHandler } from './queries/find-account-by-ident-cert.query';
-import { GetPermissionHandler } from './queries/get-permission.query';
+import { FindAccountByIdIdentCertQueryHandler } from './application/queries/find-account-by-ident-cert.query';
+import { GetPermissionHandler } from './application/queries/get-permission.query';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Account, Profile } from 'water-bbs-migration';
+import { CreateAccountCommandHandler } from './application/commands/create-account.command';
+import { RemoveAccountCommandHandler } from './application/commands/remove-account.command';
+import { UpdatePasswordCommandHandler } from './application/commands/update-password';
+import { ResetPasswordCommandHandler } from './application/commands/reset-password';
+import { UpdateProfileCommandHandler } from './application/commands/update-profile.command';
+import { UploadAvatarCommandHandler } from './application/commands/upload-avatar.command';
+import { FindAccountQueryHandler } from './application/queries/find-account.query';
+import { GetProfileQueryHandler } from './application/queries/get-profile.query';
 
 @Module({
   imports: [StorageModule, MikroOrmModule.forFeature([Account, Profile])],
@@ -38,7 +46,6 @@ import { Account, Profile } from 'water-bbs-migration';
     },
     {
       provide: ACCOUNT_RESGISTOR_REJECTION_KEY,
-
       useFactory: (...deps) => deps as [MailRegistor],
       inject: [MailRegistor],
     },
@@ -60,14 +67,22 @@ import { Account, Profile } from 'water-bbs-migration';
     },
     CaptchaService,
     AccountService,
+    CreateAccountCommandHandler,
+    RemoveAccountCommandHandler,
+    UpdatePasswordCommandHandler,
+    ResetPasswordCommandHandler,
+    UpdateProfileCommandHandler,
+    UploadAvatarCommandHandler,
     AccountAliveHandler,
     CheckPasswordHandler,
     FindProfileHandler,
     FindProfileBatchQueryHandler,
-    BanAccountAction,
-    UnbanAccountAction,
+    FindAccountQueryHandler,
+    GetProfileQueryHandler,
     FindAccountByIdIdentCertQueryHandler,
     GetPermissionHandler,
+    BanAccountAction,
+    UnbanAccountAction,
   ],
 })
 export class AccountModule {}

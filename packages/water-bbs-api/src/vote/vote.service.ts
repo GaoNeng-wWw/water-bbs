@@ -5,7 +5,7 @@ import { isErr, ok } from 'water-bbs-shared';
 import { CreateVoteDTO } from './dto/create-vote.dto';
 import { VoteAuthor, VoteComment } from './dto/list-vote.dto';
 import { QueryBus } from '@nestjs/cqrs';
-import { FindProfileByAccountIDQuery } from 'src/account/queries';
+import { FindProfileByAccountIDQuery } from 'src/account/application/queries';
 
 @Injectable()
 export class VoteService {

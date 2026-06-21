@@ -46,7 +46,7 @@ export class RegisterDTO {
   }
 }
 
-export class CreateAccountResponse {
+export class RegisterResponse {
   @ApiProperty()
   @Expose()
   public account_id: string;

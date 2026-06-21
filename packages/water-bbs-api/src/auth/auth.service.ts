@@ -5,7 +5,7 @@ import {
   AccountAliveQuery,
   CheckPasswordQuery,
   FindAccountByIdIdentCertQuery,
-} from '../account/queries';
+} from '../account/application/queries';
 import { IdentEnum } from 'water-bbs-migration';
 import {
   ApplicationServiceError,

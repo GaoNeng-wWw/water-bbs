@@ -3,9 +3,9 @@ import { AppError, err, isErr, ok, Result } from 'water-bbs-shared';
 import {
   type IAccountRepoistory,
   InjectAccountRepository,
-} from '../domain/repo/account.repo';
-import { AccountID } from '../domain';
-import { AccountNotFound } from '../application/errors';
+} from '../../domain/repo/account.repo';
+import { AccountID } from '../../domain';
+import { AccountNotFound } from '../errors';
 import { InjectUrlResolver, type Resolver } from '@app/storage';
 
 export class FindProfileByAccountIDQuery extends Query<

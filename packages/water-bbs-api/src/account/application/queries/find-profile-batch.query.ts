@@ -4,8 +4,8 @@ import { AppError, isErr, ok, Result } from 'water-bbs-shared';
 import {
   type IAccountRepoistory,
   InjectAccountRepository,
-} from '../domain/repo/account.repo';
-import { AccountID } from '../domain';
+} from '../../domain/repo/account.repo';
+import { AccountID } from '../../domain';
 
 export class Profile {
   constructor(

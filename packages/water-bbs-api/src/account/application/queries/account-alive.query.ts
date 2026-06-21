@@ -2,11 +2,11 @@ import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import {
   InjectAccountRepository,
   type IAccountRepoistory,
-} from '../domain/repo/account.repo';
+} from '../../domain/repo/account.repo';
 import { isErr, ok, PersistenceError, Result } from 'water-bbs-shared';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
-import { AccountID } from '../domain';
+import { AccountID } from '../../domain';
 export class AccountAliveQuery extends Query<
   Result<
     | { alive: false; reason: 'ACCOUNT_REMOVED' }

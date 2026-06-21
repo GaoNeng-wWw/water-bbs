@@ -10,15 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AccountService } from './application';
-import { CreateAccountResponse, RegisterDTO } from './dto/register.dto';
 import { isErr } from 'water-bbs-shared';
-import { RemoveAccountDTO } from './application/dto/remove-account.dto';
-import { ResetPasswordDTO } from './dto/reset-password.dto';
-import {
-  UpdateProfileDTO,
-  UpdateProfileResponse,
-} from './dto/update-profile.dto';
-import { GetProfileResponse } from './dto/get-profile.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -28,13 +20,22 @@ import {
   ApiOperation,
   ApiParam,
 } from '@nestjs/swagger';
-import { RemoveAccountResponse } from './dto/remove-account.dto';
 import { Public, UseModel, User } from '@app/shared';
-import { UpdatePassword } from './dto/update-password.dto';
-import { AccountID } from './domain';
+import {
+  AccountID,
+  UpdateProfileDTO,
+  UpdateProfileResponse,
+  ResetPasswordDTO,
+  GetProfileResponse,
+  RemoveAccountResponse,
+  UpdatePassword,
+  UpdateAvatarResponse,
+  AvatarUploadDto,
+  RegisterResponse,
+  RegisterDTO,
+  RemoveAccountDTO,
+} from './domain';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UpdateAvatarResponse } from './dto/update-avatar.dto';
-import { AvatarUploadDto } from './dto/avatar-upload.dto';
 
 @Controller('account')
 export class AccountController {
@@ -98,9 +99,9 @@ export class AccountController {
   }
 
   // TODO: 移动到AUTH里
-  @UseModel(CreateAccountResponse)
+  @UseModel(RegisterResponse)
   @Public()
-  @ApiCreatedResponse({ type: CreateAccountResponse })
+  @ApiCreatedResponse({ type: RegisterResponse })
   @Post('register')
   async register(@Body() dto: RegisterDTO) {
     const res = await this.accountService.createAccount({

@@ -1,6 +1,6 @@
 import { IQueryHandler, Query, QueryHandler, QueryBus } from '@nestjs/cqrs';
 import { PostRepo } from '../post.repo';
-import { FindProfileByAccountIDQuery } from '../../account/queries';
+import { FindProfileByAccountIDQuery } from '../../account/application/queries';
 import { AuthorSummary, PostSummary } from '../entities/post-summary';
 import { PostNotFound } from '../errors';
 import { AppError, err, isErr, ok, Result } from 'water-bbs-shared';
