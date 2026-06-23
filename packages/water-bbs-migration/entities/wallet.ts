@@ -37,8 +37,6 @@ export class Wallet {
 }
 
 @Entity()
-@Index({ properties: ['from', 'createdAt'] })
-@Index({ properties: ['to', 'createdAt'] })
 export class TransferLog extends BaseMetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: string;
@@ -47,9 +45,9 @@ export class TransferLog extends BaseMetaEntity {
 
   @Embedded(() => TransactionDetail)
   transactionDetail: TransactionDetail;
-  @Embedded(()=>Subject)
+  @Embedded(()=>Subject, {index: true})
   from: Subject;
-  @Embedded(()=>Subject)
+  @Embedded(()=>Subject, {index: true})
   to: Subject;
 
   constructor(
@@ -102,7 +100,7 @@ export class TransactionDetail {
 export class Subject {
   @Property({ type: 'boolean' })
   private system: boolean;
-  @Property({ nullable: true })
+  @Property({ nullable: true, type: 'uuid' })
   private accountId?: string;
 
   constructor(

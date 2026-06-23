@@ -45,6 +45,7 @@
     "@vitest/coverage-v8": "3.2.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "decimal.js": "^10.6.0",
     "ioredis": "^5.10.1",
     "joi": "^18.1.2",
     "js-yaml": "^4.1.1",
@@ -116,6 +117,7 @@
       "/node_modules/"
     ],
     "moduleNameMapper": {
+      "^@app/bank(|/.*)$": "<rootDir>/libs/bank/src/$1",
       "^@app/captcha(|/.*)$": "<rootDir>/libs/captcha/src/$1",
       "^@app/configure(|/.*)$": "<rootDir>/libs/configure/src/$1",
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",

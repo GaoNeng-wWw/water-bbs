@@ -22,6 +22,12 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": "./",
     "paths": {
+      "@app/bank": [
+        "libs/bank/src"
+      ],
+      "@app/bank/*": [
+        "libs/bank/src/*"
+      ],
       "@app/captcha": [
         "libs/captcha/src"
       ],

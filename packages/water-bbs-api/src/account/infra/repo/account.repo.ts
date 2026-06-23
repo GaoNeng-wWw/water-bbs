@@ -1,5 +1,5 @@
 import { AccountID } from 'src/account/domain';
-import { Account, IdentEnum } from 'water-bbs-migration';
+import { Account, IdentEnum, Wallet } from 'water-bbs-migration';
 import { err, ok, PersistenceError, Result } from 'water-bbs-shared';
 import { IAccountRepoistory } from '../../domain/repo/account.repo';
 import { EntityManager } from '@mikro-orm/core';
@@ -43,6 +43,14 @@ export class AccountRepo implements IAccountRepoistory {
         }
         em.persist(existingAccount);
       }
+
+      const wallet = em.create(Wallet, {
+        accountId: account.id,
+        balance: '0',
+        version: 0,
+      });
+      
+      em.persist(wallet);
 
       await em.flush();
       await em.commit();
