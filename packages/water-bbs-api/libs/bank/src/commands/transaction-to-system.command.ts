@@ -12,7 +12,7 @@ import {
 } from 'water-bbs-shared';
 
 export class TransactionToSystemCommand extends Command<
-  Result<null, DomainError | PersistenceError>
+  Result<null, DomainError>
 > {
   constructor(
     public source: string,
@@ -33,7 +33,7 @@ export class TransactionToSystemHandler implements ICommandHandler<TransactionTo
 
   async execute(
     command: TransactionToSystemCommand,
-  ): Promise<Result<null, DomainError | PersistenceError>> {
+  ): Promise<Result<null, DomainError>> {
     const { source, cost, detail } = command;
     const fromWallet = await this.walletRepo.findOne({ accountId: source });
     if (!fromWallet) {
@@ -61,7 +61,10 @@ export class TransactionToSystemHandler implements ICommandHandler<TransactionTo
       return em
         .flush()
         .then(() => ok(null))
-        .catch((reason) => err(new PersistenceError(reason)));
+        .catch((reason) => {
+          const perr = new PersistenceError(reason);
+          return err(new DomainError(perr.message, perr));
+        });
     });
   }
 }

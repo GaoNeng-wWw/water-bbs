@@ -11,9 +11,7 @@ import {
   Result,
 } from 'water-bbs-shared';
 
-export class TransactionCommand extends Command<
-  Result<null, DomainError | PersistenceError>
-> {
+export class TransactionCommand extends Command<Result<null, DomainError>> {
   constructor(
     public source: string,
     public target: string,
@@ -34,7 +32,7 @@ export class TransactionHandler implements ICommandHandler<TransactionCommand> {
 
   async execute(
     command: TransactionCommand,
-  ): Promise<Result<null, DomainError | PersistenceError>> {
+  ): Promise<Result<null, DomainError>> {
     const { source, target, cost, detail } = command;
     const fromWallet = await this.walletRepo.findOne({ accountId: source });
     const targetWallet = await this.walletRepo.findOne({ accountId: target });
@@ -80,7 +78,10 @@ export class TransactionHandler implements ICommandHandler<TransactionCommand> {
       return em
         .flush()
         .then(() => ok(null))
-        .catch((reason) => err(new PersistenceError(reason)));
+        .catch((reason) => {
+          const perr = new PersistenceError(reason);
+          return err(new DomainError(perr.message, perr));
+        });
     });
   }
 }

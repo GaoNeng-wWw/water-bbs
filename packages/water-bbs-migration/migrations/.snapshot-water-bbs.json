@@ -15,7 +15,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -142,7 +142,7 @@
           "deleteRule": "set null"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "action",
@@ -155,9 +155,9 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": null,
-          "precision": 3,
-          "scale": 0,
+          "length": 1,
+          "precision": null,
+          "scale": null,
           "default": "true",
           "comment": null,
           "enumItems": [],
@@ -187,7 +187,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -226,7 +226,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "category",
@@ -242,7 +242,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -362,7 +362,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "cert",
@@ -391,7 +391,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 8,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -480,7 +480,7 @@
           "referencedTableName": "account"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "file_reference",
@@ -509,7 +509,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -590,7 +590,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "ident",
@@ -635,7 +635,7 @@
           "primary": false,
           "nullable": false,
           "unique": true,
-          "length": 5,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -669,9 +669,9 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": null,
-          "precision": 3,
-          "scale": 0,
+          "length": 1,
+          "precision": null,
+          "scale": null,
           "default": "false",
           "comment": null,
           "enumItems": [],
@@ -736,7 +736,7 @@
           "referencedTableName": "account"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "permission",
@@ -768,7 +768,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -892,7 +892,143 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
+    },
+    {
+      "name": "policy",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "current_timestamp",
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": 255,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "removed_at": {
+          "name": "removed_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "schema": {
+          "name": "schema",
+          "type": "json",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "json"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "value": {
+          "name": "value",
+          "type": "json",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "json"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "created_at"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "policy_created_at_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "removed_at"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "policy_removed_at_index",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "comment": null
     },
     {
       "name": "post",
@@ -940,7 +1076,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -953,9 +1089,9 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": null,
-          "precision": 3,
-          "scale": 0,
+          "length": 1,
+          "precision": null,
+          "scale": null,
           "default": "false",
           "comment": null,
           "enumItems": [],
@@ -1065,7 +1201,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -1140,7 +1276,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "profile",
@@ -1185,7 +1321,7 @@
           "primary": false,
           "nullable": true,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -1204,7 +1340,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -1217,7 +1353,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -1328,7 +1464,7 @@
           "deleteRule": "set null"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "proposal_comment",
@@ -1357,7 +1493,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 3,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -1376,10 +1512,10 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
-          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "default": "''",
           "comment": null,
           "enumItems": [],
           "mappedType": "text"
@@ -1395,7 +1531,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -1411,7 +1547,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eed01-50ef-7435-8b8f-921c39632ef7'",
+          "default": "'019ef352-9bd8-743b-b4a3-3b9a7ebd9cc4'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -1499,7 +1635,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "proposals",
@@ -1515,7 +1651,7 @@
           "length": null,
           "precision": 5,
           "scale": 2,
-          "default": "50.00",
+          "default": "50",
           "comment": null,
           "enumItems": [],
           "mappedType": "decimal"
@@ -1544,7 +1680,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -1560,10 +1696,10 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
-          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "default": "''",
           "comment": null,
           "enumItems": [],
           "mappedType": "text"
@@ -1579,10 +1715,26 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
+        },
+        "deposit": {
+          "name": "deposit",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "integer"
         },
         "end_at": {
           "name": "end_at",
@@ -1608,10 +1760,10 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
-          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "default": "''",
           "comment": null,
           "enumItems": [],
           "mappedType": "text"
@@ -1627,7 +1779,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eed01-50ee-7598-bf32-1eb23c242c2c'",
+          "default": "'019ef352-9bd6-7090-8b44-25a3195469ec'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -1640,10 +1792,10 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
-          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "default": "''",
           "comment": null,
           "enumItems": [],
           "mappedType": "text"
@@ -1688,7 +1840,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 9,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": "'active'",
@@ -1710,10 +1862,10 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
-          "default": "'_utf8mb4\\\\\\'\\\\\\''",
+          "default": "''",
           "comment": null,
           "enumItems": [],
           "mappedType": "text"
@@ -1779,7 +1931,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "reply",
@@ -1808,7 +1960,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -1827,7 +1979,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -1991,7 +2143,7 @@
           "referencedTableName": "thread"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "resource",
@@ -2095,7 +2247,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "resource_owner_map",
@@ -2183,7 +2335,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "role",
@@ -2215,7 +2367,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -2339,7 +2491,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "role_permission",
@@ -2439,7 +2591,7 @@
           "deleteRule": "cascade"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "thread",
@@ -2468,7 +2620,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -2487,7 +2639,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -2629,7 +2781,7 @@
           "referencedTableName": "post"
         }
       },
-      "comment": ""
+      "comment": null
     },
     {
       "name": "transfer_log",
@@ -2661,7 +2813,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -2690,9 +2842,9 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": null,
-          "precision": 3,
-          "scale": 0,
+          "length": 1,
+          "precision": null,
+          "scale": null,
           "default": null,
           "comment": null,
           "enumItems": [],
@@ -2754,9 +2906,9 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": null,
-          "precision": 3,
-          "scale": 0,
+          "length": 1,
+          "precision": null,
+          "scale": null,
           "default": null,
           "comment": null,
           "enumItems": [],
@@ -2786,7 +2938,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 65535,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -2845,7 +2997,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "vote",
@@ -2874,7 +3026,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 3,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -2896,7 +3048,7 @@
           "length": null,
           "precision": null,
           "scale": null,
-          "default": "CURRENT_TIMESTAMP",
+          "default": "current_timestamp",
           "comment": null,
           "enumItems": [],
           "mappedType": "datetime"
@@ -2912,7 +3064,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eed01-50ef-7435-8b8f-8b8e4369d41a'",
+          "default": "'019ef352-9bd7-7529-b464-6c4421cee812'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -3031,7 +3183,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "vote_slot",
@@ -3044,7 +3196,7 @@
           "primary": false,
           "nullable": false,
           "unique": false,
-          "length": 3,
+          "length": null,
           "precision": null,
           "scale": null,
           "default": null,
@@ -3082,7 +3234,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019eed01-50ef-7435-8b8f-8ce4f166d7b6'",
+          "default": "'019ef352-9bd7-7529-b464-7006bf563bc2'",
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -3150,7 +3302,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     },
     {
       "name": "wallet",
@@ -3244,7 +3396,7 @@
       ],
       "checks": [],
       "foreignKeys": {},
-      "comment": ""
+      "comment": null
     }
   ],
   "views": [],

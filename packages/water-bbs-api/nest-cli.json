@@ -41,6 +41,15 @@
         "tsConfigPath": "libs/configure/tsconfig.lib.json"
       }
     },
+    "policy": {
+      "type": "library",
+      "root": "libs/policy",
+      "entryFile": "index",
+      "sourceRoot": "libs/policy/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/policy/tsconfig.lib.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",

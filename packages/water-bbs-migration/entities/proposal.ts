@@ -49,6 +49,9 @@ export class Proposals extends BaseMetaEntity {
   @Property({ type: 'text', default: ''})
   executor_id: string;
 
+  @Property({ type: 'number' })
+  deposit:number;
+
   constructor(
     id: string,
     authorId: string,
@@ -57,6 +60,7 @@ export class Proposals extends BaseMetaEntity {
     startAt: Date,
     endAt: Date,
     title: string,
+    deposite: number,
   ){
     super();
     this.title = title;
@@ -66,6 +70,7 @@ export class Proposals extends BaseMetaEntity {
     this.command=command;
     this.startAt=startAt;
     this.endAt=endAt;
+    this.deposit = deposite;
   }
 
   run(){
@@ -103,8 +108,10 @@ export class Proposals extends BaseMetaEntity {
   static create(
     authorId: string,
     comment: string,
-    command: string, startAt: Date, endAt: Date, title: string){
-    return new Proposals(v7(), authorId, comment, command, startAt, endAt, title);
+    command: string, startAt: Date, endAt: Date, title: string,
+    deposite: number
+  ){
+    return new Proposals(v7(), authorId, comment, command, startAt, endAt, title, deposite);
   }
 
   remove(){

@@ -24,9 +24,13 @@ import { ProposalDomainService } from './proposal.domain.service';
 import { CronProposalRunner } from './cron-proposal.infra';
 import { VoteRepository } from '../vote/vote.repo';
 import { WorkflowModule, WorkflowService } from '@app/workflow';
+import { BankModule } from '@app/bank';
+import { PolicyModule } from '@app/policy';
 
 @Module({
   imports: [
+    BankModule,
+    PolicyModule,
     WorkflowModule.forRootAsync({
       inject: [WorkflowService],
       useFactory: (workflowService: WorkflowService) => {

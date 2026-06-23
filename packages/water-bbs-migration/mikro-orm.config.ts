@@ -1,6 +1,6 @@
 import { defineConfig } from '@mikro-orm/mysql';
 import * as dotenv from 'dotenv';
-import { Account, Ident, Cert, Permission, Role, Profile, Post, Thread, Reply, Category, FileReference, Proposals, Vote, VoteSlot, Action, Resource, ResourceOwnerMap, Wallet, TransferLog } from './entities';
+import { Account, Ident, Cert, Permission, Role, Profile, Post, Thread, Reply, Category, FileReference, Proposals, Vote, VoteSlot, Action, Resource, ResourceOwnerMap, Wallet, TransferLog, Policy } from './entities';
 import { Migrator } from '@mikro-orm/migrations';
 import { SeedManager } from '@mikro-orm/seeder';
 import { ProposalComment } from './entities/proposal';
@@ -36,7 +36,7 @@ export default defineConfig({
     Profile,
     Post, Thread, Reply, Category, FileReference,
     Proposals, Vote, VoteSlot, Action, ProposalComment,
-    Resource, ResourceOwnerMap,Wallet, TransferLog
+    Resource, ResourceOwnerMap,Wallet, TransferLog, Policy
   ],
   debug: true,
 })

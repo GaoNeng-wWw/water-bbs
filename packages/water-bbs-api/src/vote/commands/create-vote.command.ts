@@ -8,9 +8,12 @@ import {
   err,
   isErr,
   ok,
+  policyList,
   Result,
 } from 'water-bbs-shared';
 import { isEmpty } from 'radashi';
+import { BankService } from '@app/bank';
+import { PolicyService } from '@app/policy';
 
 export class CreateVoteCommand extends Command<
   Result<CreateVoteResponse, AppError>
@@ -27,7 +30,11 @@ export class CreateVoteCommand extends Command<
 
 @CommandHandler(CreateVoteCommand)
 export class CreateVoteHandler implements ICommandHandler<CreateVoteCommand> {
-  constructor(private readonly voteRepository: VoteRepository) {}
+  constructor(
+    private readonly bankService: BankService,
+    private readonly policyService: PolicyService,
+    private readonly voteRepository: VoteRepository,
+  ) {}
   async execute(
     command: CreateVoteCommand,
   ): Promise<Result<CreateVoteResponse, AppError>> {
@@ -40,6 +47,20 @@ export class CreateVoteHandler implements ICommandHandler<CreateVoteCommand> {
     }
     if (!isEmpty(existVote)) {
       return err(new DomainError('DUPLICATE_VOTE'));
+    }
+    const policyRes = await this.policyService.getPolicy(
+      policyList.CreateVoteCostPolicy,
+    );
+    if (isErr(policyRes)) {
+      return policyRes;
+    }
+    const { cost } = policyRes.value.value;
+    const ensureResult = await this.bankService.ensureBalance(
+      command.accountId,
+      cost,
+    );
+    if (isErr(ensureResult)) {
+      return ensureResult;
     }
     const vote = Vote.create(
       command.proposalId,

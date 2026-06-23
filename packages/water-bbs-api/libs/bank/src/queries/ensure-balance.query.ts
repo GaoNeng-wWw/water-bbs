@@ -5,7 +5,7 @@ import { Wallet } from 'water-bbs-migration';
 import Decimal from 'decimal.js';
 import { DomainError, err, ok, Result } from 'water-bbs-shared';
 
-export class EnsureBalanceQuery extends Query<Result<boolean, DomainError>> {
+export class EnsureBalanceQuery extends Query<Result<true, DomainError>> {
   constructor(
     public subject: string,
     public cost: number,
@@ -21,9 +21,7 @@ export class EnsureBalanceHandler implements IQueryHandler<EnsureBalanceQuery> {
     private readonly walletRepo: EntityRepository<Wallet>,
   ) {}
 
-  async execute(
-    query: EnsureBalanceQuery,
-  ): Promise<Result<boolean, DomainError>> {
+  async execute(query: EnsureBalanceQuery): Promise<Result<true, DomainError>> {
     const wallet = await this.walletRepo.findOne(
       { accountId: query.subject },
       { fields: ['balance'], cache: true },
@@ -35,6 +33,9 @@ export class EnsureBalanceHandler implements IQueryHandler<EnsureBalanceQuery> {
         }),
       );
     }
-    return ok(new Decimal(wallet.balance).gte(query.cost));
+    if (new Decimal(wallet.balance).lt(query.cost)) {
+      return err(new DomainError('INSUFFICIENT_BALANCE'));
+    }
+    return ok(true);
   }
 }
