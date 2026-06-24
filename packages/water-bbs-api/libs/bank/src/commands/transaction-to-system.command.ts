@@ -2,7 +2,7 @@ import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Wallet, TransferLog, TransactionDetail } from 'water-bbs-migration';
-import { Subject } from 'water-bbs-migration/wallet';
+import { Subject } from 'water-bbs-migration';
 import {
   DomainError,
   err,

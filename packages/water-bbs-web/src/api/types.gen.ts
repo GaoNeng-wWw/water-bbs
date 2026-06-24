@@ -1099,3 +1099,27 @@ export type RoleControllerFindRoleResponses = {
 };
 
 export type RoleControllerFindRoleResponse = RoleControllerFindRoleResponses[keyof RoleControllerFindRoleResponses];
+
+export type WalletControllerGetBalanceData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/wallet/balance';
+};
+
+export type WalletControllerGetBalanceResponses = {
+    200: unknown;
+};
+
+export type WalletControllerListTranscationData = {
+    body?: never;
+    path?: never;
+    query: {
+        year: number;
+    };
+    url: '/wallet/transcation';
+};
+
+export type WalletControllerListTranscationResponses = {
+    200: unknown;
+};

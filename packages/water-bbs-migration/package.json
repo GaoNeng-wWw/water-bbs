@@ -10,7 +10,7 @@
     }
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsc",
     "schema:create": "pnpm mikro-orm schema:create --run",
     "orm": "pnpm mikro-orm",
     "migration": "pnpm mikro-orm migration",

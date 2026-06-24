@@ -17,6 +17,9 @@ import {
   Role,
   Vote,
   VoteSlot,
+  Wallet,
+  TransferLog,
+  Policy,
 } from 'water-bbs-migration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SingleNode, yaml } from '@app/configure';
@@ -42,6 +45,7 @@ import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppSerivce } from './app.service';
 import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -70,6 +74,9 @@ import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
             ProposalComment,
             Resource,
             ResourceOwnerMap,
+            Wallet,
+            TransferLog,
+            Policy,
           ],
           allowGlobalContext: true,
           host: configService.get('database.host'),
@@ -153,6 +160,7 @@ import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
     PermissionModule,
     RoleModule,
     AdminModule,
+    WalletModule,
   ],
   providers: [
     {
