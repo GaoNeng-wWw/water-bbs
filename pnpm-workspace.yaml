@@ -1,2 +1,18 @@
 packages:
   - './packages/*'
+syncInjectedDepsAfterScripts:
+  - build
+injectWorkspacePackages: true
+allowBuilds:
+  "@nestjs/core": true
+  "@scarf/scarf": true
+  "@suites/di.nestjs": true
+  "@suites/doubles.jest": true
+  "@suites/doubles.vitest": true
+  "@swc/core": true
+  "bcrypt": true
+  "better-sqlite3": true
+  "es5-ext": true
+  "esbuild": true
+  "unrs-resolver": true
+  "vue-demi": true

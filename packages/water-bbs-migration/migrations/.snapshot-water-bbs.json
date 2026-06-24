@@ -1547,7 +1547,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ef352-9bd8-743b-b4a3-3b9a7ebd9cc4'",
+          "default": null,
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -1779,7 +1779,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ef352-9bd6-7090-8b44-25a3195469ec'",
+          "default": null,
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -3064,7 +3064,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ef352-9bd7-7529-b464-6c4421cee812'",
+          "default": null,
           "comment": null,
           "enumItems": [],
           "mappedType": "string"
@@ -3234,7 +3234,7 @@
           "length": 36,
           "precision": null,
           "scale": null,
-          "default": "'019ef352-9bd7-7529-b464-7006bf563bc2'",
+          "default": null,
           "comment": null,
           "enumItems": [],
           "mappedType": "string"

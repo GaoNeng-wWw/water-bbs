@@ -2,14 +2,17 @@
     "pnpm": {
         "onlyBuiltDependencies": [
             "@nestjs/core",
+            "@scarf/scarf",
             "@suites/di.nestjs",
             "@suites/doubles.jest",
             "@suites/doubles.vitest",
             "@swc/core",
             "bcrypt",
             "better-sqlite3",
+            "es5-ext",
             "esbuild",
-            "unrs-resolver"
+            "unrs-resolver",
+            "vue-demi"
         ]
     }
 }

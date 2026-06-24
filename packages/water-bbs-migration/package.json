@@ -10,7 +10,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsdown",
     "schema:create": "pnpm mikro-orm schema:create --run",
     "orm": "pnpm mikro-orm",
     "migration": "pnpm mikro-orm migration",
@@ -18,7 +18,8 @@
     "migration:down": "pnpm mikro-orm migration:down --config mikro-orm.config.ts",
     "migration:list": "pnpm mikro-orm migration:list --config mikro-orm.config.ts",
     "migration:fresh": "pnpm mikro-orm migration:fresh --config mikro-orm.config.ts",
-    "migration:create": "pnpm mikro-orm migration:create --config mikro-orm.config.ts"
+    "migration:create": "pnpm mikro-orm migration:create --config mikro-orm.config.ts",
+    "seed:run": "pnpm mikro-orm seeder:run --config mikro-orm.config.ts"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +36,7 @@
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "esno": "^4.8.0",
+    "tsdown": "^0.22.3",
     "uuid": "^14.0.0",
     "water-bbs-shared": "workspace:*",
     "zod": "^4.4.3"

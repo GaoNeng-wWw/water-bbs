@@ -26,7 +26,6 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@arethetypeswrong/core": "^0.18.4",
     "tsdown": "^0.22.3",
     "typescript": "^5.9.3",
     "zod": "^4.4.3"

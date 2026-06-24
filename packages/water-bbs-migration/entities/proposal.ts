@@ -18,7 +18,7 @@ export enum ProposalStatus {
 
 @Entity()
 export class Proposals extends BaseMetaEntity {
-  @PrimaryKey({ type: 'uuid', default: v7() })
+  @PrimaryKey({ type: 'uuid',  })
   id: string;
   @Property({ type: 'text', default: ''})
   title: string;
@@ -122,7 +122,7 @@ export class Proposals extends BaseMetaEntity {
 @Entity()
 @Unique({ properties: ['proposalId', 'accountId'] })
 export class Vote extends BaseMetaEntity {
-  @PrimaryKey({ type: 'uuid', default: v7() })
+  @PrimaryKey({ type: 'uuid',  })
   id: string;
 
   @Property({ index: true, type: 'uuid' })
@@ -157,7 +157,7 @@ export class Vote extends BaseMetaEntity {
 
 @Entity()
 export class VoteSlot {
-  @PrimaryKey({ type: 'uuid', default: v7() })
+  @PrimaryKey({ type: 'uuid',  })
   id: string;
   @Property({type: 'uuid'})
   voteId: string;
@@ -197,7 +197,7 @@ export class VoteSlot {
 
 @Entity()
 export class ProposalComment extends BaseMetaEntity {
-  @PrimaryKey({ type: 'uuid', default: v7() })
+  @PrimaryKey({ type: 'uuid',  })
   id: string;
   @Property({type: 'uuid'})
   proposalId: string;
