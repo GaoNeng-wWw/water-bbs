@@ -2,11 +2,11 @@
   "name": "water-bbs-shared",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
   "scripts": {
     "test": "vitest",
     "test:cov": "vitest --coverage",
-    "build": "tsdown --config-loader unrun"
+    "build": "tsdown --config-loader unrun",
+    "clean": "rimraf node_modules && rimraf dist"
   },
   "exports": {
     ".": {

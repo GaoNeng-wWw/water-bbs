@@ -181,7 +181,8 @@ import { WalletModule } from './wallet/wallet.module';
     },
     {
       provide: STORAGE_ENGINE_KEY,
-      useFactory: (...deps) => deps,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-unsafe-return
+      useFactory: (...deps) => deps as any[],
       inject: [LocalStorage],
     },
     LocalStorage,

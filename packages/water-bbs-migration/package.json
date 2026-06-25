@@ -19,7 +19,8 @@
     "migration:list": "pnpm mikro-orm migration:list --config mikro-orm.config.ts",
     "migration:fresh": "pnpm mikro-orm migration:fresh --config mikro-orm.config.ts",
     "migration:create": "pnpm mikro-orm migration:create --config mikro-orm.config.ts",
-    "seed:run": "pnpm mikro-orm seeder:run --config mikro-orm.config.ts"
+    "seed:run": "pnpm mikro-orm seeder:run --config mikro-orm.config.ts",
+    "clean": "rimraf node_modules && rimraf dist"
   },
   "keywords": [],
   "author": "",
