@@ -26,7 +26,7 @@ const onClick = (ev: MouseEvent) => {
 const showLoading = ref(loading);
 
 const style = tv({
-  base: 'inline-flex items-center justify-center transition duration-fast cursor-pointer',
+  base: 'inline-flex items-center justify-center transition duration-fast cursor-pointer outline-none!',
   variants: {
     disabled: {
       true: 'cursor-not-allowed bg-opacity-50! text-opacity-50! pointer-events-none',

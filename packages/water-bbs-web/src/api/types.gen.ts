@@ -377,6 +377,10 @@ export type FindRoleResponse = {
     [key: string]: unknown;
 };
 
+export type GetBalanceResponse = {
+    balance: string;
+};
+
 export type AppControllerGetAssetData = {
     body?: never;
     path: {
@@ -1108,8 +1112,10 @@ export type WalletControllerGetBalanceData = {
 };
 
 export type WalletControllerGetBalanceResponses = {
-    200: unknown;
+    200: GetBalanceResponse;
 };
+
+export type WalletControllerGetBalanceResponse = WalletControllerGetBalanceResponses[keyof WalletControllerGetBalanceResponses];
 
 export type WalletControllerListTranscationData = {
     body?: never;

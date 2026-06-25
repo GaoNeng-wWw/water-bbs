@@ -7,13 +7,14 @@ import { useAccount, useUserStore } from '@/store';
 import { storeToRefs } from 'pinia';
 import { UiPopover, UiPopoverContent, UiPopoverTrigger, UiButton } from '@/components/ui';
 import { authControllerLogout } from '@/api';
-import { NOT_PUBLIC_ENDPOINT } from '@/composables';
+import { NOT_PUBLIC_ENDPOINT, useWallet } from '@/composables';
 import { useRouter } from 'vue-router';
 
 const { profile } = storeToRefs(useUserStore());
 const { isLogged, accountId } = storeToRefs(useAccount());
 const { setProfile } = useUserStore();
 const { logout } = useAccount();
+const { balance, getBalance } = useWallet();
 const router = useRouter();
 const active = ref('');
 const status = ref(false);
@@ -35,6 +36,8 @@ const onClickLogout = () => {
       router.replace('/');
     });
 };
+
+getBalance();
 </script>
 
 <template>
@@ -54,14 +57,24 @@ const onClickLogout = () => {
           </div>
         </div>
       </ui-popover-trigger>
-      <ui-popover-content class="min-w-fit h-fit bg-warm-100 border border-solid border-warm-200 my-2 p-2 rounded" @pointer-down-outside="showProfilePanel = false">
-        <div class="w-full h-fit space-y-2">
+      <ui-popover-content :side-offset="20" class="min-w-fit h-fit bg-warm-50 border border-solid border-warm-200 p-4 rounded" @pointer-down-outside="showProfilePanel = false">
+        <div class="w-full h-fit flex flex-col gap-3 min-w-100px">
+          <div class="w-full flex flex-col items-center py-2">
+            <router-link :to="`/profile/${accountId}`">
+              <p class="text-xl mb-1">
+                {{ profile?.username }}
+              </p>
+            </router-link>
+            <p class="text-xs text-warm-600">
+              Balance: {{ balance }}
+            </p>
+          </div>
           <router-link :to="`/profile/${accountId}`">
-            <ui-button full size="sm" class="justify-start!">
+            <ui-button full size="sm" class="justify-center!">
               Profile
             </ui-button>
           </router-link>
-          <ui-button full size="sm" class="justify-start!" @click="onClickLogout">
+          <ui-button full size="sm" class="justify-center!" @click="onClickLogout">
             Logout
           </ui-button>
         </div>

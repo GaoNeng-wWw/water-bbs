@@ -388,6 +388,10 @@ export const roleControllerFindRole = <ThrowOnError extends boolean = false>(opt
     ...options
 });
 
-export const walletControllerGetBalance = <ThrowOnError extends boolean = false>(options?: Options<WalletControllerGetBalanceData, ThrowOnError>) => (options?.client ?? client).get<WalletControllerGetBalanceResponses, unknown, ThrowOnError>({ url: '/wallet/balance', ...options });
+export const walletControllerGetBalance = <ThrowOnError extends boolean = false>(options?: Options<WalletControllerGetBalanceData, ThrowOnError>) => (options?.client ?? client).get<WalletControllerGetBalanceResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/wallet/balance',
+    ...options
+});
 
 export const walletControllerListTranscation = <ThrowOnError extends boolean = false>(options: Options<WalletControllerListTranscationData, ThrowOnError>) => (options.client ?? client).get<WalletControllerListTranscationResponses, unknown, ThrowOnError>({ url: '/wallet/transcation', ...options });

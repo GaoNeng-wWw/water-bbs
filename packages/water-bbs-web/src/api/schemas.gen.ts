@@ -1054,3 +1054,15 @@ export const FindRoleResponseSchema = {
     type: 'object',
     properties: {}
 } as const;
+
+export const GetBalanceResponseSchema = {
+    type: 'object',
+    properties: {
+        balance: {
+            type: 'string'
+        }
+    },
+    required: [
+        'balance'
+    ]
+} as const;
