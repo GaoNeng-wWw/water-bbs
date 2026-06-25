@@ -1,0 +1,20 @@
+{
+  "name": "water-bbs-gamification",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@gaonengwww/eslint-config": "^1.0.6",
+    "eslint": "^9.39.4",
+    "tsdown": "^0.22.3",
+    "vitest": "^3.2.4"
+  }
+}
