@@ -1,5 +1,8 @@
 packages:
   - './packages/*'
+syncInjectedDepsAfterScripts:
+  - build
+injectWorkspacePackages: true
 allowBuilds:
   "@nestjs/core": true
   "@scarf/scarf": true

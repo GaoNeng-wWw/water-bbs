@@ -8,7 +8,8 @@
     "build": "vite build --config config/vite.prod.config.ts",
     "preview": "vite preview",
     "lint": "eslint ./src",
-    "openapi-ts": "openapi-ts"
+    "openapi-ts": "openapi-ts",
+    "clean": "pnpm run -r clean"
   },
   "dependencies": {
     "@hey-api/client-axios": "^0.9.1",
