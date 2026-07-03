@@ -40,6 +40,12 @@
       "@app/configure/*": [
         "libs/configure/src/*"
       ],
+      "@app/gamification": [
+        "libs/gamification/src"
+      ],
+      "@app/gamification/*": [
+        "libs/gamification/src/*"
+      ],
       "@app/policy": [
         "libs/policy/src"
       ],

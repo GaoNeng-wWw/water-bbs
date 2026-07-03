@@ -41,6 +41,15 @@
         "tsConfigPath": "libs/configure/tsconfig.lib.json"
       }
     },
+    "gamification": {
+      "type": "library",
+      "root": "libs/gamification",
+      "entryFile": "index",
+      "sourceRoot": "libs/gamification/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/gamification/tsconfig.lib.json"
+      }
+    },
     "policy": {
       "type": "library",
       "root": "libs/policy",

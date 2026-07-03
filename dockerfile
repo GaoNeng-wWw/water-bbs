@@ -15,7 +15,9 @@ COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm i --frozen-lockfile --ignore-scripts=false
 
-RUN pnpm run -r build && \
+RUN rm -rf pnpm-workspace.yaml && \
+    mv pnpm-workspace.prod.yaml pnpm-workspace.yaml
+    pnpm run -r build && \
     pnpm deploy --filter water-bbs-api ./deploy/water-bbs-api && \
     pnpm deploy --filter water-bbs-web ./deploy/water-bbs-web && \
     pnpm deploy --filter water-bbs-migration ./deploy/water-bbs-migration

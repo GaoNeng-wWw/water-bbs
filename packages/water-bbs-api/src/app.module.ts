@@ -20,6 +20,10 @@ import {
   Wallet,
   TransferLog,
   Policy,
+  Task,
+  Reward,
+  TaskReward,
+  UserTask,
 } from 'water-bbs-migration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SingleNode, yaml } from '@app/configure';
@@ -46,6 +50,7 @@ import { AppController } from './app.controller';
 import { AppSerivce } from './app.service';
 import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
 import { WalletModule } from './wallet/wallet.module';
+import { GamificationModule } from '@app/gamification';
 
 @Module({
   imports: [
@@ -77,6 +82,10 @@ import { WalletModule } from './wallet/wallet.module';
             Wallet,
             TransferLog,
             Policy,
+            Task,
+            Reward,
+            TaskReward,
+            UserTask,
           ],
           allowGlobalContext: true,
           host: configService.get('database.host'),
@@ -86,7 +95,7 @@ import { WalletModule } from './wallet/wallet.module';
           dbName: configService.get('database.dbName'),
         };
       },
-    } as any),
+    }),
     MikroOrmModule.forFeature([
       Account,
       Cert,
@@ -103,6 +112,10 @@ import { WalletModule } from './wallet/wallet.module';
       ProposalComment,
       Resource,
       ResourceOwnerMap,
+      Task,
+      Reward,
+      TaskReward,
+      UserTask,
     ]),
     RedisModule.forRootAsync({
       inject: [ConfigService],
@@ -161,6 +174,7 @@ import { WalletModule } from './wallet/wallet.module';
     RoleModule,
     AdminModule,
     WalletModule,
+    GamificationModule,
   ],
   providers: [
     {
