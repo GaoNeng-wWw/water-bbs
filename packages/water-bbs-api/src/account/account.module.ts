@@ -35,9 +35,14 @@ import { UploadAvatarCommandHandler } from './application/commands/upload-avatar
 import { FindAccountQueryHandler } from './application/queries/find-account.query';
 import { GetProfileQueryHandler } from './application/queries/get-profile.query';
 import { AccountAliveFact, AccountBalanceFact } from './fact';
+import { CheckInModule } from '@app/gamification';
 
 @Module({
-  imports: [StorageModule, MikroOrmModule.forFeature([Account, Profile])],
+  imports: [
+    CheckInModule,
+    StorageModule,
+    MikroOrmModule.forFeature([Account, Profile]),
+  ],
   controllers: [AccountController],
   providers: [
     MailRegistor,
@@ -85,7 +90,7 @@ import { AccountAliveFact, AccountBalanceFact } from './fact';
     BanAccountAction,
     UnbanAccountAction,
     AccountAliveFact,
-    AccountBalanceFact
+    AccountBalanceFact,
   ],
 })
 export class AccountModule {}

@@ -32,5 +32,6 @@ export class CheckInService {
     await this.redis.set(`check-in:${account}`, '1');
     const expAt = endOfDay(time);
     await this.redis.expireat(`check-in:${account}`, getTime(expAt));
+    return ok({ balance });
   }
 }

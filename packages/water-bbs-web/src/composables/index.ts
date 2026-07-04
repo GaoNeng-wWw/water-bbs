@@ -6,3 +6,4 @@ export * from './use-dialog';
 export * from './use-drawer';
 export * from './use-proposal-comment-list';
 export * from './use-wallet';
+export * from './use-checked-in';

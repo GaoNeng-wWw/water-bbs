@@ -66,6 +66,14 @@ export type UpdateAvatarResponse = {
     [key: string]: unknown;
 };
 
+export type GetCheckInResponse = {
+    checked: boolean;
+};
+
+export type CheckInResponse = {
+    balance: number;
+};
+
 export type LoginDto = {
     ident_type: 'Email';
     ident_value: string;
@@ -508,6 +516,32 @@ export type AccountControllerGetPermissionResponses = {
 };
 
 export type AccountControllerGetPermissionResponse = AccountControllerGetPermissionResponses[keyof AccountControllerGetPermissionResponses];
+
+export type AccountControllerGetCheckInStatusData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/account/check-in';
+};
+
+export type AccountControllerGetCheckInStatusResponses = {
+    200: GetCheckInResponse;
+};
+
+export type AccountControllerGetCheckInStatusResponse = AccountControllerGetCheckInStatusResponses[keyof AccountControllerGetCheckInStatusResponses];
+
+export type AccountControllerCheckInData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/account/check-in';
+};
+
+export type AccountControllerCheckInResponses = {
+    200: CheckInResponse;
+};
+
+export type AccountControllerCheckInResponse = AccountControllerCheckInResponses[keyof AccountControllerCheckInResponses];
 
 export type AuthControllerLoginData = {
     body: LoginDto;

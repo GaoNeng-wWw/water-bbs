@@ -1,15 +1,18 @@
 import { walletControllerGetBalance } from '@/api';
-import { readonly, ref } from 'vue';
+import { readonly } from 'vue';
 import { NOT_PUBLIC_ENDPOINT } from './use-api';
+import { useAccountWallet } from '@/store';
+import { storeToRefs } from 'pinia';
 
 export const useWallet = () => {
-  const balance = ref('');
+  const accountWallet = useAccountWallet();
+  const { balance } = storeToRefs(accountWallet);
   const getBalance = () => {
     walletControllerGetBalance({
       client: NOT_PUBLIC_ENDPOINT,
     })
       .then((resp) => {
-        balance.value = resp.data?.balance ?? '0';
+        accountWallet.setBalacne(resp.data?.balance ?? '0');
       });
   };
   return {

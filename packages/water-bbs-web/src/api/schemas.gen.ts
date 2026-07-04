@@ -168,6 +168,30 @@ export const UpdateAvatarResponseSchema = {
     properties: {}
 } as const;
 
+export const GetCheckInResponseSchema = {
+    type: 'object',
+    properties: {
+        checked: {
+            type: 'boolean'
+        }
+    },
+    required: [
+        'checked'
+    ]
+} as const;
+
+export const CheckInResponseSchema = {
+    type: 'object',
+    properties: {
+        balance: {
+            type: 'number'
+        }
+    },
+    required: [
+        'balance'
+    ]
+} as const;
+
 export const LoginDTOSchema = {
     type: 'object',
     properties: {

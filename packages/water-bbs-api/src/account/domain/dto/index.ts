@@ -8,3 +8,4 @@ export * from './reset-password.dto';
 export * from './update-avatar.dto';
 export * from './update-password.dto';
 export * from './update-profile.dto';
+export * from './check-in.dto';

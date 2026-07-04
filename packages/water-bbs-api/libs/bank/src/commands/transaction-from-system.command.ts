@@ -44,15 +44,15 @@ export class TransactionFromSystemHandler implements ICommandHandler<Transaction
         `UPDATE wallet 
        SET balance = CAST(balance AS DECIMAL(18,2)) + CAST(? AS DECIMAL(18,2)),
            version = version + 1
-       WHERE account_id = ? 
-         AND CAST(balance AS DECIMAL(18,2)) >= CAST(? AS DECIMAL(18,2))`,
-        [cost, target, cost],
+       WHERE account_id = ?`,
+        [cost, target, cost], 'run'
       );
+      console.log(sourceRes);
       if (sourceRes.length === 0) {
         return err(new DomainError('INSUFFICIENT_BALANCE'));
       }
       const log = TransferLog.create(
-        `cost`,
+        `${cost}`,
         detail,
         new Subject(true),
         new Subject(false, target),

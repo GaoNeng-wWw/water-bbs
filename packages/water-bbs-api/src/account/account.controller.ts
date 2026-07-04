@@ -34,6 +34,8 @@ import {
   RegisterResponse,
   RegisterDTO,
   RemoveAccountDTO,
+  CheckInResponse,
+  GetCheckInResponse,
 } from './domain';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CheckInService } from '@app/gamification';
@@ -185,16 +187,23 @@ export class AccountController {
 
   @Get('check-in')
   @ApiBearerAuth()
+  @ApiOkResponse({
+    type: GetCheckInResponse,
+  })
+  @UseModel(GetCheckInResponse)
   async getCheckInStatus(@User() user: RequestUser) {
     return this.checkInService
       .canCheckIn(user.account.id)
-      .then((resp) => ok({ status: resp.value ? false : true }));
+      .then((resp) => ok({ checked: resp.value }));
   }
   @Post('check-in')
+  @ApiOkResponse({
+    type: CheckInResponse,
+  })
+  @UseModel(CheckInResponse)
   async checkIn(@User() user: RequestUser) {
     if (await this.checkInService.canCheckIn(user.account.id)) {
-      await this.checkInService.checkin(user.account.id, new Date());
-      return ok('ok');
+      return await this.checkInService.checkin(user.account.id, new Date());
     }
     return err(new DomainError('DUPLICATE_ERROR'));
   }
