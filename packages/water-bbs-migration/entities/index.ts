@@ -9,4 +9,4 @@ export { Action } from './action';
 export { Resource, ResourceOwnerMap } from './resource';
 export { Wallet, TransactionDetail, TransferLog, Subject } from './wallet';
 export { Policy } from './policy';
-export { Task, TaskReward, TaskStatus,UserTask, Reward } from './task';
+export { Task, TaskReward, TaskStatus,UserTask, Reward, Period, PeriodUnit } from './task';

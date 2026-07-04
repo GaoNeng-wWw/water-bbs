@@ -8,11 +8,12 @@ import {
 } from 'water-bbs-shared';
 import { TaskRegistry, Event } from './task.registry';
 import { Engine } from 'json-rules-engine';
-import { Reward } from 'water-bbs-migration';
+import { Reward, UserTask } from 'water-bbs-migration';
 import { EntityRepository } from '@mikro-orm/core';
 import { RewardRegistry } from '../reward';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable } from '@nestjs/common';
+import { canComplete } from './domain/service/judge';
 
 @Injectable()
 export class TaskService {
@@ -20,6 +21,8 @@ export class TaskService {
     private readonly taskRegistry: TaskRegistry,
     @InjectRepository(Reward)
     private readonly rewardRepository: EntityRepository<Reward>,
+    @InjectRepository(UserTask)
+    private readonly userTaskRepository: EntityRepository<UserTask>,
     @Inject('ENGINE')
     private readonly engine: Engine,
     private readonly rewardRegistry: RewardRegistry,
@@ -33,9 +36,17 @@ export class TaskService {
       }
       return err(new DomainError('TASK_NOT_FOUND', null, { taskId }));
     }
-    const task = taskResult.value.value;
+    const targetHistory = await this.userTaskRepository.findAll({
+      where: {
+        taskId: taskResult.value.value.id,
+      },
+    });
+    const completeResult = canComplete(taskResult.value.value, targetHistory);
+    if (isErr(completeResult)) {
+      return completeResult;
+    }
     const runResult = await this.engine
-      .run(task.condition)
+      .run({ accountId: userId })
       .then((result) => ok(result))
       .catch((reason) =>
         err(new InfrastructureError(`INTERNAL_ERROR`, reason)),

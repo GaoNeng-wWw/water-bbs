@@ -5,6 +5,7 @@ import { EngineModule } from './engine.module';
 import { DiscoveryModule } from '@nestjs/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Reward, Task, TaskReward, UserTask } from 'water-bbs-migration';
+import { FactFactory } from './fact/fact.factory';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { Reward, Task, TaskReward, UserTask } from 'water-bbs-migration';
     RewardModule,
     TaskModule,
   ],
-  providers: [RewardRegistry, TaskRegistry, TaskService],
+  providers: [RewardRegistry, TaskRegistry, TaskService, FactFactory],
   exports: [RewardRegistry, TaskRegistry, TaskService],
 })
 export class GamificationModule {}

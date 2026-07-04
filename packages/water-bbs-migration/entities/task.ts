@@ -24,6 +24,7 @@ export class Reward extends BaseMetaEntity {
 }
 
 export enum PeriodUnit {
+  Once = 'Once',
   Day = 'day',
   Week = 'week',
   Month = 'month',

@@ -34,6 +34,7 @@ import { UpdateProfileCommandHandler } from './application/commands/update-profi
 import { UploadAvatarCommandHandler } from './application/commands/upload-avatar.command';
 import { FindAccountQueryHandler } from './application/queries/find-account.query';
 import { GetProfileQueryHandler } from './application/queries/get-profile.query';
+import { AccountAliveFact, AccountBalanceFact } from './fact';
 
 @Module({
   imports: [StorageModule, MikroOrmModule.forFeature([Account, Profile])],
@@ -83,6 +84,8 @@ import { GetProfileQueryHandler } from './application/queries/get-profile.query'
     GetPermissionHandler,
     BanAccountAction,
     UnbanAccountAction,
+    AccountAliveFact,
+    AccountBalanceFact
   ],
 })
 export class AccountModule {}
