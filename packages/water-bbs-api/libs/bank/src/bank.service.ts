@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { TransactionDetail } from 'water-bbs-migration';
 import { DomainError, Result } from 'water-bbs-shared';
-import { TransactionCommand, TransactionToSystemCommand } from './commands';
+import {
+  TransactionCommand,
+  TransactionFromSystemCommand,
+  TransactionToSystemCommand,
+} from './commands';
 import { EnsureBalanceQuery } from './queries';
 
 @Injectable()
@@ -23,6 +27,15 @@ export class BankService {
     );
   }
 
+  transactionFromSystem(
+    target: string,
+    cost: number,
+    detail: TransactionDetail,
+  ) {
+    return this.cb.execute(
+      new TransactionFromSystemCommand(target, cost, detail),
+    );
+  }
   transactionToSystem(source: string, cost: number, detail: TransactionDetail) {
     return this.cb.execute(
       new TransactionToSystemCommand(source, cost, detail),

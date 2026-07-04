@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AccountService } from './application';
-import { isErr } from 'water-bbs-shared';
+import { DomainError, err, isErr, ok } from 'water-bbs-shared';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -36,10 +36,14 @@ import {
   RemoveAccountDTO,
 } from './domain';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CheckInService } from '@app/gamification';
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly checkInService: CheckInService,
+  ) {}
 
   @UseModel(GetProfileResponse)
   @ApiOkResponse({
@@ -177,5 +181,21 @@ export class AccountController {
   })
   async getPermission(@User() user: RequestUser) {
     return this.accountService.getPermission(user.account.id);
+  }
+
+  @Get('check-in')
+  @ApiBearerAuth()
+  async getCheckInStatus(@User() user: RequestUser) {
+    return this.checkInService
+      .canCheckIn(user.account.id)
+      .then((resp) => ok({ status: resp.value ? false : true }));
+  }
+  @Post('check-in')
+  async checkIn(@User() user: RequestUser) {
+    if (await this.checkInService.canCheckIn(user.account.id)) {
+      await this.checkInService.checkin(user.account.id, new Date());
+      return ok('ok');
+    }
+    return err(new DomainError('DUPLICATE_ERROR'));
   }
 }

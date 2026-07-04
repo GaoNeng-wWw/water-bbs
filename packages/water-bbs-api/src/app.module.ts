@@ -50,7 +50,7 @@ import { AppController } from './app.controller';
 import { AppSerivce } from './app.service';
 import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
 import { WalletModule } from './wallet/wallet.module';
-import { GamificationModule } from '@app/gamification';
+import { GamificationModule, CheckInModule } from '@app/gamification';
 
 @Module({
   imports: [
@@ -175,6 +175,7 @@ import { GamificationModule } from '@app/gamification';
     AdminModule,
     WalletModule,
     GamificationModule,
+    CheckInModule,
   ],
   providers: [
     {

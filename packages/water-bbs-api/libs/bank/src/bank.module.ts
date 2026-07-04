@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Wallet, TransferLog } from 'water-bbs-migration';
-import { TransactionToSystemHandler, TransactionHandler } from './commands';
+import {
+  TransactionToSystemHandler,
+  TransactionHandler,
+  TransactionFromSystemHandler,
+} from './commands';
 import { EnsureBalanceHandler } from './queries';
 import { BankService } from './bank.service';
 
@@ -10,6 +14,7 @@ import { BankService } from './bank.service';
   providers: [
     BankService,
     TransactionToSystemHandler,
+    TransactionFromSystemHandler,
     TransactionHandler,
     EnsureBalanceHandler,
   ],
