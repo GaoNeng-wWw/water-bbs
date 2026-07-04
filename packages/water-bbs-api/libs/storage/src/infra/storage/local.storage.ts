@@ -42,7 +42,6 @@ export class LocalStorage implements StorageEngine {
     if (!existsSync(fullPath)) {
       mkdirSync(fullPath);
     }
-    console.log(join(fullPath, `${hash}`));
     writeFileSync(join(fullPath, `${hash}`), file);
     return Promise.resolve(ok(fileReference));
   }

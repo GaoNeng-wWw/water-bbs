@@ -47,7 +47,6 @@ export class TransactionFromSystemHandler implements ICommandHandler<Transaction
        WHERE account_id = ?`,
         [cost, target, cost], 'run'
       );
-      console.log(sourceRes);
       if (sourceRes.length === 0) {
         return err(new DomainError('INSUFFICIENT_BALANCE'));
       }
