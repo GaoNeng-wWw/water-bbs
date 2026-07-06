@@ -51,6 +51,7 @@ import { AppSerivce } from './app.service';
 import { LocalStorage, STORAGE_ENGINE_KEY } from '@app/storage';
 import { WalletModule } from './wallet/wallet.module';
 import { GamificationModule, CheckInModule } from '@app/gamification';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -176,6 +177,7 @@ import { GamificationModule, CheckInModule } from '@app/gamification';
     WalletModule,
     GamificationModule,
     CheckInModule,
+    TaskModule,
   ],
   providers: [
     {

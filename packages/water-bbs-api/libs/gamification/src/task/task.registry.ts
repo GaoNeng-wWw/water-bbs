@@ -76,10 +76,11 @@ export class TaskRegistry implements OnApplicationBootstrap {
       taskId: task.value.id,
     });
     taskRewards.forEach((reward) => reward.remove());
-    this.em
+    return this.em
       .transactional(async (em) => {
         await this.taskRepo.upsert(task.value, { em });
         await this.taskRewardRepo.upsertMany(taskRewards, { em });
+        return task.value.id;
       })
       .then(ok)
       .catch((reason) => err(new PersistenceError(reason)));

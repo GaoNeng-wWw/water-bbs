@@ -1,6 +1,7 @@
 import { Embeddable, Embedded, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/decorators/legacy";
 import { v7 } from "uuid";
 import { BaseMetaEntity } from "./meta";
+import { NonFunctionKeys } from "water-bbs-shared";
 
 @Entity()
 export class Reward extends BaseMetaEntity {
@@ -37,6 +38,10 @@ export class Period {
   unit: PeriodUnit;
   @Property({ type: 'number' })
   value: number;
+
+  constructor(props: NonFunctionKeys<Period>){
+    Object.assign(this, props);
+  }
 }
 
 @Entity()
@@ -55,14 +60,23 @@ export class Task extends BaseMetaEntity {
   period: Period;
 
   constructor(
-    props: Omit<Task, 'remove'>
+    props: Pick<Task, NonFunctionKeys<Task>>
   ) {
     super();
-    Object.assign(this, props);
+    
+    Object.assign(this, props)
+  }
+  static create(code: string, label: string, description: string, condition: Record<string, any>, period: Period) {
+    return new Task(
+      {id: v7(), code, label, description, condition, period, createdAt: new Date()}
+    )
   }
 
   remove(){
     this.removedAt = new Date();
+  }
+  isOnce(){
+    return this.period.unit === PeriodUnit.Once;
   }
 }
 
@@ -94,7 +108,7 @@ export class TaskReward extends BaseMetaEntity {
 }
 
 export enum TaskStatus {
-  Pending = 'pending',
+  Claim = 'pending',
   Completed = 'completed',
 }
 
@@ -108,17 +122,43 @@ export class UserTask extends BaseMetaEntity {
   taskId: string;
   @Property({ type: 'string' })
   status: TaskStatus;
+  @Property({ type: 'date', nullable: true })
+  completedAt?: Date;
   @Property({ type: 'date' })
-  completedAt: Date;
+  claimAt: Date;
+
+  static create(
+    userId: string,
+    taskId: string,
+    completedAt?: Date,
+  ){
+    return new UserTask(v7(), userId, taskId, TaskStatus.Claim, new Date(), completedAt)
+  }
 
   constructor(
-    props: UserTask
+    id: string,
+    userId: string,
+    taskId: string,
+    status: TaskStatus,
+    claimAt: Date,
+    completedAt?: Date,
   ) {
     super();
-    Object.assign(this, props);
+    this.id = id;
+    this.userId = userId;
+    this.taskId = taskId;
+    this.status = status;
+    this.claimAt = claimAt;
+    this.completedAt = completedAt;
   }
 
   complete() {
     this.status = TaskStatus.Completed;
+  }
+  claim(){
+    this.status = TaskStatus.Claim;
+  }
+  remove(){
+    this.removedAt = new Date();
   }
 }

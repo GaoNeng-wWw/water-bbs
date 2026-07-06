@@ -4,7 +4,7 @@ import { isNullish } from 'radashi';
 import { IRewardHandler, RewardHandlerKey } from './reward.types';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Reward } from 'water-bbs-migration';
-import { DomainError, err, isNone, none, ok, some } from 'water-bbs-shared';
+import { DomainError, err, isNone, none, ok, PersistenceError, some } from 'water-bbs-shared';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
 @Injectable()
@@ -21,6 +21,18 @@ export class RewardRegistry implements OnApplicationBootstrap {
   getRewardHandler(code: string) {
     const r = this.handlers.filter((h) => h.code === code)[0];
     return r ? some(r) : none;
+  }
+  getId(code: string) {
+    return this.reward.find({ code }, { fields: ['id'], cache: true });
+  }
+  getEntity(code: string){
+    return this.reward
+      .findOne({ code }, { cache: true })
+      .then((value) => (value ? ok(some(value)) : ok(none)))
+      .catch((reason) => {
+        const perr = new PersistenceError(reason);
+        return err(new DomainError(perr.message, perr));
+      });
   }
   getRewardHandlers() {
     return ok(this.handlers);

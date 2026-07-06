@@ -8,12 +8,12 @@ import {
 } from 'water-bbs-shared';
 import { TaskRegistry, Event } from './task.registry';
 import { Engine } from 'json-rules-engine';
-import { Reward, UserTask } from 'water-bbs-migration';
+import { Reward, TaskStatus, UserTask } from 'water-bbs-migration';
 import { EntityRepository } from '@mikro-orm/core';
 import { RewardRegistry } from '../reward';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable } from '@nestjs/common';
-import { canComplete } from './domain/service/judge';
+import { canClaim } from './domain';
 
 @Injectable()
 export class TaskService {
@@ -35,15 +35,6 @@ export class TaskService {
         return taskResult;
       }
       return err(new DomainError('TASK_NOT_FOUND', null, { taskId }));
-    }
-    const targetHistory = await this.userTaskRepository.findAll({
-      where: {
-        taskId: taskResult.value.value.id,
-      },
-    });
-    const completeResult = canComplete(taskResult.value.value, targetHistory);
-    if (isErr(completeResult)) {
-      return completeResult;
     }
     const runResult = await this.engine
       .run({ accountId: userId })
@@ -69,5 +60,49 @@ export class TaskService {
       }
       await this.rewardRegistry.applyReward(reward, userId);
     }
+    return ok({ taskId });
+  }
+  async claim(taskId: string, userId: string) {
+    const taskResult = await this.taskRegistry.findTask(taskId);
+    if (isErr(taskResult)) {
+      return taskResult;
+    }
+    if (isNone(taskResult.value)) {
+      return err(new DomainError('TASK_NOT_FOUND', null, { taskId }));
+    }
+    const task = taskResult.value.value;
+    const completedHistory = await this.userTaskRepository.findOne(
+      {
+        userId,
+        taskId: taskId,
+        status: TaskStatus.Completed,
+      },
+      { orderBy: { completedAt: 'desc' } },
+    );
+    const claimHistory = await this.userTaskRepository.findOne(
+      {
+        userId,
+        taskId: taskId,
+        status: TaskStatus.Claim,
+      },
+      { orderBy: { completedAt: 'desc' } },
+    );
+    const tasks: UserTask[] = [];
+    if (completedHistory) {
+      tasks.push(completedHistory);
+    }
+    if (claimHistory) {
+      tasks.push(claimHistory);
+    }
+    const canClaimResult = canClaim(task, tasks);
+    if (isErr(canClaimResult)) {
+      return canClaimResult;
+    }
+    if (!canClaimResult.value) {
+      return err(new DomainError('CLAIMING_TOO_EARLY'));
+    }
+    const userTask = UserTask.create(userId, taskId, new Date());
+    await this.userTaskRepository.upsert(userTask);
+    return ok(userTask);
   }
 }
