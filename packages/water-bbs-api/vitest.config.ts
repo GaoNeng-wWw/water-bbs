@@ -19,6 +19,11 @@ export default defineConfig({
       '@app/captcha': resolve(__dirname, 'libs/captcha/src'),
       '@app/configure': resolve(__dirname, 'libs/configure/src'),
       '@app/shared': resolve(__dirname, 'libs/shared/src'),
+      '@app/bank': resolve(__dirname, 'libs/bank/src'),
+      '@app/gamification': resolve(__dirname, 'libs/gamification/src'),
+      '@app/policy': resolve(__dirname, 'libs/policy/src'),
+      '@app/storage': resolve(__dirname, 'libs/storage/src'),
+      '@app/workflow': resolve(__dirname, 'libs/workflow/src'),
     },
   },
 });
