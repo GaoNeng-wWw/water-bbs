@@ -15,7 +15,7 @@ export class TaskService {
     private readonly qb: QueryBus,
     private readonly cb: CommandBus,
   ) {}
-  createTask(dto: CreateTaskRequest){
+  createTask(dto: CreateTaskRequest) {
     return this.cb.execute(new CreateTaskCommand(dto));
   }
   removeTask(taskId: string) {

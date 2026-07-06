@@ -4,12 +4,21 @@ import { isNullish } from 'radashi';
 import { IRewardHandler, RewardHandlerKey } from './reward.types';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Reward } from 'water-bbs-migration';
-import { DomainError, err, isNone, none, ok, PersistenceError, some } from 'water-bbs-shared';
+import {
+  DomainError,
+  err,
+  isNone,
+  none,
+  ok,
+  PersistenceError,
+  some,
+} from 'water-bbs-shared';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { ZodAny } from 'zod';
 
 @Injectable()
 export class RewardRegistry implements OnApplicationBootstrap {
-  private handlers: IRewardHandler[];
+  private handlers: IRewardHandler<ZodAny>[];
   constructor(
     private readonly reflector: Reflector,
     private readonly moduleRef: ModuleRef,
@@ -25,7 +34,7 @@ export class RewardRegistry implements OnApplicationBootstrap {
   getId(code: string) {
     return this.reward.find({ code }, { fields: ['id'], cache: true });
   }
-  getEntity(code: string){
+  getEntity(code: string) {
     return this.reward
       .findOne({ code }, { cache: true })
       .then((value) => (value ? ok(some(value)) : ok(none)))
@@ -37,7 +46,11 @@ export class RewardRegistry implements OnApplicationBootstrap {
   getRewardHandlers() {
     return ok(this.handlers);
   }
-  applyReward(reward: Reward, userId: string) {
+  applyReward(
+    reward: Reward,
+    userId: string,
+    externalParam: Record<string, any> = {},
+  ) {
     const handler = this.getRewardHandler(reward.code);
     if (isNone(handler)) {
       return err(
@@ -47,7 +60,7 @@ export class RewardRegistry implements OnApplicationBootstrap {
         }),
       );
     }
-    return handler.value.handle({ userId });
+    return handler.value.handle({ userId }, externalParam);
   }
   async onApplicationBootstrap() {
     const providers = this.discoveryService.getProviders();
@@ -58,7 +71,7 @@ export class RewardRegistry implements OnApplicationBootstrap {
       .map((provider) => provider.metatype)
       .filter((mt) => !isNullish(mt));
     const handlers = metaTypes.map((mt) =>
-      this.moduleRef.get<IRewardHandler>(mt, { strict: false }),
+      this.moduleRef.get<IRewardHandler<ZodAny>>(mt, { strict: false }),
     );
     await this.em.transactional(async (em) => {
       for (const handler of handlers) {
@@ -69,6 +82,7 @@ export class RewardRegistry implements OnApplicationBootstrap {
         const r = Reward.create({
           code: handler.code,
           label: handler.label,
+          schema: handler.schema,
           description: handler.description,
         });
         await this.reward.upsert(r, { em });

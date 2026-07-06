@@ -58,7 +58,8 @@ export class TaskService {
       if (!reward) {
         return err(new DomainError(`CAN_NOT_FOUND_REWARD`, null, { rewardId }));
       }
-      await this.rewardRegistry.applyReward(reward, userId);
+      const param = event.params.rewardParams[reward.id] ?? {};
+      await this.rewardRegistry.applyReward(reward, userId, param);
     }
     return ok({ taskId });
   }

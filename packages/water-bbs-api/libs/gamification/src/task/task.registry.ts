@@ -14,6 +14,7 @@ import {
   err,
   isErr,
   isNone,
+  isSome,
   none,
   ok,
   PersistenceError,
@@ -26,6 +27,7 @@ export type Event = {
   type: `${string}.reward`;
   params: {
     rewardIds: string[];
+    rewardParams: Record<string, any>;
   };
 };
 
@@ -97,7 +99,10 @@ export class TaskRegistry implements OnApplicationBootstrap {
     const rewardSummary = rewards.map((r) => ({ id: r.id, code: r.code }));
     const taskResult = await this.findTask(task.id);
     if (isErr(taskResult)) {
-      return err(new DomainError('TASK_EXISTING', taskResult.error));
+      return taskResult;
+    }
+    if (isSome(taskResult.value)) {
+      return err(new DomainError('TASK_EXISTING'));
     }
     for (const { code } of rewardSummary) {
       if (isNone(this.rewardRegistry.getRewardHandler(code))) {
@@ -141,6 +146,7 @@ export class TaskRegistry implements OnApplicationBootstrap {
         type: `${task.code}.reward`,
         params: {
           rewardIds,
+          rewardParams: task.param,
         },
       },
     });

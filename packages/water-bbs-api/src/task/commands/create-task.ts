@@ -21,9 +21,16 @@ export class CreateTask implements ICommandHandler<CreateTaskCommand> {
   async execute(
     command: CreateTaskCommand,
   ): Promise<Result<{ taskId: string }, DomainError>> {
-    const { code, label, description, condition, period, rewardCodes } =
+    const { code, label, description, condition, period, rewardCodes, params } =
       command.req;
-    const task = Task.create(code, label, description, condition, period);
+    const task = Task.create(
+      code,
+      label,
+      description,
+      condition,
+      period,
+      params,
+    );
     const rewardJob = rewardCodes
       .map((code) => this.rewardResgitry.getRewardHandler(code))
       .filter((value) => isSome(value))

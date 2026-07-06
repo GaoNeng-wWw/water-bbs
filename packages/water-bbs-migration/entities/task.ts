@@ -13,6 +13,8 @@ export class Reward extends BaseMetaEntity {
   label: string;
   @Property({ type: 'string' })
   description: string;
+  @Property({ type: 'json' })
+  schema: Record<string, any>
   constructor(
     props: Reward
   ) {
@@ -58,6 +60,8 @@ export class Task extends BaseMetaEntity {
   condition: Record<string, any>;
   @Embedded(()=>Period)
   period: Period;
+  @Property({ type: 'json' })
+  param: Record<string, any>
 
   constructor(
     props: Pick<Task, NonFunctionKeys<Task>>
@@ -66,9 +70,16 @@ export class Task extends BaseMetaEntity {
     
     Object.assign(this, props)
   }
-  static create(code: string, label: string, description: string, condition: Record<string, any>, period: Period) {
+  static create(
+    code: string,
+    label: string,
+    description: string,
+    condition: Record<string, any>,
+    period: Period,
+    param: Record<string, any>
+  ) {
     return new Task(
-      {id: v7(), code, label, description, condition, period, createdAt: new Date()}
+      {id: v7(), code, label, description, condition, period, createdAt: new Date(), param}
     )
   }
 

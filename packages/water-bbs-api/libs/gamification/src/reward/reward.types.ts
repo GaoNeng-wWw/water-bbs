@@ -1,12 +1,17 @@
 import { applyDecorators, SetMetadata } from '@nestjs/common';
+import z, { ZodType } from 'zod';
 
 export type RewardHandlerParam = { userId: string };
 
-export interface IRewardHandler {
+export interface IRewardHandler<Schema extends ZodType> {
   code: string;
   description: string;
   label: string;
-  handle(param: RewardHandlerParam): Promise<void>;
+  schema: Schema;
+  handle(
+    param: RewardHandlerParam,
+    dynamicParam: z.infer<Schema>,
+  ): Promise<void>;
 }
 
 export const RewardHandlerKey = Symbol('RewardHandlerKey');

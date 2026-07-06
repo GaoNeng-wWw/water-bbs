@@ -51,4 +51,7 @@ export class CreateTaskRequest {
   @IsArray()
   @IsString({ each: true })
   rewardCodes: string[];
+  @IsNotEmptyObject()
+  @IsObject()
+  params: Record<string, any>;
 }
