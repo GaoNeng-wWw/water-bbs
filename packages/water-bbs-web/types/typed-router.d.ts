@@ -20,8 +20,9 @@ import type {
 
 declare module 'vue-router' {
   interface TypesConfig {
-    ParamParsers:
-      | never
+    _ParamParsers: {}
+    RouteNamedMap: import('vue-router/auto-routes').RouteNamedMap
+    _RouteFileInfoMap: import('vue-router/auto-routes')._RouteFileInfoMap
   }
 }
 
@@ -65,6 +66,20 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/tasks/': RouteRecordInfo<
+      '/tasks/',
+      '/tasks',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tasks/create': RouteRecordInfo<
+      '/tasks/create',
+      '/tasks/create',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
   }
 
   /**
@@ -83,29 +98,55 @@ declare module 'vue-router/auto-routes' {
         | '/'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'src/pages/post/[id].vue': {
       routes:
         | '/post/[id]'
       views:
         | never
+      pathParamNames:
+        | 'id'
     }
     'src/pages/profile/[id].vue': {
       routes:
         | '/profile/[id]'
       views:
         | never
+      pathParamNames:
+        | 'id'
     }
     'src/pages/proposal/index.vue': {
       routes:
         | '/proposal/'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'src/pages/proposal/[id].vue': {
       routes:
         | '/proposal/[id]'
       views:
+        | never
+      pathParamNames:
+        | 'id'
+    }
+    'src/pages/tasks/index.vue': {
+      routes:
+        | '/tasks/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tasks/create.vue': {
+      routes:
+        | '/tasks/create'
+      views:
+        | never
+      pathParamNames:
         | never
     }
   }

@@ -3,8 +3,9 @@ import { QueryBus } from '@nestjs/cqrs';
 import { Almanac } from 'json-rules-engine';
 import { AccountAliveQuery } from '../application';
 import { isErr } from 'water-bbs-shared';
+import z from 'zod';
 
-@FactHandler('account-alive')
+@FactHandler('account-alive', z.boolean())
 export class AccountAliveFact implements IFactHandler<
   Record<string, any>,
   boolean

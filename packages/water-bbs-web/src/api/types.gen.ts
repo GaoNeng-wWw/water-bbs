@@ -389,6 +389,68 @@ export type GetBalanceResponse = {
     balance: string;
 };
 
+export type RewardSummary = {
+    code: string;
+    label: string;
+    description: string;
+    schema: {
+        [key: string]: unknown;
+    };
+};
+
+export type FactInfo = {
+    name: string;
+    returnType: {
+        [key: string]: unknown;
+    };
+};
+
+export type ListTaskItem = {
+    id: string;
+    label: string;
+    description: string;
+    createdAt: Date;
+};
+
+export type ListTaskResponse = {
+    items: Array<ListTaskItem>;
+    total: number;
+};
+
+export type FindTaskInfo = {
+    id: string;
+    label: string;
+    description: string;
+    createdAt: Date;
+    once: boolean;
+    claimableAt: Date;
+    canClaim: boolean;
+};
+
+export type TaskPeriod = {
+    unit: 'Once' | 'day' | 'week' | 'month' | 'year';
+    value: number;
+};
+
+export type CreateTaskRequest = {
+    label: string;
+    code: string;
+    description: string;
+    condition: {
+        [key: string]: unknown;
+    };
+    period: TaskPeriod;
+    rewardCodes: Array<string>;
+};
+
+export type CreateTaskResponse = {
+    taskId: string;
+};
+
+export type RemoveTaskResponse = {
+    id: string;
+};
+
 export type AppControllerGetAssetData = {
     body?: never;
     path: {
@@ -1163,3 +1225,88 @@ export type WalletControllerListTranscationData = {
 export type WalletControllerListTranscationResponses = {
     200: unknown;
 };
+
+export type TaskControllerGetRewardsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/task/reward';
+};
+
+export type TaskControllerGetRewardsResponses = {
+    200: Array<RewardSummary>;
+};
+
+export type TaskControllerGetRewardsResponse = TaskControllerGetRewardsResponses[keyof TaskControllerGetRewardsResponses];
+
+export type TaskControllerGetFactsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/task/facts';
+};
+
+export type TaskControllerGetFactsResponses = {
+    200: Array<FactInfo>;
+};
+
+export type TaskControllerGetFactsResponse = TaskControllerGetFactsResponses[keyof TaskControllerGetFactsResponses];
+
+export type TaskControllerListTasksData = {
+    body?: never;
+    path?: never;
+    query: {
+        page: number;
+        size: number;
+    };
+    url: '/task';
+};
+
+export type TaskControllerListTasksResponses = {
+    200: ListTaskResponse;
+};
+
+export type TaskControllerListTasksResponse = TaskControllerListTasksResponses[keyof TaskControllerListTasksResponses];
+
+export type TaskControllerCreateTaskData = {
+    body: CreateTaskRequest;
+    path?: never;
+    query?: never;
+    url: '/task';
+};
+
+export type TaskControllerCreateTaskResponses = {
+    201: CreateTaskResponse;
+};
+
+export type TaskControllerCreateTaskResponse = TaskControllerCreateTaskResponses[keyof TaskControllerCreateTaskResponses];
+
+export type TaskControllerRemoveTaskData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/task/{id}';
+};
+
+export type TaskControllerRemoveTaskResponses = {
+    201: RemoveTaskResponse;
+};
+
+export type TaskControllerRemoveTaskResponse = TaskControllerRemoveTaskResponses[keyof TaskControllerRemoveTaskResponses];
+
+export type TaskControllerFindTaskData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/task/{id}';
+};
+
+export type TaskControllerFindTaskResponses = {
+    200: FindTaskInfo;
+};
+
+export type TaskControllerFindTaskResponse = TaskControllerFindTaskResponses[keyof TaskControllerFindTaskResponses];

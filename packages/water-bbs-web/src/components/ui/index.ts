@@ -18,6 +18,10 @@ export * from './paginaton';
 export * from './avatar';
 export * from './layout';
 export * from './tag';
+export * from './select';
+export * from './numeric';
+export * from './drop-menu';
+
 
 export { default as UiCheckbox } from './checkbox/index.vue';
 export { default as TreeSelect } from './tree-select/index.vue';

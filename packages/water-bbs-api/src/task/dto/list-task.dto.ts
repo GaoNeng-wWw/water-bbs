@@ -5,10 +5,10 @@ import { IsNumber } from 'class-validator';
 export class ListTaskRequest {
   @IsNumber({ allowNaN: false, allowInfinity: false })
   @ApiProperty()
-  public page: number = 1;
+  page: number = 1;
   @IsNumber({ allowNaN: false, allowInfinity: false })
   @ApiProperty()
-  public size: number;
+  size: number;
 }
 
 export class ListTaskItem {
@@ -28,7 +28,7 @@ export class ListTaskItem {
 }
 
 export class ListTaskResponse {
-  @ApiProperty()
+  @ApiProperty({ type: [ListTaskItem] })
   @Expose()
   items: ListTaskItem[];
   @ApiProperty()

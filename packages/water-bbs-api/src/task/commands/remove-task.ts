@@ -4,6 +4,7 @@ import { RemoveTaskResponse } from '../dto/remove-task.dto';
 import { TaskRegistry } from '@app/gamification';
 import { EntityRepository } from '@mikro-orm/mysql';
 import { UserTask } from 'water-bbs-migration';
+import { InjectRepository } from '@mikro-orm/nestjs';
 
 export class RemoveTaskCommand extends Command<
   Result<RemoveTaskResponse, DomainError>
@@ -17,6 +18,7 @@ export class RemoveTaskCommand extends Command<
 export class RemoveTask implements ICommandHandler<RemoveTaskCommand> {
   constructor(
     private readonly taskRegistry: TaskRegistry,
+    @InjectRepository(UserTask)
     private readonly userTaskRepo: EntityRepository<UserTask>,
   ) {}
   async execute(

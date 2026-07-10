@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import { UiPopover, UiPopoverContent, UiPopoverTrigger } from '../popover';
+import type { PopoverContentProps, PopoverContentEmits } from 'reka-ui';
+import { useForwardPropsEmits } from 'reka-ui';
+
+const { align = 'start', ...props } = defineProps<PopoverContentProps>();
+const emits = defineEmits<PopoverContentEmits>();
+const forwarded = useForwardPropsEmits(props, emits);
 </script>
 
 <template>
@@ -8,8 +14,7 @@ import { UiPopover, UiPopoverContent, UiPopoverTrigger } from '../popover';
       <slot name="trigger" />
     </ui-popover-trigger>
     <ui-popover-content
-      align="start"
-      align-flip
+      v-bind="{ ...forwarded }"
       class="fixed top-0 w-sm h-fit rounded border border-warm-200 bg-warm-100 text-warm-foreground py2 z-999999"
     >
       <slot name="content" />

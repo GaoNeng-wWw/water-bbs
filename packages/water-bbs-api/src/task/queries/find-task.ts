@@ -5,6 +5,7 @@ import { TaskRegistry } from '@app/gamification';
 import { PeriodUnit, UserTask } from 'water-bbs-migration';
 import { EntityRepository } from '@mikro-orm/mysql';
 import { nextClaimableAt } from '@app/gamification';
+import { InjectRepository } from '@mikro-orm/nestjs';
 
 export class FindTaskQuery extends Query<Result<FindTaskInfo, DomainError>> {
   constructor(
@@ -19,6 +20,7 @@ export class FindTaskQuery extends Query<Result<FindTaskInfo, DomainError>> {
 export class FindTask implements IQueryHandler<FindTaskQuery> {
   constructor(
     private readonly taskRegistry: TaskRegistry,
+    @InjectRepository(UserTask)
     private readonly userTaskRepository: EntityRepository<UserTask>,
   ) {}
   async execute({

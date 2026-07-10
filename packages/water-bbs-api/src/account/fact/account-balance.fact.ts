@@ -3,8 +3,9 @@ import { QueryBus } from '@nestjs/cqrs';
 import { Almanac } from 'json-rules-engine';
 import { isErr } from 'water-bbs-shared';
 import { GetBalanceQuery } from '../../wallet/query';
+import z from 'zod';
 
-@FactHandler('account-balance')
+@FactHandler('account-balance', z.number())
 export class AccountBalanceFact implements IFactHandler<
   Record<string, any>,
   number

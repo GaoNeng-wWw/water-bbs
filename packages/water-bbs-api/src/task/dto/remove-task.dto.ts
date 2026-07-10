@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { IsString } from 'class-validator';
 
 export class RemoveTaskRequest {
@@ -9,7 +10,7 @@ export class RemoveTaskRequest {
 
 export class RemoveTaskResponse {
   @ApiProperty()
-  @IsString()
+  @Expose()
   id: string;
   constructor(props: RemoveTaskResponse){
     Object.assign(this, props);

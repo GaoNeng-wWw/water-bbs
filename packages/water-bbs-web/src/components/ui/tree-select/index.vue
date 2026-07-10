@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import { BaseSelect } from '../base-select';
+import { BaseDrop } from '../base-drop';
 import { UiButton } from '../button';
 import type { FlattenNode, NestedNode } from '../tree/tree.prop';
 import Tree from '../tree/tree.vue';
@@ -21,7 +21,7 @@ watch(activeNodes, () => {
 </script>
 
 <template>
-  <base-select>
+  <base-drop>
     <template #trigger>
       <ui-button>
         {{ nodeLabeles[0] ? nodeLabeles[0] : 'Not Select' }}
@@ -30,5 +30,5 @@ watch(activeNodes, () => {
     <template #content>
       <tree v-model="activeNodes" :nodes="data" @expand="(node) => emits('expand', node)" />
     </template>
-  </base-select>
+  </base-drop>
 </template>

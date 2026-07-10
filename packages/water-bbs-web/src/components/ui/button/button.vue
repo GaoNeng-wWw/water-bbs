@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants';
 import { computed, ref } from 'vue';
 
 const { loading = false, ...props } = defineProps<{
-  color?: 'info' | 'primary' | 'success' | 'warning';
+  color?: 'info' | 'primary' | 'success' | 'warning' | 'danger';
   loading?: boolean;
   disabled?: boolean;
   htmlType?: 'button' | 'submit' | 'reset';
@@ -58,6 +58,7 @@ const style = tv({
       success: '',
       info: '',
       warning: '',
+      danger: '',
     },
   },
   compoundVariants: [
@@ -78,6 +79,10 @@ const style = tv({
       className: 'bg-warm-500/0 text-warm-500 hover:bg-warm-500/20',
     },
     {
+      color: 'danger', shape: 'ghost',
+      className: 'bg-danger-500/0 text-danger-500 hover:bg-danger-500/20',
+    },
+    {
       color: 'warning', shape: 'solid',
       className: 'bg-warning-500 text-warning-foreground hover:bg-warning-400 border-none',
     },
@@ -92,6 +97,10 @@ const style = tv({
     {
       color: 'info', shape: 'solid',
       className: 'bg-warm-500 text-warm-foreground hover:bg-warm-400 border-none',
+    },
+    {
+      color: 'danger', shape: 'solid',
+      className: 'bg-danger-500 text-warm-foreground hover:bg-danger-400 border-none',
     },
     {
       color: 'info', shape: 'flat',
@@ -109,6 +118,10 @@ const style = tv({
       color: 'warning', shape: 'flat',
       className: 'text-warning-foreground hover:bg-warning-100 border-none',
     },
+    {
+      color: 'danger', shape: 'flat',
+      className: 'text-warning-foreground hover:bg-danger-100 border-none',
+    }
   ],
   defaultVariants: {
     size: 'md',

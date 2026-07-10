@@ -1,2 +1,2 @@
-export * from './fact.factory';
+export * from './fact.registry';
 export * from './fact.type';

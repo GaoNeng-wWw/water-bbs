@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
@@ -54,4 +55,10 @@ export class CreateTaskRequest {
   @IsNotEmptyObject()
   @IsObject()
   params: Record<string, any>;
+}
+
+export class CreateTaskResponse {
+  @ApiProperty()
+  @Expose()
+  taskId: string;
 }

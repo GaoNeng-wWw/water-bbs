@@ -7,7 +7,7 @@ import { resolve } from 'path';
 export const plugins = [
   UnoCSS(),
   VueRouter({
-    dts: '../types/typed-router.d.ts',
+    dts: './types/typed-router.d.ts',
   }),
   vue(),
 ];

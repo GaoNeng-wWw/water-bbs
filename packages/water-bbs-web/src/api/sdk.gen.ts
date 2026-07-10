@@ -2,8 +2,8 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import { proposalControllerListProposalCommentsResponseTransformer } from './transformers.gen';
-import type { AccountControllerCheckInData, AccountControllerCheckInResponses, AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetCheckInStatusData, AccountControllerGetCheckInStatusResponses, AccountControllerGetPermissionData, AccountControllerGetPermissionResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, ActionControllerGetActionInfoData, ActionControllerGetActionInfoResponses, ActionControllerGetActionTotalData, ActionControllerGetActionTotalResponses, ActionControllerListActionData, ActionControllerListActionResponses, ActionControllerUpdateActiveData, ActionControllerUpdateActiveResponses, AppControllerGetAssetData, AppControllerGetAssetResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PermissionControllerCreatePermissionData, PermissionControllerCreatePermissionResponses, PermissionControllerFindPermissionData, PermissionControllerFindPermissionResponses, PermissionControllerListPermissionData, PermissionControllerListPermissionResponses, PermissionControllerRemovePermissionData, PermissionControllerRemovePermissionResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, PostControllerListResourcesData, PostControllerListResourcesResponses, PostControllerUploadImageData, PostControllerUploadImageResponses, PostControllerUploadResourceData, PostControllerUploadResourceResponses, ProposalControllerCreateProposalCommentData, ProposalControllerCreateProposalCommentResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerGetProposalVotesData, ProposalControllerGetProposalVotesResponses, ProposalControllerListProposalCommentsData, ProposalControllerListProposalCommentsResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses, ProposalControllerVoteProposalData, ProposalControllerVoteProposalResponses, RoleControllerCreateRoleData, RoleControllerCreateRoleResponses, RoleControllerFindRoleData, RoleControllerFindRoleResponses, RoleControllerListRoleData, RoleControllerListRoleResponses, RoleControllerRemoveRoleData, RoleControllerRemoveRoleResponses, RoleControllerUpdateRoleData, RoleControllerUpdateRoleResponses, WalletControllerGetBalanceData, WalletControllerGetBalanceResponses, WalletControllerListTranscationData, WalletControllerListTranscationResponses } from './types.gen';
+import { proposalControllerListProposalCommentsResponseTransformer, taskControllerFindTaskResponseTransformer, taskControllerListTasksResponseTransformer } from './transformers.gen';
+import type { AccountControllerCheckInData, AccountControllerCheckInResponses, AccountControllerDeleteData, AccountControllerDeleteResponses, AccountControllerGetAccountProfileData, AccountControllerGetAccountProfileResponses, AccountControllerGetCheckInStatusData, AccountControllerGetCheckInStatusResponses, AccountControllerGetPermissionData, AccountControllerGetPermissionResponses, AccountControllerGetProfileData, AccountControllerGetProfileResponses, AccountControllerRegisterData, AccountControllerRegisterResponses, AccountControllerResetPasswordData, AccountControllerResetPasswordResponses, AccountControllerUpdatePasswordData, AccountControllerUpdatePasswordResponses, AccountControllerUpdateProfileData, AccountControllerUpdateProfileResponses, AccountControllerUploadAvatarData, AccountControllerUploadAvatarResponses, ActionControllerGetActionInfoData, ActionControllerGetActionInfoResponses, ActionControllerGetActionTotalData, ActionControllerGetActionTotalResponses, ActionControllerListActionData, ActionControllerListActionResponses, ActionControllerUpdateActiveData, ActionControllerUpdateActiveResponses, AppControllerGetAssetData, AppControllerGetAssetResponses, AuthControllerLoginData, AuthControllerLoginResponses, AuthControllerLogoutData, AuthControllerLogoutResponses, AuthControllerRefreshTokenData, AuthControllerRefreshTokenResponses, CategoryControllerCreateCategoryData, CategoryControllerCreateCategoryResponses, CategoryControllerDeleteCategoryData, CategoryControllerDeleteCategoryResponses, CategoryControllerListCategoriesData, CategoryControllerListCategoriesResponses, CategoryControllerUpdateCategoryData, CategoryControllerUpdateCategoryResponses, PermissionControllerCreatePermissionData, PermissionControllerCreatePermissionResponses, PermissionControllerFindPermissionData, PermissionControllerFindPermissionResponses, PermissionControllerListPermissionData, PermissionControllerListPermissionResponses, PermissionControllerRemovePermissionData, PermissionControllerRemovePermissionResponses, PostControllerCreatePostData, PostControllerCreatePostResponses, PostControllerCreateThreadData, PostControllerCreateThreadResponses, PostControllerGetPostData, PostControllerGetPostResponses, PostControllerGetPostsData, PostControllerGetPostsResponses, PostControllerGetThreadData, PostControllerGetThreadResponses, PostControllerHidePostData, PostControllerHidePostResponses, PostControllerListResourcesData, PostControllerListResourcesResponses, PostControllerUploadImageData, PostControllerUploadImageResponses, PostControllerUploadResourceData, PostControllerUploadResourceResponses, ProposalControllerCreateProposalCommentData, ProposalControllerCreateProposalCommentResponses, ProposalControllerCreateProposalData, ProposalControllerCreateProposalResponses, ProposalControllerGetProposalData, ProposalControllerGetProposalResponses, ProposalControllerGetProposalVotesData, ProposalControllerGetProposalVotesResponses, ProposalControllerListProposalCommentsData, ProposalControllerListProposalCommentsResponses, ProposalControllerListProposalData, ProposalControllerListProposalResponses, ProposalControllerVoteProposalData, ProposalControllerVoteProposalResponses, RoleControllerCreateRoleData, RoleControllerCreateRoleResponses, RoleControllerFindRoleData, RoleControllerFindRoleResponses, RoleControllerListRoleData, RoleControllerListRoleResponses, RoleControllerRemoveRoleData, RoleControllerRemoveRoleResponses, RoleControllerUpdateRoleData, RoleControllerUpdateRoleResponses, TaskControllerCreateTaskData, TaskControllerCreateTaskResponses, TaskControllerFindTaskData, TaskControllerFindTaskResponses, TaskControllerGetFactsData, TaskControllerGetFactsResponses, TaskControllerGetRewardsData, TaskControllerGetRewardsResponses, TaskControllerListTasksData, TaskControllerListTasksResponses, TaskControllerRemoveTaskData, TaskControllerRemoveTaskResponses, WalletControllerGetBalanceData, WalletControllerGetBalanceResponses, WalletControllerListTranscationData, WalletControllerListTranscationResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -407,3 +407,45 @@ export const walletControllerGetBalance = <ThrowOnError extends boolean = false>
 });
 
 export const walletControllerListTranscation = <ThrowOnError extends boolean = false>(options: Options<WalletControllerListTranscationData, ThrowOnError>) => (options.client ?? client).get<WalletControllerListTranscationResponses, unknown, ThrowOnError>({ url: '/wallet/transcation', ...options });
+
+export const taskControllerGetRewards = <ThrowOnError extends boolean = false>(options?: Options<TaskControllerGetRewardsData, ThrowOnError>) => (options?.client ?? client).get<TaskControllerGetRewardsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/reward',
+    ...options
+});
+
+export const taskControllerGetFacts = <ThrowOnError extends boolean = false>(options?: Options<TaskControllerGetFactsData, ThrowOnError>) => (options?.client ?? client).get<TaskControllerGetFactsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/facts',
+    ...options
+});
+
+export const taskControllerListTasks = <ThrowOnError extends boolean = false>(options: Options<TaskControllerListTasksData, ThrowOnError>) => (options.client ?? client).get<TaskControllerListTasksResponses, unknown, ThrowOnError>({
+    responseTransformer: taskControllerListTasksResponseTransformer,
+    responseType: 'json',
+    url: '/task',
+    ...options
+});
+
+export const taskControllerCreateTask = <ThrowOnError extends boolean = false>(options: Options<TaskControllerCreateTaskData, ThrowOnError>) => (options.client ?? client).post<TaskControllerCreateTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+export const taskControllerRemoveTask = <ThrowOnError extends boolean = false>(options: Options<TaskControllerRemoveTaskData, ThrowOnError>) => (options.client ?? client).delete<TaskControllerRemoveTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}',
+    ...options
+});
+
+export const taskControllerFindTask = <ThrowOnError extends boolean = false>(options: Options<TaskControllerFindTaskData, ThrowOnError>) => (options.client ?? client).get<TaskControllerFindTaskResponses, unknown, ThrowOnError>({
+    responseTransformer: taskControllerFindTaskResponseTransformer,
+    responseType: 'json',
+    url: '/task/{id}',
+    ...options
+});

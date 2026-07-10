@@ -8,10 +8,18 @@ import { DiscoveryService, ModuleRef, Reflector } from '@nestjs/core';
 import { IFactHandler, FactKey, FactMetadata } from './fact.type';
 import { isNullish } from 'radashi';
 import { Engine, Fact } from 'json-rules-engine';
+import z from 'zod';
+
+export type IFact = {
+  handler: IFactHandler;
+  name: string;
+  returnType: Record<string, any>;
+};
 
 @Injectable()
-export class FactFactory implements OnApplicationBootstrap {
-  private readonly logger: Logger = new Logger(FactFactory.name);
+export class FactRegistry implements OnApplicationBootstrap {
+  private handlers: IFact[];
+  private readonly logger: Logger = new Logger(FactRegistry.name);
   constructor(
     private readonly reflector: Reflector,
     private readonly moduleRef: ModuleRef,
@@ -33,6 +41,7 @@ export class FactFactory implements OnApplicationBootstrap {
       return {
         handler: this.moduleRef.get<IFactHandler>(mt, { strict: false }),
         name: factMetadata.name,
+        returnType: z.toJSONSchema(factMetadata.returnType)
       };
     });
     handlers.forEach((handler) => {
@@ -43,5 +52,9 @@ export class FactFactory implements OnApplicationBootstrap {
       );
       this.logger.log(`Resgiter fact ${handler.name} successed!`);
     });
+    this.handlers = handlers;
+  }
+  getFacts() {
+    return this.handlers;
   }
 }

@@ -55,7 +55,7 @@ const modelValue = defineModel<boolean>({ required: false, default: false });
 </script>
 
 <template>
-  <label v-if="label" :class="clazz.label()">
+  <label :class="clazz.label()">
     <div :class="[clazz.container(), clazz.base()]">
       <Checkbox.Root v-model="modelValue" :class="[clazz.base(), clazz.root()]">
         <Checkbox.Indicator :class="[clazz.indicator()]">

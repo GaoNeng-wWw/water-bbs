@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { FindTaskQuery, ListTaskQuery } from './queries';
+import { FindTaskQuery, GetFact, GetFactsQuery, ListTaskQuery } from './queries';
 import {
   ClaimTaskCommand,
   CreateTaskCommand,
@@ -8,6 +8,7 @@ import {
   RemoveTaskCommand,
 } from './commands';
 import { CreateTaskRequest } from './dto';
+import { GetRewardsQuery } from './queries/get-rewards';
 
 @Injectable()
 export class TaskService {
@@ -32,5 +33,13 @@ export class TaskService {
   }
   async findTask(id: string, userId?: string) {
     return this.qb.execute(new FindTaskQuery(id, userId));
+  }
+
+  getRewards() {
+    return this.qb.execute(new GetRewardsQuery());
+  }
+
+  getFacts() {
+    return this.qb.execute(new GetFactsQuery());
   }
 }

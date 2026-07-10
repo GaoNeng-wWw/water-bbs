@@ -1090,3 +1090,207 @@ export const GetBalanceResponseSchema = {
         'balance'
     ]
 } as const;
+
+export const RewardSummarySchema = {
+    type: 'object',
+    properties: {
+        code: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        description: {
+            type: 'string'
+        },
+        schema: {
+            type: 'object'
+        }
+    },
+    required: [
+        'code',
+        'label',
+        'description',
+        'schema'
+    ]
+} as const;
+
+export const FactInfoSchema = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string'
+        },
+        returnType: {
+            type: 'object'
+        }
+    },
+    required: [
+        'name',
+        'returnType'
+    ]
+} as const;
+
+export const ListTaskItemSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        description: {
+            type: 'string'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string'
+        }
+    },
+    required: [
+        'id',
+        'label',
+        'description',
+        'createdAt'
+    ]
+} as const;
+
+export const ListTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        items: {
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ListTaskItem'
+            }
+        },
+        total: {
+            type: 'number'
+        }
+    },
+    required: [
+        'items',
+        'total'
+    ]
+} as const;
+
+export const FindTaskInfoSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        description: {
+            type: 'string'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string'
+        },
+        once: {
+            type: 'boolean'
+        },
+        claimableAt: {
+            format: 'date-time',
+            type: 'string'
+        },
+        canClaim: {
+            type: 'boolean'
+        }
+    },
+    required: [
+        'id',
+        'label',
+        'description',
+        'createdAt',
+        'once',
+        'claimableAt',
+        'canClaim'
+    ]
+} as const;
+
+export const TaskPeriodSchema = {
+    type: 'object',
+    properties: {
+        unit: {
+            type: 'string',
+            enum: [
+                'Once',
+                'day',
+                'week',
+                'month',
+                'year'
+            ]
+        },
+        value: {
+            type: 'number'
+        }
+    },
+    required: [
+        'unit',
+        'value'
+    ]
+} as const;
+
+export const CreateTaskRequestSchema = {
+    type: 'object',
+    properties: {
+        label: {
+            type: 'string'
+        },
+        code: {
+            type: 'string'
+        },
+        description: {
+            type: 'string'
+        },
+        condition: {
+            type: 'object'
+        },
+        period: {
+            $ref: '#/components/schemas/TaskPeriod'
+        },
+        rewardCodes: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
+    },
+    required: [
+        'label',
+        'code',
+        'description',
+        'condition',
+        'period',
+        'rewardCodes'
+    ]
+} as const;
+
+export const CreateTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        taskId: {
+            type: 'string'
+        }
+    },
+    required: [
+        'taskId'
+    ]
+} as const;
+
+export const RemoveTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;

@@ -1,7 +1,7 @@
 import { Embeddable, Embedded, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/decorators/legacy";
 import { v7 } from "uuid";
 import { BaseMetaEntity } from "./meta";
-import { NonFunctionKeys } from "water-bbs-shared";
+import { type NonFunctionKeys } from "water-bbs-shared";
 
 @Entity()
 export class Reward extends BaseMetaEntity {
