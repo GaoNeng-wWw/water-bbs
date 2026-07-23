@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { tv } from 'tailwind-variants';
 
 const {
@@ -19,7 +19,10 @@ const emits = defineEmits<{
   blur: [FocusEvent];
 }>();
 const modelValue = defineModel<number>();
-
+const value = ref(modelValue.value);
+watch(value, ()=>{
+  modelValue.value = Number(value.value);
+})
 const style = tv({
   base: [
     'w-full flex items-center gap-4 text-warm-foreground rounded-md border border-solid transition duration-fast ease-in-out',
@@ -67,7 +70,7 @@ const clazz = computed(() => style({ size, color, variant }));
 <template>
   <div :class="clazz">
     <input
-      v-model="modelValue"
+      v-model="value"
       type="input"
       :data-fit="fit"
       class="outline-none w-full cursor-pointer data-[fit=true]:field-sizing-content"

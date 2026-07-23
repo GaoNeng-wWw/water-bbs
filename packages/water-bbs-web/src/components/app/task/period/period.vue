@@ -19,8 +19,8 @@ const modelValue = defineModel<PeriodModelValue>({
 
 <template>
   <div class="w-full flex gap-4">
-    <div class="shrink-0 w-fit">
-      <ui-numeric v-if="modelValue.unit !== PeriodUnit.Once" v-model="modelValue.value" fit />
+    <div v-if="modelValue.unit !== PeriodUnit.Once" class="shrink-0 w-fit">
+      <ui-numeric v-model="modelValue.value" fit />
     </div>
     <ui-select v-model="modelValue.unit" :options="unit" class="w-fit" fit />
   </div>

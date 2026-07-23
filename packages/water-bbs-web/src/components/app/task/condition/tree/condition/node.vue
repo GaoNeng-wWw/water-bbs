@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import { UiCollapse, UiCollapseItem, UiSelect } from '@/components/ui';
-import { type ConditionKind } from '@/composables';
+import type { ConditionKind } from '@/composables';
 import headerMeta from './header-meta.vue';
-import { ref, watch } from 'vue';
-const { id, label, updateCondition } = defineProps<{
+import { ref, watch, type Ref } from 'vue';
+const { id, label, updateCondition, facts = [] } = defineProps<{
   id: string;
   label: string;
   updateCondition: (id: string, newCondition: ConditionKind) => void;
+  facts: string[];
 }>();
+
+const emits = defineEmits<{ select: ['condition' | 'fact', string, string]; remove: [string] }>();
 
 const conditions = ['any', 'all', 'not']
   .map((condition) => {
@@ -18,6 +21,21 @@ const conditions = ['any', 'all', 'not']
   });
 
 const currentCondition = ref<ConditionKind>(label as ConditionKind);
+const factOptions: Ref<{ label: string; value: string }[]> = ref([]);
+
+factOptions.value = facts.map((data) => {
+  return {
+    label: data,
+    value: data,
+  };
+});
+
+const onSelect = (value: string) => {
+  emits('select', conditions.find(cond => cond.value === value) ? 'condition' : 'fact', value, id);
+};
+const onRemove = (id: string) => {
+  emits('remove', id);
+};
 
 watch(currentCondition, () => {
   updateCondition(id, currentCondition.value);
@@ -39,7 +57,25 @@ watch(currentCondition, () => {
                 <ui-select v-model="currentCondition" :options="conditions" />
               </div>
             </div>
-            <header-meta :id="id" />
+            <header-meta
+              :id="id"
+              :options="[
+                {
+                  label: 'condition',
+                  children: [
+                    { label: 'any', value: 'any' },
+                    { label: 'all', value: 'all' },
+                    { label: 'not', value: 'not' },
+                  ],
+                },
+                {
+                  label: 'fact',
+                  children: factOptions,
+                },
+              ]"
+              @select="onSelect"
+              @remove="onRemove"
+            />
           </div>
         </template>
         <div class="pr-4 flex text-warm-foreground mt-2">

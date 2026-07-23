@@ -38,7 +38,7 @@ const components = {
 };
 
 const value = ref();
-const currentOperator = ref();
+const currentOperator = ref('equal');
 
 watch(value, () => {
   setData(id, value.value);

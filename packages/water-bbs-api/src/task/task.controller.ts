@@ -38,7 +38,7 @@ export class TaskController {
     type: [FactInfo],
   })
   async getFacts() {
-    return this.taskService.getRewards();
+    return this.taskService.getFacts();
   }
 
   @Get('')

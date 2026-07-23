@@ -16,6 +16,6 @@ import { FactRegistry } from './fact';
     TaskModule,
   ],
   providers: [RewardRegistry, TaskRegistry, TaskService, FactRegistry],
-  exports: [RewardRegistry, TaskRegistry, TaskService],
+  exports: [RewardRegistry, TaskRegistry, TaskService, FactRegistry],
 })
 export class GamificationModule {}

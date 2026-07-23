@@ -20,9 +20,9 @@ export * from './layout';
 export * from './tag';
 export * from './select';
 export * from './numeric';
-export * from './drop-menu';
+export * from './list-box';
 
-
+export { BaseDrop as UiBaseDrop } from './base-drop';
 export { default as UiCheckbox } from './checkbox/index.vue';
 export { default as TreeSelect } from './tree-select/index.vue';
 export { default as UiTreeSelect } from './tree-select/index.vue';

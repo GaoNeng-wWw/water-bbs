@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import { Layout, UiButton } from '@/components/ui';
+import { Layout, UiButton, UiInput } from '@/components/ui';
 import { Condition, Period, PeriodUnit } from '@/components/app/task';
 import { reactive } from 'vue';
+import { HomeHeader } from '@/components/app/shell';
 
 const formData = reactive({
+  taskName: '',
   condition: {},
   period: {
     unit: PeriodUnit.Once,
@@ -25,18 +27,23 @@ const formData = reactive({
           <div class="i-material-symbols:arrow-back-ios-new-rounded size-4" />
         </ui-button>
       </div>
-      <div class="w-full flex flex-col gap-4">
-        <div class="px-1">
+      <div class="w-full flex flex-col gap-4 px-4">
+        <div class="w-md">
+          <input v-model="formData.taskName" type="text" placeholder="Untitled Task" class="w-full text-3xl border-none outline-none text-warm-foreground">
+        </div>
+        <div>
           <h2 class="text-warm-foreground text-2xl mb-2">
             Condition
           </h2>
           <condition />
         </div>
-        <div class="px-1">
+        <div>
           <h2 class="text-warm-foreground text-2xl mb-2">
             Period
           </h2>
-          <period v-model="formData.period" />
+          <div class="px-10">
+            <period v-model="formData.period" />
+          </div>
         </div>
       </div>
     </div>

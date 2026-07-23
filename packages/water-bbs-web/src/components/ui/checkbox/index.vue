@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'motion-v';
 const { size = 'md', colors = 'default', label } = defineProps<{
   size?: 'sm' | 'md' | 'lg' | undefined;
   colors?: 'default' | undefined;
-  label: string;
+  label?: string;
 }>();
 
 const checkbox = tv({
