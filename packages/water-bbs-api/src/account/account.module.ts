@@ -36,12 +36,15 @@ import { FindAccountQueryHandler } from './application/queries/find-account.quer
 import { GetProfileQueryHandler } from './application/queries/get-profile.query';
 import { AccountAliveFact, AccountBalanceFact } from './fact';
 import { CheckInModule } from '@app/gamification';
+import { RewardBalance } from './rewards';
+import { BankModule } from '@app/bank';
 
 @Module({
   imports: [
     CheckInModule,
     StorageModule,
     MikroOrmModule.forFeature([Account, Profile]),
+    BankModule,
   ],
   controllers: [AccountController],
   providers: [
@@ -91,6 +94,7 @@ import { CheckInModule } from '@app/gamification';
     UnbanAccountAction,
     AccountAliveFact,
     AccountBalanceFact,
+    RewardBalance,
   ],
 })
 export class AccountModule {}

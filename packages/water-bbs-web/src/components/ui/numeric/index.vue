@@ -71,7 +71,7 @@ const clazz = computed(() => style({ size, color, variant }));
   <div :class="clazz">
     <input
       v-model="value"
-      type="input"
+      type="number"
       :data-fit="fit"
       class="outline-none w-full cursor-pointer data-[fit=true]:field-sizing-content"
       @focus="(ev) => emits('focus', ev)"

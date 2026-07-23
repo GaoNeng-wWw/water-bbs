@@ -1,7 +1,11 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryService, ModuleRef, Reflector } from '@nestjs/core';
 import { isNullish } from 'radashi';
-import { IRewardHandler, RewardHandlerKey } from './reward.types';
+import {
+  IRewardHandler,
+  RewardHandlerKey,
+  RewardOptions,
+} from './reward.types';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Reward } from 'water-bbs-migration';
 import {
@@ -14,11 +18,19 @@ import {
   some,
 } from 'water-bbs-shared';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { ZodAny } from 'zod';
+import { ZodType } from 'zod';
+
+export type Handler = {
+  code: string;
+  description?: string | undefined;
+  label: string;
+  schema: ZodType;
+  handler: IRewardHandler<ZodType>;
+};
 
 @Injectable()
 export class RewardRegistry implements OnApplicationBootstrap {
-  private handlers: IRewardHandler<ZodAny>[];
+  private handlers: Handler[];
   constructor(
     private readonly reflector: Reflector,
     private readonly moduleRef: ModuleRef,
@@ -60,7 +72,7 @@ export class RewardRegistry implements OnApplicationBootstrap {
         }),
       );
     }
-    return handler.value.handle({ userId }, externalParam);
+    return handler.value.handler.handle({ userId }, externalParam);
   }
   async onApplicationBootstrap() {
     const providers = this.discoveryService.getProviders();
@@ -70,24 +82,31 @@ export class RewardRegistry implements OnApplicationBootstrap {
       )
       .map((provider) => provider.metatype)
       .filter((mt) => !isNullish(mt));
-    const handlers = metaTypes.map((mt) =>
-      this.moduleRef.get<IRewardHandler<ZodAny>>(mt, { strict: false }),
-    );
-    await this.em.transactional(async (em) => {
-      for (const handler of handlers) {
-        const reward = await this.reward.findOne({ code: handler.code });
-        if (reward) {
-          continue;
-        }
-        const r = Reward.create({
-          code: handler.code,
-          label: handler.label,
-          schema: handler.schema,
-          description: handler.description,
-        });
-        await this.reward.upsert(r, { em });
-      }
+    const handlers = metaTypes.map((mt) => {
+      const rewardMetadata = this.reflector.get<RewardOptions<ZodType>>(
+        RewardHandlerKey,
+        mt,
+      );
+      return {
+        handler: this.moduleRef.get<IRewardHandler<ZodType>>(mt, {
+          strict: false,
+        }),
+        ...rewardMetadata,
+      };
     });
     this.handlers = handlers;
+    await this.em.transactional(async (em) => {
+      const rewards = this.handlers.map((h) => {
+        return em.create(Reward, {
+          code: h.code,
+          label: h.label,
+          description: h.description ?? '',
+          createdAt: new Date(),
+          schema: h.schema,
+        });
+      });
+      em.persist(rewards);
+      await em.flush();
+    });
   }
 }

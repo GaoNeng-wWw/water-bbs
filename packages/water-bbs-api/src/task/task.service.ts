@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { FindTaskQuery, GetFact, GetFactsQuery, ListTaskQuery } from './queries';
+import { FindTaskQuery, GetFactsQuery, ListTaskQuery } from './queries';
 import {
   ClaimTaskCommand,
   CreateTaskCommand,

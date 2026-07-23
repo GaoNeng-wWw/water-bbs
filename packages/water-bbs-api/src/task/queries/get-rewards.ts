@@ -24,7 +24,7 @@ export class GetRewards implements IQueryHandler<GetRewardsQuery> {
     const summaries = handlers.map<RewardSummary>((handler) => {
       return {
         code: handler.code,
-        description: handler.description,
+        description: handler.description ?? '',
         label: handler.label,
         schema: z.toJSONSchema(handler.schema),
       };

@@ -1,0 +1,1 @@
+export { default as RewardList } from './form.vue';

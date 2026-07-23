@@ -19,6 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "vitest run --config ./vitest.e2e.config.ts",
     "mikro-orm": "mikro-orm",
+    "schema:update": "mikro-orm schema:update",
     "clean": "rimraf node_modules && rimraf dist"
   },
   "dependencies": {

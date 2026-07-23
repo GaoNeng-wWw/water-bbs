@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { UiSelect, UiInput, UiNumeric, UiCheckbox } from '@/components/ui';
+import { UiSelect, UiInput, UiNumeric, UiCheckbox, UiButton } from '@/components/ui';
 import { ref, watch } from 'vue';
 import type { ZodStandardJSONSchemaPayload } from 'zod/v4/core';
 
@@ -11,6 +11,7 @@ const { id, label, returnType, setData, setOperator } = defineProps<{
   setOperator: (id: string, operator: string) => void;
 }>();
 
+const emits = defineEmits<{ remove: [string] }>();
 const ComparableData = ['number', 'integer'];
 const EqualityData = ['string', 'number', 'boolean', 'integer'];
 
@@ -40,6 +41,10 @@ const components = {
 const value = ref();
 const currentOperator = ref('equal');
 
+const onClickRemove = () => {
+  emits('remove', id);
+};
+
 watch(value, () => {
   setData(id, value.value);
 });
@@ -56,6 +61,9 @@ watch(currentOperator, () => {
         <ui-select v-model="currentOperator" :options="operator" />
       </div>
       <component :is="components[returnType.type ?? 'string']" v-model="value" />
+      <ui-button icon size="sm" color="danger" @click="onClickRemove">
+        <div class="i-material-symbols:delete-outline size-6" />
+      </ui-button>
     </div>
   </div>
 </template>

@@ -75,7 +75,7 @@ const dfs = (nodeId: Id): VNode | null => {
   if (node.type === 'fact') {
     return h(
       FactNode,
-      { id: node.id, label: node.factName, returnType: returnSchemas.get(node.factName), setData, setOperator },
+      { id: node.id, label: node.factName, returnType: returnSchemas.get(node.factName), setData, setOperator, onRemove },
     );
   }
   const facts = tree.getChildren(node.id)

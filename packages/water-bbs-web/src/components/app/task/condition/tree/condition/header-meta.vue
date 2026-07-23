@@ -58,7 +58,7 @@ const listItem = computed(() => options.map(toVNode));
 
 <template>
   <div class="w-fit space-y-4">
-    <ui-button v-if="id !== ROOT_ID" icon size="sm" color="danger" @click="onClickRemove">
+    <ui-button v-show="id !== ROOT_ID" icon size="sm" color="danger" @click="onClickRemove">
       <div class="i-material-symbols:delete-outline size-6" />
     </ui-button>
     <ui-base-drop :visible="visible">

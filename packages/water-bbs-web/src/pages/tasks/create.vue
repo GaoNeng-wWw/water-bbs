@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { Layout, UiButton, UiInput } from '@/components/ui';
-import { Condition, Period, PeriodUnit } from '@/components/app/task';
+import { Layout, UiButton } from '@/components/ui';
+import { Condition, Period, PeriodUnit, RewardList } from '@/components/app/task';
 import { reactive } from 'vue';
 import { HomeHeader } from '@/components/app/shell';
 
@@ -43,6 +43,14 @@ const formData = reactive({
           </h2>
           <div class="px-10">
             <period v-model="formData.period" />
+          </div>
+        </div>
+        <div>
+          <h2 class="text-warm-foreground text-2xl mb-2">
+            Rewards
+          </h2>
+          <div>
+            <reward-list />
           </div>
         </div>
       </div>
