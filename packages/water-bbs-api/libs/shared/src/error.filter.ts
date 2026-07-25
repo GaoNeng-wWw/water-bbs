@@ -15,7 +15,7 @@ export class ErrorFilter implements ExceptionFilter {
     if (exception instanceof DomainError) {
       const { status, key, details, args } = exception;
       const translatedMessage = this.i18n.translate(key, { args, lang });
-      resp.status(exception.status).json({
+      return resp.status(exception.status).json({
         statusCode: status,
         message: translatedMessage,
         details,

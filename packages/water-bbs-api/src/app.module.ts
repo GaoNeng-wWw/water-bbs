@@ -1,8 +1,8 @@
 import { ConfigureModule, ConfigureService } from '@app/configure';
-import { ErrorFilter } from '@app/shared';
+import { ErrorFilter, ResultInterceptor } from '@app/shared';
 // import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
 // import cfg from '../mikro-orm.config';
@@ -45,6 +45,10 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
     {
       provide: APP_FILTER,
       useClass: ErrorFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResultInterceptor,
     },
   ],
 })
