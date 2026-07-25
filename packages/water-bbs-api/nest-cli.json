@@ -4,6 +4,38 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true
+    "webpack": true,
+    "assets": [
+      {
+        "include": "../libs/translation/**/*",
+        "watchAssets": true,
+        "outDir": "dist/translation"
+      },
+      {
+        "include": "../configs/**/*",
+        "watchAssets": true,
+        "outDir": "dist/configs"
+      }
+    ]
+  },
+  "projects": {
+    "configure": {
+      "type": "library",
+      "root": "libs/configure",
+      "entryFile": "index",
+      "sourceRoot": "libs/configure/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/configure/tsconfig.lib.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    }
   }
 }
