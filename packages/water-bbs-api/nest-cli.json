@@ -4,7 +4,12 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
+    "builder": {
+      "type": "swc",
+      "options": {
+        "swcrcPath": ".swcrc"
+      }
+    },
     "assets": [
       {
         "include": "../libs/translation/**/*",
@@ -15,8 +20,14 @@
         "include": "../configs/**/*",
         "watchAssets": true,
         "outDir": "dist/configs"
+      },
+      {
+        "include": "../templates/**/*",
+        "watchAssets": true,
+        "outDir": "dist/templates"
       }
-    ]
+    ],
+    "webpack": true
   },
   "projects": {
     "configure": {
@@ -28,6 +39,15 @@
         "tsConfigPath": "libs/configure/tsconfig.lib.json"
       }
     },
+    "notification": {
+      "type": "library",
+      "root": "libs/notification",
+      "entryFile": "index",
+      "sourceRoot": "libs/notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/notification/tsconfig.lib.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",
@@ -35,6 +55,15 @@
       "sourceRoot": "libs/shared/src",
       "compilerOptions": {
         "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    },
+    "verification-code": {
+      "type": "library",
+      "root": "libs/verification-code",
+      "entryFile": "index",
+      "sourceRoot": "libs/verification-code/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/verification-code/tsconfig.lib.json"
       }
     }
   }

@@ -21,8 +21,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "strictPropertyInitialization": false,
     "types": [
-      "@types/express"
+      "@types/express",
+      "vitest/globals",
+      "@suites/di.nestjs/types",
+      "@suites/doubles.jest/unit"
     ],
     "paths": {
       "@app/configure": [
@@ -31,11 +35,23 @@
       "@app/configure/*": [
         "libs/configure/src/*"
       ],
+      "@app/notification": [
+        "libs/notification/src"
+      ],
+      "@app/notification/*": [
+        "libs/notification/src/*"
+      ],
       "@app/shared": [
         "libs/shared/src"
       ],
       "@app/shared/*": [
         "libs/shared/src/*"
+      ],
+      "@app/verification-code": [
+        "libs/verification-code/src"
+      ],
+      "@app/verification-code/*": [
+        "libs/verification-code/src/*"
       ]
     }
   }

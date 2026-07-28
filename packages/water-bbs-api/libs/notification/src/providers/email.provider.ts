@@ -30,7 +30,7 @@ export class EmailProvider extends NotificationProvider {
       .sendMail({
         template: template.isOk()
           ? template.value
-          : (context.scene.toString() ?? ''),
+          : (context.scene.toString().toLowerCase() ?? ''),
         context: context.data,
       })
       .then(() => ok(true))

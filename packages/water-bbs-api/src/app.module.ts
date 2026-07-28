@@ -1,15 +1,20 @@
 import { ConfigureModule, ConfigureService } from '@app/configure';
 import { ErrorFilter, ResultInterceptor } from '@app/shared';
-// import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
-// import cfg from '../mikro-orm.config';
+import cfg from '../mikro-orm.config';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { AuthModule } from './auth/auth.module';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [
+    CqrsModule.forRoot({
+      rethrowUnhandled: true,
+    }),
     I18nModule.forRoot({
       loaderOptions: {
         path: path.join(__dirname, '../libs/translation/'),
@@ -39,7 +44,8 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
         };
       },
     }),
-    // MikroOrmModule.forRoot(cfg),
+    AuthModule,
+    MikroOrmModule.forRoot(cfg),
   ],
   providers: [
     {

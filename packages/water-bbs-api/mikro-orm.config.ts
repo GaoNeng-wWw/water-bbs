@@ -1,6 +1,7 @@
 import { defineConfig } from '@mikro-orm/core';
 import { database } from './configs/config.json';
 import { SqliteDriver } from '@mikro-orm/sqlite';
+import { Account, Credential, Identifier } from './src/auth';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -9,4 +10,5 @@ export default defineConfig({
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : database.port,
   dbName: process.env.DB_DBNAME ?? database.db,
   driver: SqliteDriver,
+  entities: [Identifier, Credential, Account],
 });

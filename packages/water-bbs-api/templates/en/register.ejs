@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,body {width: 100vw;height: 100vh;padding: 0;margin: 0;font-size: 16px;}
+    main {
+      width: 100%;height: 100%;margin: 0;padding: 0;
+    }
+    nav {width: 100%;padding-inline: 16px;}
+    .logo {
+      width: 48px;height: 48px;
+      border-radius: 100%;
+    }
+  </style>
+</head>
+<body>
+  <p>
+    Welcome, verify-code: <%= code %>. The validity period is <%= ttl_min %> minutes
+  </p>
+</body>
+</html>

@@ -10,5 +10,17 @@
     "host": "localhost",
     "port": 6379,
     "db": 0
+  },
+  "mail":{
+    "host": "live.smtp.mailtrap.io",
+    "port": 587,
+    "auth": {
+        "user": "smtp@mailtrap.io",
+        "pass": "0be7d4a18ffbf5c99d52053e5993e2ef"
+    },
+    "from": "admin <support@demomailtrap.co>"
+  },
+  "feature":{
+    "verificationCodeTTL": 15
   }
 }

@@ -37,7 +37,7 @@ export type NotificationContext = {
 @Injectable()
 export class NotificationService {
   constructor(private readonly providers: NotificationProvider[]) {}
-  notice(ctx: NotificationContext) {
+  notify(ctx: NotificationContext) {
     const tasks: Promise<Result<boolean, DomainError>>[] = [];
     for (const r of ctx.receivers) {
       const provider = this.providers.find((p) => p.support(r.channel));
