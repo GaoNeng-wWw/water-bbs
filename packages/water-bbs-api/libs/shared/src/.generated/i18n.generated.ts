@@ -7,6 +7,13 @@ import type { Path } from "nestjs-i18n";
 export type I18nTranslations = {
     "exception": {
         "INTERNAL_ERROR": string;
+        "USER_EXISTS": string;
+        "VERFICATION_CODE_REPEAT_SEND": string;
+    };
+    "mail": {
+        "register": {
+            "title": string;
+        };
     };
 };
 /* prettier-ignore */

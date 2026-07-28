@@ -1,6 +1,6 @@
 import { ArgumentsHost, ExceptionFilter, Injectable } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { DomainError } from './error.base';
+import { DomainError } from '@app/shared';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from './.generated/i18n.generated';
 

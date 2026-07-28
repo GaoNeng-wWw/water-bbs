@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigureService } from './configure.service';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
@@ -12,6 +12,7 @@ const loader = () => {
   );
 };
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
