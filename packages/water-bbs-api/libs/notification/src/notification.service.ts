@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { NotificationProvider } from './notification.provider';
 import { Result } from 'neverthrow';
 import { DomainError } from '@app/shared';
@@ -36,7 +36,10 @@ export type NotificationContext = {
 
 @Injectable()
 export class NotificationService {
-  constructor(private readonly providers: NotificationProvider[]) {}
+  constructor(
+    @Inject(NotificationProvider)
+    private readonly providers: NotificationProvider[]
+  ) {}
   notify(ctx: NotificationContext) {
     const tasks: Promise<Result<boolean, DomainError>>[] = [];
     for (const r of ctx.receivers) {

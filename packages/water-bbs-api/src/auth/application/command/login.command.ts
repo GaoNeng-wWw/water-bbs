@@ -1,23 +1,23 @@
 import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { err, ok, Result } from 'neverthrow';
 import { DomainError, InternalError, randomAlphabet } from '@app/shared';
-import { RedisService } from '@liaoliaots/nestjs-redis';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { ConfigureService } from '@app/configure';
 import { TokenPair } from '../../dto';
 import {
   Identifier,
-  Account,
   createSessionId,
   AccessTokenData,
   createJti,
   RefreshTokenData,
+  Credential,
 } from '../../entites';
 import { UserNotExists, PasswordIncorrect } from '../../errors';
 import { RedisSessionRepository } from '../../infra';
 import { CredentialVerifier } from '../service/credential-verifer/verifier';
 import { TokenGenrator } from 'src/auth/domain';
+import { Inject } from '@nestjs/common';
 
 export class Login extends Command<Result<TokenPair, DomainError>> {
   constructor(
@@ -34,10 +34,11 @@ export class Login extends Command<Result<TokenPair, DomainError>> {
 export class LoginService implements ICommandHandler<Login> {
   constructor(
     private readonly jwt: TokenGenrator,
-    private readonly redis: RedisService,
     @InjectRepository(Identifier)
     private readonly identRepo: EntityRepository<Identifier>,
-    private readonly accountRepo: EntityRepository<Account>,
+    @InjectRepository(Credential)
+    private readonly credentialRepo: EntityRepository<Credential>,
+    @Inject(CredentialVerifier)
     private readonly credentialVerifier: CredentialVerifier[],
     private readonly sessionRepository: RedisSessionRepository,
     private readonly config: ConfigureService,
@@ -54,30 +55,25 @@ export class LoginService implements ICommandHandler<Login> {
     if (!verifier) {
       return err(new InternalError());
     }
-    const identifier = await this.identRepo.findOne(
-      { identType, identValue },
-      { populate: ['credentials'] },
-    );
+    const identifier = await this.identRepo.findOne({ identType, identValue });
     if (!identifier) {
       return err(new UserNotExists());
     }
-    const state = await verifier.run(
-      [
-        ...identifier.credentials.filter(
-          (credential) => credential.credentialType === credentialType,
-        ),
-      ],
-      credentialValue,
-    );
+    const credential = await this.credentialRepo.findOne({
+      credentialType,
+    });
+    if (!credential) {
+      return err(new UserNotExists());
+    }
+    const state = await verifier.run(credential, credentialValue);
     if (state.isErr()) {
       return err(state.error);
     }
     if (!state.value) {
       return err(new PasswordIncorrect());
     }
-    const account = await this.accountRepo.findOne({
-      identifier_id: identifier.id,
-    });
+
+    const account = identifier.account;
     if (!account) {
       return err(new UserNotExists());
     }

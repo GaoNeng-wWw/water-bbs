@@ -5,7 +5,7 @@ import { Credential } from '../../../entites';
 export abstract class CredentialVerifier {
   abstract validate(credentialType: string): boolean;
   abstract run(
-    credential: Credential[],
+    credential: Credential,
     credentialValue: string,
   ): Promise<Result<boolean, DomainError>>;
 }

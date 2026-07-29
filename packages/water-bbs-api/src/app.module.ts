@@ -1,14 +1,15 @@
 import { ConfigureModule, ConfigureService } from '@app/configure';
 import { ErrorFilter, ResultInterceptor } from '@app/shared';
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
 import cfg from '../mikro-orm.config';
-import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { RedisModule, RedisService } from '@liaoliaots/nestjs-redis';
 import { AuthModule } from './auth/auth.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { CqrsModule } from '@nestjs/cqrs';
+import { readFileSync } from 'fs';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { CqrsModule } from '@nestjs/cqrs';
     }),
     I18nModule.forRoot({
       loaderOptions: {
-        path: path.join(__dirname, '../libs/translation/'),
+        path: path.join(__dirname, './translation/'),
         watch: true,
       },
       fallbackLanguage: 'en-us',
@@ -27,7 +28,9 @@ import { CqrsModule } from '@nestjs/cqrs';
       ),
       resolvers: [new HeaderResolver(['x-lang'])],
     }),
-    ConfigureModule,
+    ConfigureModule.register({
+      path: join(__dirname, 'configs/config.json'),
+    }),
     RedisModule.forRootAsync({
       imports: [ConfigureModule],
       inject: [ConfigureService],
@@ -58,4 +61,26 @@ import { CqrsModule } from '@nestjs/cqrs';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly redis: RedisService) {
+    const r = this.redis.getOrThrow();
+    r.defineCommand('issueToken', {
+      lua: readFileSync(join(__dirname, './lua/issue-token.lua')).toString(),
+      numberOfKeys: 0,
+    });
+    r.defineCommand('refreshToken', {
+      lua: readFileSync(join(__dirname, './lua/refresh-token.lua')).toString(),
+      numberOfKeys: 0,
+    });
+    r.defineCommand('revokeSession', {
+      lua: readFileSync(join(__dirname, './lua/revoke-session.lua')).toString(),
+      numberOfKeys: 0,
+    });
+    r.defineCommand('revokeAllSession', {
+      lua: readFileSync(
+        join(__dirname, './lua/revoke-all-session.lua'),
+      ).toString(),
+      numberOfKeys: 0,
+    });
+  }
+}

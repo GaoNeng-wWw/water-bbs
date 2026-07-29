@@ -12,19 +12,24 @@
     },
     "assets": [
       {
-        "include": "../libs/translation/**/*",
+        "include": "./translation/**/*",
         "watchAssets": true,
-        "outDir": "dist/translation"
+        "outDir": "dist"
       },
       {
-        "include": "../configs/**/*",
+        "include": "./configs/**/*",
         "watchAssets": true,
-        "outDir": "dist/configs"
+        "outDir": "dist"
       },
       {
         "include": "../templates/**/*",
         "watchAssets": true,
         "outDir": "dist/templates"
+      },
+      {
+        "include": "./lua/**/*",
+        "watchAssets": true,
+        "outDir": "dist"
       }
     ],
     "webpack": true

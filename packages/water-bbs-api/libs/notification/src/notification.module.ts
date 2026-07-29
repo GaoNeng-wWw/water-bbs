@@ -6,6 +6,7 @@ import { ConfigureModule, ConfigureService } from '@app/configure';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/adapters/ejs.adapter';
 import { join } from 'path';
+import { NotificationProvider } from './notification.provider';
 
 @Module({
   imports: [
@@ -31,7 +32,16 @@ import { join } from 'path';
       },
     }),
   ],
-  providers: [NotificationService, NotificationTemplateResolver, EmailProvider],
+  providers: [
+    NotificationService,
+    NotificationTemplateResolver,
+    EmailProvider,
+    {
+      provide: NotificationProvider,
+      useFactory: (...dep) => dep as NotificationProvider[],
+      inject: [EmailProvider],
+    },
+  ],
   exports: [NotificationService],
 })
 export class NotificationModule {}

@@ -4,13 +4,19 @@ import { AuthController } from './auth.controller';
 import { MailRegistor, Registor, RegistorKey } from './application/service';
 import { SendVerificationEmailService } from './application/event-handler';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Account, Credential, Identifier } from './entites';
+import { Account, Credential, Identifier, Profile } from './entites';
 import { NotificationModule } from '@app/notification/notification.module';
 import { LoginService, RegisterService } from './application';
+import { VerificationCodeModule } from '@app/verification-code';
+import { TokenGenrator } from './domain';
+import { JwtGenerator, RedisSessionRepository } from './infra';
+import { CredentialVerifier } from './application/service/credential-verifer/verifier';
+import { PasswordVerifier } from './application/service/credential-verifer/password.verifer';
 
 @Module({
   imports: [
-    MikroOrmModule.forFeature([Identifier, Credential, Account]),
+    MikroOrmModule.forFeature([Identifier, Credential, Account, Profile]),
+    VerificationCodeModule,
     NotificationModule,
   ],
   controllers: [AuthController],
@@ -18,12 +24,25 @@ import { LoginService, RegisterService } from './application';
     AuthService,
     SendVerificationEmailService,
     MailRegistor,
+    PasswordVerifier,
+    RedisSessionRepository,
     {
       provide: RegistorKey,
       useFactory(...args) {
         return args as Registor[];
       },
       inject: [MailRegistor],
+    },
+    {
+      provide: TokenGenrator,
+      useClass: JwtGenerator,
+    },
+    {
+      provide: CredentialVerifier,
+      useFactory(...args) {
+        return args as CredentialVerifier[];
+      },
+      inject: [PasswordVerifier],
     },
     LoginService,
     RegisterService,

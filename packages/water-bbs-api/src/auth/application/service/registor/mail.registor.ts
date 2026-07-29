@@ -1,6 +1,6 @@
 import { DomainError } from '@app/shared';
 import { ok, Result } from 'neverthrow';
-import { Credential, Identifier } from 'src/auth/entites';
+import { Account } from '../../../entites';
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
@@ -16,24 +16,13 @@ export class MailRegistor implements Registor {
   validate(identType: string): Promise<boolean> {
     return Promise.resolve(identType.toLowerCase().trim() === 'email');
   }
-  async execute(
-    props: RegistorProps,
-  ): Promise<Result<Identifier, DomainError>> {
-    const ident = this.em.create(Identifier, {
-      identType: props.identType,
-      identValue: props.identValue,
-      verified: false,
-    });
-    const cert = this.em.create(Credential, {
-      credentialType: props.certType,
-      credentialValue: props.certValue,
-      identifier: ident,
-    });
-    this.em.persist(ident).persist(cert);
+  async execute(props: RegistorProps): Promise<Result<Account, DomainError>> {
+    props.account.addCredential(props.credentialType, props.credentialValue);
+    props.account.addIdentifier(props.identType, props.identValue);
     await this.em.flush();
     setImmediate(() => {
       this.eventBus.publish(new MailRegisteredEvent(props.identValue));
     });
-    return ok(ident);
+    return ok(props.account);
   }
 }

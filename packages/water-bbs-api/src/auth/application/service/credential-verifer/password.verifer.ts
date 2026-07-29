@@ -10,12 +10,9 @@ export class PasswordVerifier implements CredentialVerifier {
     return credentialType.toLowerCase().trim() === 'password';
   }
   run(
-    credential: Credential[],
+    credential: Credential,
     credentialValue: string,
   ): Promise<Result<boolean, DomainError>> {
-    const result = credential.some((credential) =>
-      credential.isSameCredentialValue(credentialValue),
-    );
-    return Promise.resolve(ok(result));
+    return Promise.resolve(ok(credential.verify(credentialValue)));
   }
 }

@@ -1,19 +1,20 @@
 import { Result } from 'neverthrow';
-import { Identifier } from '../../../entites';
+import { Account } from '../../../entites';
 import { DomainError } from '@app/shared';
 import { Inject } from '@nestjs/common';
 
 export type RegistorProps = {
   identType: string;
   identValue: string;
-  certType: string;
-  certValue: string;
+  credentialType: string;
+  credentialValue: string;
+  account: Account;
 };
 
 export const RegistorKey = Symbol('REGISTOR');
-export const InjectRegistorKey = () => Inject(RegistorKey);
+export const InjectRegistor = () => Inject(RegistorKey);
 
 export interface Registor {
   validate(identType: string): Promise<boolean>;
-  execute(props: RegistorProps): Promise<Result<Identifier, DomainError>>;
+  execute(props: RegistorProps): Promise<Result<Account, DomainError>>;
 }

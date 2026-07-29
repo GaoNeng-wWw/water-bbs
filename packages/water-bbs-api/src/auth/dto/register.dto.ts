@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class RegisterProfile {
@@ -7,8 +12,8 @@ export class RegisterProfile {
   nick: string;
 
   @IsString()
-  @IsNotEmpty()
-  bio: string;
+  @IsOptional()
+  bio?: string;
 }
 
 export class RegisterRequest {
@@ -31,4 +36,8 @@ export class RegisterRequest {
   @ValidateNested()
   @Type(() => RegisterProfile)
   profile: RegisterProfile;
+
+  @IsString()
+  @IsNotEmpty()
+  verificationCode: string;
 }

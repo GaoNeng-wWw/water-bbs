@@ -8,7 +8,11 @@ export type I18nTranslations = {
     "exception": {
         "INTERNAL_ERROR": string;
         "USER_EXISTS": string;
-        "VERFICATION_CODE_REPEAT_SEND": string;
+        "VERIFICATION_CODE_REPEAT_SEND": string;
+        "VERIFICATION_CODE_NOT_FOUND_OR_EXPIRED": string;
+        "TEMPLATE_NOT_FOUND": string;
+        "TEMPLATE_CAN_NOT_OPEN": string;
+        "PASSWORD_INCORRECT": string;
     };
     "mail": {
         "register": {

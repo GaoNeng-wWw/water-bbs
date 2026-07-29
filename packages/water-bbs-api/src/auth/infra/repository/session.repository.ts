@@ -1,8 +1,6 @@
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { Injectable } from '@nestjs/common';
-import { readFileSync } from 'fs';
 import { Redis as IRedis } from 'ioredis';
-import { join } from 'path';
 
 interface Redis extends IRedis {
   issueToken: (
@@ -60,27 +58,7 @@ export type RefreshTokenProps = {
 
 @Injectable()
 export class RedisSessionRepository {
-  constructor(private readonly redisSrv: RedisService) {
-    const redis = this.redisSrv.getOrThrow();
-    redis.defineCommand('issueToken', {
-      lua: readFileSync(join(__dirname, './lua/issue-token.lua')).toString(),
-      numberOfKeys: 0,
-    });
-    redis.defineCommand('refreshToken', {
-      lua: readFileSync(join(__dirname, './lua/refresh-token.lua')).toString(),
-      numberOfKeys: 0,
-    });
-    redis.defineCommand('revokeSession', {
-      lua: readFileSync(join(__dirname, './lua/revoke-session.lua')).toString(),
-      numberOfKeys: 0,
-    });
-    redis.defineCommand('revokeAllSession', {
-      lua: readFileSync(
-        join(__dirname, './lua/revoke-all-session.lua'),
-      ).toString(),
-      numberOfKeys: 0,
-    });
-  }
+  constructor(private readonly redisSrv: RedisService) {}
   issueToken({
     sessionId,
     sessionIssueAt,

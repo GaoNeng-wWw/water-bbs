@@ -1,4 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
+import { LoginDTO } from './dto';
+import { Login, RegisterCommand } from './application';
+import { RegisterRequest } from './dto/register.dto';
 
 @Injectable()
-export class AuthService {}
+export class AuthService {
+  constructor(private readonly commandBus: CommandBus) {}
+  login(dto: LoginDTO) {
+    return this.commandBus.execute(
+      new Login(
+        dto.identType,
+        dto.identValue,
+        dto.credentialType,
+        dto.credentialValue,
+      ),
+    );
+  }
+  async register(dto: RegisterRequest) {
+    await this.commandBus.execute(
+      new RegisterCommand(
+        dto.identType,
+        dto.identValue,
+        dto.credentialType,
+        dto.credentialValue,
+        dto.verificationCode,
+        dto.profile.nick,
+        dto.profile.bio,
+      ),
+    );
+  }
+}

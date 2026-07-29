@@ -1,4 +1,4 @@
-import { DomainError } from '@app/shared';
+import { DomainError, InternalError } from '@app/shared';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { err, ok, Result } from 'neverthrow';
@@ -6,6 +6,8 @@ import { Identifier, Credential, Account, Profile } from '../../entites';
 import { UserExists } from 'src/auth/errors';
 import { VerificationCodeService } from '@app/verification-code';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { InjectRegistor, Registor } from '../service';
+import { Logger } from '@nestjs/common';
 
 export class RegisterCommand extends Command<Result<void, DomainError>> {
   constructor(
@@ -23,11 +25,14 @@ export class RegisterCommand extends Command<Result<void, DomainError>> {
 
 @CommandHandler(RegisterCommand)
 export class RegisterService implements ICommandHandler<RegisterCommand> {
+  private readonly logger = new Logger(RegisterService.name);
   constructor(
     @InjectRepository(Identifier)
     private readonly identifierRepo: EntityRepository<Identifier>,
     private readonly em: EntityManager,
     private readonly verification: VerificationCodeService,
+    @InjectRegistor()
+    private readonly registor: Registor[],
   ) {}
   async execute({
     identType,
@@ -53,30 +58,30 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
     if (identifier) {
       return err(new UserExists());
     }
-    const ident = this.em.create(Identifier, {
+    const account = this.em.create(Account, {});
+    const [registor] = await Promise.all(
+      this.registor.map((r) => r.validate(identType).then(() => r)),
+    );
+    if (!registor) {
+      this.logger.warn(`Can not find any registor`);
+      return err(new InternalError());
+    }
+    const newAccount = await registor.execute({
+      account,
       identType,
       identValue,
-      verified: false,
-    });
-    this.em.persist(ident);
-    const credential = this.em.create(Credential, {
       credentialType,
       credentialValue,
-      identifier: ident,
     });
-    this.em.persist(credential);
-    ident.credentials.add(credential);
-    const account = this.em.create(Account, {
-      identifier_id: ident.id,
-    });
-    this.em.persist(account);
+    if (newAccount.isErr()) {
+      return err(newAccount.error);
+    }
     const profile = this.em.create(Profile, {
-      account,
-      accountId: account.id,
+      accountId: newAccount.value.id,
       nick,
       bio,
     });
-    account.profile = profile;
+    this.em.persist(newAccount.value);
     this.em.persist(profile);
     await this.em.flush();
     return ok();

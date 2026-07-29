@@ -4,5 +4,6 @@
   "VERIFICATION_CODE_REPEAT_SEND": "Verification code repeat send",
   "VERIFICATION_CODE_NOT_FOUND_OR_EXPIRED": "Verification Code Not Found Or Exrpied",
   "TEMPLATE_NOT_FOUND": "Can Not Found Template",
-  "TEMPLATE_CAN_NOT_OPEN": "Can Not Open Template"
+  "TEMPLATE_CAN_NOT_OPEN": "Can Not Open Template",
+  "PASSWORD_INCORRECT": "Password Incorrect"
 }

@@ -1,6 +1,6 @@
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { Injectable } from '@nestjs/common';
-import { Jti } from '../entites';
+import { Jti } from '../../entites';
 
 @Injectable()
 export class TokenRepository {

@@ -3,6 +3,10 @@ packages:
 
 allowBuilds:
   '@nestjs/core': set this to true or false
+  '@scarf/scarf': true
+  '@suites/di.nestjs': true
+  '@suites/doubles.vitest': true
+  '@swc/core': true
   better-sqlite3: true
   esbuild: true
   unrs-resolver: true
