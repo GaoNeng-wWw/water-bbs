@@ -1,9 +1,15 @@
-import { ArgumentsHost, ExceptionFilter, Injectable } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  Injectable,
+} from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { DomainError } from '@app/shared';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from './.generated/i18n.generated';
 
+@Catch()
 @Injectable()
 export class ErrorFilter implements ExceptionFilter {
   constructor(private readonly i18n: I18nService<I18nTranslations>) {}

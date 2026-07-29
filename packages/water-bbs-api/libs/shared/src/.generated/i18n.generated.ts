@@ -8,6 +8,7 @@ export type I18nTranslations = {
     "exception": {
         "INTERNAL_ERROR": string;
         "USER_EXISTS": string;
+        "USER_NOT_FOUND": string;
         "VERIFICATION_CODE_REPEAT_SEND": string;
         "VERIFICATION_CODE_NOT_FOUND_OR_EXPIRED": string;
         "TEMPLATE_NOT_FOUND": string;

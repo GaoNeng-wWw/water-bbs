@@ -4,8 +4,8 @@ import { HttpStatus } from '@nestjs/common';
 export class UserNotExists extends DomainError {
   constructor() {
     super({
-      key: 'exception.INTERNAL_ERROR',
-      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      key: 'exception.USER_NOT_FOUND',
+      status: HttpStatus.NOT_FOUND,
     });
   }
 }

@@ -18,7 +18,7 @@ export class AuthService {
     );
   }
   async register(dto: RegisterRequest) {
-    await this.commandBus.execute(
+    return this.commandBus.execute(
       new RegisterCommand(
         dto.identType,
         dto.identValue,

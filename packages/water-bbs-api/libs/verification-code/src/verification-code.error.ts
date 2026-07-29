@@ -5,7 +5,7 @@ export class CodeNotFoundOrExpired extends DomainError {
   constructor() {
     super({
       key: 'exception.VERIFICATION_CODE_NOT_FOUND_OR_EXPIRED',
-      status: HttpStatus.NOT_FOUND,
+      status: HttpStatus.BAD_REQUEST,
     });
   }
 }

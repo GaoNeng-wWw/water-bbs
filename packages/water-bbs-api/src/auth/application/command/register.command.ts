@@ -47,14 +47,15 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
       identType,
       identValue,
     });
-    const verify = await this.verification.verify({
-      scene: 'register',
-      receiver: identValue,
-      code: verificationCode,
-    });
-    if (verify.isErr()) {
-      return verify;
-    }
+    // TODO: Wait for feature module
+    // const verify = await this.verification.verify({
+    //   scene: 'register',
+    //   receiver: identValue,
+    //   code: verificationCode,
+    // });
+    // if (verify.isErr()) {
+    //   return err(verify.error);
+    // }
     if (identifier) {
       return err(new UserExists());
     }

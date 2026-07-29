@@ -10,11 +10,16 @@ import { AuthModule } from './auth/auth.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { CqrsModule } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     CqrsModule.forRoot({
       rethrowUnhandled: true,
+    }),
+    JwtModule.register({
+      secret: 'test',
+      global: true,
     }),
     I18nModule.forRoot({
       loaderOptions: {
