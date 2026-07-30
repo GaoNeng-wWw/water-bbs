@@ -14,6 +14,7 @@ export type I18nTranslations = {
         "TEMPLATE_NOT_FOUND": string;
         "TEMPLATE_CAN_NOT_OPEN": string;
         "PASSWORD_INCORRECT": string;
+        "CATEGORY_NOT_FOUND": string;
     };
     "mail": {
         "register": {

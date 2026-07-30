@@ -11,6 +11,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { CqrsModule } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
 import { JwtModule } from '@nestjs/jwt';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     AuthModule,
     MikroOrmModule.forRoot(cfg),
+    CategoryModule,
   ],
   providers: [
     {

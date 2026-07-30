@@ -6,5 +6,6 @@
   "VERIFICATION_CODE_NOT_FOUND_OR_EXPIRED": "Verification Code Not Found Or Exrpied",
   "TEMPLATE_NOT_FOUND": "Can Not Found Template",
   "TEMPLATE_CAN_NOT_OPEN": "Can Not Open Template",
-  "PASSWORD_INCORRECT": "Password Incorrect"
+  "PASSWORD_INCORRECT": "Password Incorrect",
+  "CATEGORY_NOT_FOUND": "Category Not Found"
 }
