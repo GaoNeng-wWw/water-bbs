@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { I18nPath } from '../.generated/i18n.generated';
+import { ApiProperty } from '@nestjs/swagger';
 export type DomainErrorProps = {
   key: I18nPath;
   status: HttpStatus;
@@ -7,6 +8,24 @@ export type DomainErrorProps = {
   details?: Record<string, any>;
   cause?: Error;
 };
+
+export class HttpPresentationError {
+  @ApiProperty({ description: '错误 message', example: '错误信息' })
+  public readonly message: string;
+  @ApiProperty({ description: '错误状态码', example: HttpStatus.BAD_REQUEST })
+  public readonly statusCode: number;
+  @ApiProperty({ description: '错误详情', example: { id: 123456 } })
+  public readonly details: Record<string, any>;
+  constructor(
+    message: string,
+    statusCode: number,
+    details: Record<string, any> = {},
+  ) {
+    this.message = message;
+    this.statusCode = statusCode;
+    this.details = details;
+  }
+}
 
 export class DomainError extends Error {
   public readonly key: I18nPath;
@@ -21,5 +40,8 @@ export class DomainError extends Error {
     this.args = props.args;
     this.details = props.details;
     this.cause = props.cause;
+  }
+  toHttpPresentationError(): HttpPresentationError {
+    return new HttpPresentationError(this.message, this.status, this.details);
   }
 }
