@@ -6,10 +6,14 @@ import { SendVerificationEmailService } from './application/event-handler';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Account, Credential, Identifier, Profile } from './entites';
 import { NotificationModule } from '@app/notification/notification.module';
-import { LoginService, RegisterService } from './application';
+import {
+  LoginService,
+  RefreshTokenService,
+  RegisterService,
+} from './application';
 import { VerificationCodeModule } from '@app/verification-code';
 import { TokenGenrator } from './domain';
-import { JwtGenerator, RedisSessionRepository } from './infra';
+import { JwtGenerator, RedisSessionRepository, TokenRepository } from './infra';
 import { CredentialVerifier } from './application/service/credential-verifer/verifier';
 import { PasswordVerifier } from './application/service/credential-verifer/password.verifer';
 
@@ -26,6 +30,7 @@ import { PasswordVerifier } from './application/service/credential-verifer/passw
     MailRegistor,
     PasswordVerifier,
     RedisSessionRepository,
+    TokenRepository,
     {
       provide: RegistorKey,
       useFactory(...args) {
@@ -46,6 +51,7 @@ import { PasswordVerifier } from './application/service/credential-verifer/passw
     },
     LoginService,
     RegisterService,
+    RefreshTokenService,
   ],
 })
 export class AuthModule {}
