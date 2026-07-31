@@ -25,6 +25,7 @@
     "types": [
       "@types/express",
       "vitest/globals",
+      
     ],
     "paths": {
       "@app/configure": [
@@ -53,6 +54,6 @@
       ]
     }
   },
-  "include": ["src/**/*", "libs/**/*", "types/**/*"],
+  "include": ["src/**/*", "libs/**/*", "types/**/*", "test/**/*"],
   "exclude": ["node_modules"]
 }

@@ -18,6 +18,11 @@ export type I18nTranslations = {
         "TEMPLATE_CAN_NOT_OPEN": string;
         "PASSWORD_INCORRECT": string;
         "CATEGORY_NOT_FOUND": string;
+        "TOPIC_NOT_FOUND": string;
+        "HIDDEN_REASON_REQUIRED": string;
+        "HIDDEN_END_MUST_BE_AFTER_START": string;
+        "TOPIC_CAN_NOT_REMOVED": string;
+        "REPLY_CAN_NOT_REMOVE": string;
     };
     "mail": {
         "register": {

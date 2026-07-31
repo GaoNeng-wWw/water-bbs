@@ -28,7 +28,10 @@ export class RecoverCategoryService implements ICommandHandler<RecoverCategory> 
   async execute({
     id,
   }: RecoverCategory): Promise<Result<CategoryId, DomainError>> {
-    const category = await this.categoryRepo.findOne({ id });
+    const category = await this.categoryRepo.findOne(
+      { id },
+      { filters: false },
+    );
     if (!category) {
       return err(new CategoryNotFound(id));
     }

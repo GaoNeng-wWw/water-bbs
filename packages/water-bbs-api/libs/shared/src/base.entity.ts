@@ -2,9 +2,22 @@ import { type Opt } from '@mikro-orm/core';
 import {
   BeforeUpdate,
   Embeddable,
+  Filter,
   Property,
 } from '@mikro-orm/decorators/legacy';
+import { err, ok } from 'neverthrow';
+import {
+  EndMustAfterAfterStartError,
+  ReasonRequiredError,
+} from './errors/hidden-period.error';
 
+@Filter({
+  name: 'notRemoved',
+  cond: {
+    removedAt: null,
+  },
+  default: true,
+})
 @Embeddable()
 export class MetaEntity {
   @Property({ type: 'datetime', index: true })
@@ -17,5 +30,54 @@ export class MetaEntity {
   @BeforeUpdate()
   onUpdate() {
     this.updatedAt = new Date();
+  }
+}
+
+@Filter({
+  name: 'notHidden',
+  cond: {
+    end: {
+      $lt: new Date(),
+    },
+  },
+  default: true,
+})
+@Embeddable()
+export class HiddenPeriod {
+  @Property({
+    type: 'date',
+  })
+  start: Date;
+
+  @Property({
+    type: 'date',
+  })
+  end: Date;
+
+  @Property({
+    type: 'text',
+  })
+  reason: string;
+
+  private constructor(start: Date, end: Date, reason: string) {
+    this.start = start;
+    this.end = end;
+    this.reason = reason;
+  }
+
+  static create(reason: string, end: Date) {
+    if (end <= new Date()) {
+      return err(new EndMustAfterAfterStartError());
+    }
+
+    if (!reason.trim()) {
+      return err(new ReasonRequiredError());
+    }
+
+    return ok(new HiddenPeriod(new Date(), end, reason));
+  }
+
+  isExpired(now = new Date()) {
+    return now >= this.end;
   }
 }

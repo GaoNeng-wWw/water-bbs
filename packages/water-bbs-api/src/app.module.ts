@@ -13,6 +13,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
 import { JwtModule } from '@nestjs/jwt';
 import { CategoryModule } from './category/category.module';
+import { TopicModule } from './topic/topic.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { CategoryModule } from './category/category.module';
     AuthModule,
     MikroOrmModule.forRoot(cfg),
     CategoryModule,
+    TopicModule,
   ],
   providers: [
     {

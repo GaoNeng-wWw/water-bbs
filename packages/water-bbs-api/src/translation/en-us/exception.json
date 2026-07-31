@@ -10,5 +10,10 @@
   "TEMPLATE_NOT_FOUND": "Can Not Found Template",
   "TEMPLATE_CAN_NOT_OPEN": "Can Not Open Template",
   "PASSWORD_INCORRECT": "Password Incorrect",
-  "CATEGORY_NOT_FOUND": "Category Not Found"
+  "CATEGORY_NOT_FOUND": "Category Not Found",
+  "TOPIC_NOT_FOUND": "Topic Not Found",
+  "HIDDEN_REASON_REQUIRED": "Hidden reason required",
+  "HIDDEN_END_MUST_BE_AFTER_START": "Hidden end must be after start",
+  "TOPIC_CAN_NOT_REMOVED": "Can Not Remove Topic",
+  "REPLY_CAN_NOT_REMOVE": "Can Not Remove Reply"
 }
