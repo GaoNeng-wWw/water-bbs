@@ -22,5 +22,10 @@
   },
   "feature":{
     "verificationCodeTTL": 15
+  },
+  "token":{
+    "secret": "water-bbs-api-token-secret",
+    "accessTokenTTL": 300,
+    "refreshTokenTTL": 604800
   }
 }

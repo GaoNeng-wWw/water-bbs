@@ -125,6 +125,7 @@ export class TopicService {
       return err(new TopicCanNotRemove());
     }
     await this.cb.execute(new RemoveTopicCommand(id));
+    return topic;
   }
 
   async removeReply(id: ReplyId, actor: AccountId) {
@@ -136,5 +137,6 @@ export class TopicService {
       return err(new ReplyCanNotRemove());
     }
     await this.cb.execute(new RemoveReplyCommand(id));
+    return reply;
   }
 }

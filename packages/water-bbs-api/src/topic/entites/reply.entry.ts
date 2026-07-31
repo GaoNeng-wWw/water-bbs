@@ -18,7 +18,7 @@ export class Reply extends MetaEntity {
   id: Opt<ReplyId> = v7() as ReplyId;
   @Property({ type: 'uuid' })
   topicId: TopicId;
-  @Property()
+  @Property({ type: 'longtext' })
   content: string;
   @Property({ type: 'uuid' })
   authorId: AccountId;

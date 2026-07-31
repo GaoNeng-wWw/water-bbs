@@ -15,8 +15,12 @@ import {
   ListReplyService,
   ListTopicService,
 } from './query';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Reply, Topic } from './entites';
+import { Profile } from '../auth';
 
 @Module({
+  imports: [MikroOrmModule.forFeature([Topic, Reply, Profile])],
   controllers: [TopicController],
   providers: [
     TopicService,
