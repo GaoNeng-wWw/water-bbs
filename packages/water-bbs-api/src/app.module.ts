@@ -20,9 +20,12 @@ import { TopicModule } from './topic/topic.module';
     CqrsModule.forRoot({
       rethrowUnhandled: true,
     }),
-    JwtModule.register({
-      secret: 'test',
+    JwtModule.registerAsync({
       global: true,
+      useFactory: (service: ConfigureService) => ({
+        secret: service.get('token.secret'),
+      }),
+      inject: [ConfigureService],
     }),
     I18nModule.forRoot({
       loaderOptions: {

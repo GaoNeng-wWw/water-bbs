@@ -15,10 +15,10 @@
     "host": "live.smtp.mailtrap.io",
     "port": 587,
     "auth": {
-        "user": "smtp@mailtrap.io",
-        "pass": "0be7d4a18ffbf5c99d52053e5993e2ef"
+      "user": "",
+      "pass": ""
     },
-    "from": "admin <support@demomailtrap.co>"
+    "from": ""
   },
   "feature":{
     "verificationCodeTTL": 15
