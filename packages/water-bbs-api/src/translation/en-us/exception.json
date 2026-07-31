@@ -1,5 +1,8 @@
 {
-  "INTERNAL_ERROR": "INTERNAL_ERROR",
+  "INTERNAL_ERROR": "Internal Error",
+  "UNAUTHORIZED": "unauthorized",
+  "INVALID_TOKEN": "Invalid Token",
+  "TOKEN_EXPIRED": "Login Expired",
   "USER_EXISTS": "User Exists",
   "USER_NOT_FOUND": "User Not Found",
   "VERIFICATION_CODE_REPEAT_SEND": "Verification code repeat send",

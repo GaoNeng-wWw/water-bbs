@@ -1,12 +1,13 @@
 import { ConfigureModule, ConfigureService } from '@app/configure';
 import { ErrorFilter, ResultInterceptor } from '@app/shared';
 import { Module } from '@nestjs/common';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
 import cfg from '../mikro-orm.config';
 import { RedisModule, RedisService } from '@liaoliaots/nestjs-redis';
 import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { CqrsModule } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
@@ -58,6 +59,10 @@ import { CategoryModule } from './category/category.module';
     CategoryModule,
   ],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
     {
       provide: APP_FILTER,
       useClass: ErrorFilter,
