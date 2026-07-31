@@ -11,7 +11,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --dangerously-all
 
 FROM base as test
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --dangerously-allow-all-builds
-RUN pnpm run test:e2e
+CMD ["pnpm", "test:e2e"]
 
 FROM base as build
 COPY --from=deps /app/node_modules /app/node_modules
