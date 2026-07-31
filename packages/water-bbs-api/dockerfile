@@ -2,9 +2,9 @@ FROM ghcr.io/pnpm/pnpm:11.7.0 as base
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json ./
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 COPY . .
 
