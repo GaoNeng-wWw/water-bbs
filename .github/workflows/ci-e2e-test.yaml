@@ -28,4 +28,4 @@ jobs:
         uses: docker/setup-compose-action@v1
       - name: Run docker compose
         working-directory: ./packages/water-bbs-api
-        run: docker compose -f docker-compose-ci.yml up -d
+        run: docker compose -f docker-compose.ci.yaml up -d
