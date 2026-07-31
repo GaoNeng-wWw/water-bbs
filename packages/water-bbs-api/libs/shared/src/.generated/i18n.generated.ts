@@ -7,6 +7,9 @@ import type { Path } from "nestjs-i18n";
 export type I18nTranslations = {
     "exception": {
         "INTERNAL_ERROR": string;
+        "UNAUTHORIZED": string;
+        "INVALID_TOKEN": string;
+        "TOKEN_EXPIRED": string;
         "USER_EXISTS": string;
         "USER_NOT_FOUND": string;
         "VERIFICATION_CODE_REPEAT_SEND": string;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { LoginDTO } from './dto';
-import { Login, RegisterCommand } from './application';
+import { Login, RefreshToken, RegisterCommand } from './application';
 import { RegisterRequest } from './dto/register.dto';
 
 @Injectable()
@@ -29,5 +29,9 @@ export class AuthService {
         dto.profile.bio,
       ),
     );
+  }
+
+  async refreshToken(refreshToken: string) {
+    return this.commandBus.execute(new RefreshToken(refreshToken));
   }
 }

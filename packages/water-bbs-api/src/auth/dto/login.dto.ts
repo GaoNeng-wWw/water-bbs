@@ -2,16 +2,22 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class LoginDTO {
-  @ApiProperty()
+  @ApiProperty({ description: '标识类型' })
   @IsString()
   @IsNotEmpty()
   identType: string;
+
+  @ApiProperty({ description: '标识值' })
   @IsString()
   @IsNotEmpty()
   identValue: string;
+
+  @ApiProperty({ description: '凭证类型' })
   @IsString()
   @IsNotEmpty()
   credentialType: string;
+
+  @ApiProperty({ description: '凭证值' })
   @IsString()
   @IsNotEmpty()
   credentialValue: string;
