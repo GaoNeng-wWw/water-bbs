@@ -25,8 +25,6 @@
     "types": [
       "@types/express",
       "vitest/globals",
-      "@suites/di.nestjs/types",
-      "@suites/doubles.jest/unit"
     ],
     "paths": {
       "@app/configure": [
@@ -54,5 +52,7 @@
         "libs/verification-code/src/*"
       ]
     }
-  }
+  },
+  "include": ["src/**/*", "libs/**/*", "types/**/*"],
+  "exclude": ["node_modules"]
 }
