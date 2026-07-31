@@ -30,4 +30,6 @@ jobs:
       - name: Install dependencies
         run: npm i -g pnpm && pnpm i --dangerously-allow-all-builds
       - name: Connect to Redis
-        run: pnpm test:api-e2e
+        run: cp ./packages/water-bbs-api/src/configs/config.ci.json ./packages/water-bbs-api/src/configs/config.json && pnpm test:api-e2e
+        env:
+          NODE_ENV: test
