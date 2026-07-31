@@ -6,10 +6,12 @@ import { AppModule } from './../src/app.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
+import { Account, Credential, Identifier, Profile } from '../src/auth';
 import { Category } from '../src/category';
 
 describe('CategoryController (e2e)', () => {
   let app: INestApplication<App>;
+  let authToken: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -20,7 +22,7 @@ describe('CategoryController (e2e)', () => {
         MikroOrmModule.forRoot({
           driver: SqliteDriver,
           dbName: ':memory:',
-          entities: [Category],
+          entities: [Account, Identifier, Credential, Profile, Category],
           pool: {
             min: 0,
             max: 1,
@@ -34,15 +36,44 @@ describe('CategoryController (e2e)', () => {
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();
     await orm.schema.create();
+
+    await request(app.getHttpServer())
+      .post('/auth/register')
+      .send({
+        identType: 'email',
+        identValue: 'test@no-reply.com',
+        credentialType: 'password',
+        credentialValue: 'test123',
+        profile: {
+          nick: 'testuser',
+        },
+      })
+      .expect(201);
+
+    const loginResponse = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        identType: 'email',
+        identValue: 'test@no-reply.com',
+        credentialType: 'password',
+        credentialValue: 'test123',
+      })
+      .expect(201);
+
+    authToken = loginResponse.body.accessToken;
   });
 
   it('should list categories', async () => {
-    await request(app.getHttpServer()).get('/category').expect(200);
+    await request(app.getHttpServer())
+      .get('/category')
+      .set('Authorization', `Bearer ${authToken}`)
+      .expect(200);
   });
 
   it('should create a category', async () => {
     const response = await request(app.getHttpServer())
       .post('/category')
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Test Category',
         color: '#FF0000',
@@ -61,6 +92,7 @@ describe('CategoryController (e2e)', () => {
   it('should create a category with minimal data', async () => {
     const response = await request(app.getHttpServer())
       .post('/category')
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Minimal Category',
       })
@@ -73,6 +105,7 @@ describe('CategoryController (e2e)', () => {
   it('should find a category by id', async () => {
     const createResponse = await request(app.getHttpServer())
       .post('/category')
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Findable Category',
       })
@@ -82,6 +115,7 @@ describe('CategoryController (e2e)', () => {
 
     const findResponse = await request(app.getHttpServer())
       .get(`/category/${categoryId}`)
+      .set('Authorization', `Bearer ${authToken}`)
       .expect(200);
 
     expect(findResponse.body.id).toBe(categoryId);
@@ -91,6 +125,7 @@ describe('CategoryController (e2e)', () => {
   it('should update a category', async () => {
     const createResponse = await request(app.getHttpServer())
       .post('/category')
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Original Name',
         color: '#00FF00',
@@ -101,6 +136,7 @@ describe('CategoryController (e2e)', () => {
 
     const updateResponse = await request(app.getHttpServer())
       .patch(`/category/${categoryId}`)
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Updated Name',
         color: '#0000FF',
@@ -115,6 +151,7 @@ describe('CategoryController (e2e)', () => {
   it('should remove a category', async () => {
     const createResponse = await request(app.getHttpServer())
       .post('/category')
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Removable Category',
       })
@@ -124,6 +161,7 @@ describe('CategoryController (e2e)', () => {
 
     const removeResponse = await request(app.getHttpServer())
       .delete(`/category/${categoryId}`)
+      .set('Authorization', `Bearer ${authToken}`)
       .expect(200);
     expect(removeResponse.body).toHaveProperty('id', categoryId);
   });
@@ -131,6 +169,7 @@ describe('CategoryController (e2e)', () => {
   it('should recover a removed category', async () => {
     const createResponse = await request(app.getHttpServer())
       .post('/category')
+      .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Recoverable Category',
       })
@@ -140,14 +179,25 @@ describe('CategoryController (e2e)', () => {
 
     await request(app.getHttpServer())
       .delete(`/category/${categoryId}`)
+      .set('Authorization', `Bearer ${authToken}`)
       .expect(200);
 
     const recoverResponse = await request(app.getHttpServer())
       .patch(`/category/recover/${categoryId}`)
+      .set('Authorization', `Bearer ${authToken}`)
       .expect(200);
 
     expect(recoverResponse.body.id).toBe(categoryId);
     expect(recoverResponse.body.removedAt).toBeNull();
+  });
+
+  it('should reject requests without authentication', async () => {
+    await request(app.getHttpServer()).get('/category').expect(401);
+
+    await request(app.getHttpServer())
+      .post('/category')
+      .send({ name: 'Test' })
+      .expect(401);
   });
 
   afterEach(async () => {
