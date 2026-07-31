@@ -9,23 +9,12 @@
       "name": "pnpm",
       "version": "^11.9.0",
       "onFail": "download"
-    },
-    "runtime": [
-      {
-        "name": "node",
-        "version": "22.16.0",
-        "onFail": "download"
-      },
-      {
-        "name": "node",
-        "version": "24.18.1",
-        "onFail": "download"
-      }
-    ]
+    }
   },
   "type": "module",
   "scripts": {
     "start:api": "pnpm --filter ./packages/water-bbs-api start:dev",
-    "start:web": "pnpm --filter ./packages/water-bbs-web dev"
+    "start:web": "pnpm --filter ./packages/water-bbs-web dev",
+    "test:api-e2e": "pnpm --filter ./packages/water-bbs-api test:e2e"
   }
 }
