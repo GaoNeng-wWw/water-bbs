@@ -18,7 +18,7 @@ export class Topic extends MetaEntity {
   id: Opt<TopicId> = v7() as TopicId;
   @Property({ type: 'text' })
   title: string;
-  @Property({ type: 'uuid' })
+  @Property({ type: 'uuid', index: true })
   authorId: AccountId;
   @Property({ type: 'uuid' })
   categoryId: CategoryId;

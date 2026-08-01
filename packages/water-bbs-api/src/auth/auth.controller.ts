@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDTO, RefreshTokenDTO, TokenPair } from './dto';
-import { RegisterRequest } from './dto/register.dto';
+import { RegisterRequest, RegisterResponse } from './dto/register.dto';
 import { ApiBody, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { Public } from './auth.guard';
 
@@ -21,6 +21,7 @@ export class AuthController {
   @ApiOperation({ summary: '注册账号' })
   @Public()
   @ApiBody({ type: RegisterRequest })
+  @ApiCreatedResponse({ type: RegisterResponse })
   @Post('register')
   async register(@Body() body: RegisterRequest) {
     return this.authService.register(body);

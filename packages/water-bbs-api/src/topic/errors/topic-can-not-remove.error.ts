@@ -4,7 +4,7 @@ import { HttpStatus } from '@nestjs/common';
 export class TopicCanNotRemove extends DomainError {
   constructor() {
     super({
-      key: 'exception.TOPIC_CAN_NOT_REMOVE',
+      key: 'exception.TOPIC_CAN_NOT_REMOVED',
       status: HttpStatus.FORBIDDEN,
     });
   }

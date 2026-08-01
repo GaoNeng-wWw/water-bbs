@@ -6,6 +6,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import type { AccountId } from '../entites';
 
 export class RegisterProfile {
   @IsString()
@@ -17,6 +18,12 @@ export class RegisterProfile {
   @IsOptional()
   @ApiProperty({ description: '个人简介' })
   bio?: string;
+}
+
+export class RegisterResponse {
+  @IsString()
+  @ApiProperty({ description: '账号ID' })
+  accountId: AccountId;
 }
 
 export class RegisterRequest {

@@ -7,7 +7,7 @@ export class TopicNotFound extends DomainError {
     super({
       key: 'exception.TOPIC_NOT_FOUND',
       status: HttpStatus.NOT_FOUND,
-      detail: { id },
+      details: { id },
     });
   }
 }
