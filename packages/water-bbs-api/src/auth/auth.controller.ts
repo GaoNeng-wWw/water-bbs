@@ -9,7 +9,10 @@ import { Public } from './auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: '登陆账号, 并且签发一个新的令牌对' })
+  @ApiOperation({
+    summary: '登陆账号, 并且签发一个新的令牌对',
+    operationId: 'login',
+  })
   @Public()
   @ApiBody({ type: LoginDTO })
   @ApiCreatedResponse({ type: TokenPair })
@@ -18,7 +21,7 @@ export class AuthController {
     return this.authService.login(body);
   }
 
-  @ApiOperation({ summary: '注册账号' })
+  @ApiOperation({ summary: '注册账号', operationId: 'register' })
   @Public()
   @ApiBody({ type: RegisterRequest })
   @ApiCreatedResponse({ type: RegisterResponse })
@@ -27,11 +30,11 @@ export class AuthController {
     return this.authService.register(body);
   }
 
-  @ApiOperation({ summary: '获得一个新的令牌对' })
+  @ApiOperation({ summary: '获得一个新的令牌对', operationId: 'refreshToken' })
   @Public()
   @ApiCreatedResponse({ type: TokenPair })
   @Post('refresh-token')
-  async refreshToken(@Body() body: RefreshTokenDTO){
+  async refreshToken(@Body() body: RefreshTokenDTO) {
     return this.authService.refreshToken(body.token);
   }
 }

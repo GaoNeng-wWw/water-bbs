@@ -28,7 +28,7 @@ import { ReplyInfo, ReplyItem } from './dto/find-reply.dto';
 export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
-  @ApiOperation({ summary: '获取回复列表' })
+  @ApiOperation({ summary: '获取回复列表', operationId: 'listReply' })
   @ApiPaginationResponse(ReplyItem)
   @ApiParam({ name: 'topicId', description: '主题ID' })
   @Get('replies/:topicId')
@@ -39,7 +39,7 @@ export class TopicController {
     return this.topicService.listReply(topicId, dto);
   }
 
-  @ApiOperation({ summary: '获取主题列表' })
+  @ApiOperation({ summary: '获取主题列表', operationId: 'listTopic' })
   @ApiPaginationResponse(TopicInfo)
   @ApiParam({ name: 'categoryId', description: '分类ID' })
   @Get(':categoryId')
@@ -50,7 +50,7 @@ export class TopicController {
     return this.topicService.listTopics(categoryId, dto);
   }
 
-  @ApiOperation({ summary: '创建回复' })
+  @ApiOperation({ summary: '创建回复', operationId: 'createReply' })
   @ApiCreatedResponse({ type: ReplyInfo })
   @ApiParam({ name: 'topicId', description: '主题ID' })
   @Post('replies/:topicId')
@@ -62,7 +62,7 @@ export class TopicController {
     return this.topicService.createReply(topicId, dto, id);
   }
 
-  @ApiOperation({ summary: '创建主题' })
+  @ApiOperation({ summary: '创建主题', operationId: 'createTopic' })
   @ApiCreatedResponse({ type: TopicInfo })
   @ApiParam({ name: 'categoryId', description: '分类ID' })
   @Post(':categoryId')
@@ -74,7 +74,7 @@ export class TopicController {
     return this.topicService.createTopic(categoryId, dto, id);
   }
 
-  @ApiOperation({ summary: '删除回复' })
+  @ApiOperation({ summary: '删除回复', operationId: 'removeReply' })
   @ApiOkResponse({ type: ReplyInfo })
   @ApiParam({ name: 'replyId', description: '回复ID' })
   @Delete('replies/:replyId')
@@ -85,7 +85,7 @@ export class TopicController {
     return this.topicService.removeReply(replyId, id);
   }
 
-  @ApiOperation({ summary: '删除主题' })
+  @ApiOperation({ summary: '删除主题', operationId: 'removeTopic' })
   @ApiOkResponse({ type: TopicInfo })
   @ApiParam({ name: 'topicId', description: '主题ID' })
   @Delete(':topicId')
@@ -96,7 +96,7 @@ export class TopicController {
     return this.topicService.removeTopic(topicId, id);
   }
 
-  @ApiOperation({ summary: '更新主题' })
+  @ApiOperation({ summary: '更新主题', operationId: 'updateTopic' })
   @ApiOkResponse({ type: UpdateTopicResponse })
   @ApiParam({ name: 'topicId', description: '主题ID' })
   @Patch(':topicId')
