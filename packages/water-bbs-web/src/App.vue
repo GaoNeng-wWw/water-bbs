@@ -1,7 +1,5 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-</script>
-
 <template>
-  <hello-world />
+  <div class="w-full bg-surface-50 min-h-screen">
+    <router-view />
+  </div>
 </template>
