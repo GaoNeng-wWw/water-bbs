@@ -2,12 +2,13 @@ import { DomainError, InternalError } from '@app/shared';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { err, ok, Result } from 'neverthrow';
-import { Identifier, Credential, Account, Profile, AccountId } from '../../entites';
+import { Identifier, Account, Profile, AccountId } from '../../entites';
 import { UserExists } from 'src/auth/errors';
 import { VerificationCodeService } from '@app/verification-code';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { InjectRegistor, Registor } from '../service';
 import { Logger } from '@nestjs/common';
+import { ConfigureService } from '@app/configure';
 
 export class RegisterCommand extends Command<Result<AccountId, DomainError>> {
   constructor(
@@ -15,8 +16,8 @@ export class RegisterCommand extends Command<Result<AccountId, DomainError>> {
     public readonly identValue: string,
     public readonly credentialType: string,
     public readonly credentialValue: string,
-    public readonly verificationCode: string,
     public readonly nick: string,
+    public readonly verificationCode?: string,
     public readonly bio?: string,
   ) {
     super();
@@ -33,6 +34,7 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
     private readonly verification: VerificationCodeService,
     @InjectRegistor()
     private readonly registor: Registor[],
+    private readonly configure: ConfigureService,
   ) {}
   async execute({
     identType,
@@ -47,15 +49,17 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
       identType,
       identValue,
     });
-    // TODO: Wait for feature module
-    // const verify = await this.verification.verify({
-    //   scene: 'register',
-    //   receiver: identValue,
-    //   code: verificationCode,
-    // });
-    // if (verify.isErr()) {
-    //   return err(verify.error);
-    // }
+    const feature = this.configure.get('feature.verificationCodeOnRegister');
+    if (feature) {
+      const verify = await this.verification.verify({
+        scene: 'register',
+        receiver: identValue,
+        code: verificationCode,
+      });
+      if (verify.isErr()) {
+        return err(verify.error);
+      }
+    }
     if (identifier) {
       return err(new UserExists());
     }

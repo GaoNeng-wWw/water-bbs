@@ -6,7 +6,7 @@ import { CodeNotFoundOrExpired, RepeatSend } from './verification-code.error';
 import { Injectable } from '@nestjs/common';
 
 export type VerifyContext = IssueContext & {
-  code: string;
+  code?: string;
 };
 
 export type IssueContext = {

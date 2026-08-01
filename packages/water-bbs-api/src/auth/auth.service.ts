@@ -24,8 +24,8 @@ export class AuthService {
         dto.identValue,
         dto.credentialType,
         dto.credentialValue,
-        dto.verificationCode,
         dto.profile.nick,
+        dto.verificationCode,
         dto.profile.bio,
       ),
     );
