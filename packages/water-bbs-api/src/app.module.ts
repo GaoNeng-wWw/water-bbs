@@ -14,6 +14,7 @@ import { readFileSync } from 'fs';
 import { JwtModule } from '@nestjs/jwt';
 import { CategoryModule } from './category/category.module';
 import { TopicModule } from './topic/topic.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { TopicModule } from './topic/topic.module';
     MikroOrmModule.forRoot(cfg),
     CategoryModule,
     TopicModule,
+    ProfileModule,
   ],
   providers: [
     {

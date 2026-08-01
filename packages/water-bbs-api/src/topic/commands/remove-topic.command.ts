@@ -1,10 +1,16 @@
 import { DomainError } from '@app/shared';
 import { Topic, TopicId } from '../entites';
 import { err, ok, Result } from 'neverthrow';
-import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import {
+  Command,
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { EntityManager } from '@mikro-orm/core';
 import { TopicNotFound } from '../errors';
 import { RedisService } from '@liaoliaots/nestjs-redis';
+import { TopicRemoved } from '../events';
 
 export class RemoveTopicCommand extends Command<Result<TopicId, DomainError>> {
   constructor(public readonly id: TopicId) {
@@ -17,6 +23,7 @@ export class RemoveTopicService implements ICommandHandler<RemoveTopicCommand> {
   constructor(
     private readonly em: EntityManager,
     private readonly redisSrv: RedisService,
+    private readonly eb: EventBus,
   ) {}
   async execute(
     command: RemoveTopicCommand,
@@ -35,6 +42,7 @@ export class RemoveTopicService implements ICommandHandler<RemoveTopicCommand> {
       await redis.decr(`category:${topic.categoryId}:topic`);
       await redis.del(`topic:${command.id}:reply`);
     });
+    this.eb.publish(new TopicRemoved(topic.authorId, topic.id));
     return ok(topic.id);
   }
 }

@@ -18,7 +18,7 @@ export class AuthService {
     );
   }
   async register(dto: RegisterRequest) {
-    return this.commandBus.execute(
+    const id = await this.commandBus.execute(
       new RegisterCommand(
         dto.identType,
         dto.identValue,
@@ -29,6 +29,10 @@ export class AuthService {
         dto.profile.bio,
       ),
     );
+    if (id.isErr()) {
+      return id;
+    }
+    return { accountId: id.value };
   }
 
   async refreshToken(refreshToken: string) {

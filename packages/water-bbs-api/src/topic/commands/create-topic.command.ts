@@ -1,4 +1,9 @@
-import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import {
+  Command,
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { Reply, Topic, TopicId } from '../entites';
 import { err, ok, Result } from 'neverthrow';
 import { DomainError } from '@app/shared';
@@ -7,6 +12,7 @@ import { Category, CategoryId } from '../../category';
 import { EntityManager } from '@mikro-orm/core';
 import { CategoryNotFound } from '../errors';
 import { RedisService } from '@liaoliaots/nestjs-redis';
+import { TopicCreated } from '../events';
 
 export class CreateTopicCommand extends Command<Result<TopicId, DomainError>> {
   constructor(
@@ -24,6 +30,7 @@ export class CreateTopicService implements ICommandHandler<CreateTopicCommand> {
   constructor(
     private readonly em: EntityManager,
     private readonly redisSrv: RedisService,
+    private readonly eb: EventBus,
   ) {}
   async execute(
     command: CreateTopicCommand,
@@ -52,6 +59,7 @@ export class CreateTopicService implements ICommandHandler<CreateTopicCommand> {
       await em.flush();
       await redis.incr(`category:${command.categoryId}:topic`);
     });
+    this.eb.publish(new TopicCreated(command.authorId, topic.id));
     return ok(topic.id);
   }
 }

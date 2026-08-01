@@ -2,14 +2,14 @@ import { DomainError, InternalError } from '@app/shared';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { err, ok, Result } from 'neverthrow';
-import { Identifier, Credential, Account, Profile } from '../../entites';
+import { Identifier, Credential, Account, Profile, AccountId } from '../../entites';
 import { UserExists } from 'src/auth/errors';
 import { VerificationCodeService } from '@app/verification-code';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { InjectRegistor, Registor } from '../service';
 import { Logger } from '@nestjs/common';
 
-export class RegisterCommand extends Command<Result<void, DomainError>> {
+export class RegisterCommand extends Command<Result<AccountId, DomainError>> {
   constructor(
     public readonly identType: string,
     public readonly identValue: string,
@@ -42,7 +42,7 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
     nick,
     bio,
     verificationCode,
-  }: RegisterCommand): Promise<Result<void, DomainError>> {
+  }: RegisterCommand): Promise<Result<AccountId, DomainError>> {
     const identifier = await this.identifierRepo.findOne({
       identType,
       identValue,
@@ -85,6 +85,6 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
     this.em.persist(newAccount.value);
     this.em.persist(profile);
     await this.em.flush();
-    return ok();
+    return ok(newAccount.value.id);
   }
 }

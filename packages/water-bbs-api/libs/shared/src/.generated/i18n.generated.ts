@@ -23,6 +23,7 @@ export type I18nTranslations = {
         "HIDDEN_END_MUST_BE_AFTER_START": string;
         "TOPIC_CAN_NOT_REMOVED": string;
         "REPLY_CAN_NOT_REMOVE": string;
+        "REPLY_NOT_FOUND": string;
     };
     "mail": {
         "register": {
