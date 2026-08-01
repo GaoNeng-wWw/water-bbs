@@ -1,5 +1,4 @@
 name: E2E Test
-
 on:
   pull_request:
     branches:
@@ -12,14 +11,10 @@ on:
       - dev
     paths:
       - 'packages/water-bbs-api/**'
-
 jobs:
   container-job:
     runs-on: ubuntu-latest
-
-    container:
-      image: node:22-alpine
-
+    container: node:22-alpine
     services:
       redis:
         image: redis
@@ -32,22 +27,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Setup node cache
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
       - name: Install dependencies
-        run: pnpm install --dangerously-allow-all-builds
-
+        run: npm i -g pnpm && pnpm i --dangerously-allow-all-builds
       - name: Run Test
-        run: |
-          cp ./packages/water-bbs-api/src/configs/config.ci.json ./packages/water-bbs-api/src/configs/config.json
-          pnpm test:api-e2e
+        run: cp ./packages/water-bbs-api/src/configs/config.ci.json ./packages/water-bbs-api/src/configs/config.json && pnpm test:api-e2e
