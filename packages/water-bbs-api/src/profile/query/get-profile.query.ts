@@ -27,7 +27,6 @@ export class GetProfileService implements IQueryHandler<GetProfileQuery> {
     const profile = await this.profileRepo.findOne({
       accountId: query.id,
     });
-    console.log(profile);
     if (isEmpty(profile) || !profile) {
       return err(new UserNotExists());
     }
