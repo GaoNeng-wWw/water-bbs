@@ -6,6 +6,7 @@ import { CategoryId } from '../../category';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { AccountId, Profile } from '../../auth';
+import { RedisService } from '@liaoliaots/nestjs-redis';
 
 export type AuthorInfo = {
   id: AccountId;
@@ -18,6 +19,8 @@ export type TopicInfo = {
   createdAt: Date;
   content: string;
   author: AuthorInfo;
+  pinned: boolean;
+  replyTotal: number;
 };
 
 export type ListTopicResult = {
@@ -45,12 +48,14 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
     private readonly profileRepository: EntityRepository<Profile>,
     @InjectRepository(Reply)
     private readonly replyRepository: EntityRepository<Reply>,
+    private readonly redisSrv: RedisService,
   ) {}
   async execute({
     categoryId,
     page,
     size,
   }: ListTopicQuery): Promise<Result<ListTopicResult, DomainError>> {
+    const redis = this.redisSrv.getOrThrow();
     const items: TopicInfo[] = [];
     const topics = await this.topicRepository.find(
       {
@@ -59,6 +64,9 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
       {
         offset: (page - 1) * size,
         limit: size,
+        orderBy: {
+          pinned: 'desc',
+        },
       },
     );
     for (const topic of topics) {
@@ -81,6 +89,7 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
       if (!reply) {
         continue;
       }
+      const total = await redis.get(`topic:${topic.id}:reply`);
       items.push({
         id: topic.id,
         title: topic.title,
@@ -90,6 +99,8 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
           id: topic.authorId,
           nick: author.nick,
         },
+        pinned: topic.pinned,
+        replyTotal: !total ? 0 : Number(total),
       });
     }
     return ok({ topics: items });

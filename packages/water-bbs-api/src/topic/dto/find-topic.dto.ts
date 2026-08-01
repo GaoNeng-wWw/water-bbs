@@ -23,6 +23,10 @@ export class TopicInfoProps {
   author: TopicAuthor;
   @ApiProperty({ description: '主题创建时间' })
   createdAt: Date;
+  @ApiProperty({ description: '主题是否置顶' })
+  pinned: boolean;
+  @ApiProperty({ description: '主题回复总数' })
+  replyTotal: number;
 }
 
 export class TopicInfo {
@@ -36,6 +40,10 @@ export class TopicInfo {
   author: TopicAuthor;
   @ApiProperty({ description: '主题创建时间' })
   createdAt: string;
+  @ApiProperty({ description: '主题是否置顶' })
+  pinned: boolean;
+  @ApiProperty({ description: '主题回复总数' })
+  replyTotal: number;
   constructor(props: TopicInfoProps) {
     Object.assign(this, props);
     this.createdAt = props.createdAt.toLocaleTimeString();

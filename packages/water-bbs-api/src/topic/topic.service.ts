@@ -18,10 +18,11 @@ import {
   CreateTopicCommand,
   RemoveReplyCommand,
   RemoveTopicCommand,
+  UpdateTopicCommand,
 } from './commands';
 import { FindCategoryQuery } from '../category';
 import { ReplyItem } from './dto/find-reply.dto';
-import { TopicInfo } from './dto';
+import { TopicInfo, UpdateTopicDto } from './dto';
 import { GetTopicQuery } from './query/get-topic.query';
 import { GetReply } from './query/get-reply.query';
 import { err, ok } from 'neverthrow';
@@ -34,6 +35,23 @@ export class TopicService {
     private readonly qb: QueryBus,
     private readonly cb: CommandBus,
   ) {}
+
+  async updateTopic(id: TopicId, actor: AccountId, dto: UpdateTopicDto) {
+    const topic = await this.qb.execute(new GetTopicQuery(id));
+    if (topic.isErr()) {
+      return topic;
+    }
+    if (topic.value.author.id !== actor) {
+      return err(new TopicCanNotRemove());
+    }
+    const updateTopic = await this.cb.execute(
+      new UpdateTopicCommand(id, dto.title, dto.categoryId, dto.pinned),
+    );
+    if (updateTopic.isErr()) {
+      return updateTopic;
+    }
+    return ok({ id: updateTopic.value });
+  }
 
   async listTopics(categoryId: CategoryId, dto: PaginationQuery) {
     const topics = await this.qb.execute(
@@ -94,7 +112,7 @@ export class TopicService {
     if (reply.isErr()) {
       return reply;
     }
-    return ok(reply);
+    return reply;
   }
   async createTopic(id: CategoryId, dto: CreateTopicDto, accountId: AccountId) {
     const category = await this.qb.execute(new FindCategoryQuery(id));
@@ -107,6 +125,7 @@ export class TopicService {
         dto.content,
         accountId,
         category.value.id,
+        dto.pinned,
       ),
     );
     if (topic.isErr()) {

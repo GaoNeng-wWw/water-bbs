@@ -23,6 +23,9 @@ export class Topic extends MetaEntity {
   @Property({ type: 'uuid' })
   categoryId: CategoryId;
 
+  @Property({ type: 'boolean', default: false })
+  pinned: Opt<boolean>;
+
   @Embedded(() => HiddenPeriod, {
     nullable: true,
     prefix: 'hidden_',
@@ -34,5 +37,11 @@ export class Topic extends MetaEntity {
   }
   restore() {
     this.removedAt = null;
+  }
+  pin() {
+    this.pinned = true;
+  }
+  unpin() {
+    this.pinned = false;
   }
 }

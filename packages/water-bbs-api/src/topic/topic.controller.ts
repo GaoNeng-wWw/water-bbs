@@ -4,83 +4,107 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { TopicService } from './topic.service';
-import { PaginationQuery } from '@app/shared';
+import { ApiPaginationResponse, PaginationQuery } from '@app/shared';
 import type { CategoryId } from '../category';
 import type { ReplyId, TopicId } from './entites';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { CreateTopicDto } from './dto/create-topic.dto';
 import { type AccountId, User } from '../auth';
-import { ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
-import { TopicInfo } from './dto';
-import { ReplyInfo } from './dto/find-reply.dto';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+} from '@nestjs/swagger';
+import { TopicInfo, UpdateTopicDto, UpdateTopicResponse } from './dto';
+import { ReplyInfo, ReplyItem } from './dto/find-reply.dto';
 
 @Controller('topic')
 export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
-  @ApiOkResponse({ type: ReplyInfo })
-  @ApiParam({ name: 'topic-id', description: '主题ID' })
-  @Get('replies/:topic-id')
+  @ApiOperation({ summary: '获取回复列表' })
+  @ApiPaginationResponse(ReplyItem)
+  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @Get('replies/:topicId')
   async listReply(
-    @Param('topic-id') topicId: TopicId,
+    @Param('topicId') topicId: TopicId,
     @Query() dto: PaginationQuery,
   ) {
     return this.topicService.listReply(topicId, dto);
   }
 
-  @ApiOkResponse({ type: TopicInfo })
-  @ApiParam({ name: 'category-id', description: '分类ID' })
-  @Get(':category-id')
+  @ApiOperation({ summary: '获取主题列表' })
+  @ApiPaginationResponse(TopicInfo)
+  @ApiParam({ name: 'categoryId', description: '分类ID' })
+  @Get(':categoryId')
   async listTopic(
     @Query() dto: PaginationQuery,
-    @Param('category-id') categoryId: CategoryId,
+    @Param('categoryId') categoryId: CategoryId,
   ) {
     return this.topicService.listTopics(categoryId, dto);
   }
 
+  @ApiOperation({ summary: '创建回复' })
   @ApiCreatedResponse({ type: ReplyInfo })
-  @ApiParam({ name: 'topic-id', description: '主题ID' })
-  @Post('replies/:topic-id')
+  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @Post('replies/:topicId')
   async createReply(
-    @Param('topic-id') topicId: TopicId,
+    @Param('topicId') topicId: TopicId,
     @Body() dto: CreateReplyDto,
     @User('id') id: AccountId,
   ) {
     return this.topicService.createReply(topicId, dto, id);
   }
 
+  @ApiOperation({ summary: '创建主题' })
   @ApiCreatedResponse({ type: TopicInfo })
-  @ApiParam({ name: 'category-id', description: '分类ID' })
-  @Post(':category-id')
+  @ApiParam({ name: 'categoryId', description: '分类ID' })
+  @Post(':categoryId')
   async createTopic(
-    @Param('category-id') categoryId: CategoryId,
+    @Param('categoryId') categoryId: CategoryId,
     @Body() dto: CreateTopicDto,
     @User('id') id: AccountId,
   ) {
     return this.topicService.createTopic(categoryId, dto, id);
   }
 
+  @ApiOperation({ summary: '删除回复' })
   @ApiOkResponse({ type: ReplyInfo })
-  @ApiParam({ name: 'reply-id', description: '回复ID' })
-  @Delete('replies/:reply-id')
+  @ApiParam({ name: 'replyId', description: '回复ID' })
+  @Delete('replies/:replyId')
   async removeReply(
-    @Param('reply-id') replyId: ReplyId,
+    @Param('replyId') replyId: ReplyId,
     @User('id') id: AccountId,
   ) {
     return this.topicService.removeReply(replyId, id);
   }
 
+  @ApiOperation({ summary: '删除主题' })
   @ApiOkResponse({ type: TopicInfo })
-  @ApiParam({ name: 'topic-id', description: '主题ID' })
-  @Delete(':topic-id')
+  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @Delete(':topicId')
   async removeTopic(
-    @Param('topic-id') topicId: TopicId,
+    @Param('topicId') topicId: TopicId,
     @User('id') id: AccountId,
   ) {
     return this.topicService.removeTopic(topicId, id);
+  }
+
+  @ApiOperation({ summary: '更新主题' })
+  @ApiOkResponse({ type: UpdateTopicResponse })
+  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @Patch(':topicId')
+  async updateTopic(
+    @Param('topicId') topicId: TopicId,
+    @Body() dto: UpdateTopicDto,
+    @User('id') id: AccountId,
+  ) {
+    return this.topicService.updateTopic(topicId, id, dto);
   }
 }
