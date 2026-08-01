@@ -54,6 +54,6 @@ export class RegisterRequest {
   profile: RegisterProfile;
 
   @IsString()
-  @ApiProperty({ description: '验证码' })
-  verificationCode: string;
+  @ApiProperty({ description: '验证码', required: false })
+  verificationCode?: string;
 }
