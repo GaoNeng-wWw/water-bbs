@@ -11,6 +11,7 @@ export class UpdateTopicCommand extends Command<Result<TopicId, DomainError>> {
     public readonly id: TopicId,
     public readonly title?: string,
     public readonly categoryId?: CategoryId,
+    public readonly pinned?: boolean,
   ) {
     super();
   }
@@ -39,6 +40,9 @@ export class UpdateTopicService implements ICommandHandler<UpdateTopicCommand> {
         return err(new CategoryNotFound(command.categoryId));
       }
       topic.categoryId = command.categoryId;
+    }
+    if (command.pinned !== undefined) {
+      topic.pinned = command.pinned;
     }
 
     this.em.persist(topic);

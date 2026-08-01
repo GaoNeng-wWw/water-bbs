@@ -20,6 +20,7 @@ export class CreateTopicCommand extends Command<Result<TopicId, DomainError>> {
     public content: string,
     public authorId: AccountId,
     public categoryId: CategoryId,
+    public pinned?: boolean,
   ) {
     super();
   }
@@ -46,6 +47,7 @@ export class CreateTopicService implements ICommandHandler<CreateTopicCommand> {
       title: command.title,
       authorId: command.authorId,
       categoryId: command.categoryId,
+      pinned: command.pinned,
     });
     const reply = this.em.create(Reply, {
       content: command.content,

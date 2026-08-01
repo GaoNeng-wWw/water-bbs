@@ -7,6 +7,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { TopicNotFound } from '../errors';
 import { Profile } from '../../auth';
+import { RedisService } from '@liaoliaots/nestjs-redis';
 
 export class GetTopicQuery extends Query<Result<TopicInfo, DomainError>> {
   constructor(public id: TopicId) {
@@ -23,9 +24,12 @@ export class GetTopicService implements IQueryHandler<GetTopicQuery> {
     private readonly replyRepository: EntityRepository<Reply>,
     @InjectRepository(Profile)
     private readonly profileRepository: EntityRepository<Profile>,
+    private readonly redisSrv: RedisService,
   ) {}
 
   async execute(query: GetTopicQuery): Promise<Result<TopicInfo, DomainError>> {
+    const redis = this.redisSrv.getOrThrow();
+    const total = await redis.get(`topic:${query.id}:replyTotal`);
     const topic = await this.topicRepository.findOne(query.id);
     if (!topic) {
       return err(new TopicNotFound(query.id));
@@ -59,6 +63,8 @@ export class GetTopicService implements IQueryHandler<GetTopicQuery> {
           nick: profile.nick,
         }),
         createdAt: topic.createdAt,
+        pinned: topic.pinned,
+        replyTotal: !total ? 0 : Number(total),
       }),
     );
   }

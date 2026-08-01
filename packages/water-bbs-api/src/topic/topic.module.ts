@@ -18,6 +18,14 @@ import {
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Reply, Topic } from './entites';
 import { Profile } from '../auth';
+import { GetTopicService } from './query/get-topic.query';
+import { GetReplyService } from './query/get-reply.query';
+import {
+  OnReplyRemoved,
+  OnTopicRemoved,
+  OnTopicCreated,
+  OnReplyCreated,
+} from './event-handler';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Topic, Reply, Profile])],
@@ -34,6 +42,12 @@ import { Profile } from '../auth';
     GetTopicTotalService,
     ListReplyService,
     ListTopicService,
+    GetTopicService,
+    GetReplyService,
+    OnReplyRemoved,
+    OnTopicRemoved,
+    OnTopicCreated,
+    OnReplyCreated,
   ],
 })
 export class TopicModule {}
