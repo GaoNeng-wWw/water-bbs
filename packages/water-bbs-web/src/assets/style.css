@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./theme.css";
-@import "../components/button/theme.css";
+@import "../components/ui/button/theme.css";
+@import "../components/ui/avatar/theme.css";
 
 @layer theme, base, components, utilities;
 
