@@ -25,6 +25,7 @@ export class ProfileController {
   @ApiOperation({
     summary: '通过Account ID获取用户信息',
     description: '根据Account ID获取用户信息',
+    operationId: 'getProfile',
   })
   @ApiOkResponse({ type: ProfileInfo })
   @ApiParam({ name: 'id', description: 'Account ID' })
@@ -37,6 +38,7 @@ export class ProfileController {
   @ApiOperation({
     summary: '通过Account ID获取用户发布的主题',
     description: '根据Account ID获取用户发布的主题',
+    operationId: 'getPublishedTopic',
   })
   @ApiParam({ name: 'id', description: 'Account ID' })
   @ApiPaginationResponse(TopicInfo)
@@ -53,6 +55,7 @@ export class ProfileController {
 
   @ApiOperation({
     summary: '更新用户信息',
+    operationId: 'updateProfile',
   })
   @Patch()
   async updateProfile(

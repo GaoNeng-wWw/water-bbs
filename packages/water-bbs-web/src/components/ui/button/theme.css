@@ -1,0 +1,36 @@
+@theme {
+
+  --color-btn-solid-primary-hover: var(--color-primary-400);
+  --color-btn-solid-surface-hover: var(--color-surface-100);
+  --color-btn-solid-danger-hover: var(--color-danger-400);
+
+  --color-btn-solid-primary-bg: var(--color-primary-500);
+  --color-btn-solid-surface-bg: var(--color-surface-200);
+  --color-btn-solid-danger-bg: var(--color-danger-500);
+
+  --color-btn-solid-primary-text: var(--color-primary-fg);
+  --color-btn-solid-surface-text: var(--color-surface-fg);
+  --color-btn-solid-danger-text: var(--color-danger-fg);
+
+  --color-btn-outline-surface: var(--color-surface-500);
+  --color-btn-outline-surface-text: var(--color-surface-700);
+
+  --color-btn-outline-primary: var(--color-primary-500);
+  --color-btn-outline-primary-text: var(--color-primary-700);
+
+  --color-btn-outline-danger: var(--color-danger-500);
+  --color-btn-outline-danger-text: var(--color-danger-700);
+
+  --color-btn-ghost-primary-bg: var(--color-primary-600);
+  --color-btn-ghost-primary-text: var(--color-primary-600);
+  --color-btn-ghost-primary-hovered-text: var(--color-primary-fg);
+
+  --color-btn-ghost-surface-bg: var(--color-surface-600);
+  --color-btn-ghost-surface-text: var(--color-surface-600);
+  --color-btn-ghost-surface-hovered-text: var(--color-surface-fg);
+
+  --color-btn-ghost-danger-bg: var(--color-danger-600);
+  --color-btn-ghost-danger-text: var(--color-danger-600);
+  --color-btn-ghost-danger-hovered-text: var(--color-danger-fg);
+
+}
