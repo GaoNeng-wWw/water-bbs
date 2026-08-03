@@ -13,7 +13,9 @@
     "paths": {
       "@/": ["./src/"],
       "@/*": ["./src/*"]
-    }
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue","configs/**/*", "env.d.ts"]
 }

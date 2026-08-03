@@ -1,0 +1,1 @@
+export { default as UiShadowScroll } from './scroll.vue';

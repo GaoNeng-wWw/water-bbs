@@ -2,6 +2,7 @@
 @import "./theme.css";
 @import "../components/ui/button/theme.css";
 @import "../components/ui/avatar/theme.css";
+@plugin "@iconify/tailwind4";
 
 @layer theme, base, components, utilities;
 

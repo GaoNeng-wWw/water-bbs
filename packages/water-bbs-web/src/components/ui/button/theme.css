@@ -25,7 +25,7 @@
   --color-btn-ghost-primary-text: var(--color-primary-600);
   --color-btn-ghost-primary-hovered-text: var(--color-primary-fg);
 
-  --color-btn-ghost-surface-bg: var(--color-surface-600);
+  --color-btn-ghost-surface-bg: var(--color-surface-200);
   --color-btn-ghost-surface-text: var(--color-surface-600);
   --color-btn-ghost-surface-hovered-text: var(--color-surface-fg);
 

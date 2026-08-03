@@ -22,9 +22,13 @@ const defaultBio = '这位成员还没有填写个人简介，但 TA 已经在�
         </Avatar.Fallback>
       </Avatar.Root>
       <div class="grow flex flex-col space-y-4">
-        <div class="w-full space-y-3"> 
-          <p class="text-xl text-surface-fg">{{ nickName }}</p>
-          <p class="text-sm text-surface-fg/50">{{ bio ?? defaultBio }}</p>
+        <div class="w-full space-y-3">
+          <p class="text-xl text-surface-fg">
+            {{ nickName }}
+          </p>
+          <p class="text-sm text-surface-fg/50">
+            {{ bio ?? defaultBio }}
+          </p>
         </div>
         <div class="w-fit px-2 rounded-full bg-surface-200 border border-solid border-surface-300">
           <span class="text-surface-fg text-sm">2024 年加入</span>

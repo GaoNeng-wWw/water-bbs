@@ -18,6 +18,21 @@
 @utility w-form-md {width: var(--size-md)}
 @utility w-form-lg {width: var(--size-lg)}
 
+@utility min-h-form-xs {height: var(--size-xs);}
+@utility min-h-form-sm {height: var(--size-sm);}
+@utility min-h-form-md {height: var(--size-md);}
+@utility min-h-form-lg {height: var(--size-lg);}
+
+@utility min-w-form-xs {width: var(--size-xs);}
+@utility min-w-form-sm {width: var(--size-sm);}
+@utility min-w-form-md {width: var(--size-md);}
+@utility min-w-form-lg {width: var(--size-lg);}
+
+@utility min-size-form-xs {width: var(--size-xs); height: var(--size-xs);}
+@utility min-size-form-sm {width: var(--size-sm); height: var(--size-sm);}
+@utility min-size-form-md {width: var(--size-md); height: var(--size-md);}
+@utility min-size-form-lg {width: var(--size-lg); height: var(--size-lg);}
+
 @theme {
 
   --duration-instant: 0ms;
