@@ -1,0 +1,15 @@
+@theme {
+  --size-avatar-xs: var(--size-xs);
+  --size-avatar-sm: var(--size-sm);
+  --size-avatar-md: var(--size-md);
+  --size-avatar-lg: var(--size-lg);
+  --color-avatar-bg: var(--color-surface-100);
+  --color-avatar-border: var(--color-surface-300);
+}
+
+@utility avatar-* {
+  @apply flex items-center justify-center size-full aspect-square;
+  max-width: --value(--size-avatar-*);
+  max-height: --value(--size-avatar-*);
+  border-radius: 100%;
+}

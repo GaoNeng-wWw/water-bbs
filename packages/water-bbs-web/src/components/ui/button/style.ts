@@ -22,7 +22,7 @@ export const buttonStyle = tv({
       full: 'h-form-md w-full text-base',
     },
     icon: {
-      true: 'aspect-square',
+      true: 'aspect-square px-0!',
     },
     disabled: {
       true: 'pointer-events-none opacity-50',

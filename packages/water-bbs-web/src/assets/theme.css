@@ -13,6 +13,26 @@
 @utility h-form-md {height: var(--size-md)}
 @utility h-form-lg {height: var(--size-lg)}
 
+@utility w-form-xs {width: var(--size-xs)}
+@utility w-form-sm {width: var(--size-sm)}
+@utility w-form-md {width: var(--size-md)}
+@utility w-form-lg {width: var(--size-lg)}
+
+@utility min-h-form-xs {height: var(--size-xs);}
+@utility min-h-form-sm {height: var(--size-sm);}
+@utility min-h-form-md {height: var(--size-md);}
+@utility min-h-form-lg {height: var(--size-lg);}
+
+@utility min-w-form-xs {width: var(--size-xs);}
+@utility min-w-form-sm {width: var(--size-sm);}
+@utility min-w-form-md {width: var(--size-md);}
+@utility min-w-form-lg {width: var(--size-lg);}
+
+@utility min-size-form-xs {width: var(--size-xs); height: var(--size-xs);}
+@utility min-size-form-sm {width: var(--size-sm); height: var(--size-sm);}
+@utility min-size-form-md {width: var(--size-md); height: var(--size-md);}
+@utility min-size-form-lg {width: var(--size-lg); height: var(--size-lg);}
+
 @theme {
 
   --duration-instant: 0ms;
@@ -165,6 +185,9 @@
 
   --color-border: var(--border);
 
+  --color-bg: var(--background);
+  --color-bg-fg: var(--background-fg);
+
   --size-xs: 1.5rem;
   --size-sm: 2.25rem;
   --size-md: 2.625rem;
@@ -252,9 +275,9 @@
   --danger-900: var(--color-red-900);
   --danger-950: var(--color-red-950);
 
-  --surface-fg: #fff;
-  --background: var(--surface-50);
-  --background-fg: var(--surface-900);
+  --surface-fg: black;
+  --background: var(--color-surface-50);
+  --background-fg: var(--color-surface-900);
   --primary: var(--color-blue-600);
   --primary-fg: #ffffff;
   --success: var(--color-green-600);
@@ -263,9 +286,9 @@
   --warning-fg: var(--color-paper-900);
   --danger: var(--color-red-600);
   --danger-fg: #ffffff;
-  --muted: var(--surface-200);
-  --muted-fg: var(--surface-700);
-  --border: var(--surface-300);
+  --muted: var(--color-surface-200);
+  --muted-fg: var(--color-surface-700);
+  --border: var(--color-surface-300);
 }
 
 [data-theme="dark"] {
@@ -330,9 +353,10 @@
   --surface-900: var(--color-paper-100);
   --surface-950: var(--color-paper-50);
 
-  --background: var(--surface-50);
-  --background-fg: var(--surface-900);
-  --suface-fg: var(--surface-900);
+  --surface-fg: #fff;
+  --background: var(--color-surface-50);
+  --background-fg: var(--color-surface-950);
+  --suface-fg: var(--color-surface-900);
   --primary: var(--color-blue-400);
   --primary-fg: #fff;
   --success: var(--color-green-400);
@@ -341,7 +365,7 @@
   --danger: var(--color-red-400);
   --warning-fg: #fff;
   --danger-fg: #fff;
-  --muted: var(--surface-300);
-  --muted-fg: var(--surface-700);
-  --border: var(--surface-700);
+  --muted: var(--color-surface-300);
+  --muted-fg: var(--color-surface-700);
+  --border: var(--color-surface-300);
 }
