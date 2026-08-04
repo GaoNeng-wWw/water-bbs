@@ -10,11 +10,19 @@ const { url, fallbackText, size = 'md' } = defineProps<{
 }>();
 
 const clazz = computed(() => avatarStyle({ size }));
+
+defineOptions({
+  inheritAttrs:true,
+})
+
 </script>
 
 <template>
   <avatar-root :class="clazz" as="div">
-    <avatar-image :src="url ?? ''" class="size-full object-cover rounded-[inherit]" />
+    <avatar-image
+      :src="url ?? ''"
+      class="size-full object-cover rounded-[inherit]" :class="[$attrs.class]"
+    />
     <avatar-fallback class="text-surface-fg" :delay-ms="600">
       {{ fallbackText }}
     </avatar-fallback>

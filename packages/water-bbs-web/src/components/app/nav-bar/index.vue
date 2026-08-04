@@ -3,6 +3,7 @@ import {
   UiAvatar, UiPopover, UiPopoverContent, UiPopoverTrigger,
   UiListbox, UiListboxItem,
   type ListBoxItem,
+  UiDialog, UiDialogContent, UiDialogTrigger
 } from '@/components/ui';
 import { useRouter } from 'vue-router';
 
@@ -21,7 +22,15 @@ const onSelect = (item: ListBoxItem) => {
     <div class="max-w-5xl mx-auto flex gap-3">
       <div class=" w-form-md h-form-md bg-danger-500 shrink-0" />
       <div class="grow" />
-      <ui-popover>
+      <ui-dialog>
+        <ui-dialog-trigger class="shrink-0" as-child>
+          <ui-avatar fallback-text="test" class="shrink-0" />
+        </ui-dialog-trigger>
+        <ui-dialog-content>
+          test
+        </ui-dialog-content>
+      </ui-dialog>
+      <!-- <ui-popover>
         <ui-popover-trigger class="shrink-0 size-md" as="button">
           <ui-avatar fallback-text="test" />
         </ui-popover-trigger>
@@ -35,7 +44,7 @@ const onSelect = (item: ListBoxItem) => {
             </ui-listbox-item>
           </ui-listbox>
         </ui-popover-content>
-      </ui-popover>
+      </ui-popover> -->
     </div>
   </div>
 </template>
