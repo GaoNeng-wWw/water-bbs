@@ -6,3 +6,4 @@ export * from './shadow-scroll';
 export * from './tabs';
 export * from './dialog';
 export * from './form';
+export * from './input';

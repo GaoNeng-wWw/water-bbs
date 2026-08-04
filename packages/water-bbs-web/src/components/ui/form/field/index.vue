@@ -1,12 +1,14 @@
 <script lang="ts" setup>
+import { injectFormItem } from '../form-item.props';
+
 export type FieldProps = {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
-  invalid?: boolean;
 };
 
-const {size, ...props} = defineProps<FieldProps>();
+const { size = 'md', ...props } = defineProps<FieldProps>();
+const {invalid} = injectFormItem();
 </script>
 
 <template>
@@ -37,7 +39,7 @@ const {size, ...props} = defineProps<FieldProps>();
     @apply bg-surface-100/80 text-surface-800 pointer-events-none;
   }
   &[data-invalid] {
-    @apply text-danger border-danger;
+    @apply text-danger ring-danger ring-2;
     &:hover {
       @apply border-danger-600;
     }
