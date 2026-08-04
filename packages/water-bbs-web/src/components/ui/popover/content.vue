@@ -9,18 +9,20 @@ export type Props = PopoverContentProps & {
   widthFollowTrigger?: boolean;
 };
 
+defineOptions({
+  inheritAttrs: true,
+});
 const props = defineProps<Props>();
 const emits = defineEmits<PopoverContentEmits>();
 
 const forwarded = useForwardPropsEmits(props, emits);
 
-const clazz = computed(() => popoverContentStyle({rounded: props.rounded ?? 'md', widthFollowTrigger: props.widthFollowTrigger}))
-
+const clazz = computed(() => popoverContentStyle({ rounded: props.rounded ?? 'md', widthFollowTrigger: props.widthFollowTrigger }));
 </script>
 
 <template>
   <popover-portal>
-    <popover-content :class="clazz">
+    <popover-content :class="[clazz, $attrs.class]" v-bind="forwarded">
       <slot />
     </popover-content>
   </popover-portal>

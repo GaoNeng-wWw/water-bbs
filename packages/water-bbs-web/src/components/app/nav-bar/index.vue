@@ -25,7 +25,7 @@ const onSelect = (item: ListBoxItem) => {
         <ui-popover-trigger class="shrink-0 size-md" as="button">
           <ui-avatar fallback-text="test" />
         </ui-popover-trigger>
-        <ui-popover-content width-follow-trigger>
+        <ui-popover-content width-follow-trigger class="z-[calc(infinity+2)] bg-red-500">
           <ui-listbox mode="none" @select="onSelect">
             <ui-listbox-item id="Profile" value="/profile">
               Profile
