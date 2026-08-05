@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { buttonStyle } from './style';
 
 const {
+  htmlType,
   ...themeProps
 } = defineProps<{
   color?: 'surface' | 'primary' | 'danger' | undefined;
@@ -11,13 +12,14 @@ const {
   icon?: boolean | undefined;
   disabled?: boolean | undefined;
   loading?: boolean | undefined;
+  htmlType?: 'button' | 'submit' | 'reset';
 }>();
 
 const style = computed(() => buttonStyle(themeProps));
 </script>
 
 <template>
-  <button :class="style">
+  <button :class="style" :type="htmlType">
     <slot v-if="$slots.prefix" />
     <slot />
     <slot v-if="$slots.suffix" />

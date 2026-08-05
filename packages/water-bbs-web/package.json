@@ -7,18 +7,23 @@
     "dev": "vite",
     "build": "vite build --config ./configs/vite.config.prod.ts",
     "lint": "eslint ./src/**/*",
-    "lint:fix": "eslint ./src/**/* --fix"
+    "lint:fix": "eslint ./src/**/* --fix",
+    "test": "vitest"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@vee-validate/zod": "^4.15.1",
     "dayjs": "^1.11.21",
     "motion-v": "^2.3.0",
     "reka-ui": "^2.10.1",
     "tailwind-merge": "^3.6.0",
     "tailwind-variants": "^3.3.0",
     "tailwindcss": "^4.3.3",
+    "vee-validate": "^4.15.1",
+    "vitest": "^4.1.10",
     "vue": "^3.5.39",
-    "vue-router": "^5.2.0"
+    "vue-router": "^5.2.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@gaonengwww/eslint-config": "^1.0.6",
