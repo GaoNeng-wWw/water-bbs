@@ -10,22 +10,19 @@ const { horizontal = false } = defineProps<{
 const mode = computed(() => horizontal ? 'horizontal' : 'vertical');
 const scrollAreaViewPort = useTemplateRef('scroll-area');
 const { state } = useShadowScroll({ mode, el: computed(() => scrollAreaViewPort.value?.viewport) });
-watch(state, () => {
-  console.log(state.value);
-});
 </script>
 
 <template>
   <scroll-area-root ref="scroll-area" class="scroll" :data-scroll-state="state" :data-direction=" horizontal ? 'horizontal' : 'vertical'">
+    <scroll-area-viewport class="w-full h-full">
+      <slot />
+    </scroll-area-viewport>
     <scroll-area-scrollbar orientation="vertical" class="scroll__bar scroll__bar--vertical outline-none border-none">
       <scroll-area-thumb class="scroll__bar__thumb" />
     </scroll-area-scrollbar>
     <scroll-area-scrollbar v-if="horizontal" orientation="horizontal" class="scroll__bar scroll__bar--horizontal">
       <scroll-area-thumb class="scroll__bar__thumb" />
     </scroll-area-scrollbar>
-    <scroll-area-viewport as-child as="div" class="size-full">
-      <slot />
-    </scroll-area-viewport>
   </scroll-area-root>
 </template>
 
@@ -44,8 +41,7 @@ watch(state, () => {
   }
   &[data-scroll-state="end"] {
     --scroll-shadow: linear-gradient(
-      var(--scroll-shadow-direction),
-      black calc(100% - var(--scroll-shadow-size)), transparent
+      transparent, black var(--scroll-shadow-size)
     );
   }
   &[data-scroll-state="mid"] {
@@ -57,7 +53,7 @@ watch(state, () => {
   &[data-scroll-state="start"] {
     --scroll-shadow: linear-gradient(
       var(--scroll-shadow-direction),
-      transparent, black var(--scroll-shadow-size)
+      black calc(100% - var(--scrollbar-size)), transparent
     );
   }
   mask-image: var(--scroll-shadow);

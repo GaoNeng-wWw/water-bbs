@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, provide, ref, type Ref } from 'vue';
+import { computed, provide, ref, watch, type Ref } from 'vue';
 import { ListBoxContextKey, type ListBoxRootProps, type RootEmits } from './root.props';
 
 const {
@@ -9,8 +9,10 @@ const {
 } = defineProps<ListBoxRootProps>();
 
 const emits = defineEmits<RootEmits>();
+const modelValue = defineModel<string[]>({ required: true });
 
-const selected: Ref<string[]> = ref(defaultSelected);
+const selected: Ref<string[]> = ref([...modelValue.value]);
+
 const onSelect = (id: string, value: string) => {
   emits('select', { id, value });
   if (mode === 'none') {
@@ -27,6 +29,10 @@ const onSelect = (id: string, value: string) => {
     selected.value = [id];
   }
 };
+
+watch(selected, () => {
+  modelValue.value = selected.value;
+}, { deep: true });
 
 provide(ListBoxContextKey, {
   onSelect,

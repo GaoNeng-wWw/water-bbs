@@ -3,6 +3,10 @@ import { AvatarRoot, AvatarFallback, AvatarImage } from 'reka-ui';
 import { computed } from 'vue';
 import { avatarStyle } from './style';
 
+defineOptions({
+  inheritAttrs: true,
+});
+
 const { url, fallbackText, size = 'md' } = defineProps<{
   url?: string;
   fallbackText: string;
@@ -10,11 +14,7 @@ const { url, fallbackText, size = 'md' } = defineProps<{
 }>();
 
 const clazz = computed(() => avatarStyle({ size }));
-
-defineOptions({
-  inheritAttrs:true,
-})
-
+const friendlyFallbackText = computed(() => fallbackText.length <= 2 ? fallbackText : fallbackText.slice(0,2));
 </script>
 
 <template>
@@ -23,8 +23,8 @@ defineOptions({
       :src="url ?? ''"
       class="size-full object-cover rounded-[inherit]" :class="[$attrs.class]"
     />
-    <avatar-fallback class="text-surface-fg" :delay-ms="600">
-      {{ fallbackText }}
+    <avatar-fallback class="text-surface-fg p-1 text-nowrap" :delay-ms="600">
+      {{ friendlyFallbackText }}
     </avatar-fallback>
   </avatar-root>
 </template>

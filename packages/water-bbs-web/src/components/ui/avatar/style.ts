@@ -1,13 +1,13 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 export const avatarStyle = tv({
-  base: 'bg-avatar-bg border border-solid border-avatar-border shirnk-0',
+  base: 'bg-avatar-bg border border-solid border-avatar-border shirnk-0 overflow-hidden',
   variants: {
     size: {
-      xs: 'avatar-xs',
-      sm: 'avatar-sm',
-      md: 'avatar-md',
-      lg: 'avatar-lg',
+      xs: 'avatar-xs text-xs',
+      sm: 'avatar-sm text-sm',
+      md: 'avatar-md text-base',
+      lg: 'avatar-lg text-base',
     },
   },
   defaultVariants: {
