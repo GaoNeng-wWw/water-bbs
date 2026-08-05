@@ -13,7 +13,6 @@ type HeaderItem = {
   disabled: boolean;
 };
 const curActive: Ref<string | null> = ref(defaultActvie ?? '');
-const highlighted = ref(curActive.value);
 const headers: Ref<HeaderItem[]> = ref([]);
 const disabledKey = reactive(new Set(disabled));
 const vnodeMap = reactive(new Map<string, () => VNode[]>());
@@ -23,7 +22,6 @@ const onClick = (id: string) => {
     return;
   }
   curActive.value = id;
-  highlighted.value = id;
 };
 
 const onMounted = (id: string, label: string, slot: () => VNode[], disabledRewrite: boolean) => {
@@ -38,7 +36,6 @@ const onMounted = (id: string, label: string, slot: () => VNode[], disabledRewri
   const isDisabled = disabledKey.has(id);
   if (!curActive.value && !isDisabled) {
     curActive.value = id;
-    highlighted.value = id;
   }
 };
 
@@ -53,7 +50,7 @@ provideContext({
 <template>
   <motion.div>
     <motion.div>
-      <animate-presence>
+      <animate-presence mode="wait">
         <ui-shadow-scroll horizontal>
           <ul class="flex gap-3 w-fit">
             <li
@@ -66,11 +63,9 @@ provideContext({
               :data-disabled="disabledKey.has(item.id)"
               :data-active="curActive === item.id"
               @click="onClick(item.id)"
-              @mouseenter="() => { highlighted = item.id; }"
-              @mouseleave="() => { highlighted = curActive; }"
             >
               <motion.div
-                v-if="highlighted === item.id"
+                v-if="curActive === item.id"
                 layout-id="thumb"
                 layout
                 class="w-full h-full bg-surface-100 rounded-md absolute top-0 left-0"

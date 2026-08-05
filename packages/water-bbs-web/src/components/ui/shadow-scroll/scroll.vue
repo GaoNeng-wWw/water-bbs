@@ -17,7 +17,7 @@ watch(state, () => {
 
 <template>
   <scroll-area-root ref="scroll-area" class="scroll" :data-scroll-state="state" :data-direction=" horizontal ? 'horizontal' : 'vertical'">
-    <scroll-area-scrollbar orientation="vertical" class="scroll__bar scroll__bar--vertical">
+    <scroll-area-scrollbar orientation="vertical" class="scroll__bar scroll__bar--vertical outline-none border-none">
       <scroll-area-thumb class="scroll__bar__thumb" />
     </scroll-area-scrollbar>
     <scroll-area-scrollbar v-if="horizontal" orientation="horizontal" class="scroll__bar scroll__bar--horizontal">

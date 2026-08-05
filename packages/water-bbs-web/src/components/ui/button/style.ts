@@ -19,7 +19,7 @@ export const buttonStyle = tv({
       sm: 'h-form-sm px-component-sm rounded-sm text-sm',
       md: 'h-form-md px-component-md rounded-md text-base',
       lg: 'h-form-lg px-component-lg rounded-lg text-lg',
-      full: 'h-form-md w-full text-base',
+      full: 'h-form-md w-full text-base rounded-md',
     },
     icon: {
       true: 'aspect-square px-0!',

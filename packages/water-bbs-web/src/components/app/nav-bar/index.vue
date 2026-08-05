@@ -7,6 +7,7 @@ import {
 } from '@/components/ui';
 import { useRouter } from 'vue-router';
 import LoginForm from '../auth/login-form.vue';
+import AuthTab from '../auth/auth-tab.vue';
 
 const router = useRouter();
 
@@ -28,7 +29,7 @@ const onSelect = (item: ListBoxItem) => {
           <ui-avatar fallback-text="test" class="shrink-0" />
         </ui-dialog-trigger>
         <ui-dialog-content>
-          <login-form />
+          <auth-tab />
         </ui-dialog-content>
       </ui-dialog>
       <!-- <ui-popover>

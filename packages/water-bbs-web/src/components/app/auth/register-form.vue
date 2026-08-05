@@ -9,8 +9,6 @@ const schema = z.object({
   password: z.string(),
 });
 
-console.log(schema.required())
-
 const model = reactive({ email: '', password: '' });
 </script>
 
@@ -19,11 +17,20 @@ const model = reactive({ email: '', password: '' });
     <ui-form-item label="Email" prop="email">
       <ui-input v-model="model.email" />
     </ui-form-item>
+    <ui-form-item label="Confirm Password" prop="password">
+      <ui-input v-model="model.password" password />
+    </ui-form-item>
     <ui-form-item label="Password" prop="password">
       <ui-input v-model="model.password" password />
     </ui-form-item>
+    <ui-form-item label="Nick" prop="password">
+      <ui-input v-model="model.password" password />
+    </ui-form-item>
+    <ui-form-item label="Bio" prop="password">
+      <ui-input v-model="model.password" password />
+    </ui-form-item>
     <div class="mt-2 w-full">
-      <ui-button color="primary" size="full" html-type="button">
+      <ui-button color="primary" size="full">
         登录
       </ui-button>
     </div>

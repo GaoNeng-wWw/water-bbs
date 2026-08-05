@@ -23,15 +23,20 @@ const setPos = (el: HTMLElement) => {
   };
 };
 
-watchEffect(() => {
+const setPosHandler = (ev: Event) => {
+  setPos(ev.target as HTMLElement);
+};
+
+watchEffect((cleanup) => {
   const el = triggerElement.value;
 
   if (!el) {
     return;
   }
   setPos(el);
-  el.addEventListener('click', () => {
-    setPos(el);
+  el.addEventListener('click', setPosHandler);
+  cleanup(() => {
+    el.removeEventListener('click', setPosHandler);
   });
 });
 
@@ -44,7 +49,6 @@ const forwarded = useForwardPropsEmits(props, emits);
     <animate-presence>
       <dialog-content v-bind="forwarded" as-child>
         <motion.div
-          layout
           class="fixed top-0 left-0 max-w-lg w-full p-4 rounded-md bg-surface-200 z-[calc(infinity+1)] flex flex-col"
           :initial="{
             opacity: 0,
