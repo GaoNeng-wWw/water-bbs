@@ -2,7 +2,7 @@
 import { AppNavBar, TopicList } from '@/components/app';
 import Categoies, { type CategoryItem } from './components/categoies.vue';
 import { UiShadowScroll } from '@/components/ui';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const categories: CategoryItem[] = [
@@ -29,7 +29,8 @@ const categories: CategoryItem[] = [
 const router = useRouter();
 const route = useRoute();
 
-const categoryId = ref(route.params.id?.toString());
+const categoryId = ref(route.params.id?.toString() || categories[0].id);
+const activeCategory = computed(() => categories.filter(c => c.id === categoryId.value)[0]);
 
 watch(categoryId, () => {
   router.replace({ path: `/${categoryId.value}` });
@@ -39,18 +40,25 @@ watch(categoryId, () => {
 <template>
   <div class="w-full">
     <app-nav-bar />
-    <div class="max-w-5xl flex mx-auto py-4 gap-4 flex-col md:flex-row px-5">
+    <div class="max-w-5xl flex flex-col mx-auto pt-8 pb-4 gap-8 px-5">
       <div class="w-full">
-        <topic-list />
+        <h1 class="text-3xl text-surface-fg">
+          {{ activeCategory.label }}
+        </h1>
       </div>
-      <div class="w-full shrink-0 h-fit -order-1 top-16 static space-y-4 md:sticky md:order-1 md:w-75">
-        <div class="w-full h-fit bg-surface-100 rounded-md border border-surface-200 p-2">
-          <div class="mb-4 text-surface-fg/50">
-            <span>分类</span>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="w-full">
+          <topic-list />
+        </div>
+        <div class="w-full shrink-0 h-fit -order-1 top-16 static space-y-4 md:sticky md:order-1 md:w-75">
+          <div class="w-full h-fit bg-surface-100 rounded-md border border-surface-200 p-2">
+            <div class="mb-4 text-surface-fg/50">
+              <span>分类</span>
+            </div>
+            <ui-shadow-scroll class="h-75">
+              <categoies v-model="categoryId" :categories="categories" />
+            </ui-shadow-scroll>
           </div>
-          <ui-shadow-scroll class="h-75">
-            <categoies v-model="categoryId" :categories="categories" />
-          </ui-shadow-scroll>
         </div>
       </div>
     </div>
