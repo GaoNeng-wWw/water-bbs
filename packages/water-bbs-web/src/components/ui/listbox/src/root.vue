@@ -9,7 +9,7 @@ const {
 } = defineProps<ListBoxRootProps>();
 
 const emits = defineEmits<RootEmits>();
-const modelValue = defineModel<string[]>({ required: true });
+const modelValue = defineModel<string[]>({ required: false, default: () => [] });
 
 const selected: Ref<string[]> = ref([...modelValue.value]);
 
