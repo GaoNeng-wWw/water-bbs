@@ -11,7 +11,12 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
+    "@tiptap/markdown": "^3.29.2",
+    "@tiptap/pm": "^3.29.2",
+    "@tiptap/starter-kit": "^3.29.2",
+    "@tiptap/vue-3": "^3.29.2",
     "@vee-validate/zod": "^4.15.1",
     "dayjs": "^1.11.21",
     "motion-v": "^2.3.0",

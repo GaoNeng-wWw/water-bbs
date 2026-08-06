@@ -3,6 +3,7 @@
 @import "../components/ui/button/theme.css";
 @import "../components/ui/avatar/theme.css";
 @plugin "@iconify/tailwind4";
+@plugin "@tailwindcss/typography";
 
 @layer theme, base, components, utilities;
 
@@ -14,8 +15,6 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 html {
-  overflow: auto;
-  height: auto;
 }
 
 html, body, #app{

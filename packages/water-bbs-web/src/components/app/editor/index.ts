@@ -1,0 +1,1 @@
+export { default as TopicEditor } from './topic-editor.vue';

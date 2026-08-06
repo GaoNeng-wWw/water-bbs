@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants';
 
 export const popoverContentStyle = tv({
-  base: ['border border-solid border-surface-200 bg-surface-100 max-h-(--reka-popover-content-available-height) overflow-auto',],
+  base: ['border border-solid border-surface-200 bg-surface-100 max-h-(--reka-popover-content-available-height) overflow-auto', 'w-full'],
   variants: {
     widthFollowTrigger: {
       true: 'min-w-(--reka-popover-trigger-width)',

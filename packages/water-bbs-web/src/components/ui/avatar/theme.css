@@ -8,8 +8,8 @@
 }
 
 @utility avatar-* {
-  @apply flex items-center justify-center size-full aspect-square;
-  max-width: --value(--size-avatar-*);
-  max-height: --value(--size-avatar-*);
+  @apply flex items-center justify-center aspect-square;
+  width: --value(--size-avatar-*);
+  height: --value(--size-avatar-*);
   border-radius: 100%;
 }
