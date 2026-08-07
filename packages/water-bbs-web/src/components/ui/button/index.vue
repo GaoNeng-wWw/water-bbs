@@ -7,7 +7,7 @@ const {
   ...themeProps
 } = defineProps<{
   color?: 'surface' | 'primary' | 'danger' | undefined;
-  variant?: 'solid' | 'outline' | 'ghost' | 'text' | undefined;
+  variant?: 'solid' | 'outline' | 'ghost' | 'text' | 'flat' | undefined;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'full' | undefined;
   icon?: boolean | undefined;
   disabled?: boolean | undefined;
