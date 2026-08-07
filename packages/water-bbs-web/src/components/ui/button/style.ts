@@ -13,6 +13,7 @@ export const buttonStyle = tv({
       outline: 'border border-solid',
       ghost: '',
       text: '',
+      flat: '',
     },
     size: {
       xs: 'h-form-xs px-component-xs rounded-xs text-xs',
@@ -39,6 +40,10 @@ export const buttonStyle = tv({
     { color: 'primary', variant: 'outline', className: 'border-btn-outline-primary text-btn-outline-primary-text' },
     { color: 'surface', variant: 'outline', className: 'border-btn-outline-surface text-btn-outline-surface-text' },
     { color: 'danger', variant: 'outline', className: 'border-btn-outline-danger text-btn-outline-danger-text' },
+
+    { color: 'primary', variant: 'flat', className: 'text-btn-ghost-primary-hovered-text bg-btn-ghost-primary-bg/50' },
+    { color: 'surface', variant: 'flat', className: 'text-btn-ghost-surface-hovered-text bg-btn-ghost-surface-bg/50' },
+    { color: 'danger', variant: 'flat', className: 'text-btn-ghost-danger-hovered-text bg-btn-ghost-danger-bg/50' },
 
     { color: 'primary', variant: 'ghost', className: 'text-btn-ghost-primary-text hover:text-btn-ghost-primary-hovered-text hover:bg-btn-ghost-primary-bg/50' },
     { color: 'surface', variant: 'ghost', className: 'text-btn-ghost-surface-text hover:text-btn-ghost-surface-hovered-text hover:bg-btn-ghost-surface-bg/50' },

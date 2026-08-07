@@ -8,7 +8,7 @@ const {
 
 <template>
   <div class="w-full">
-    <span>{{ label }}</span>
+    <span class="text-surface-600 text-sm">{{ label }}</span>
     <div class="w-full space-y-2">
       <slot />
     </div>

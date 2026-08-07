@@ -8,3 +8,4 @@ export * from './dialog';
 export * from './form';
 export * from './input';
 export * from './drawer';
+export * from './pagination';

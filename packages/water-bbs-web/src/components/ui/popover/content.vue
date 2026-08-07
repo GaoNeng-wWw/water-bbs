@@ -6,7 +6,7 @@ import { popoverContentStyle } from './style';
 
 export type Props = PopoverContentProps & {
   rounded?: 'xs' | 'sm' | 'md' | 'lg';
-  widthFollowTrigger?: boolean; 
+  widthFollowTrigger?: boolean;
 };
 
 defineOptions({
