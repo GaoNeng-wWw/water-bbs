@@ -4,7 +4,6 @@ import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
 
 const editor = useEditor({
-  autofocus: true,
   editorProps: {
     attributes: {
       class: 'size-full outline-none prose dark:prose-invert',

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { UiButton } from '@/components/ui';
 import { AppNavBar } from '@/components/app';
 import ReplyCardList from './component/reply-card-list.vue';
 import { onMounted, ref, useTemplateRef, watch } from 'vue';
@@ -23,6 +24,9 @@ const onScroll = (ev: Event) => {
   blur.value = `${rawBlur}px`;
 };
 
+const onClickBack = () => {
+  router.back();
+}
 const onPageUpdate = (page: number) => {
   router.push({ path: router.currentRoute.value.path, query: { page }, replace: true });
 };
@@ -54,7 +58,10 @@ onMounted(() => {
     </app-nav-bar>
     <div class="max-w-5xl mx-auto py-4 px-2">
       <div class="w-full">
-        <div class="w-full bg-bg border-x border-t border-surface-200 p-4 rounded-t-lg">
+        <div class="w-full bg-bg border-x border-t border-surface-200 p-4 rounded-t-lg flex items-center gap-3">
+          <ui-button icon size="sm" variant="text" @click="onClickBack">
+            <div class="size-4 icon-[material-symbols--keyboard-arrow-left] text-surface-fg" />
+          </ui-button>
           <h1 ref="post-title" class="text-3xl text-surface-fg">
             Title
           </h1>
