@@ -22,10 +22,11 @@
   },
   "dependencies": {
     "@liaoliaots/nestjs-redis": "^10.0.0",
+    "@mikro-orm/cli": "^7.1.11",
     "@mikro-orm/core": "^7.1.7",
-    "@mikro-orm/decorators": "^7.1.7",
+    "@mikro-orm/decorators": "^7.1.11",
     "@mikro-orm/nestjs": "^7.0.2",
-    "@mikro-orm/sqlite": "^7.1.7",
+    "@mikro-orm/sqlite": "^7.1.11",
     "@nestjs-modules/mailer": "^2.3.7",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",

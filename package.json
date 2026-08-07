@@ -19,6 +19,7 @@
     "test:web": "pnpm --filter ./packages/water-bbs-web test"
   },
   "dependencies": {
+    "pinia-plugin-persistedstate": "^4.7.1",
     "vaul-vue": "^0.4.1"
   }
 }

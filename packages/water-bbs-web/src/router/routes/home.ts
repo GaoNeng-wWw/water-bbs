@@ -1,8 +1,11 @@
-import type { RouteRecord } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 
 export default [
   {
     path: '/:id?',
     component: () => import('@/pages/home/index.vue'),
+    meta: {
+      scrollToTop: true,
+    },
   },
-] as unknown as RouteRecord[];
+] as RouteRecordRaw[];
