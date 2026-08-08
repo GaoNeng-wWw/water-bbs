@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { getProfile } from '@/api';
+import { client } from '@/api/client.gen';
 import {
   UiAvatar,
   type ListBoxItem,
@@ -7,9 +9,22 @@ import {
   UiListbox,
   UiListboxItem,
 } from '@/components/ui';
+import { useAuthStore, useProfile } from '@/store';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const authStore = useAuthStore();
+const profileStore = useProfile();
+
+await getProfile({ client })
+  .then(resp => resp.data)
+  .then((data) => {
+    if (!data) {
+      authStore.clearToken();
+      return;
+    }
+    return data;
+  });
 
 const onSelect = (item: ListBoxItem) => {
   if (item.id === 'loggedout') {

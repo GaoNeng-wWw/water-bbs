@@ -89,11 +89,11 @@ export class RefreshTokenService implements ICommandHandler<RefreshToken> {
         }),
       );
     } catch (error) {
+      console.log(error);
       if (error instanceof TokenExpiredError) {
         return err(new TokenExpired());
       }
       return err(new InvalidToken(error as Error));
     }
-    throw new Error('Method not implemented.');
   }
 }

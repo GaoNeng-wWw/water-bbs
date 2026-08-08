@@ -4,7 +4,8 @@ import { vAuthed } from './directive';
 import './assets/style.css';
 import { router } from '@/router';
 import { createPinia } from 'pinia';
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import { setupClient } from './client';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -12,4 +13,9 @@ pinia.use(piniaPluginPersistedstate);
 app.use(router);
 app.use(pinia);
 app.directive('authed', vAuthed);
-app.mount('#app');
+
+setupClient();
+
+setTimeout(() => {
+  app.mount('#app');
+}, 0);

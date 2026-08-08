@@ -37,21 +37,22 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
-      return true;
-    }
     const http = context.switchToHttp();
     const req: AuthRequest = http.getRequest();
-    if (!req.headers['authorization']) {
+    if (!req.headers['authorization'] && !isPublic) {
       throw new UnAuthorized();
     }
     const token = this.getToken(req.headers['authorization'] ?? '');
+    if (isPublic && !token) {
+      return true;
+    }
     try {
-      const verifyResult: TokenData = this.jwt.verify(token);
+      const verifyResult: TokenData = isPublic
+        ? this.jwt.verify(token)
+        : this.jwt.decode(token);
       if ('accessTokenJti' in verifyResult) {
         throw new InvalidToken();
       }
-
       req['user'] = {
         id: verifyResult.sub as AccountId,
       };

@@ -14,7 +14,7 @@ const { url, fallbackText, size = 'md' } = defineProps<{
 }>();
 
 const clazz = computed(() => avatarStyle({ size }));
-const friendlyFallbackText = computed(() => fallbackText.length <= 2 ? fallbackText : fallbackText.slice(0,2));
+const friendlyFallbackText = computed(() => fallbackText.length <= 2 ? fallbackText : fallbackText.slice(0, 2).toUpperCase());
 </script>
 
 <template>

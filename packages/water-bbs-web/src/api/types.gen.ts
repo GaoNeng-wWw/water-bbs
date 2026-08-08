@@ -680,11 +680,11 @@ export type UpdateTopicResponse2 = UpdateTopicResponses[keyof UpdateTopicRespons
 
 export type GetProfileData = {
     body?: never;
-    path: {
+    path?: {
         /**
          * Account ID
          */
-        id: unknown;
+        id?: unknown;
     };
     query?: never;
     url: '/profile/{id}';

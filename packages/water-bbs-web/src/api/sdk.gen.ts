@@ -202,7 +202,7 @@ export const updateTopic = <ThrowOnError extends boolean = false>(options: Optio
  *
  * 根据Account ID获取用户信息
  */
-export const getProfile = <ThrowOnError extends boolean = false>(options: Options<GetProfileData, ThrowOnError>): RequestResult<GetProfileResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetProfileResponses, unknown, ThrowOnError>({
+export const getProfile = <ThrowOnError extends boolean = false>(options?: Options<GetProfileData, ThrowOnError>): RequestResult<GetProfileResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetProfileResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/profile/{id}',
     ...options
