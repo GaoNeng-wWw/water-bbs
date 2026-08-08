@@ -216,9 +216,7 @@ export type TopicAuthor = {
     /**
      * 主题作者ID
      */
-    id: {
-        [key: string]: unknown;
-    };
+    id: string;
     /**
      * 主题作者昵称
      */
@@ -229,9 +227,7 @@ export type TopicInfo = {
     /**
      * 主题ID
      */
-    id: {
-        [key: string]: unknown;
-    };
+    id: string;
     /**
      * 主题标题
      */
@@ -244,6 +240,14 @@ export type TopicInfo = {
      * 创建时间
      */
     createdAt: string;
+    /**
+     * 分类
+     */
+    category: TopicCategory;
+    /**
+     * 回复总数
+     */
+    repliesTotal: number;
 };
 
 export type CreateReplyDto = {
@@ -314,9 +318,7 @@ export type UpdateTopicResponse = {
     /**
      * 主题ID
      */
-    id: {
-        [key: string]: unknown;
-    };
+    id: string;
 };
 
 export type ProfileInfo = {
@@ -334,6 +336,21 @@ export type ProfileInfo = {
      * 个人简介
      */
     bio?: string;
+};
+
+export type TopicCategory = {
+    /**
+     * 分类ID
+     */
+    id: string;
+    /**
+     * 分类名称
+     */
+    name: string;
+    /**
+     * 分类颜色
+     */
+    color: string;
 };
 
 export type UpdateProfile = {
@@ -536,7 +553,7 @@ export type ListReplyData = {
         /**
          * 主题ID
          */
-        topicId: unknown;
+        topicId: string;
     };
     query: {
         /**
@@ -565,7 +582,7 @@ export type CreateReplyData = {
         /**
          * 主题ID
          */
-        topicId: unknown;
+        topicId: string;
     };
     query?: never;
     url: '/topic/replies/{topicId}';
@@ -648,7 +665,7 @@ export type RemoveTopicData = {
         /**
          * 主题ID
          */
-        topicId: unknown;
+        topicId: string;
     };
     query?: never;
     url: '/topic/{topicId}';
@@ -666,7 +683,7 @@ export type UpdateTopicData = {
         /**
          * 主题ID
          */
-        topicId: unknown;
+        topicId: string;
     };
     query?: never;
     url: '/topic/{topicId}';

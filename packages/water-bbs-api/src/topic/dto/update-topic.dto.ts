@@ -22,7 +22,7 @@ export class UpdateTopicDto {
 }
 
 export class UpdateTopicResponse {
-  @ApiProperty({ description: '主题ID' })
+  @ApiProperty({ description: '主题ID', type: String })
   @IsString()
   id: TopicId;
 }

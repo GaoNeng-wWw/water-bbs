@@ -3,10 +3,10 @@ import dayjs from 'dayjs';
 
 import { computed } from 'vue';
 
-export type CategoryInfo = { color?: string; label: string; id: string };
+export type CategoryInfo = { color?: string; name: string; id: string };
 export type ProfilePublishedTopicCardProps = {
   title: string;
-  categories: CategoryInfo[];
+  category: CategoryInfo;
   id: string;
   createdAt: string;
   repliesTotal: number;
@@ -16,9 +16,8 @@ const {
   id,
   createdAt,
   repliesTotal,
-  categories = [],
+  category,
 } = defineProps<ProfilePublishedTopicCardProps>();
-
 
 const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow());
 </script>
@@ -26,9 +25,9 @@ const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow());
 <template>
   <div class="w-full border border-solid border-surface-200 p-4 rounded-xl bg-surface-100">
     <div class="w-full flex gap-2 flex-wrap mb-3">
-      <div v-for="category in categories" :key="category.id" class="px-2 py-0.5 text-xs bg-surface-200 rounded-full flex items-center gap-2 text-surface-fg">
+      <div :key="category.id" class="px-2 py-0.5 text-xs bg-surface-200 rounded-full flex items-center gap-2 text-surface-fg">
         <div class="size-component-sm rounded-full bg-(--color)" :style="{ '--color': category.color ?? 'var(--color-primary-500)' }" />
-        {{ category.label }}
+        {{ category.name }}
       </div>
     </div>
     <div class="flex gap-2 items-center flex-wrap pl-1">

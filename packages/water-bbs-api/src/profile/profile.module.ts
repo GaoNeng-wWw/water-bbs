@@ -11,9 +11,10 @@ import { UpdateProfileService } from './commands';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Reply, Topic } from '../topic';
 import { Profile } from '../auth';
+import { Category } from '../category';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Profile, Topic, Reply])],
+  imports: [MikroOrmModule.forFeature([Profile, Topic, Reply, Category])],
   controllers: [ProfileController],
   providers: [
     ProfileService,

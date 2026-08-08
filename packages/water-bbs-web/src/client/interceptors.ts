@@ -22,8 +22,11 @@ export function setupInterceptors(client: Client) {
         refreshed = true;
         const token = authStore.refreshToken;
         return refreshToken({
+          headers: {
+            Authorization: `Bearer ${authStore.accessToken}`,
+          },
           body: {
-            token,
+            token: `Bearer ${token}`,
           },
         })
           .then(resp => resp.data)

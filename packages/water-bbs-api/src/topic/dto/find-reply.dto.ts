@@ -4,7 +4,7 @@ import type { AccountId } from '../../auth';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class FindReplyDto {
-  @ApiProperty({ description: '回复主题ID' })
+  @ApiProperty({ description: '回复主题ID', type: String })
   @IsString()
   @IsNotEmpty()
   id: TopicId;

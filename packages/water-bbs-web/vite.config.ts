@@ -4,7 +4,6 @@ import { join } from 'path';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 
-
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
@@ -44,16 +43,16 @@ export default defineConfig(({ mode }) => {
         '@': join(__dirname, 'src'),
       },
     },
-    server:{
-      proxy:{
-        '/api':{
+    server: {
+      proxy: {
+        '/api': {
           target: 'http://localhost:3000',
           changeOrigin: true,
           rewrite(path) {
             return path.replace('/api', '');
           },
-        }
-      }
-    }
+        },
+      },
+    },
   };
 });

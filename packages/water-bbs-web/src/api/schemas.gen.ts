@@ -324,7 +324,7 @@ export const TopicAuthorSchema = {
     type: 'object',
     properties: {
         id: {
-            type: 'object',
+            type: 'string',
             description: '主题作者ID'
         },
         nick: {
@@ -342,7 +342,7 @@ export const TopicInfoSchema = {
     type: 'object',
     properties: {
         id: {
-            type: 'object',
+            type: 'string',
             description: '主题ID'
         },
         title: {
@@ -356,13 +356,27 @@ export const TopicInfoSchema = {
         createdAt: {
             type: 'string',
             description: '创建时间'
+        },
+        category: {
+            description: '分类',
+            allOf: [
+                {
+                    $ref: '#/components/schemas/TopicCategory'
+                }
+            ]
+        },
+        repliesTotal: {
+            type: 'number',
+            description: '回复总数'
         }
     },
     required: [
         'id',
         'title',
         'content',
-        'createdAt'
+        'createdAt',
+        'category',
+        'repliesTotal'
     ]
 } as const;
 
@@ -467,7 +481,7 @@ export const UpdateTopicResponseSchema = {
     type: 'object',
     properties: {
         id: {
-            type: 'object',
+            type: 'string',
             description: '主题ID'
         }
     },
@@ -495,6 +509,29 @@ export const ProfileInfoSchema = {
     required: [
         'id',
         'nick'
+    ]
+} as const;
+
+export const TopicCategorySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '分类ID'
+        },
+        name: {
+            type: 'string',
+            description: '分类名称'
+        },
+        color: {
+            type: 'string',
+            description: '分类颜色'
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'color'
     ]
 } as const;
 

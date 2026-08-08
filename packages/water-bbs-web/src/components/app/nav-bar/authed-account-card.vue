@@ -15,16 +15,17 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const authStore = useAuthStore();
 const profileStore = useProfile();
-
-await getProfile({ client })
-  .then(resp => resp.data)
-  .then((data) => {
-    if (!data) {
-      authStore.clearToken();
-      return;
-    }
-    return data;
-  });
+if (profileStore.profile === null) {
+  await getProfile({ client })
+    .then(resp => resp.data)
+    .then((data) => {
+      if (!data) {
+        authStore.clearToken();
+        return;
+      }
+      return data;
+    });
+}
 
 const onSelect = (item: ListBoxItem) => {
   if (item.id === 'loggedout') {
