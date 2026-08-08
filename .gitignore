@@ -3,3 +3,4 @@ packages/water-bbs-api/dist/*
 config.*
 !config.example.json
 !config.ci.json
+*.db

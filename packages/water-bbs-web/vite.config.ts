@@ -11,38 +11,49 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       tailwindcss(),
-      // heyApiPlugin({
-      //   config: {
-      //     input: `${env.VITE_API_URL}/api-json`,
-      //     output: {
-      //       path: join(__dirname, '..', 'src', 'api'),
-      //     },
-      //     plugins: [
-      //       {
-      //         name: '@hey-api/client-axios',
-      //         baseUrl: env.VITE_BASE_URL,
-      //       },
-      //       '@hey-api/schemas',
-      //       {
-      //         dates: true,
-      //         name: '@hey-api/transformers',
-      //       },
-      //       {
-      //         enums: 'javascript',
-      //         name: '@hey-api/typescript',
-      //       },
-      //       {
-      //         name: '@hey-api/sdk',
-      //         transformer: true,
-      //       },
-      //     ],
-      //   },
-      // }),
+      heyApiPlugin({
+        config: {
+          input: `${env.VITE_API_URL}/api-json`,
+          output: {
+            path: join(__dirname, 'src', 'api'),
+          },
+          plugins: [
+            {
+              name: '@hey-api/client-axios',
+              baseUrl: env.VITE_BASE_URL,
+            },
+            '@hey-api/schemas',
+            {
+              dates: true,
+              name: '@hey-api/transformers',
+            },
+            {
+              enums: 'javascript',
+              name: '@hey-api/typescript',
+            },
+            {
+              name: '@hey-api/sdk',
+              transformer: true,
+            },
+          ],
+        },
+      }),
     ],
     resolve: {
       alias: {
         '@': join(__dirname, 'src'),
       },
     },
+    server:{
+      proxy:{
+        '/api':{
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          rewrite(path) {
+            return path.replace('/api', '');
+          },
+        }
+      }
+    }
   };
 });
