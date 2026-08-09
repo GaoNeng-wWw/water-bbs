@@ -3,26 +3,26 @@ import dayjs from 'dayjs';
 import { UiAvatar } from '@/components/ui';
 import { computed } from 'vue';
 
-export type CategoryInfo = { color?: string; label: string; id: string };
+export type CategoryInfo = { color?: string; name: string; id: string };
 export type Author = {
   id: string;
   nick: string;
 };
 export type TopicCardProps = {
   title: string;
-  categories: CategoryInfo[];
+  category: CategoryInfo;
   id: string;
   createdAt: string;
   repliesTotal: number;
   author?: Author;
-  pin?: boolean
+  pin?: boolean;
 };
 const {
   title,
   id,
   createdAt,
   repliesTotal,
-  categories = [],
+  category,
   author,
 } = defineProps<TopicCardProps>();
 
@@ -33,9 +33,9 @@ const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow());
   <div class="w-full border border-solid border-surface-200 p-4 rounded-xl bg-surface-100">
     <div class="w-full flex gap-2 flex-wrap mb-3">
       <div v-if="pin" class="icon-[mdi--pin-outline] size-5 text-surface-fg" />
-      <div v-for="category in categories" :key="category.id" class="px-2 py-0.5 text-xs bg-surface-200 rounded-full flex items-center gap-2 text-surface-fg">
+      <div :key="category.id" class="px-2 py-0.5 text-xs bg-surface-200 rounded-full flex items-center gap-2 text-surface-fg">
         <div class="size-component-sm rounded-full bg-(--color)" :style="{ '--color': category.color ?? 'var(--color-primary-500)' }" />
-        {{ category.label }}
+        {{ category.name }}
       </div>
     </div>
     <div class="flex gap-2 items-center flex-wrap pl-1">
@@ -47,7 +47,7 @@ const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow());
       <div v-if="author" class="w-fit flex items-center shrink-0">
         <div class="w-fit shrink-0 flex items-center gap-2">
           <ui-avatar size="sm" :fallback-text="author.nick" url="" />
-          <router-link :to="{path: `/profile/${author.id}`}" class="text-nowrap">
+          <router-link :to="{path: `/profile/${author.id}` }" class="text-nowrap">
             <span class="text-sm shrink-0 text-surface-800">{{ author.nick }}</span>
           </router-link>
         </div>

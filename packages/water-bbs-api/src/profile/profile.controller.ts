@@ -4,7 +4,7 @@ import { Public, User, type AccountId } from '../auth';
 import { ApiPaginationResponse, DomainError } from '@app/shared';
 import {
   ProfileInfo,
-  TopicInfo,
+  ProfileTopicInfo,
   UpdateProfile,
   UserPublishedTopicList,
 } from './dto';
@@ -30,7 +30,7 @@ export class ProfileController {
     operationId: 'getProfile',
   })
   @ApiOkResponse({ type: ProfileInfo })
-  @ApiParam({ name: 'id', description: 'Account ID', required: false})
+  @ApiParam({ name: 'id', description: 'Account ID', required: false })
   @ApiBearerAuth()
   async getProfile(
     @Param('id') id: AccountId,
@@ -48,7 +48,7 @@ export class ProfileController {
     operationId: 'getPublishedTopic',
   })
   @ApiParam({ name: 'id', description: 'Account ID' })
-  @ApiPaginationResponse(TopicInfo)
+  @ApiPaginationResponse(ProfileTopicInfo)
   @Get(':id/published-topic')
   @ApiQuery({ name: 'page', description: 'Page number' })
   @ApiQuery({ name: 'size', description: 'Page size' })

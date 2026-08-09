@@ -26,7 +26,7 @@ export function setupInterceptors(client: Client) {
             Authorization: `Bearer ${authStore.accessToken}`,
           },
           body: {
-            token: `Bearer ${token}`,
+            token: `${token}`,
           },
         })
           .then(resp => resp.data)

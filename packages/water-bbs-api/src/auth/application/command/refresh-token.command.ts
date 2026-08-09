@@ -34,8 +34,10 @@ export class RefreshTokenService implements ICommandHandler<RefreshToken> {
     refreshToken: refreshTokenStr,
   }: RefreshToken): Promise<Result<TokenPair, DomainError>> {
     try {
-      const verifyResult = this.jwt.verify<TokenData>(refreshTokenStr);
-      if (!('accessTokenjti' in verifyResult)) {
+      const verifyResult = this.jwt.verify<TokenData>(
+        refreshTokenStr.replace('Bearer ', ''),
+      );
+      if (!('accessTokenJti' in verifyResult)) {
         return err(new InvalidToken());
       }
       const realRefreshToken = await this.tokenRepo.getTokenByJti(
@@ -67,6 +69,7 @@ export class RefreshTokenService implements ICommandHandler<RefreshToken> {
       const refreshToken = await this.tokenGenerator.generator({
         ...refreshTokenData,
         ttl: refreshTokenTTL,
+        accessTokenJti: accessTokenData.jti,
       });
       await this.sessionRepo.refreshToken({
         uid: verifyResult.sub,

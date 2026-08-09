@@ -36,7 +36,7 @@ export class TopicInfo {
   title: string;
   @ApiProperty({ description: '主题内容' })
   content: string;
-  @ApiProperty({ description: '主题作者' })
+  @ApiProperty({ description: '主题作者', type: TopicAuthor })
   author: TopicAuthor;
   @ApiProperty({ description: '主题创建时间' })
   createdAt: string;

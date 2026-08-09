@@ -237,17 +237,21 @@ export type TopicInfo = {
      */
     content: string;
     /**
-     * 创建时间
+     * 主题作者
+     */
+    author: TopicAuthor;
+    /**
+     * 主题创建时间
      */
     createdAt: string;
     /**
-     * 分类
+     * 主题是否置顶
      */
-    category: TopicCategory;
+    pinned: boolean;
     /**
-     * 回复总数
+     * 主题回复总数
      */
-    repliesTotal: number;
+    replyTotal: number;
 };
 
 export type CreateReplyDto = {
@@ -351,6 +355,33 @@ export type TopicCategory = {
      * 分类颜色
      */
     color: string;
+};
+
+export type ProfileTopicInfo = {
+    /**
+     * 主题ID
+     */
+    id: string;
+    /**
+     * 主题标题
+     */
+    title: string;
+    /**
+     * 主题内容
+     */
+    content: string;
+    /**
+     * 创建时间
+     */
+    createdAt: string;
+    /**
+     * 分类
+     */
+    category: TopicCategory;
+    /**
+     * 回复总数
+     */
+    repliesTotal: number;
 };
 
 export type UpdateProfile = {
@@ -736,7 +767,7 @@ export type GetPublishedTopicData = {
 
 export type GetPublishedTopicResponses = {
     200: PaginationData & {
-        data?: Array<TopicInfo>;
+        data?: Array<ProfileTopicInfo>;
     };
 };
 

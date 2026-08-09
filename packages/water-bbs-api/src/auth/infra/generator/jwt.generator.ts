@@ -10,7 +10,7 @@ export class JwtGenerator implements TokenGenrator {
     sessionId,
     ttl,
     sub,
-    additionalData,
+    ...additionalData
   }: GenratorProps<AdditionalData>): Promise<string> {
     return this.jwt.signAsync(
       { sessionId, sub, ...additionalData, nonce: randomAlphabet(64) },
