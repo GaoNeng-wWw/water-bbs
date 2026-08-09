@@ -8,6 +8,8 @@ dayjs.extend(relativeTime);
 
 <template>
   <div class="w-full bg-surface-50 min-h-screen">
-    <router-view />
+    <suspense>
+      <router-view />
+    </suspense>
   </div>
 </template>

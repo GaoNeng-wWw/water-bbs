@@ -3,7 +3,7 @@ import type { AccountId } from '../../auth';
 import type { TopicId } from '../entites';
 
 export class TopicAuthor {
-  @ApiProperty({ description: '主题作者ID' })
+  @ApiProperty({ description: '主题作者ID', type: String })
   id: AccountId;
   @ApiProperty({ description: '主题作者昵称' })
   nick: string;
@@ -13,7 +13,7 @@ export class TopicAuthor {
 }
 
 export class TopicInfoProps {
-  @ApiProperty({ description: '主题ID' })
+  @ApiProperty({ description: '主题ID', type: String })
   id: TopicId;
   @ApiProperty({ description: '主题标题' })
   title: string;
@@ -30,7 +30,7 @@ export class TopicInfoProps {
 }
 
 export class TopicInfo {
-  @ApiProperty({ description: '主题ID' })
+  @ApiProperty({ description: '主题ID', type: String })
   id: TopicId;
   @ApiProperty({ description: '主题标题' })
   title: string;

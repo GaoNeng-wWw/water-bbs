@@ -8,31 +8,38 @@ import {
   UpdateProfile,
   UserPublishedTopicList,
 } from './dto';
-import { Result } from 'neverthrow';
+import { err, Result } from 'neverthrow';
 import {
+  ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
+import { UserNotExists } from '../auth/errors';
 
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Public()
-  @Get(':id')
+  @Get('{/:id}')
   @ApiOperation({
     summary: '通过Account ID获取用户信息',
     description: '根据Account ID获取用户信息',
     operationId: 'getProfile',
   })
   @ApiOkResponse({ type: ProfileInfo })
-  @ApiParam({ name: 'id', description: 'Account ID' })
+  @ApiParam({ name: 'id', description: 'Account ID', required: false})
+  @ApiBearerAuth()
   async getProfile(
     @Param('id') id: AccountId,
+    @User('id') userId?: AccountId,
   ): Promise<Result<ProfileInfo, DomainError>> {
-    return this.profileService.getProfile(id);
+    if (!id && !userId) {
+      return err(new UserNotExists());
+    }
+    return this.profileService.getProfile(userId ?? id);
   }
 
   @ApiOperation({

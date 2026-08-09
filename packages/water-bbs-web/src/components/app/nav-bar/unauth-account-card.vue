@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import {
-  UiAvatar,
-  UiDialog, UiDialogContent, UiDialogTrigger,
-} from '@/components/ui';
+import { UiDialog, UiDialogContent, UiDialogTrigger } from '@/components/ui';
 import AuthTab from '../auth/auth-tab.vue';
 </script>
 
@@ -10,7 +7,9 @@ import AuthTab from '../auth/auth-tab.vue';
   <div class="w-fit flex shrink-0 gap-3">
     <ui-dialog>
       <ui-dialog-trigger class="shrink-0" as-child>
-        <ui-avatar fallback-text="test" class="shrink-0" />
+        <div class="avatar-md rounded-full bg-surface-200 border border-surface-300 shrink-0 p-1 cursor-pointer">
+          <div class="size-full icon-[material-symbols--person] text-surface-fg" />
+        </div>
       </ui-dialog-trigger>
       <ui-dialog-content>
         <auth-tab />

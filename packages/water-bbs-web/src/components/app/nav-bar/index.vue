@@ -3,6 +3,7 @@ import UnAuthAccountCard from './unauth-account-card.vue';
 import authAccountCard from './authed-account-card.vue';
 import topicPublishButton from './topic-publish-button.vue';
 import { useAuthStore } from '@/store/auth.ts';
+import AuthedAccountCardSkeleton from './authed-account-card.skeleton.vue';
 
 const authStore = useAuthStore();
 </script>
@@ -18,10 +19,17 @@ const authStore = useAuthStore();
         <div v-if="!authStore.loggedIn" class="w-fit">
           <un-auth-account-card />
         </div>
-        <div v-else class="w-fit gap-3 flex">
-          <topic-publish-button />
-          <auth-account-card />
-        </div>
+        <suspense v-else>
+          <div class="w-fit gap-3 flex">
+            <div class="shrink-0">
+              <topic-publish-button />
+            </div>
+            <auth-account-card />
+          </div>
+          <template #fallback>
+            <authed-account-card-skeleton />
+          </template>
+        </suspense>
       </div>
     </div>
   </div>

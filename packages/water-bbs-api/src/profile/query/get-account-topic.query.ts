@@ -7,6 +7,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Reply, Topic } from '../../topic';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { TopicInfo } from '../dto';
+import { Category } from '../../category';
 
 export class GetAccountPublishedTopic extends Query<
   Result<TopicInfo[], DomainError>
@@ -31,8 +32,19 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
       { authorId: accountId },
       { limit: size, offset: page - 1 * size },
     );
+    const redis = this.redisService.getOrThrow();
     const ret: TopicInfo[] = [];
     for (const topic of topics) {
+      const category = await this.categoryRepo.findOne({
+        id: topic.categoryId,
+      });
+      if (!category) {
+        continue;
+      }
+      const repliesTotal = await redis.get(`topic:${topic.id}:replyTotal`);
+      if (!repliesTotal) {
+        continue;
+      }
       const reply = await this.replyRepo.findOne(
         {
           topicId: topic.id,
@@ -47,7 +59,9 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
       ret.push(
         new TopicInfo({
           ...topic,
+          category,
           content: reply?.content ?? '',
+          repliesTotal: Number(repliesTotal),
         }),
       );
     }
@@ -59,5 +73,7 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
     private readonly topicRepo: EntityRepository<Topic>,
     @InjectRepository(Reply)
     private readonly replyRepo: EntityRepository<Reply>,
+    @InjectRepository(Category)
+    private readonly categoryRepo: EntityRepository<Category>,
   ) {}
 }

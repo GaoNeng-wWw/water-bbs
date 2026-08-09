@@ -30,7 +30,7 @@ export class TopicController {
 
   @ApiOperation({ summary: '获取回复列表', operationId: 'listReply' })
   @ApiPaginationResponse(ReplyItem)
-  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @ApiParam({ name: 'topicId', description: '主题ID', type: String })
   @Get('replies/:topicId')
   async listReply(
     @Param('topicId') topicId: TopicId,
@@ -52,7 +52,7 @@ export class TopicController {
 
   @ApiOperation({ summary: '创建回复', operationId: 'createReply' })
   @ApiCreatedResponse({ type: ReplyInfo })
-  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @ApiParam({ name: 'topicId', description: '主题ID', type: String })
   @Post('replies/:topicId')
   async createReply(
     @Param('topicId') topicId: TopicId,
@@ -87,7 +87,7 @@ export class TopicController {
 
   @ApiOperation({ summary: '删除主题', operationId: 'removeTopic' })
   @ApiOkResponse({ type: TopicInfo })
-  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @ApiParam({ name: 'topicId', description: '主题ID', type: String })
   @Delete(':topicId')
   async removeTopic(
     @Param('topicId') topicId: TopicId,
@@ -98,7 +98,7 @@ export class TopicController {
 
   @ApiOperation({ summary: '更新主题', operationId: 'updateTopic' })
   @ApiOkResponse({ type: UpdateTopicResponse })
-  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @ApiParam({ name: 'topicId', description: '主题ID', type: String })
   @Patch(':topicId')
   async updateTopic(
     @Param('topicId') topicId: TopicId,

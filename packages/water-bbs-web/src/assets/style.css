@@ -2,6 +2,7 @@
 @import "./theme.css";
 @import "../components/ui/button/theme.css";
 @import "../components/ui/avatar/theme.css";
+@import "../components/ui/skeleton/theme.css";
 @plugin "@iconify/tailwind4";
 @plugin "@tailwindcss/typography";
 
