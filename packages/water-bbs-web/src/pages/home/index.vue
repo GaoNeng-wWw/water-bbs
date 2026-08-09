@@ -4,6 +4,7 @@ import Categoies, { type CategoryItem } from './components/categoies.vue';
 import { UiShadowScroll } from '@/components/ui';
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import TopicListSkeleton from '@/components/app/topic/topic-list.skeleton.vue';
 
 const categories: CategoryItem[] = [
   { id: 'c1', label: '前端', color: '#3b82f6' },
@@ -48,7 +49,12 @@ watch(categoryId, () => {
       </div>
       <div class="flex flex-col md:flex-row gap-4">
         <div class="w-full">
-          <topic-list />
+          <suspense>
+            <topic-list :category="{ ...activeCategory, name: activeCategory.label }" />
+            <template #fallback>
+              <topic-list-skeleton />
+            </template>
+          </suspense>
         </div>
         <div class="w-full shrink-0 h-fit -order-1 top-16 static space-y-4 md:sticky md:order-1 md:w-75">
           <div class="w-full h-fit bg-surface-100 rounded-md border border-surface-200 p-2">

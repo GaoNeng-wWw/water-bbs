@@ -6,11 +6,11 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 import { EntityRepository } from '@mikro-orm/core';
 import { Reply, Topic } from '../../topic';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { TopicInfo } from '../dto';
+import { ProfileTopicInfo } from '../dto';
 import { Category } from '../../category';
 
 export class GetAccountPublishedTopic extends Query<
-  Result<TopicInfo[], DomainError>
+  Result<ProfileTopicInfo[], DomainError>
 > {
   constructor(
     public readonly accountId: AccountId,
@@ -27,13 +27,13 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
     accountId,
     size,
     page,
-  }: GetAccountPublishedTopic): Promise<Result<TopicInfo[], DomainError>> {
+  }: GetAccountPublishedTopic): Promise<Result<ProfileTopicInfo[], DomainError>> {
     const topics = await this.topicRepo.find(
       { authorId: accountId },
       { limit: size, offset: page - 1 * size },
     );
     const redis = this.redisService.getOrThrow();
-    const ret: TopicInfo[] = [];
+    const ret: ProfileTopicInfo[] = [];
     for (const topic of topics) {
       const category = await this.categoryRepo.findOne({
         id: topic.categoryId,
@@ -57,7 +57,7 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
         },
       );
       ret.push(
-        new TopicInfo({
+        new ProfileTopicInfo({
           ...topic,
           category,
           content: reply?.content ?? '',

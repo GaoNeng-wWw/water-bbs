@@ -5,8 +5,7 @@ export type GenratorProps<AdditionalData extends Record<string, any>> = {
    * @description seconds
    */
   ttl: number;
-  additionalData?: AdditionalData;
-};
+} & AdditionalData;
 
 export abstract class TokenGenrator {
   abstract generator<AdditionalData extends Record<string, any>>(

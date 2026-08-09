@@ -353,30 +353,35 @@ export const TopicInfoSchema = {
             type: 'string',
             description: '主题内容'
         },
-        createdAt: {
-            type: 'string',
-            description: '创建时间'
-        },
-        category: {
-            description: '分类',
+        author: {
+            description: '主题作者',
             allOf: [
                 {
-                    $ref: '#/components/schemas/TopicCategory'
+                    $ref: '#/components/schemas/TopicAuthor'
                 }
             ]
         },
-        repliesTotal: {
+        createdAt: {
+            type: 'string',
+            description: '主题创建时间'
+        },
+        pinned: {
+            type: 'boolean',
+            description: '主题是否置顶'
+        },
+        replyTotal: {
             type: 'number',
-            description: '回复总数'
+            description: '主题回复总数'
         }
     },
     required: [
         'id',
         'title',
         'content',
+        'author',
         'createdAt',
-        'category',
-        'repliesTotal'
+        'pinned',
+        'replyTotal'
     ]
 } as const;
 
@@ -532,6 +537,48 @@ export const TopicCategorySchema = {
         'id',
         'name',
         'color'
+    ]
+} as const;
+
+export const ProfileTopicInfoSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '主题ID'
+        },
+        title: {
+            type: 'string',
+            description: '主题标题'
+        },
+        content: {
+            type: 'string',
+            description: '主题内容'
+        },
+        createdAt: {
+            type: 'string',
+            description: '创建时间'
+        },
+        category: {
+            description: '分类',
+            allOf: [
+                {
+                    $ref: '#/components/schemas/TopicCategory'
+                }
+            ]
+        },
+        repliesTotal: {
+            type: 'number',
+            description: '回复总数'
+        }
+    },
+    required: [
+        'id',
+        'title',
+        'content',
+        'createdAt',
+        'category',
+        'repliesTotal'
     ]
 } as const;
 

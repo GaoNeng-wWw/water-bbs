@@ -17,7 +17,7 @@ export class TopicCategory {
   }
 }
 
-export type TopicInfoProps = {
+export type ProfileTopicInfoProps = {
   id: TopicId;
   title: string;
   content: string;
@@ -26,7 +26,7 @@ export type TopicInfoProps = {
   repliesTotal: number;
 };
 
-export class TopicInfo {
+export class ProfileTopicInfo {
   @ApiProperty({ description: '主题ID', type: String })
   id: TopicId;
   @ApiProperty({ description: '主题标题' })
@@ -39,7 +39,7 @@ export class TopicInfo {
   category: TopicCategory;
   @ApiProperty({ description: '回复总数' })
   repliesTotal: number;
-  constructor(props: TopicInfoProps) {
+  constructor(props: ProfileTopicInfoProps) {
     this.id = props.id;
     this.title = props.title;
     this.content = props.content;
@@ -49,8 +49,8 @@ export class TopicInfo {
   }
 }
 
-export class UserPublishedTopicList extends PaginationData<TopicInfo> {
-  constructor(data: TopicInfo[], total: number) {
+export class UserPublishedTopicList extends PaginationData<ProfileTopicInfo> {
+  constructor(data: ProfileTopicInfo[], total: number) {
     super(data, total);
   }
 }

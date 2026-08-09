@@ -5,16 +5,23 @@ import {
   ApiProperty,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsNumber, IsPositive } from 'class-validator';
 
 export class PaginationQuery {
   @IsNumber()
   @IsPositive()
   @ApiProperty({ description: '页码', default: 1 })
+  @Transform(({ value }) =>
+    Number.isNaN(Number.parseInt(value)) ? 1 : Number.parseInt(value),
+  )
   public readonly page: number = 1;
   @IsNumber()
   @IsPositive()
   @ApiProperty({ description: '每页数量', default: 10 })
+  @Transform(({ value }) =>
+    Number.isNaN(Number.parseInt(value)) ? 10 : Number.parseInt(value),
+  )
   public readonly size: number = 10;
 }
 
