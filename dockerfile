@@ -71,7 +71,7 @@ CMD ["pnpm", "start"]
 FROM base as web
 
 COPY --from=build /prod/water-bbs-web/dist /app
-
+ 
 FROM nginx:alpine AS web_prod
 ENV API_ADDR="water-bbs-api:3000"
 LABEL env.API_ADDR.required="true" \
