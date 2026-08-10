@@ -17,7 +17,7 @@ WORKDIR /app
 COPY . /app/
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run -r build
+RUN rm -rf ./mikro-orm.config.ts && pnpm run -r build
 RUN pnpm deploy --legacy --filter ./packages/water-bbs-api --prod /prod/water-bbs-api
 RUN pnpm deploy --legacy --filter ./packages/water-bbs-web --prod /prod/water-bbs-web
 
@@ -61,6 +61,8 @@ LABEL env.DB_HOST.required="true" \
       env.RUN_SEEDER.desc="是否只初始化数据" \
       env.RUN_SEEDER.required="true" \
       env.RUN_SEEDER.default="false"
+
+COPY mikro-orm.config.ts .
 
 ENTRYPOINT ["/entrypoint.sh"]
 
