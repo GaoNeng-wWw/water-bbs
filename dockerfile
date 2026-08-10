@@ -8,7 +8,6 @@ RUN npm config set registry https://registry.npmmirror.com
 
 RUN corepack enable
 
-
 FROM base as build
 
 LABEL maintainer="water-bbs-org"
@@ -66,3 +65,16 @@ LABEL env.DB_HOST.required="true" \
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["pnpm", "start"]
+
+FROM base as web
+
+COPY --from=build /prod/water-bbs-web/dist /app
+
+FROM nginx:alpine AS web_prod
+ENV API_ADDR="water-bbs-api:3000"
+LABEL env.API_ADDR.required="true" \
+      env.API_ADDR.desc="后端地址" \
+      env.API_ADDR.required="false"
+COPY --from=web /app /usr/share/nginx/html
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+EXPOSE 80
