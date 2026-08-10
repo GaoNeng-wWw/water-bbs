@@ -17,7 +17,7 @@ WORKDIR /app
 COPY . /app/
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN rm -rf ./packages/water-bbs-api/mikro-orm.config.ts && pnpm run -r build
+RUN cp ./packages/water-bbs-api/src/configs/config.example.json ./packages/water-bbs-api/src/configs/config.json && pnpm run -r build
 RUN pnpm deploy --legacy --filter ./packages/water-bbs-api --prod /prod/water-bbs-api
 RUN pnpm deploy --legacy --filter ./packages/water-bbs-web --prod /prod/water-bbs-web
 
