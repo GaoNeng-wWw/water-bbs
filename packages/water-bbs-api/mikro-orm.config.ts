@@ -4,6 +4,8 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 import { Account, Credential, Identifier, Profile } from './src/auth';
 import { Category } from './src/category';
 import { Reply, Topic } from './src/topic';
+import { SeedManager } from '@mikro-orm/seeder';
+import { Migrator } from '@mikro-orm/migrations';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -13,4 +15,5 @@ export default defineConfig({
   dbName: process.env.DB_DBNAME ?? database.db,
   driver: SqliteDriver,
   entities: [Identifier, Credential, Account, Profile, Category, Topic, Reply],
+  extensions: [SeedManager, Migrator],
 });
