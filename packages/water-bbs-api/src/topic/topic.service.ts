@@ -53,7 +53,7 @@ export class TopicService {
     return ok({ id: updateTopic.value });
   }
 
-  async listTopics(categoryId: CategoryId, dto: PaginationQuery) {
+  async listTopics(categoryId: CategoryId | null, dto: PaginationQuery) {
     const topics = await this.qb.execute(
       new ListTopicQuery(categoryId, dto.page, dto.size),
     );

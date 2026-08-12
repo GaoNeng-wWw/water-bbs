@@ -11,7 +11,7 @@ export type CategoryInfoProps = {
 };
 
 export class CategoryInfo {
-  @ApiProperty({ description: '分类ID', example: '123-4567890' })
+  @ApiProperty({ description: '分类ID', example: '123-4567890', type: String })
   id: CategoryId;
   @ApiProperty({ description: '分类名称', example: '技术分类' })
   name: string;

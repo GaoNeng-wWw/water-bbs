@@ -5,7 +5,7 @@ import { Category } from 'src/category';
 export class CategorySeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const dbCategory = await em.find(Category, {}, { limit: 1 });
-    if (dbCategory) {
+    if (dbCategory.length) {
       return;
     }
     const category = em.create(Category, {

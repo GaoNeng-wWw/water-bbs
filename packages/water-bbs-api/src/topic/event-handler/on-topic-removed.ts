@@ -8,5 +8,6 @@ export class OnTopicRemoved implements IEventHandler<TopicRemoved> {
   async handle(event: TopicRemoved) {
     const redis = this.redisSrv.getOrThrow();
     await redis.del(`topic:${event.topicId}:replyTotal`);
+    await redis.decr(`topic-total`);
   }
 }

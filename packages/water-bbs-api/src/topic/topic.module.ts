@@ -26,9 +26,10 @@ import {
   OnTopicCreated,
   OnReplyCreated,
 } from './event-handler';
+import { Category } from '../category';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Topic, Reply, Profile])],
+  imports: [MikroOrmModule.forFeature([Topic, Reply, Profile, Category])],
   controllers: [TopicController],
   providers: [
     TopicService,

@@ -111,9 +111,7 @@ export type CategoryInfo = {
     /**
      * 分类ID
      */
-    id: {
-        [key: string]: unknown;
-    };
+    id: string;
     /**
      * 分类名称
      */
@@ -223,6 +221,21 @@ export type TopicAuthor = {
     nick: string;
 };
 
+export type TopicCategory = {
+    /**
+     * 分类ID
+     */
+    id: string;
+    /**
+     * 分类名称
+     */
+    name: string;
+    /**
+     * 分类颜色
+     */
+    color: string;
+};
+
 export type TopicInfo = {
     /**
      * 主题ID
@@ -252,6 +265,10 @@ export type TopicInfo = {
      * 主题回复总数
      */
     replyTotal: number;
+    /**
+     * 主体所属分类
+     */
+    category: TopicCategory;
 };
 
 export type CreateReplyDto = {
@@ -340,21 +357,6 @@ export type ProfileInfo = {
      * 个人简介
      */
     bio?: string;
-};
-
-export type TopicCategory = {
-    /**
-     * 分类ID
-     */
-    id: string;
-    /**
-     * 分类名称
-     */
-    name: string;
-    /**
-     * 分类颜色
-     */
-    color: string;
 };
 
 export type ProfileTopicInfo = {
@@ -500,7 +502,7 @@ export type RemoveCategoryData = {
         /**
          * 分类ID
          */
-        id: unknown;
+        id: string;
     };
     query?: never;
     url: '/category/{id}';
@@ -521,7 +523,7 @@ export type FindCategoryData = {
         /**
          * 分类ID
          */
-        id: unknown;
+        id: string;
     };
     query?: never;
     url: '/category/{id}';
@@ -542,7 +544,7 @@ export type UpdateCategoryData = {
         /**
          * 分类ID
          */
-        id: unknown;
+        id: string;
     };
     query?: never;
     url: '/category/{id}';
@@ -563,7 +565,7 @@ export type RecoverCategoryData = {
         /**
          * 分类ID
          */
-        id: unknown;
+        id: string;
     };
     query?: never;
     url: '/category/recover/{id}';
@@ -625,13 +627,37 @@ export type CreateReplyResponses = {
 
 export type CreateReplyResponse = CreateReplyResponses[keyof CreateReplyResponses];
 
+export type ListAllTopicData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * 页码
+         */
+        page: number;
+        /**
+         * 每页数量
+         */
+        size: number;
+    };
+    url: '/topic';
+};
+
+export type ListAllTopicResponses = {
+    200: PaginationData & {
+        data?: Array<TopicInfo>;
+    };
+};
+
+export type ListAllTopicResponse = ListAllTopicResponses[keyof ListAllTopicResponses];
+
 export type ListTopicData = {
     body?: never;
-    path: {
+    path?: {
         /**
          * 分类ID
          */
-        categoryId: unknown;
+        categoryId?: string;
     };
     query: {
         /**
@@ -660,7 +686,7 @@ export type CreateTopicData = {
         /**
          * 分类ID
          */
-        categoryId: unknown;
+        categoryId: string;
     };
     query?: never;
     url: '/topic/{categoryId}';

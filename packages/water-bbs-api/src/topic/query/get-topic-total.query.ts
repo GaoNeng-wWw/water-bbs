@@ -6,7 +6,7 @@ import { EntityManager } from '@mikro-orm/core';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 
 export class GetTopicTotalQuery extends Query<Result<number, DomainError>> {
-  constructor(public readonly categoryId: CategoryId) {
+  constructor(public readonly categoryId: CategoryId | null) {
     super();
   }
 }
@@ -17,7 +17,11 @@ export class GetTopicTotalService implements IQueryHandler<GetTopicTotalQuery> {
     query: GetTopicTotalQuery,
   ): Promise<Result<number, DomainError>> {
     const redis = this.redisSrv.getOrThrow();
-    const total = await redis.get(`category:${query.categoryId}:topic`);
+    const total = await redis.get(
+      query.categoryId
+        ? `category:${query.categoryId}:topicTotal`
+        : `topic-total`,
+    );
     if (!total) {
       return ok(0);
     }

@@ -61,7 +61,9 @@ export class CreateTopicService implements ICommandHandler<CreateTopicCommand> {
       await em.flush();
       await redis.incr(`category:${command.categoryId}:topic`);
     });
-    this.eb.publish(new TopicCreated(command.authorId, topic.id));
+    this.eb.publish(
+      new TopicCreated(command.authorId, topic.id, command.categoryId),
+    );
     return ok(topic.id);
   }
 }

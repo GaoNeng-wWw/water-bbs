@@ -26,7 +26,7 @@ const {
   author,
 } = defineProps<TopicCardProps>();
 
-const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow());
+const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow())
 </script>
 
 <template>

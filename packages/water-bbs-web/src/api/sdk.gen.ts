@@ -3,7 +3,7 @@
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
 import { createReplyResponseTransformer, removeReplyResponseTransformer } from './transformers.gen';
-import type { CreateCategoryData, CreateCategoryResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, ListCategoryData, ListCategoryResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses } from './types.gen';
+import type { CreateCategoryData, CreateCategoryResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -141,6 +141,15 @@ export const createReply = <ThrowOnError extends boolean = false>(options: Optio
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * 获取主题列表
+ */
+export const listAllTopic = <ThrowOnError extends boolean = false>(options: Options<ListAllTopicData, ThrowOnError>): RequestResult<ListAllTopicResponses, unknown, ThrowOnError> => (options.client ?? client).get<ListAllTopicResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/topic',
+    ...options
 });
 
 /**

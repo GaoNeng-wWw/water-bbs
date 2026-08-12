@@ -8,5 +8,7 @@ export class OnTopicCreated implements IEventHandler<TopicCreated> {
   async handle(event: TopicCreated) {
     const redis = this.redisSrv.getOrThrow();
     await redis.incr(`topic:${event.topicId}:replyTotal`);
+    await redis.incr(`category:${event.categoryId}:topic-total`);
+    await redis.incr(`topic-total`);
   }
 }

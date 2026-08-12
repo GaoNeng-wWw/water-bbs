@@ -27,7 +27,9 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
     accountId,
     size,
     page,
-  }: GetAccountPublishedTopic): Promise<Result<ProfileTopicInfo[], DomainError>> {
+  }: GetAccountPublishedTopic): Promise<
+    Result<ProfileTopicInfo[], DomainError>
+  > {
     const topics = await this.topicRepo.find(
       { authorId: accountId },
       { limit: size, offset: page - 1 * size },

@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const plugins = [vue(), tailwindcss()];
-  if (mode !== 'production') {
+  if (mode === 'development') {
     plugins.push(heyApiPlugin({
       config: {
         input: `${env.VITE_API_URL}/api-json`,
@@ -37,10 +37,7 @@ export default defineConfig(({ mode }) => {
     }));
   }
   return {
-    plugins: [
-      vue(),
-      tailwindcss(),
-    ],
+    plugins,
     resolve: {
       alias: {
         '@': join(__dirname, 'src'),

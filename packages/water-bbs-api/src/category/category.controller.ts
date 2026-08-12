@@ -31,7 +31,12 @@ export class CategoryController {
   @ApiOperation({ summary: '获取分类详情', operationId: 'findCategory' })
   @ApiOkResponse({ description: '获取分类详情', type: CategoryInfo })
   @Get(':id')
-  @ApiParam({ name: 'id', description: '分类ID', example: '123-4567890' })
+  @ApiParam({
+    name: 'id',
+    description: '分类ID',
+    example: '123-4567890',
+    type: String,
+  })
   async find(@Param('id') id: CategoryId) {
     return this.categoryService.find(id);
   }
@@ -46,7 +51,12 @@ export class CategoryController {
   @ApiOperation({ summary: '恢复分类', operationId: 'recoverCategory' })
   @ApiOkResponse({ description: '恢复分类', type: CategoryInfo })
   @Patch('recover/:id')
-  @ApiParam({ name: 'id', description: '分类ID', example: '123-4567890' })
+  @ApiParam({
+    name: 'id',
+    description: '分类ID',
+    example: '123-4567890',
+    type: String,
+  })
   async recover(@Param('id') id: CategoryId) {
     return this.categoryService.recover(id);
   }
@@ -54,7 +64,12 @@ export class CategoryController {
   @ApiOperation({ summary: '更新分类', operationId: 'updateCategory' })
   @ApiOkResponse({ description: '更新分类', type: CategoryInfo })
   @Patch(':id')
-  @ApiParam({ name: 'id', description: '分类ID', example: '123-4567890' })
+  @ApiParam({
+    name: 'id',
+    description: '分类ID',
+    example: '123-4567890',
+    type: String,
+  })
   update(@Param('id') id: CategoryId, @Body() body: UpdateCategoryRequest) {
     return this.categoryService.updateCategory(id, body);
   }
@@ -62,7 +77,12 @@ export class CategoryController {
   @ApiOperation({ summary: '删除分类', operationId: 'removeCategory' })
   @ApiOkResponse({ description: '删除分类', type: RemoveCategoryResponse })
   @Delete(':id')
-  @ApiParam({ name: 'id', description: '分类ID', example: '123-4567890' })
+  @ApiParam({
+    name: 'id',
+    description: '分类ID',
+    example: '123-4567890',
+    type: String,
+  })
   async remove(@Param('id') id: CategoryId) {
     return this.categoryService.remove(id);
   }
