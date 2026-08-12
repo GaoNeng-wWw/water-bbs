@@ -2,7 +2,7 @@
 import { listCategory, type CategoryInfo } from '@/api';
 import { UiListbox, UiListboxItem, UiListboxSection } from '@/components/ui';
 import { useOffsetPagination } from '@vueuse/core';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, watchEffect } from 'vue';
 
 const modelValue = defineModel<CategoryInfo | null>({ required: true });
 
@@ -10,7 +10,7 @@ const selected = ref([modelValue.value?.id as unknown as string]);
 
 const categories = ref<CategoryInfo[]>([]);
 
-watch(selected, () => {
+watchEffect(() => {
   modelValue.value = categories.value.filter(category => selected.value.includes((category.id as unknown as string)))[0] ?? null;
 });
 

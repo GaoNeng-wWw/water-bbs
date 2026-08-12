@@ -2,7 +2,7 @@ import { ok, Result } from 'neverthrow';
 import { Reply, Topic, TopicId } from '../entites';
 import { DomainError } from '@app/shared';
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
-import { CategoryId } from '../../category';
+import { Category, CategoryId } from '../../category';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { AccountId, Profile } from '../../auth';
@@ -11,6 +11,11 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 export type AuthorInfo = {
   id: AccountId;
   nick: string;
+};
+export type TopicCategory = {
+  id: CategoryId;
+  name: string;
+  color: string;
 };
 
 export type TopicInfo = {
@@ -21,6 +26,7 @@ export type TopicInfo = {
   author: AuthorInfo;
   pinned: boolean;
   replyTotal: number;
+  category: TopicCategory;
 };
 
 export type ListTopicResult = {
@@ -31,7 +37,7 @@ export class ListTopicQuery extends Query<
   Result<ListTopicResult, DomainError>
 > {
   constructor(
-    public readonly categoryId: CategoryId,
+    public readonly categoryId: CategoryId | null,
     public readonly page: number,
     public readonly size: number,
   ) {
@@ -48,6 +54,8 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
     private readonly profileRepository: EntityRepository<Profile>,
     @InjectRepository(Reply)
     private readonly replyRepository: EntityRepository<Reply>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: EntityRepository<Category>,
     private readonly redisSrv: RedisService,
   ) {}
   async execute({
@@ -58,9 +66,11 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
     const redis = this.redisSrv.getOrThrow();
     const items: TopicInfo[] = [];
     const topics = await this.topicRepository.find(
-      {
-        categoryId: categoryId,
-      },
+      categoryId
+        ? {
+            categoryId: categoryId,
+          }
+        : {},
       {
         offset: (page - 1) * size,
         limit: size,
@@ -89,7 +99,13 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
       if (!reply) {
         continue;
       }
-      const total = await redis.get(`topic:${topic.id}:reply`);
+      const total = await redis.get(`topic:${topic.id}:replyTotal`);
+      const category = await this.categoryRepository.findOne({
+        id: topic.categoryId,
+      });
+      if (!category) {
+        continue;
+      }
       items.push({
         id: topic.id,
         title: topic.title,
@@ -101,6 +117,7 @@ export class ListTopicService implements IQueryHandler<ListTopicQuery> {
         },
         pinned: topic.pinned,
         replyTotal: !total ? 0 : Number(total),
+        category,
       });
     }
     return ok({ topics: items });

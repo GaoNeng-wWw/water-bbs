@@ -167,7 +167,7 @@ export const CategoryInfoSchema = {
     type: 'object',
     properties: {
         id: {
-            type: 'object',
+            type: 'string',
             description: '分类ID',
             example: '123-4567890'
         },
@@ -338,6 +338,29 @@ export const TopicAuthorSchema = {
     ]
 } as const;
 
+export const TopicCategorySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '分类ID'
+        },
+        name: {
+            type: 'string',
+            description: '分类名称'
+        },
+        color: {
+            type: 'string',
+            description: '分类颜色'
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'color'
+    ]
+} as const;
+
 export const TopicInfoSchema = {
     type: 'object',
     properties: {
@@ -372,6 +395,14 @@ export const TopicInfoSchema = {
         replyTotal: {
             type: 'number',
             description: '主题回复总数'
+        },
+        category: {
+            description: '主体所属分类',
+            allOf: [
+                {
+                    $ref: '#/components/schemas/TopicCategory'
+                }
+            ]
         }
     },
     required: [
@@ -381,7 +412,8 @@ export const TopicInfoSchema = {
         'author',
         'createdAt',
         'pinned',
-        'replyTotal'
+        'replyTotal',
+        'category'
     ]
 } as const;
 
@@ -514,29 +546,6 @@ export const ProfileInfoSchema = {
     required: [
         'id',
         'nick'
-    ]
-} as const;
-
-export const TopicCategorySchema = {
-    type: 'object',
-    properties: {
-        id: {
-            type: 'string',
-            description: '分类ID'
-        },
-        name: {
-            type: 'string',
-            description: '分类名称'
-        },
-        color: {
-            type: 'string',
-            description: '分类颜色'
-        }
-    },
-    required: [
-        'id',
-        'name',
-        'color'
     ]
 } as const;
 

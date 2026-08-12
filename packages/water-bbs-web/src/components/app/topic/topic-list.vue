@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TopicInfo } from '@/api/types.gen.ts';
-import { listTopic } from '@/api/sdk.gen';
+import { listAllTopic, listTopic } from '@/api/sdk.gen';
 import { useOffsetPagination } from '@vueuse/core';
 import { reactive, ref } from 'vue';
 import { vElementVisibility } from '@vueuse/components';
@@ -20,15 +20,9 @@ const fetchTopicList = (page: number, size: number) => {
     return;
   }
   fetchState.loading = true;
-  listTopic({
-    path: {
-      categoryId: category.id,
-    },
-    query: {
-      page,
-      size,
-    },
-  })
+  const query = { page, size };
+  const listTask = category.id ? listTopic({ path: { categoryId: category.id }, query }) : listAllTopic({ query });
+  listTask
     .then(resp => resp.data)
     .then((data) => {
       if (!data?.data) {
@@ -68,7 +62,7 @@ fetchTopicList(currentPage.value, currentPageSize.value);
       :title="item.title"
       :created-at="item.createdAt"
       :replies-total="item.replyTotal"
-      :category="category"
+      :category="item.category"
       :author="item.author"
     />
     <div v-if="!fetchState.done" v-element-visibility="loadMore" class="w-full" />

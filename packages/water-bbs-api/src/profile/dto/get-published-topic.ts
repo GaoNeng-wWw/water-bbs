@@ -43,7 +43,7 @@ export class ProfileTopicInfo {
     this.id = props.id;
     this.title = props.title;
     this.content = props.content;
-    this.createdAt = props.createdAt.toLocaleTimeString();
+    this.createdAt = props.createdAt.toString();
     this.category = props.category;
     this.repliesTotal = props.repliesTotal;
   }

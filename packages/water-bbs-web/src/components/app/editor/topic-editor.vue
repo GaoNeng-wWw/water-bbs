@@ -22,6 +22,10 @@ const editor = useEditor({
   ],
   editable: true,
 });
+
+const getContent = () => editor.value?.getMarkdown() ?? '';
+
+defineExpose({ getContent });
 </script>
 
 <template>

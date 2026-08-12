@@ -8,6 +8,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { TopicNotFound } from '../errors';
 import { Profile } from '../../auth';
 import { RedisService } from '@liaoliaots/nestjs-redis';
+import { Category } from '../../category';
 
 export class GetTopicQuery extends Query<Result<TopicInfo, DomainError>> {
   constructor(public id: TopicId) {
@@ -24,6 +25,8 @@ export class GetTopicService implements IQueryHandler<GetTopicQuery> {
     private readonly replyRepository: EntityRepository<Reply>,
     @InjectRepository(Profile)
     private readonly profileRepository: EntityRepository<Profile>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: EntityRepository<Category>,
     private readonly redisSrv: RedisService,
   ) {}
 
@@ -53,6 +56,12 @@ export class GetTopicService implements IQueryHandler<GetTopicQuery> {
     if (!profile) {
       return err(new TopicNotFound(query.id));
     }
+    const category = await this.categoryRepository.findOne({
+      id: topic.categoryId,
+    });
+    if (!category) {
+      return err(new TopicNotFound(query.id));
+    }
     return ok(
       new TopicInfo({
         id: topic.id,
@@ -62,6 +71,7 @@ export class GetTopicService implements IQueryHandler<GetTopicQuery> {
           id: topic.authorId,
           nick: profile.nick,
         }),
+        category,
         createdAt: topic.createdAt,
         pinned: topic.pinned,
         replyTotal: !total ? 0 : Number(total),

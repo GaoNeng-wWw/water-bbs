@@ -39,10 +39,11 @@ export class RemoveTopicService implements ICommandHandler<RemoveTopicCommand> {
     await this.em.transactional(async (em) => {
       em.persist(topic);
       await em.flush();
-      await redis.decr(`category:${topic.categoryId}:topic`);
       await redis.del(`topic:${command.id}:reply`);
     });
-    this.eb.publish(new TopicRemoved(topic.authorId, topic.id));
+    this.eb.publish(
+      new TopicRemoved(topic.authorId, topic.id, topic.categoryId),
+    );
     return ok(topic.id);
   }
 }

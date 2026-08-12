@@ -47,9 +47,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     try {
-      const verifyResult: TokenData = !isPublic
-        ? this.jwt.verify(token)
-        : this.jwt.decode(token);
+      const verifyResult: TokenData = this.jwt.decode(token);
       if ('accessTokenJti' in verifyResult) {
         throw new InvalidToken();
       }

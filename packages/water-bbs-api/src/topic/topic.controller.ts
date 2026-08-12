@@ -39,10 +39,22 @@ export class TopicController {
     return this.topicService.listReply(topicId, dto);
   }
 
+  @ApiOperation({ summary: '获取主题列表', operationId: 'listAllTopic' })
+  @ApiPaginationResponse(TopicInfo)
+  @Get('/')
+  async listAllTopic(@Query() dto: PaginationQuery) {
+    return this.topicService.listTopics(null, dto);
+  }
+
   @ApiOperation({ summary: '获取主题列表', operationId: 'listTopic' })
   @ApiPaginationResponse(TopicInfo)
-  @ApiParam({ name: 'categoryId', description: '分类ID' })
-  @Get(':categoryId')
+  @ApiParam({
+    name: 'categoryId',
+    description: '分类ID',
+    type: String,
+    required: false,
+  })
+  @Get('{:categoryId}')
   async listTopic(
     @Query() dto: PaginationQuery,
     @Param('categoryId') categoryId: CategoryId,
@@ -64,7 +76,7 @@ export class TopicController {
 
   @ApiOperation({ summary: '创建主题', operationId: 'createTopic' })
   @ApiCreatedResponse({ type: TopicInfo })
-  @ApiParam({ name: 'categoryId', description: '分类ID' })
+  @ApiParam({ name: 'categoryId', description: '分类ID', type: String })
   @Post(':categoryId')
   async createTopic(
     @Param('categoryId') categoryId: CategoryId,
