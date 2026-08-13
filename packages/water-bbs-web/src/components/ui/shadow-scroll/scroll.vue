@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { ScrollAreaRoot, ScrollAreaViewport, ScrollAreaScrollbar, ScrollAreaThumb } from 'reka-ui';
-import { computed, useTemplateRef, watch } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 import { useShadowScroll } from './use-shadow-scroll';
 
-const { horizontal = false } = defineProps<{
+const { horizontal = false, viewportAsChild = false } = defineProps<{
   horizontal?: boolean;
+  viewportAsChild?: boolean
 }>();
 
 const mode = computed(() => horizontal ? 'horizontal' : 'vertical');
@@ -14,7 +15,7 @@ const { state } = useShadowScroll({ mode, el: computed(() => scrollAreaViewPort.
 
 <template>
   <scroll-area-root ref="scroll-area" class="scroll" :data-scroll-state="state" :data-direction=" horizontal ? 'horizontal' : 'vertical'">
-    <scroll-area-viewport class="w-full h-full">
+    <scroll-area-viewport class="w-full h-full" :as-child="viewportAsChild">
       <slot />
     </scroll-area-viewport>
     <scroll-area-scrollbar orientation="vertical" class="scroll__bar scroll__bar--vertical outline-none border-none">

@@ -8,7 +8,7 @@ export type FieldProps = {
 };
 
 const { size = 'md', ...props } = defineProps<FieldProps>();
-const {invalid} = injectFormItem();
+const { invalid } = injectFormItem();
 </script>
 
 <template>
