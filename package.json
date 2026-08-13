@@ -17,9 +17,5 @@
     "start:web": "pnpm --filter ./packages/water-bbs-web dev",
     "test:api-e2e": "pnpm --filter ./packages/water-bbs-api test:e2e",
     "test:web": "pnpm --filter ./packages/water-bbs-web test"
-  },
-  "dependencies": {
-    "pinia-plugin-persistedstate": "^4.7.1",
-    "vaul-vue": "^0.4.1"
   }
 }
