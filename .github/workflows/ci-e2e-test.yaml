@@ -28,7 +28,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v6
       - name: Setup Node.pnpm
-        uses: pnpm/setup
+        uses: pnpm/setup@v2
         with:
           runtime: node@22
           cache: true
