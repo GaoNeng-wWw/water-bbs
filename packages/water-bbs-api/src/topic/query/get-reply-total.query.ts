@@ -21,7 +21,7 @@ export class GetReplyTotalService implements IQueryHandler<GetReplyTotalQuery> {
     query: GetReplyTotalQuery,
   ): Promise<Result<number, DomainError>> {
     const redis = this.redisSrv.getOrThrow();
-    const total = await redis.get(`topic:${query.topicId}:reply`);
+    const total = await redis.get(`topic:${query.topicId}:replyTotal`);
     if (!total) {
       return ok(0);
     }

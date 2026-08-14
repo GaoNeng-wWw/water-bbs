@@ -19,7 +19,7 @@ export class GetTopicTotalService implements IQueryHandler<GetTopicTotalQuery> {
     const redis = this.redisSrv.getOrThrow();
     const total = await redis.get(
       query.categoryId
-        ? `category:${query.categoryId}:topicTotal`
+        ? `category:${query.categoryId}:topic-total`
         : `topic-total`,
     );
     if (!total) {

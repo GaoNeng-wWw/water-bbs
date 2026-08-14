@@ -1,18 +1,23 @@
 <script lang="ts" setup>
 import { UiButton } from '@/components/ui';
 import { AppNavBar } from '@/components/app';
-import ReplyCardList from './component/reply-card-list.vue';
-import { onMounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import ReplyCardListSkeleton from './component/reply-card-list.skeleton.vue';
+import replyCardList from './component/reply-card-list.vue';
+import { useMutation } from '@tanstack/vue-query';
+import { createReply } from '@/api/sdk.gen.ts';
 
 const postTitle = useTemplateRef('post-title');
 const router = useRouter();
 
-const page = ref(router.currentRoute.value.query.page ? Number(router.currentRoute.value.query.page) : 1);
+const topicId = ref(router.currentRoute.value.params.id.toString());
+const page = computed(() => Number(router.currentRoute.value.query.page) || 1);
+const size = computed(() => Number(router.currentRoute.value.query.size) || 20);
 const opacity = ref(0);
 const blur = ref('0');
 
-const onScroll = (ev: Event) => {
+const onScroll = (_ev: Event) => {
   const el = postTitle.value;
   if (!el) {
     return;
@@ -24,20 +29,33 @@ const onScroll = (ev: Event) => {
   blur.value = `${rawBlur}px`;
 };
 
+const { mutate, status } = useMutation({
+  mutationFn: (content: string) => {
+    return createReply({
+      body: {
+        content,
+      },
+      path: {
+        topicId: topicId.value,
+      },
+    })
+      .then(resp => resp.data)
+      .then(resp => resp!);
+  },
+  onSuccess(_data, _variables, _onMutateResult, context) {
+    context.client.invalidateQueries({ queryKey: context.mutationKey || ['replies', 'topic-id', topicId, 'page', page, 'size', size] });
+  },
+});
+
 const onClickBack = () => {
   router.back();
-}
-const onPageUpdate = (page: number) => {
-  router.push({ path: router.currentRoute.value.path, query: { page }, replace: true });
 };
-
-watch(router.currentRoute, () => {
-  if (router.currentRoute.value.query.page && !Number.isNaN(Number.parseInt(router.currentRoute.value.query.page.toString()))) {
-    page.value = Number.parseInt(router.currentRoute.value.query.page.toString());
-  } else {
-    page.value = 1;
-  }
-}, { immediate: true, deep: true });
+const onPageUpdate = (page: number) => {
+  router.push({ path: router.currentRoute.value.path, query: { page, size: size.value }, replace: true });
+};
+const publishReplly = (content: string) => {
+  mutate(content);
+};
 
 onMounted(() => {
   document.getRootNode().addEventListener('scroll', onScroll);
@@ -66,10 +84,19 @@ onMounted(() => {
             Title
           </h1>
         </div>
-        <reply-card-list
-          v-model="page"
-          @update:model-value="onPageUpdate"
-        />
+        <suspense>
+          <reply-card-list
+            v-model="page"
+            :size="size"
+            :topic-id="topicId"
+            :publish-loading="status === 'pending'"
+            @update:model-value="onPageUpdate"
+            @publish-reply="publishReplly"
+          />
+          <template #fallback>
+            <reply-card-list-skeleton :size="size" />
+          </template>
+        </suspense>
       </div>
     </div>
   </div>

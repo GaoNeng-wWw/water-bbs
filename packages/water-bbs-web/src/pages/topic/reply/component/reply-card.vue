@@ -4,6 +4,12 @@ import { EditorContent, useEditor } from '@tiptap/vue-3';
 import { StarterKit } from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
 
+const props = defineProps<{
+  content: string;
+  authorName: string;
+  authorId: string;
+}>();
+
 const editor = useEditor({
   editable: false,
   extensions: [StarterKit, Markdown.configure({
@@ -16,12 +22,12 @@ const editor = useEditor({
       style: 'space',
     },
   })],
-  content: '# hello world',
+  content: props.content,
   contentType: 'markdown',
   editorProps: {
     attributes: {
       class: 'prose dark:prose-invert',
-    }
+    },
   },
 });
 </script>
@@ -37,7 +43,7 @@ const editor = useEditor({
     <div class="w-full flex justify-between items-center">
       <div class="w-fit flex items-center gap-2">
         <ui-avatar size="sm" url="https://placehold.co/32" fallback-text="" />
-        <span class="text-md text-surface-fg">AuthorName</span>
+        <span class="text-md text-surface-fg">{{ props.authorId }}</span>
       </div>
       <ui-popover>
         <ui-popover-trigger>

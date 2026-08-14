@@ -9,12 +9,12 @@ import {
 } from './command';
 import {
   FindCategoryService,
-  GetCategoryTotalQuery,
   GetCategoryTotalService,
   ListCategoryService,
 } from './query';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Category } from './entities';
+import { OnCategoryCreated } from './event-handler';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Category])],
@@ -28,6 +28,7 @@ import { Category } from './entities';
     FindCategoryService,
     ListCategoryService,
     GetCategoryTotalService,
+    OnCategoryCreated,
   ],
 })
 export class CategoryModule {}
