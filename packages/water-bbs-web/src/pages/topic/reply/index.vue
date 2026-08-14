@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { UiButton } from '@/components/ui';
 import { AppNavBar } from '@/components/app';
-import { computed, onMounted, ref, useTemplateRef } from 'vue';
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import ReplyCardListSkeleton from './component/reply-card-list.skeleton.vue';
 import replyCardList from './component/reply-card-list.vue';
@@ -12,27 +12,8 @@ const postTitle = useTemplateRef('post-title');
 const router = useRouter();
 
 const topicId = ref(router.currentRoute.value.params.id.toString());
-const page = computed(() => {
-  if (
-    router.currentRoute.value.query.page
-  ) {
-    if (Number.isNaN(Number(router.currentRoute.value.query.page))) {
-      return 1;
-    } else {
-      return Number(router.currentRoute.value.query.page);
-    }
-  }
-  return 1;
-});
-const size = computed(() => {
-  if (!router.currentRoute.value.query.size) {
-    return 20;
-  }
-  if (Number.isNaN(Number(router.currentRoute.value.query.size))) {
-    return 1;
-  }
-  return Number(router.currentRoute.value.query.size);
-});
+const page = computed(() => Number(router.currentRoute.value.query.page) || 1);
+const size = computed(() => Number(router.currentRoute.value.query.size) || 20);
 const opacity = ref(0);
 const blur = ref('0');
 
