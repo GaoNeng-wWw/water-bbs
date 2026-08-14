@@ -27,7 +27,12 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
-      - name: Install dependencies
-        run: npm i -g pnpm && pnpm i --dangerously-allow-all-builds
+      - name: Setup Node.pnpm
+        uses: pnpm/setup@v2
+        with:
+          runtime: node@22
+          cache: true
+          install: false
+      - run: pnpm i --dangerously-allow-all-builds
       - name: Run Test
         run: cp ./packages/water-bbs-api/src/configs/config.ci.json ./packages/water-bbs-api/src/configs/config.json && pnpm test:api-e2e
