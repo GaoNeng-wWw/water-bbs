@@ -24,8 +24,7 @@
     "strictPropertyInitialization": false,
     "types": [
       "@types/express",
-      "vitest/globals",
-      
+      "vitest/globals"
     ],
     "paths": {
       "@app/configure": [
@@ -33,6 +32,12 @@
       ],
       "@app/configure/*": [
         "libs/configure/src/*"
+      ],
+      "@app/gamification": [
+        "libs/gamification/src"
+      ],
+      "@app/gamification/*": [
+        "libs/gamification/src/*"
       ],
       "@app/notification": [
         "libs/notification/src"
@@ -54,6 +59,13 @@
       ]
     }
   },
-  "include": ["src/**/*", "libs/**/*", "types/**/*", "test/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*",
+    "libs/**/*",
+    "types/**/*",
+    "test/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
