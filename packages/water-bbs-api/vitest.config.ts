@@ -13,11 +13,14 @@ export default defineConfig({
     }),
   ],
   resolve: {
+    tsconfigPaths: true,
     alias: {
       src: resolve(__dirname, './src'),
       '@app/configure': resolve(__dirname, 'libs/configure/src'),
       '@app/shared': resolve(__dirname, 'libs/shared/src'),
       '@app/translation': resolve(__dirname, 'libs/translation/src'),
+      '@app/gamification': resolve(__dirname, 'libs/gamification/src'),
+
       '@app/configure/*': resolve(__dirname, 'libs/configure/src/*'),
       '@app/shared/*': resolve(__dirname, 'libs/shared/src/*'),
       '@app/notification/*': resolve(__dirname, 'libs/notification/src/*'),
@@ -26,6 +29,7 @@ export default defineConfig({
         'libs/verification-code/src/*',
       ),
       '@app/translation/*': resolve(__dirname, 'libs/translation/src/*'),
+      '@app/gamification/*': resolve(__dirname, 'libs/gamification/src/*'),
     },
   },
 });

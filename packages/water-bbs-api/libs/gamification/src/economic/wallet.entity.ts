@@ -20,7 +20,7 @@ export class Wallet extends MetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: WalletId;
   @Property({ type: 'bigint' })
-  balanceSnapshot: string;
+  balanceSnapshot: bigint;
   transactions = new Collection<Transaction>(this, []);
   addTransaction(detail: TransactionDetail): void {
     const tx = new Transaction();

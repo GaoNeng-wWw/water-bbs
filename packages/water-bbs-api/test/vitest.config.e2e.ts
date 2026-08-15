@@ -10,12 +10,10 @@ export default defineConfig({
         type: 'es6',
       },
     }),
-    tsconfigPaths({
-      root: join(__dirname, '../')
-    })
   ],
 
   resolve: {
+    tsconfigPaths: true,
     alias: {
       '@': resolve(__dirname, '../src'),
     },
