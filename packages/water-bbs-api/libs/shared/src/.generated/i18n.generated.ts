@@ -24,6 +24,8 @@ export type I18nTranslations = {
         "TOPIC_CAN_NOT_REMOVED": string;
         "REPLY_CAN_NOT_REMOVE": string;
         "REPLY_NOT_FOUND": string;
+        "INSUFFICIENT_BALANCE": string;
+        "WALLET_NOT_FOUND": string;
     };
     "mail": {
         "register": {

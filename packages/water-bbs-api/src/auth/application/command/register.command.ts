@@ -9,6 +9,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { InjectRegistor, Registor } from '../service';
 import { Logger } from '@nestjs/common';
 import { ConfigureService } from '@app/configure';
+import { Wallet, WalletService } from '@app/gamification';
 
 export class RegisterCommand extends Command<Result<AccountId, DomainError>> {
   constructor(
@@ -35,6 +36,7 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
     @InjectRegistor()
     private readonly registor: Registor[],
     private readonly configure: ConfigureService,
+    private readonly walletService: WalletService,
   ) {}
   async execute({
     identType,
@@ -86,9 +88,15 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
       nick,
       bio,
     });
-    this.em.persist(newAccount.value);
-    this.em.persist(profile);
-    await this.em.flush();
+    await this.em.transactional((em) => {
+      em.persist(newAccount.value);
+      em.persist(profile);
+      const wallet = this.em.create(Wallet, {
+        balanceSnapshot: '0',
+        id: newAccount.value.id,
+      });
+      em.persist(wallet);
+    });
     return ok(newAccount.value.id);
   }
 }
