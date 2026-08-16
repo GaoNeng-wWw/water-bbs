@@ -92,7 +92,7 @@ export class RegisterService implements ICommandHandler<RegisterCommand> {
       em.persist(newAccount.value);
       em.persist(profile);
       const wallet = this.em.create(Wallet, {
-        balanceSnapshot: '0',
+        balanceSnapshot: 0n,
         id: newAccount.value.id,
       });
       em.persist(wallet);

@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from 'motion-v';
 import type { DialogContentEmits, DialogContentProps } from 'reka-ui';
 import { DialogClose, DialogContent, DialogOverlay, DialogPortal, useForwardPropsEmits, injectDialogRootContext } from 'reka-ui';
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 const props = defineProps<DialogContentProps>();
 const emits = defineEmits<DialogContentEmits>();
@@ -50,6 +50,7 @@ const forwarded = useForwardPropsEmits(props, emits);
       <dialog-content v-bind="forwarded" as-child>
         <motion.div
           class="fixed top-0 left-0 max-w-lg w-full p-4 rounded-md bg-surface-200 z-[calc(infinity+1)] flex flex-col"
+          :class="$attrs.class"
           :initial="{
             opacity: 0,
             scale: 0,

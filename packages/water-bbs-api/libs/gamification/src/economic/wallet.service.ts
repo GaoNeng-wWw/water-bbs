@@ -92,7 +92,7 @@ export class WalletService {
         'get',
       );
       const balance = BigInt(result[0].balance);
-      wallet.balanceSnapshot = balance.toString();
+      wallet.balanceSnapshot = balance;
       em.persist(wallet);
     });
     return ok(wallet);

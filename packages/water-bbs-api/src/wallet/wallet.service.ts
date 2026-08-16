@@ -1,6 +1,5 @@
 import {
   Transaction,
-  TransactionId,
   TransactionStatus,
   Wallet,
   WalletId,
@@ -31,11 +30,7 @@ export class WalletService {
       balance: wallet.balanceSnapshot.toString(),
     });
   }
-  listTransactions(
-    walletId: WalletId,
-    lastId?: TransactionId,
-    limit: number = 100,
-  ) {
+  listTransactions(walletId: WalletId, cursor?: string, limit: number = 100) {
     return this.transactionRepo
       .findByCursor({
         where: {
@@ -46,10 +41,9 @@ export class WalletService {
           id: 'asc',
         },
         first: limit,
-        after: lastId,
+        after: cursor,
       })
       .then((cursor) => {
-        console.log(cursor)
         return {
           items: cursor.items,
           nextCursor: cursor.endCursor,

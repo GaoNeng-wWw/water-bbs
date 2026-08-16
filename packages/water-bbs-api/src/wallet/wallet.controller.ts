@@ -8,6 +8,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiProperty,
+  ApiQuery,
 } from '@nestjs/swagger';
 
 @Controller('wallet')
@@ -24,15 +25,15 @@ export class WalletController {
 
   @ApiBearerAuth()
   @ApiOperation({ summary: '获取交易列表', operationId: 'getTransactions' })
-  @ApiProperty({ type: 'string', description: '交易ID' })
-  @ApiProperty({ type: 'number', description: '每页数量' })
+  @ApiQuery({ type: 'string', description: '交易ID', name: 'cursor', required: false })
+  @ApiQuery({ type: 'number', description: '每页数量', name: 'limit'})
   @ApiOkResponse({ type: ListTransactionsResponse, description: '交易列表' })
   @Get('transactions')
   getTransactions(
     @User('id') userId: AccountId,
-    @Query('lastId') lastId?: TransactionId,
+    @Query('cursor') cursor?: string,
     @Query('limit', ParseIntPipe) limit?: number,
   ) {
-    return this.walletService.listTransactions(userId, lastId, limit);
+    return this.walletService.listTransactions(userId, cursor, limit);
   }
 }

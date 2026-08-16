@@ -397,6 +397,47 @@ export type UpdateProfile = {
     bio: string;
 };
 
+export type GetBalanceResponse = {
+    /**
+     * 钱包余额
+     */
+    balance: string;
+};
+
+export type ListTransactionsItem = {
+    /**
+     * 交易ID
+     */
+    id: string;
+    /**
+     * 交易发起人
+     */
+    from: string;
+    /**
+     * 交易接收人
+     */
+    to: string;
+    /**
+     * 交易金额
+     */
+    amount: string;
+    /**
+     * 交易详情
+     */
+    detail: string;
+};
+
+export type ListTransactionsResponse = {
+    /**
+     * 交易列表
+     */
+    items: Array<ListTransactionsItem>;
+    /**
+     * 下一页交易ID
+     */
+    nextCursor: string;
+};
+
 export type HttpPresentationError = {
     /**
      * 错误 message
@@ -809,3 +850,44 @@ export type UpdateProfileData = {
 export type UpdateProfileResponses = {
     200: unknown;
 };
+
+export type GetBalanceData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/wallet/balance';
+};
+
+export type GetBalanceResponses = {
+    /**
+     * 余额
+     */
+    200: GetBalanceResponse;
+};
+
+export type GetBalanceResponse2 = GetBalanceResponses[keyof GetBalanceResponses];
+
+export type GetTransactionsData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * 交易ID
+         */
+        cursor?: string;
+        /**
+         * 每页数量
+         */
+        limit: number;
+    };
+    url: '/wallet/transactions';
+};
+
+export type GetTransactionsResponses = {
+    /**
+     * 交易列表
+     */
+    200: ListTransactionsResponse;
+};
+
+export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];

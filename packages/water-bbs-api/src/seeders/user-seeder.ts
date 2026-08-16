@@ -17,6 +17,9 @@ export class UserSeeder extends Seeder {
     const profile = new Profile();
     profile.nick = 'Admin';
     profile.bio = '';
+    if (identifier) {
+      return;
+    }
     const account = new Account();
     const pwd = randomBytes(256).toString('hex').toString().slice(0, 16);
     profile.accountId = account.id;
@@ -28,25 +31,24 @@ export class UserSeeder extends Seeder {
       console.log('Email: admin@no-reply.com');
       console.log(`Password: ${pwd}`);
     }
-    if (identifier) {
-      const adminWallet = await em.findOne(Wallet, {
-        id: identifier.account.id,
+    const id = account.id;
+    const adminWallet = await em.findOne(Wallet, {
+      id,
+    });
+    if (!adminWallet) {
+      const wallet = em.create(Wallet, {
+        id,
+        balanceSnapshot: 10000n,
       });
-      if (!adminWallet) {
-        const wallet = em.create(Wallet, {
-          id: identifier.account.id,
-          balanceSnapshot: '10000',
-        });
-        const transcation = em.create(Transaction, {
-          from: SYSTEM_WALLET_ID,
-          to: identifier.account.id,
-          amount: '10000',
-          status: TransactionStatus.Success,
-          detail: '',
-        });
-        await em.upsert(Wallet, wallet);
-        await em.upsert(Transaction, transcation);
-      }
+      const transcation = em.create(Transaction, {
+        from: SYSTEM_WALLET_ID,
+        to: id,
+        amount: '10000',
+        status: TransactionStatus.Success,
+        detail: '',
+      });
+      await em.upsert(Wallet, wallet);
+      await em.upsert(Transaction, transcation);
     }
   }
 }

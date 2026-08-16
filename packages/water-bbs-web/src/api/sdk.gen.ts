@@ -3,7 +3,7 @@
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
 import { createReplyResponseTransformer, removeReplyResponseTransformer } from './transformers.gen';
-import type { CreateCategoryData, CreateCategoryResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses } from './types.gen';
+import type { CreateCategoryData, CreateCategoryResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetBalanceData, GetBalanceResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -238,4 +238,22 @@ export const updateProfile = <ThrowOnError extends boolean = false>(options: Opt
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * 获取余额
+ */
+export const getBalance = <ThrowOnError extends boolean = false>(options?: Options<GetBalanceData, ThrowOnError>): RequestResult<GetBalanceResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetBalanceResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/wallet/balance',
+    ...options
+});
+
+/**
+ * 获取交易列表
+ */
+export const getTransactions = <ThrowOnError extends boolean = false>(options: Options<GetTransactionsData, ThrowOnError>): RequestResult<GetTransactionsResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetTransactionsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/wallet/transactions',
+    ...options
 });
