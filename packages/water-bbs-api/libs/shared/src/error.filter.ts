@@ -14,7 +14,6 @@ import { I18nTranslations } from './.generated/i18n.generated';
 export class ErrorFilter implements ExceptionFilter {
   constructor(private readonly i18n: I18nService<I18nTranslations>) {}
   catch(exception: any, host: ArgumentsHost) {
-    console.log(exception);
     const http = host.switchToHttp();
     const resp = http.getResponse<Response>();
     const req = http.getRequest<Request>();
