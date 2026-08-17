@@ -1,5 +1,3 @@
-import z from 'zod';
-import { UIFieldSchema } from './schema';
 import {
   applyDecorators,
   Injectable,
@@ -11,15 +9,11 @@ import { DiscoveryService, Reflector } from '@nestjs/core';
 import { err, ok, Result } from 'neverthrow';
 import { BadValid, ResolverNotFound } from './error';
 import { InfraError } from '@app/shared';
+import { Definition } from '../definition';
 
 export type ResolverName = string & { readonly __brand: unique symbol };
 
-export interface ResolverDefinition<Param = any> {
-  name: string;
-  inputSchema: z.ZodType<Param>;
-  uiSchema: UIFieldSchema;
-  description?: string;
-}
+export type ResolverDefinition<Param = any> = Definition<Param>;
 
 interface IResolver<Param, Return> {
   run(param: Param): Promise<Return> | Return;
