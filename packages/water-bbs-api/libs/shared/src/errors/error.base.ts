@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { I18nPath } from '../.generated/i18n.generated';
 import { ApiProperty } from '@nestjs/swagger';
-export type DomainErrorProps = {
+export type ErrorProps = {
   key: I18nPath;
   status: HttpStatus;
   args?: Record<string, any>;
@@ -33,10 +33,29 @@ export class DomainError extends Error {
   public readonly args?: Record<string, any>;
   public readonly details?: Record<string, any>;
   public readonly cause?: Error;
-  constructor(props: DomainErrorProps) {
+  constructor(props: ErrorProps) {
     super(props.key, { cause: props.cause });
     this.key = props.key;
     this.status = props.status;
+    this.args = props.args;
+    this.details = props.details;
+    this.cause = props.cause;
+  }
+  toHttpPresentationError(): HttpPresentationError {
+    return new HttpPresentationError(this.message, this.status, this.details);
+  }
+}
+
+export class InfraError extends Error {
+  public readonly key: I18nPath;
+  public readonly status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+  public readonly args?: Record<string, any>;
+  public readonly details?: Record<string, any>;
+  public readonly cause?: Error;
+  constructor(props: Omit<ErrorProps, 'status'> & { status?: HttpStatus }) {
+    super(props.key, { cause: props.cause });
+    this.key = props.key;
+    this.status = props.status || HttpStatus.INTERNAL_SERVER_ERROR;
     this.args = props.args;
     this.details = props.details;
     this.cause = props.cause;

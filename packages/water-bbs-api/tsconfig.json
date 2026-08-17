@@ -33,6 +33,12 @@
       "@app/configure/*": [
         "libs/configure/src/*"
       ],
+      "@app/engine": [
+        "libs/engine/src"
+      ],
+      "@app/engine/*": [
+        "libs/engine/src/*"
+      ],
       "@app/gamification": [
         "libs/gamification/src"
       ],
