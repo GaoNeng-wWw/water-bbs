@@ -15,6 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CategoryModule } from './category/category.module';
 import { TopicModule } from './topic/topic.module';
 import { ProfileModule } from './profile/profile.module';
+import { EngineModule } from '@app/engine/engine.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { ProfileModule } from './profile/profile.module';
     CategoryModule,
     TopicModule,
     ProfileModule,
+    EngineModule,
   ],
   providers: [
     {

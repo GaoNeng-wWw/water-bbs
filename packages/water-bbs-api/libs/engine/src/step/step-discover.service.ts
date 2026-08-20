@@ -2,6 +2,8 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { StepHandlerMetadata } from './step.decorator';
 import { Handler } from '../core';
+import { err, ok } from 'neverthrow';
+import { StepNotFound } from './errors';
 
 @Injectable()
 export class StepDiscoverService implements OnApplicationBootstrap {
@@ -21,6 +23,10 @@ export class StepDiscoverService implements OnApplicationBootstrap {
     });
   }
   getById(id: string) {
-    return this.map.get(id);
+    const handler = this.map.get(id);
+    if (!handler) {
+      return err(new StepNotFound(id));
+    }
+    return ok(handler);
   }
 }
