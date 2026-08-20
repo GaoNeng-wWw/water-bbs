@@ -6,7 +6,7 @@ import { Category } from './src/category';
 import { Reply, Topic } from './src/topic';
 import { SeedManager } from '@mikro-orm/seeder';
 import { Migrator } from '@mikro-orm/migrations';
-import { TriggerEntity, WorkflowEntity } from '@app/engine';
+import { TriggerEntity, WorkflowEntity } from './libs/engine/src';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
