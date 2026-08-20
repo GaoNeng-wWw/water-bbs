@@ -17,26 +17,18 @@ export default defineConfig({
   dbName: process.env.DB_DBNAME ?? database.db,
   driver: SqliteDriver,
   entities: [
-    
     Identifier,
-   
     Credential,
-   
     Account,
-   
     Profile,
-   
     Category,
-   
     Topic,
-   
     Reply,
     Wallet,
-    Transaction
-  ,
+    Transaction,
     TriggerEntity,
     WorkflowEntity,
   ],
   extensions: [SeedManager, Migrator],
-  allowGlobalContext: true,
+  // allowGlobalContext: true,
 });

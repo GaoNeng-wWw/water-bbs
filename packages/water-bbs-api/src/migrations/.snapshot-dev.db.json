@@ -1512,7 +1512,7 @@
       "comment": null
     },
     {
-      "name": "trigger_entity",
+      "name": "trigger",
       "columns": {
         "condition": {
           "name": "condition",
@@ -1685,7 +1685,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "trigger_entity_created_at_index",
+          "keyName": "trigger_created_at_index",
           "primary": false,
           "unique": false
         },
@@ -1695,7 +1695,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "trigger_entity_removed_at_index",
+          "keyName": "trigger_removed_at_index",
           "primary": false,
           "unique": false
         },
@@ -1705,7 +1705,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "trigger_entity_updated_at_index",
+          "keyName": "trigger_updated_at_index",
           "primary": false,
           "unique": false
         }
@@ -1852,7 +1852,7 @@
       "comment": null
     },
     {
-      "name": "workflow_entity",
+      "name": "workflow",
       "columns": {
         "created_at": {
           "name": "created_at",
@@ -1991,7 +1991,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "workflow_entity_created_at_index",
+          "keyName": "workflow_created_at_index",
           "primary": false,
           "unique": false
         },
@@ -2001,7 +2001,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "workflow_entity_removed_at_index",
+          "keyName": "workflow_removed_at_index",
           "primary": false,
           "unique": false
         },
@@ -2011,7 +2011,7 @@
           ],
           "composite": false,
           "constraint": false,
-          "keyName": "workflow_entity_updated_at_index",
+          "keyName": "workflow_updated_at_index",
           "primary": false,
           "unique": false
         }

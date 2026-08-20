@@ -8,6 +8,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
 import { Account, Credential, Identifier, Profile } from '../src/auth';
 import { Category } from '../src/category';
+import { TriggerEntity, WorkflowEntity } from '@app/engine';
 
 describe('CategoryController (e2e)', () => {
   let app: INestApplication<App>;
@@ -22,7 +23,15 @@ describe('CategoryController (e2e)', () => {
         MikroOrmModule.forRoot({
           driver: SqliteDriver,
           dbName: ':memory:',
-          entities: [Account, Identifier, Credential, Profile, Category],
+          entities: [
+            Account,
+            Identifier,
+            Credential,
+            Profile,
+            Category,
+            TriggerEntity,
+            WorkflowEntity,
+          ],
           pool: {
             min: 0,
             max: 1,
@@ -32,10 +41,10 @@ describe('CategoryController (e2e)', () => {
       )
       .compile();
     app = moduleFixture.createNestApplication();
-    await app.init();
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();
     await orm.schema.create();
+    await app.init();
 
     await request(app.getHttpServer())
       .post('/auth/register')

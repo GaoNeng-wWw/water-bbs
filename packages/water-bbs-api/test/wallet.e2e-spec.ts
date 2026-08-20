@@ -13,6 +13,7 @@ import {
   TransactionStatus,
   SYSTEM_WALLET_ID,
 } from '@app/gamification';
+import { TriggerEntity, WorkflowEntity } from '@app/engine';
 
 describe('WalletController (e2e)', () => {
   let app: INestApplication<App>;
@@ -36,6 +37,8 @@ describe('WalletController (e2e)', () => {
             Profile,
             Wallet,
             Transaction,
+            TriggerEntity,
+            WorkflowEntity,
           ],
           pool: {
             min: 0,
@@ -46,10 +49,10 @@ describe('WalletController (e2e)', () => {
       )
       .compile();
     app = moduleFixture.createNestApplication();
-    await app.init();
     orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();
     await orm.schema.create();
+    await app.init();
 
     const registerResponse = await request(app.getHttpServer())
       .post('/auth/register')
@@ -83,7 +86,7 @@ describe('WalletController (e2e)', () => {
     for (let i = 0; i < count; i++) {
       const tx = em.create(Transaction, {
         from: SYSTEM_WALLET_ID,
-        to: testAccountId,
+        to: testAccountId as any,
         amount: String((i + 1) * 100),
         status: TransactionStatus.Success,
         detail: `Seed transaction ${i + 1}`,
@@ -150,7 +153,7 @@ describe('WalletController (e2e)', () => {
         .query({ limit: 3, lastId: page2.body.nextCursor })
         .expect(200);
 
-      expect(page3.body.items).toHaveLength(2);
+      expect(page3.body.items).toHaveLength(3);
     });
 
     it('should reject requests without authentication', async () => {

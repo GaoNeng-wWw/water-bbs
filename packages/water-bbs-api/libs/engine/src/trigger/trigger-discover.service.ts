@@ -14,7 +14,8 @@ export class TriggerDiscover implements OnApplicationBootstrap {
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
   async onApplicationBootstrap() {
-    const triggers = await this.em.findAll(TriggerEntity);
+    const em = this.em.fork();
+    const triggers = await em.findAll(TriggerEntity);
     for (const trigger of triggers) {
       if (trigger.kind === TriggerKind.Cron) {
         const crobJob = new CronJob(trigger.cron!, () => {

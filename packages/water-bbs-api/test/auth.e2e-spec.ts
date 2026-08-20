@@ -7,6 +7,10 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
 import { Account, Credential, Identifier, Profile } from '../src/auth';
+import { TriggerEntity, WorkflowEntity } from '@app/engine';
+import { Category } from '../src/category';
+import { Reply, Topic } from '../src/topic';
+import { Transaction, Wallet } from '../libs/gamification/src/economic';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -20,7 +24,19 @@ describe('AppController (e2e)', () => {
         MikroOrmModule.forRoot({
           driver: SqliteDriver,
           dbName: ':memory:',
-          entities: [Account, Identifier, Credential, Profile],
+          entities: [
+            Identifier,
+            Credential,
+            Account,
+            Profile,
+            Category,
+            Topic,
+            Reply,
+            Wallet,
+            Transaction,
+            TriggerEntity,
+            WorkflowEntity,
+          ],
           pool: {
             min: 0,
             max: 1,
@@ -30,10 +46,10 @@ describe('AppController (e2e)', () => {
       )
       .compile();
     app = moduleFixture.createNestApplication();
-    await app.init();
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();
     await orm.schema.create();
+    await app.init();
   });
 
   it('user-not-found', async () => {

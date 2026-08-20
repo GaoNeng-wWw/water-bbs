@@ -9,6 +9,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { Account, Credential, Identifier, Profile } from '../src/auth';
 import { Category } from '../src/category';
 import { Topic, Reply } from '../src/topic/entites';
+import { TriggerEntity, WorkflowEntity } from '@app/engine';
 
 describe('TopicController (e2e)', () => {
   let app: INestApplication<App>;
@@ -31,6 +32,8 @@ describe('TopicController (e2e)', () => {
             Category,
             Topic,
             Reply,
+            TriggerEntity,
+            WorkflowEntity,
           ],
           pool: {
             min: 0,
@@ -41,10 +44,10 @@ describe('TopicController (e2e)', () => {
       )
       .compile();
     app = moduleFixture.createNestApplication();
-    await app.init();
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();
     await orm.schema.create();
+    await app.init();
 
     await request(app.getHttpServer())
       .post('/auth/register')

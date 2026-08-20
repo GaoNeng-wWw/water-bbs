@@ -14,7 +14,7 @@ export enum TriggerKind {
   Cron,
 }
 
-@Entity()
+@Entity({ tableName: 'trigger' })
 export class TriggerEntity extends MetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: TriggerId;
