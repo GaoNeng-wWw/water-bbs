@@ -12,6 +12,8 @@
   },
   "moduleNameMapper": {
     "^@app/configure(|/.*)$": "<rootDir>/../libs/configure/src/$1",
+    "^@app/engine(|/.*)$": "<rootDir>/../libs/engine/src/$1",
+    "^@app/gamification(|/.*)$": "<rootDir>/../libs/gamification/src/$1",
     "^@app/notification(|/.*)$": "<rootDir>/../libs/notification/src/$1",
     "^@app/shared(|/.*)$": "<rootDir>/../libs/shared/src/$1",
     "^@app/translation(|/.*)$": "<rootDir>/../libs/translation/src/$1",

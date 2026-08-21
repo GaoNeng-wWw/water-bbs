@@ -38,19 +38,23 @@
     "@nestjs/cqrs": "^11.0.3",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.1.3",
     "@nestjs/swagger": "^11.4.6",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "cron": "^4.4.0",
     "ejs": "^6.0.1",
     "ioredis": "^5.11.1",
     "joi": "^18.2.3",
+    "json-rules-engine": "^7.3.1",
     "nestjs-i18n": "^10.8.5",
     "neverthrow": "^8.2.0",
     "nodemailer": "^9.0.3",
     "radashi": "^12.9.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -106,6 +110,8 @@
     ],
     "moduleNameMapper": {
       "^@app/configure(|/.*)$": "<rootDir>/libs/configure/src/$1",
+      "^@app/engine(|/.*)$": "<rootDir>/libs/engine/src/$1",
+      "^@app/gamification(|/.*)$": "<rootDir>/libs/gamification/src/$1",
       "^@app/notification(|/.*)$": "<rootDir>/libs/notification/src/$1",
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
       "^@app/translation(|/.*)$": "<rootDir>/libs/translation/src/$1",

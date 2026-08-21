@@ -6,6 +6,7 @@ import { Category } from './src/category';
 import { Reply, Topic } from './src/topic';
 import { SeedManager } from '@mikro-orm/seeder';
 import { Migrator } from '@mikro-orm/migrations';
+import { TriggerEntity, WorkflowEntity } from './libs/engine/src';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -14,6 +15,17 @@ export default defineConfig({
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : database.port,
   dbName: process.env.DB_DBNAME ?? database.db,
   driver: SqliteDriver,
-  entities: [Identifier, Credential, Account, Profile, Category, Topic, Reply],
+  entities: [
+    Identifier,
+    Credential,
+    Account,
+    Profile,
+    Category,
+    Topic,
+    Reply,
+    TriggerEntity,
+    WorkflowEntity,
+  ],
   extensions: [SeedManager, Migrator],
+  allowGlobalContext: true,
 });
