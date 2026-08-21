@@ -28,4 +28,7 @@ export class TriggerEntity extends MetaEntity {
   condition?: Record<string, any>;
   @Property({ type: 'string', nullable: true })
   cron?: string;
+  remove(){
+    this.removedAt = new Date();
+  }
 }

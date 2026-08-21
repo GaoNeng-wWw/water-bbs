@@ -16,4 +16,8 @@ export class WorkflowEntity extends MetaEntity {
   triggerId: TriggerId;
   @Property({ type: 'jsonb' })
   steps: string[];
+
+  remove() {
+    this.removedAt = new Date();
+  }
 }
