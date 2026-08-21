@@ -14,7 +14,7 @@ export enum TriggerKind {
   Cron,
 }
 
-@Entity()
+@Entity({ tableName: 'trigger' })
 export class TriggerEntity extends MetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: TriggerId;
@@ -28,4 +28,7 @@ export class TriggerEntity extends MetaEntity {
   condition?: Record<string, any>;
   @Property({ type: 'string', nullable: true })
   cron?: string;
+  remove(){
+    this.removedAt = new Date();
+  }
 }

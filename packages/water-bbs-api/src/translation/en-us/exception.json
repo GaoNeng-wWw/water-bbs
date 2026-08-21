@@ -16,5 +16,7 @@
   "HIDDEN_END_MUST_BE_AFTER_START": "Hidden end must be after start",
   "TOPIC_CAN_NOT_REMOVED": "Can Not Remove Topic",
   "REPLY_CAN_NOT_REMOVE": "Can Not Remove Reply",
-  "REPLY_NOT_FOUND": "Reply Not Found"
+  "REPLY_NOT_FOUND": "Reply Not Found",
+  "INSUFFICIENT_BALANCE": "Insufficient Balance",
+  "WALLET_NOT_FOUND": "Wallet Not Found"
 }

@@ -6,7 +6,7 @@ import { MetaEntity } from '@app/shared';
 
 export type WorkflowId = string & { readonly __brand: unique symbol };
 
-@Entity()
+@Entity({ tableName: 'workflow' })
 export class WorkflowEntity extends MetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: Opt<WorkflowId> = v7() as WorkflowId;
@@ -16,4 +16,8 @@ export class WorkflowEntity extends MetaEntity {
   triggerId: TriggerId;
   @Property({ type: 'jsonb' })
   steps: string[];
+
+  remove() {
+    this.removedAt = new Date();
+  }
 }

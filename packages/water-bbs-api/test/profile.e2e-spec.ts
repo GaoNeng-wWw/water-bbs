@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
@@ -7,6 +8,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
 import { Account, Credential, Identifier, Profile } from '../src/auth';
+import { TriggerEntity, WorkflowEntity } from '@app/engine';
 
 describe('ProfileController (e2e)', () => {
   let app: INestApplication<App>;
@@ -22,7 +24,14 @@ describe('ProfileController (e2e)', () => {
         MikroOrmModule.forRoot({
           driver: SqliteDriver,
           dbName: ':memory:',
-          entities: [Account, Identifier, Credential, Profile],
+          entities: [
+            Account,
+            Identifier,
+            Credential,
+            Profile,
+            TriggerEntity,
+            WorkflowEntity,
+          ],
           pool: {
             min: 0,
             max: 1,
@@ -32,10 +41,10 @@ describe('ProfileController (e2e)', () => {
       )
       .compile();
     app = moduleFixture.createNestApplication();
-    await app.init();
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();
     await orm.schema.create();
+    await app.init();
 
     const registerResponse = await request(app.getHttpServer())
       .post('/auth/register')

@@ -1,8 +1,8 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20260810025705 extends Migration {
+export class Migration20260820141703 extends Migration {
 
-  override name = 'Migration20260810025705';
+  override name = 'Migration20260820141703';
 
   override up(): void | Promise<void> {
     this.addSql(`create table \`account\` (\`id\` text not null primary key, \`created_at\` datetime not null, \`removed_at\` datetime null, \`updated_at\` datetime null);`);
@@ -42,6 +42,26 @@ export class Migration20260810025705 extends Migration {
     this.addSql(`create index \`topic_removed_at_index\` on \`topic\` (\`removed_at\`);`);
     this.addSql(`create index \`topic_updated_at_index\` on \`topic\` (\`updated_at\`);`);
     this.addSql(`create index \`topic_author_id_index\` on \`topic\` (\`author_id\`);`);
+
+    this.addSql(`create table \`transaction\` (\`id\` text not null primary key, \`from\` text not null, \`to\` text not null, \`amount\` bigint not null, \`status\` text check (\`status\` in ('success', 'pending', 'fail')) not null, \`detail\` text not null);`);
+    this.addSql(`create index \`transaction_from_index\` on \`transaction\` (\`from\`);`);
+    this.addSql(`create index \`transaction_to_index\` on \`transaction\` (\`to\`);`);
+    this.addSql(`create index \`transaction_status_index\` on \`transaction\` (\`status\`);`);
+
+    this.addSql(`create table \`trigger\` (\`id\` text not null primary key, \`created_at\` datetime not null, \`removed_at\` datetime null, \`updated_at\` datetime null, \`name\` text not null, \`workflow_id\` text not null, \`kind\` integer not null, \`condition\` json null, \`cron\` text null);`);
+    this.addSql(`create index \`trigger_created_at_index\` on \`trigger\` (\`created_at\`);`);
+    this.addSql(`create index \`trigger_removed_at_index\` on \`trigger\` (\`removed_at\`);`);
+    this.addSql(`create index \`trigger_updated_at_index\` on \`trigger\` (\`updated_at\`);`);
+
+    this.addSql(`create table \`wallet\` (\`id\` text not null primary key, \`created_at\` datetime not null, \`removed_at\` datetime null, \`updated_at\` datetime null, \`balance_snapshot\` bigint not null);`);
+    this.addSql(`create index \`wallet_created_at_index\` on \`wallet\` (\`created_at\`);`);
+    this.addSql(`create index \`wallet_removed_at_index\` on \`wallet\` (\`removed_at\`);`);
+    this.addSql(`create index \`wallet_updated_at_index\` on \`wallet\` (\`updated_at\`);`);
+
+    this.addSql(`create table \`workflow\` (\`id\` text not null primary key, \`created_at\` datetime not null, \`removed_at\` datetime null, \`updated_at\` datetime null, \`name\` text not null, \`trigger_id\` text not null, \`steps\` json not null);`);
+    this.addSql(`create index \`workflow_created_at_index\` on \`workflow\` (\`created_at\`);`);
+    this.addSql(`create index \`workflow_removed_at_index\` on \`workflow\` (\`removed_at\`);`);
+    this.addSql(`create index \`workflow_updated_at_index\` on \`workflow\` (\`updated_at\`);`);
   }
 
   override down(): void | Promise<void> {
@@ -53,6 +73,10 @@ export class Migration20260810025705 extends Migration {
     this.addSql(`drop table if exists \`profile\`;`);
     this.addSql(`drop table if exists \`reply\`;`);
     this.addSql(`drop table if exists \`topic\`;`);
+    this.addSql(`drop table if exists \`transaction\`;`);
+    this.addSql(`drop table if exists \`trigger\`;`);
+    this.addSql(`drop table if exists \`wallet\`;`);
+    this.addSql(`drop table if exists \`workflow\`;`);
   }
 
 }

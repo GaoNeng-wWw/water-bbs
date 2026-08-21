@@ -19,7 +19,7 @@ export class GetProfileQuery extends Query<Result<ProfileInfo, DomainError>> {
 export class GetProfileService implements IQueryHandler<GetProfileQuery> {
   constructor(
     @InjectRepository(Profile)
-    private readonly profileRepo: EntityRepository<Profile>
+    private readonly profileRepo: EntityRepository<Profile>,
   ) {}
   async execute(
     query: GetProfileQuery,

@@ -16,12 +16,14 @@ import { TokenGenrator } from './domain';
 import { JwtGenerator, RedisSessionRepository, TokenRepository } from './infra';
 import { CredentialVerifier } from './application/service/credential-verifer/verifier';
 import { PasswordVerifier } from './application/service/credential-verifer/password.verifer';
+import { WalletModule } from '@app/gamification';
 
 @Module({
   imports: [
     MikroOrmModule.forFeature([Identifier, Credential, Account, Profile]),
     VerificationCodeModule,
     NotificationModule,
+    WalletModule
   ],
   controllers: [AuthController],
   providers: [

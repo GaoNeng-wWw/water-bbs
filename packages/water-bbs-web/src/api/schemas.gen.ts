@@ -609,6 +609,73 @@ export const UpdateProfileSchema = {
     ]
 } as const;
 
+export const GetBalanceResponseSchema = {
+    type: 'object',
+    properties: {
+        balance: {
+            type: 'string',
+            description: '钱包余额'
+        }
+    },
+    required: [
+        'balance'
+    ]
+} as const;
+
+export const ListTransactionsItemSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '交易ID'
+        },
+        from: {
+            type: 'string',
+            description: '交易发起人'
+        },
+        to: {
+            type: 'string',
+            description: '交易接收人'
+        },
+        amount: {
+            type: 'string',
+            description: '交易金额'
+        },
+        detail: {
+            type: 'string',
+            description: '交易详情'
+        }
+    },
+    required: [
+        'id',
+        'from',
+        'to',
+        'amount',
+        'detail'
+    ]
+} as const;
+
+export const ListTransactionsResponseSchema = {
+    type: 'object',
+    properties: {
+        items: {
+            description: '交易列表',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ListTransactionsItem'
+            }
+        },
+        nextCursor: {
+            type: 'string',
+            description: '下一页交易ID'
+        }
+    },
+    required: [
+        'items',
+        'nextCursor'
+    ]
+} as const;
+
 export const HttpPresentationErrorSchema = {
     type: 'object',
     properties: {
