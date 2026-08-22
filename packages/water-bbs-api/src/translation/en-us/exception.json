@@ -20,5 +20,7 @@
   "INSUFFICIENT_BALANCE": "Insufficient Balance",
   "WALLET_NOT_FOUND": "Wallet Not Found",
   "MEMBER_ALREADY_EXISTS": "Member Already Exists",
-  "MEMBER_NOT_FOUND": "Member Not Found"
+  "MEMBER_NOT_FOUND": "Member Not Found",
+  "PROPOSAL_NOT_FOUND": "Proposal Not Found",
+  "PROPOSAL_STATUS_MACHINE_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}"
 }

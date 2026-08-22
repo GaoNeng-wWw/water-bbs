@@ -28,6 +28,8 @@ export type I18nTranslations = {
         "WALLET_NOT_FOUND": string;
         "MEMBER_ALREADY_EXISTS": string;
         "MEMBER_NOT_FOUND": string;
+        "PROPOSAL_NOT_FOUND": string;
+        "PROPOSAL_STATUS_MACHINE_TRANS_ERROR": string;
     };
     "mail": {
         "register": {

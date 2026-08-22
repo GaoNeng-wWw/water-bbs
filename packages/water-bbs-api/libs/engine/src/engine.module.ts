@@ -3,18 +3,12 @@ import { EngineKey } from './core';
 import { Engine } from 'json-rules-engine';
 import { StepDiscoverService } from './step';
 import { ResolverDiscoverService } from './resolver';
-import {
-  CreateTriggerService,
-  RemoveTriggerService,
-  TriggerDiscover,
-  TriggerEntity,
-} from './trigger';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { WorkflowEntity } from './workflow';
+import { TriggerEntity, WorkflowEntity } from './workflow';
 import { DiscoveryModule } from '@nestjs/core';
-import { OnTriggerFire } from './workflow';
-import { RemoveWorkflowService } from './workflow/commands';
+import { WorkflowRegistryService } from './workflow/workflow-registry.service';
+import { WorkflowService } from './workflow/workflow.service';
 
 @Module({
   imports: [
@@ -23,17 +17,14 @@ import { RemoveWorkflowService } from './workflow/commands';
     MikroOrmModule.forFeature([WorkflowEntity, TriggerEntity]),
   ],
   providers: [
-    TriggerDiscover,
     ResolverDiscoverService,
     StepDiscoverService,
     {
       provide: EngineKey,
       useValue: new Engine([]),
     },
-    CreateTriggerService,
-    RemoveTriggerService,
-    RemoveWorkflowService,
-    OnTriggerFire,
+    WorkflowRegistryService,
+    WorkflowService,
   ],
 })
 export class EngineModule {}

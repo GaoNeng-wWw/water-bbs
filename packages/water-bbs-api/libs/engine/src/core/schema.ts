@@ -1,4 +1,4 @@
-import { EntityManager } from '@mikro-orm/sqlite';
+import { EntityManager } from '@mikro-orm/core';
 import { applyDecorators, Injectable } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { Result } from 'neverthrow';
