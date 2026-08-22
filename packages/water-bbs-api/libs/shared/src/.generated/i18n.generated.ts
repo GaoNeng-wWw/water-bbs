@@ -26,6 +26,8 @@ export type I18nTranslations = {
         "REPLY_NOT_FOUND": string;
         "INSUFFICIENT_BALANCE": string;
         "WALLET_NOT_FOUND": string;
+        "MEMBER_ALREADY_EXISTS": string;
+        "MEMBER_NOT_FOUND": string;
     };
     "mail": {
         "register": {

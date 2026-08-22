@@ -17,6 +17,7 @@ import { TopicModule } from './topic/topic.module';
 import { ProfileModule } from './profile/profile.module';
 import { WalletModule } from './wallet/wallet.module';
 import { EngineModule } from '@app/engine/engine.module';
+import { GovernanceMemberModule } from '@app/gamification';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { EngineModule } from '@app/engine/engine.module';
     ProfileModule,
     WalletModule,
     EngineModule,
+    GovernanceMemberModule,
   ],
   providers: [
     {
