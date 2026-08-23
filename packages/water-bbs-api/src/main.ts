@@ -23,4 +23,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3100);
 }
-bootstrap();
+bootstrap().catch(() => process.exit(-1));

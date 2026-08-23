@@ -27,6 +27,7 @@ import {
   OnReplyCreated,
 } from './event-handler';
 import { Category } from '../category';
+import { HideTopic, RemoveTopic } from './steps';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Topic, Reply, Profile, Category])],
@@ -49,6 +50,8 @@ import { Category } from '../category';
     OnTopicRemoved,
     OnTopicCreated,
     OnReplyCreated,
+    HideTopic,
+    RemoveTopic,
   ],
 })
 export class TopicModule {}

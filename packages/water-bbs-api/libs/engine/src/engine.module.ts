@@ -13,8 +13,8 @@ import { DiscoveryModule } from '@nestjs/core';
       provide: EngineKey,
       useValue: new Engine([]),
     },
-    StepRunner
+    StepRunner,
   ],
-  exports: [StepDiscoverService,StepRunner],
+  exports: [StepDiscoverService, StepRunner],
 })
 export class EngineModule {}

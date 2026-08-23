@@ -1,5 +1,5 @@
 import { InjectRepository, MikroOrmModule } from '@mikro-orm/nestjs';
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import {
   Proposal,
   ProposalId,
@@ -36,13 +36,17 @@ import { EngineModule } from '@app/engine';
     ProposalApprove,
   ],
 })
-export class ProposalModule {
+export class ProposalModule implements OnApplicationBootstrap {
   constructor(
     @InjectRepository(Proposal)
     private readonly proposalEntity: EntityRepository<Proposal>,
     private readonly query: QueryBus,
     private readonly eventBus: EventBus,
   ) {}
+  onApplicationBootstrap() {
+    this.scanProposal();
+  }
+
   @Cron(CronExpression.EVERY_2_HOURS)
   async scanProposal() {
     const now = new Date();
