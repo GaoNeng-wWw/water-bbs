@@ -34,6 +34,7 @@ export enum ProposalStatus {
   Executed = 'executed',
   Failed = 'failed',
   Cancelled = 'cancelled',
+  EmergencyReview = 'emergency-review',
 }
 
 export enum ProposalKind {
@@ -124,6 +125,10 @@ export class Proposal extends MetaEntity {
     }
     this.status = ProposalStatus.Cancelled;
     return ok();
+  }
+
+  emergency(){
+    this.status = ProposalStatus.EmergencyReview;
   }
 }
 

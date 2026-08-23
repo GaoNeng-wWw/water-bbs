@@ -19,7 +19,7 @@ import { EntityRepository } from '@mikro-orm/sqlite';
 import { EventBus, IEvent, QueryBus } from '@nestjs/cqrs';
 import { Approve, Controversy, Reject } from './events';
 import { ProposalNotFound } from './error';
-import { ProposalApprove } from './executor/proposal-approve.handler';
+import { ProposalApprove, OnEmergencyProposalCreated } from './executor';
 import { EngineModule } from '@app/engine';
 
 @Module({
@@ -34,6 +34,7 @@ import { EngineModule } from '@app/engine';
     CalculateVoteService,
     ListProposalService,
     ProposalApprove,
+    OnEmergencyProposalCreated
   ],
 })
 export class ProposalModule implements OnApplicationBootstrap {

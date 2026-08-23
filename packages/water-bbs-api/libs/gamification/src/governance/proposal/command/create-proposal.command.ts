@@ -58,27 +58,10 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
     await em.transactional(async (em: EntityManager) => {
       em.persist(proposal);
       if (kind === ProposalKind.Emergency) {
-        const steps = proposal.steps;
-        const jobs = steps.map((step) => {
-          const handler = this.stepRegistry.getById(step.stepName);
-          if (handler.isErr()) {
-            throw handler.error;
-          }
-          return handler.value.handle(step.param, { em, events: [] });
-        });
-        const runResult = await Promise.all(jobs);
-        const err = runResult.find((res) => res.isErr());
-        if (err) {
-          proposal.failed(err.error.message);
-        } else {
-          const executedRes = proposal.executed();
-          if (executedRes.isErr()) {
-            await em.flush();
-            throw executedRes.error;
-          }
-        }
-        await em.flush();
+        proposal.emergency();
+        em.persist(proposal);
       }
+      await em.flush();
     });
     return ok(proposal.id);
   }
