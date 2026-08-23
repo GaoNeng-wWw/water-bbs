@@ -14,7 +14,6 @@ import {
   Vote,
   Wallet,
 } from './libs/gamification/src';
-import { TriggerEntity, WorkflowEntity } from './libs/engine/src';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -33,8 +32,6 @@ export default defineConfig({
     Reply,
     Wallet,
     Transaction,
-    TriggerEntity,
-    WorkflowEntity,
     GovernanceMember,
     Proposal,
     Vote,

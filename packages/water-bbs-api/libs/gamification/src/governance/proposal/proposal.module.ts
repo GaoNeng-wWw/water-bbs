@@ -1,6 +1,12 @@
 import { InjectRepository, MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { Proposal, ProposalId, ProposalSlot, ProposalStatus, Vote } from './proposal.entity';
+import {
+  Proposal,
+  ProposalId,
+  ProposalSlot,
+  ProposalStatus,
+  Vote,
+} from './proposal.entity';
 import { CreateProposal, CreateVoteService, RemoveProposal } from './command';
 import {
   CalculateVote,
@@ -13,15 +19,21 @@ import { EntityRepository } from '@mikro-orm/sqlite';
 import { EventBus, IEvent, QueryBus } from '@nestjs/cqrs';
 import { Approve, Controversy, Reject } from './events';
 import { ProposalNotFound } from './error';
+import { ProposalApprove } from './executor/proposal-approve.handler';
+import { EngineModule } from '@app/engine';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Proposal, Vote, ProposalSlot])],
+  imports: [
+    MikroOrmModule.forFeature([Proposal, Vote, ProposalSlot]),
+    EngineModule,
+  ],
   providers: [
     CreateProposal,
     RemoveProposal,
     CreateVoteService,
     CalculateVoteService,
     ListProposalService,
+    ProposalApprove,
   ],
 })
 export class ProposalModule {

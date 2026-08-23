@@ -2,49 +2,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
-import { Account, Credential, Identifier, Profile } from '../src/auth';
-import { TriggerEntity, WorkflowEntity } from '@app/engine';
-import { Category } from '../src/category';
-import { Reply, Topic } from '../src/topic';
-import { Transaction, Wallet } from '../libs/gamification/src/economic';
+import { E2EAppModule } from 'src/e2e-test-app.modulel';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideModule(MikroOrmModule)
-      .useModule(
-        MikroOrmModule.forRoot({
-          driver: SqliteDriver,
-          dbName: ':memory:',
-          entities: [
-            Identifier,
-            Credential,
-            Account,
-            Profile,
-            Category,
-            Topic,
-            Reply,
-            Wallet,
-            Transaction,
-            TriggerEntity,
-            WorkflowEntity,
-          ],
-          pool: {
-            min: 0,
-            max: 1,
-          },
-          debug: true,
-        }),
-      )
-      .compile();
+      imports: [E2EAppModule],
+    }).compile();
     app = moduleFixture.createNestApplication();
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();

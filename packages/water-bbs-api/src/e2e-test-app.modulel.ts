@@ -45,7 +45,7 @@ import { DatabaseModule } from './infra/database.module';
       path: join(__dirname, 'configs/config.json'),
     }),
     AppRedisModule,
-    DatabaseModule.forRoot(),
+    DatabaseModule.forTest(),
     AuthModule,
     CategoryModule,
     TopicModule,
@@ -70,4 +70,4 @@ import { DatabaseModule } from './infra/database.module';
     },
   ],
 })
-export class AppModule {}
+export class E2EAppModule {}

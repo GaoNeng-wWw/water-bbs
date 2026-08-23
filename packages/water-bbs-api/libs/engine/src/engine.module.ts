@@ -1,30 +1,20 @@
 import { Module } from '@nestjs/common';
 import { EngineKey } from './core';
 import { Engine } from 'json-rules-engine';
-import { StepDiscoverService } from './step';
-import { ResolverDiscoverService } from './resolver';
+import { StepDiscoverService, StepRunner } from './step';
 import { ScheduleModule } from '@nestjs/schedule';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { TriggerEntity, WorkflowEntity } from './workflow';
 import { DiscoveryModule } from '@nestjs/core';
-import { WorkflowRegistryService } from './workflow/workflow-registry.service';
-import { WorkflowService } from './workflow/workflow.service';
 
 @Module({
-  imports: [
-    DiscoveryModule,
-    ScheduleModule.forRoot(),
-    MikroOrmModule.forFeature([WorkflowEntity, TriggerEntity]),
-  ],
+  imports: [DiscoveryModule, ScheduleModule.forRoot()],
   providers: [
-    ResolverDiscoverService,
     StepDiscoverService,
     {
       provide: EngineKey,
       useValue: new Engine([]),
     },
-    WorkflowRegistryService,
-    WorkflowService,
+    StepRunner
   ],
+  exports: [StepDiscoverService,StepRunner],
 })
 export class EngineModule {}

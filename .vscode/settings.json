@@ -1,3 +1,5 @@
 {
-  "tailwindCSS.classFunctions": ["tv"]
+  "tailwindCSS.classFunctions": [
+    "tv"
+  ]
 }
