@@ -32,15 +32,32 @@ export class CalculateVoteService implements IQueryHandler<CalculateVote> {
     const proposal = await this.proposalSlotRepository.find({
       proposalId: query.proposalId,
     });
-    if (!proposal) {
+    if (!proposal.length) {
       return err(new ProposalNotFound());
     }
-    const yes = proposal
-      .map((p) => p.agreeCount)
-      .reduce((pre, cur) => pre + cur, 0);
-    const no = proposal
-      .map((p) => p.disagreeCount)
-      .reduce((pre, cur) => pre + cur, 0);
-    return ok({ proposalId: proposal[0].id as unknown as ProposalId, yes, no });
+    const result = await this.proposalSlotRepository
+      .getEntityManager()
+      .getConnection()
+      .execute(
+        `
+    SELECT
+      proposal_id,
+      SUM(agree_count) AS yes,
+      SUM(disagree_count) AS no
+    FROM proposal_slot
+    WHERE proposal_id = ?
+    GROUP BY proposal_id
+    `,
+        [query.proposalId],
+      );
+    if (result.length === 0) {
+      return err(new ProposalNotFound());
+    }
+
+    return ok({
+      proposalId: query.proposalId,
+      yes: Number(result[0].yes),
+      no: Number(result[0].no),
+    });
   }
 }

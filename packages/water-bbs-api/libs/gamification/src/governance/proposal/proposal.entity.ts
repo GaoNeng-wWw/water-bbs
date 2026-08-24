@@ -62,6 +62,8 @@ export class Proposal extends MetaEntity {
   steps: ProposalStep[];
   @Enum(() => ProposalKind)
   kind: ProposalKind = ProposalKind.Normal;
+  @Property({ type: 'text' })
+  content: string;
   @Property({ type: 'datetime' })
   startAt: Date;
   /**
@@ -74,6 +76,10 @@ export class Proposal extends MetaEntity {
 
   @Property({ type: 'text' })
   failReason: Opt<string>;
+
+  canVote() {
+    return this.status === ProposalStatus.Pending;
+  }
 
   approve() {
     if (this.status !== ProposalStatus.Pending) {
@@ -127,7 +133,7 @@ export class Proposal extends MetaEntity {
     return ok();
   }
 
-  emergency(){
+  emergency() {
     this.status = ProposalStatus.EmergencyReview;
   }
 }

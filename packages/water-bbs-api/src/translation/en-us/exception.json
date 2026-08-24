@@ -22,5 +22,8 @@
   "MEMBER_ALREADY_EXISTS": "Member Already Exists",
   "MEMBER_NOT_FOUND": "Member Not Found",
   "PROPOSAL_NOT_FOUND": "Proposal Not Found",
-  "PROPOSAL_STATUS_MACHINE_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}"
+  "PROPOSAL_STATUS_MACHINE_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}",
+  "PROPOSAL_CAN_NOT_VOTE": "Proposal Can not Vote",
+  "VOTE_NOT_FOUND": "Vote Not Found",
+  "DUPLICATE_VOTE": "Duplicate Vote"
 }

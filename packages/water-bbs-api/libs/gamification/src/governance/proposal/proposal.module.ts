@@ -11,6 +11,9 @@ import { CreateProposal, CreateVoteService, RemoveProposal } from './command';
 import {
   CalculateVote,
   CalculateVoteService,
+  CountAccountVoteService,
+  FindProposalService,
+  FindVoteByCreatorService,
   ListProposalService,
 } from './query';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -33,8 +36,11 @@ import { EngineModule } from '@app/engine';
     CreateVoteService,
     CalculateVoteService,
     ListProposalService,
+    CountAccountVoteService,
+    FindProposalService,
+    FindVoteByCreatorService,
     ProposalApprove,
-    OnEmergencyProposalCreated
+    OnEmergencyProposalCreated,
   ],
 })
 export class ProposalModule implements OnApplicationBootstrap {

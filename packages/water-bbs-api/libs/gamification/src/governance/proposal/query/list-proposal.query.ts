@@ -1,4 +1,4 @@
-import { IQueryHandler, Query } from '@nestjs/cqrs';
+import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 import { Proposal, ProposalStatus } from '../proposal.entity';
 import { DomainError } from '@app/shared';
 import { EntityRepository } from '@mikro-orm/sqlite';
@@ -16,6 +16,8 @@ export type ListProposalItem = {
 export type ListProposalResponse = {
   items: ListProposalItem[];
   nextCursor: string | null;
+  prevCursor: string | null;
+  total: number;
 };
 
 export class ListProposal extends Query<
@@ -29,6 +31,7 @@ export class ListProposal extends Query<
   }
 }
 
+@QueryHandler(ListProposal)
 export class ListProposalService implements IQueryHandler<ListProposal> {
   constructor(
     @InjectRepository(Proposal)
@@ -41,6 +44,9 @@ export class ListProposalService implements IQueryHandler<ListProposal> {
     const items = await this.proposalRepository.findByCursor({
       after: cursor,
       first: size,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     return ok({
       items: items.items.map((item) => ({
@@ -50,7 +56,9 @@ export class ListProposalService implements IQueryHandler<ListProposal> {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       })),
+      prevCursor: items.startCursor,
       nextCursor: items.endCursor,
+      total: items.totalCount,
     });
   }
 }

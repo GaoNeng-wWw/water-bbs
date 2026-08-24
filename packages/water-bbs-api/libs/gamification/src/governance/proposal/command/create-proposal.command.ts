@@ -8,20 +8,15 @@ import {
 } from '../proposal.entity';
 import { DomainError } from '@app/shared';
 import { ok, Result } from 'neverthrow';
-import {
-  Command,
-  CommandHandler,
-  EventBus,
-  ICommandHandler,
-} from '@nestjs/cqrs';
+import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { StepDiscoverService } from '@app/engine';
 
 export class CreateProposal extends Command<Result<ProposalId, DomainError>> {
   constructor(
     public title: string,
     public steps: ProposalStep[],
+    public content: string,
     public kind: ProposalKind,
     public creator: AccountId,
     public endedAt?: Date,
@@ -35,8 +30,6 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
   constructor(
     @InjectRepository(Proposal)
     private readonly proposalRepository: EntityRepository<Proposal>,
-    private readonly eventBus: EventBus,
-    private readonly stepRegistry: StepDiscoverService,
   ) {}
   async execute({
     title,
@@ -44,9 +37,11 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
     kind,
     creator,
     endedAt,
+    content,
   }: CreateProposal): Promise<Result<ProposalId, DomainError>> {
     const proposal = this.proposalRepository.create({
       title,
+      content,
       creator,
       steps,
       kind,

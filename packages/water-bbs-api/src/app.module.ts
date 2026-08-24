@@ -16,6 +16,7 @@ import { EngineModule } from '@app/engine';
 import { GovernanceMemberModule, ProposalModule } from '@app/gamification';
 import { AppRedisModule } from './redis.module';
 import { DatabaseModule } from './infra/database.module';
+import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { DatabaseModule } from './infra/database.module';
     EngineModule,
     GovernanceMemberModule,
     ProposalModule,
+    ProposalCRUD
   ],
   providers: [
     {
