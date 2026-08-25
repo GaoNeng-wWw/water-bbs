@@ -1,6 +1,7 @@
 {
   "INTERNAL_ERROR": "Internal Error",
   "UNAUTHORIZED": "unauthorized",
+  "PERMISSION_DENIED": "Permission Denied",
   "INVALID_TOKEN": "Invalid Token",
   "TOKEN_EXPIRED": "Login Expired",
   "USER_EXISTS": "User Exists",
