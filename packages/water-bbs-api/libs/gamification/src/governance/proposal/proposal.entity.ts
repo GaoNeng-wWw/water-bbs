@@ -74,7 +74,7 @@ export class Proposal extends MetaEntity {
   @Property({ type: 'uuid' })
   creator: AccountId;
 
-  @Property({ type: 'text' })
+  @Property({ type: 'text', nullable: true })
   failReason: Opt<string>;
 
   canVote() {
@@ -155,6 +155,20 @@ export class ProposalSlot extends MetaEntity {
 
   @Property({ default: 0, type: 'int' })
   disagreeCount!: number;
+
+  constructor(
+    proposalId: ProposalId,
+    slotId: number,
+    agreeCount: number,
+    disagreeCount: number,
+  ) {
+    super();
+    this.id = createProposalVoteId();
+    this.proposalId = proposalId;
+    this.slotId = slotId;
+    this.agreeCount = agreeCount;
+    this.disagreeCount = disagreeCount;
+  }
 }
 
 export enum VoteKind {
@@ -184,4 +198,13 @@ export const getSlot = (val: string, mod: number) => {
     hash = (hash * 31 + ch) | 0;
   }
   return (hash >>> 0) % Math.max(mod, 1);
+};
+
+export const getSlots = (proposalId: ProposalId, total: number = 64) => {
+  return Array.from(
+    {
+      length: total,
+    },
+    (_, i) => new ProposalSlot(proposalId, i, 0, 0),
+  );
 };

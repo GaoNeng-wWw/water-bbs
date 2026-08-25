@@ -9,8 +9,10 @@ import {
 } from './proposal.entity';
 import {
   CreateProposal,
+  CreateProposalService,
   CreateVoteService,
   RemoveProposal,
+  RemoveProposalService,
   ResolveControversyService,
 } from './command';
 import {
@@ -40,6 +42,8 @@ import { GovernanceMember } from '../member';
   providers: [
     CreateProposal,
     RemoveProposal,
+    CreateProposalService,
+    RemoveProposalService,
     CreateVoteService,
     CalculateVoteService,
     ListProposalService,

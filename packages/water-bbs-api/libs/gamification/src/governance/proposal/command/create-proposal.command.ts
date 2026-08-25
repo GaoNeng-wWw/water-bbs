@@ -1,5 +1,6 @@
 import { AccountId } from 'src/auth';
 import {
+  getSlots,
   Proposal,
   ProposalId,
   ProposalKind,
@@ -56,6 +57,8 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
         proposal.emergency();
         em.persist(proposal);
       }
+      const slots = getSlots(proposal.id, 64);
+      slots.forEach((slot) => em.persist(slot));
       await em.flush();
     });
     return ok(proposal.id);

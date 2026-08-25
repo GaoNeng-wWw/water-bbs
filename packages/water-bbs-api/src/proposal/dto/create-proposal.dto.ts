@@ -2,12 +2,16 @@ import { ProposalStatus } from '@app/gamification';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
+  ArrayMinSize,
   IsArray,
   IsDate,
+  IsDateString,
+  IsDefined,
   IsEnum,
   IsNotEmpty,
   IsObject,
   IsString,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 
@@ -38,12 +42,14 @@ export class CreateProposalDTO {
   kind: ProposalKind;
 
   @ApiProperty({ description: '提案步骤', type: [ProposalStep] })
+  @IsDefined()
   @IsArray()
+  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => ProposalStep)
   steps: ProposalStep[];
   @ApiProperty({ description: '提案结束时间' })
-  @IsDate()
+  @IsDateString()
   proposalEndAt?: Date;
 
   @ApiProperty({ description: '提案内容' })

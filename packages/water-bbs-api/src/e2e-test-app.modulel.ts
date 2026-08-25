@@ -13,9 +13,14 @@ import { TopicModule } from './topic/topic.module';
 import { ProfileModule } from './profile/profile.module';
 import { WalletModule } from './wallet/wallet.module';
 import { EngineModule } from '@app/engine';
-import { GovernanceMemberModule, ProposalModule } from '@app/gamification';
+import {
+  GovernanceMemberModule,
+  MemberGuard,
+  ProposalModule,
+} from '@app/gamification';
 import { AppRedisModule } from './redis.module';
 import { DatabaseModule } from './infra/database.module';
+import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 
 @Module({
   imports: [
@@ -45,7 +50,7 @@ import { DatabaseModule } from './infra/database.module';
       path: join(__dirname, 'configs/config.json'),
     }),
     AppRedisModule,
-    DatabaseModule.forTest(),
+    DatabaseModule.forRoot(),
     AuthModule,
     CategoryModule,
     TopicModule,
@@ -54,6 +59,7 @@ import { DatabaseModule } from './infra/database.module';
     EngineModule,
     GovernanceMemberModule,
     ProposalModule,
+    ProposalCRUD,
   ],
   providers: [
     {
@@ -67,6 +73,10 @@ import { DatabaseModule } from './infra/database.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ResultInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: MemberGuard,
     },
   ],
 })

@@ -47,7 +47,7 @@ export class ProposalService {
     if (proposal.isErr()) {
       return proposal;
     }
-    return ok(plainToInstance(CreateProposalResponseDTO, proposal));
+    return ok(plainToInstance(CreateProposalResponseDTO, proposal.value));
   }
 
   async findProposal(id: ProposalId) {

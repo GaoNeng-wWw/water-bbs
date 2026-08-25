@@ -1,11 +1,12 @@
 import { Loaded } from '@mikro-orm/core';
-import { applyDecorators, Type } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiOkResponse,
   ApiProperty,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 type ICursorPagination<T> = {
@@ -22,6 +23,7 @@ export class CursorDTO {
   cursor?: string;
   @IsNumber()
   @ApiProperty({ description: '每页数量' })
+  @Type(() => Number)
   size: number;
 }
 

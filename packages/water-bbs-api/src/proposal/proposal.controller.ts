@@ -59,21 +59,6 @@ export class ProposalController {
   }
 
   @ApiOperation({
-    summary: '投票提案',
-    operationId: 'voteProposal',
-    description: '投票提案, 一个提案每人只能投1票',
-  })
-  @ApiOkResponse({ description: '投票提案', type: VoteProposalResponseDTO })
-  @ApiParam({ name: 'accountId', description: '用户ID' })
-  @Post('vote')
-  async voteProposal(
-    @Body() body: VoteProposalDTO,
-    @User('id') accountId: AccountId,
-  ) {
-    return this.proposalService.vote(body, accountId);
-  }
-
-  @ApiOperation({
     summary: '解决争议',
     operationId: 'resolveControversy',
     description: '解决争议, 只有BD或Admin才可以解决争议.',
@@ -94,5 +79,20 @@ export class ProposalController {
     @Query('kind') kind: string,
   ) {
     return this.proposalService.resolveControversy(id, accountId, kind);
+  }
+
+  @ApiOperation({
+    summary: '投票提案',
+    operationId: 'voteProposal',
+    description: '投票提案, 一个提案每人只能投1票',
+  })
+  @ApiOkResponse({ description: '投票提案', type: VoteProposalResponseDTO })
+  @ApiParam({ name: 'accountId', description: '用户ID' })
+  @Post('vote')
+  async voteProposal(
+    @Body() body: VoteProposalDTO,
+    @User('id') accountId: AccountId,
+  ) {
+    return this.proposalService.vote(body, accountId);
   }
 }
