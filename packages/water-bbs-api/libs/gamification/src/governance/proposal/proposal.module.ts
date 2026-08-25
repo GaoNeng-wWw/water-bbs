@@ -30,10 +30,11 @@ import { ProposalNotFound } from './error';
 import { ProposalApprove, OnEmergencyProposalCreated } from './executor';
 import { EngineModule } from '@app/engine';
 import { OnProposalControversyResolved } from './event-handler';
+import { GovernanceMember } from '../member';
 
 @Module({
   imports: [
-    MikroOrmModule.forFeature([Proposal, Vote, ProposalSlot]),
+    MikroOrmModule.forFeature([Proposal, Vote, ProposalSlot, GovernanceMember]),
     EngineModule,
   ],
   providers: [

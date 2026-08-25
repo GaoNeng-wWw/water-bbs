@@ -8,6 +8,7 @@ export type I18nTranslations = {
     "exception": {
         "INTERNAL_ERROR": string;
         "UNAUTHORIZED": string;
+        "PERMISSION_DENIED": string;
         "INVALID_TOKEN": string;
         "TOKEN_EXPIRED": string;
         "USER_EXISTS": string;
