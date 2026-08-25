@@ -17,7 +17,7 @@ import { TopicModule } from './topic/topic.module';
 import { ProfileModule } from './profile/profile.module';
 import { WalletModule } from './wallet/wallet.module';
 import { EngineModule } from '@app/engine/engine.module';
-import { GovernanceMemberModule } from '@app/gamification';
+import { GovernanceMemberModule, MemberGuard } from '@app/gamification';
 
 @Module({
   imports: [
@@ -84,6 +84,10 @@ import { GovernanceMemberModule } from '@app/gamification';
       provide: APP_INTERCEPTOR,
       useClass: ResultInterceptor,
     },
+    {
+      provide: APP_GUARD,
+      useClass: MemberGuard,
+    }
   ],
 })
 export class AppModule {
