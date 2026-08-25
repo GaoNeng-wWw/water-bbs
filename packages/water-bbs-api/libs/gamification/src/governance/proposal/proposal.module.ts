@@ -7,7 +7,12 @@ import {
   ProposalStatus,
   Vote,
 } from './proposal.entity';
-import { CreateProposal, CreateVoteService, RemoveProposal } from './command';
+import {
+  CreateProposal,
+  CreateVoteService,
+  RemoveProposal,
+  ResolveControversyService,
+} from './command';
 import {
   CalculateVote,
   CalculateVoteService,
@@ -24,6 +29,7 @@ import { Approve, Controversy, Reject } from './events';
 import { ProposalNotFound } from './error';
 import { ProposalApprove, OnEmergencyProposalCreated } from './executor';
 import { EngineModule } from '@app/engine';
+import { OnProposalControversyResolved } from './event-handler';
 
 @Module({
   imports: [
@@ -41,6 +47,8 @@ import { EngineModule } from '@app/engine';
     FindVoteByCreatorService,
     ProposalApprove,
     OnEmergencyProposalCreated,
+    ResolveControversyService,
+    OnProposalControversyResolved,
   ],
 })
 export class ProposalModule implements OnApplicationBootstrap {

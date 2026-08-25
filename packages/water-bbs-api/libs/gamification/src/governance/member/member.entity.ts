@@ -69,4 +69,8 @@ export class GovernanceMember {
     this.endedAt = now;
     this.reason = reason;
   }
+
+  canResolveControversy() {
+    return this.hasBDAuthority() || this.isAdmin();
+  }
 }

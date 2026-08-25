@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import { ApiCursorPagination, CursorDTO } from '@app/shared';
-import { type ProposalId } from '@app/gamification';
+import { Member, MemberKind, type ProposalId } from '@app/gamification';
 import {
   CreateProposalDTO,
   CreateProposalResponseDTO,
@@ -58,7 +58,11 @@ export class ProposalController {
     return this.proposalService.createProposal(body, accountId);
   }
 
-  @ApiOperation({ description: '投票提案', operationId: 'voteProposal' })
+  @ApiOperation({
+    summary: '投票提案',
+    operationId: 'voteProposal',
+    description: '投票提案, 一个提案每人只能投1票',
+  })
   @ApiOkResponse({ description: '投票提案', type: VoteProposalResponseDTO })
   @ApiParam({ name: 'accountId', description: '用户ID' })
   @Post('vote')
@@ -67,5 +71,28 @@ export class ProposalController {
     @User('id') accountId: AccountId,
   ) {
     return this.proposalService.vote(body, accountId);
+  }
+
+  @ApiOperation({
+    summary: '解决争议',
+    operationId: 'resolveControversy',
+    description: '解决争议, 只有BD或Admin才可以解决争议.',
+  })
+  @ApiOkResponse({ description: '解决争议' })
+  @ApiParam({ name: 'accountId', description: '用户ID' })
+  @ApiQuery({
+    name: 'kind',
+    description: '解决类型',
+    enum: ['approve', 'reject'],
+  })
+  @Post(':id/resolve')
+  @ApiParam({ name: 'id', description: '提案ID' })
+  @Member(MemberKind.BD)
+  async resolveControversy(
+    @Param('id') id: ProposalId,
+    @User('id') accountId: AccountId,
+    @Query('kind') kind: string,
+  ) {
+    return this.proposalService.resolveControversy(id, accountId, kind);
   }
 }

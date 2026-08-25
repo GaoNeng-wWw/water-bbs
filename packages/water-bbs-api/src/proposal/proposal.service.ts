@@ -5,6 +5,7 @@ import {
   ProposalId,
   CreateVote,
   ListProposal,
+  ResolveControversy,
 } from '@app/gamification';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -92,5 +93,10 @@ export class ProposalService {
     }
     const proposalList = proposalListResult.value;
     return proposalList;
+  }
+  async resolveControversy(id: ProposalId, accountId: AccountId, kind: string) {
+    return this.commandBus.execute(
+      new ResolveControversy(id, accountId, kind === 'approve'),
+    );
   }
 }
