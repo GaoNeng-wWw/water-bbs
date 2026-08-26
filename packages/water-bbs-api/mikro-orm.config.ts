@@ -8,6 +8,7 @@ import { SeedManager } from '@mikro-orm/seeder';
 import { Migrator } from '@mikro-orm/migrations';
 import { Transaction, Wallet } from './libs/gamification/src';
 import { TriggerEntity, WorkflowEntity } from './libs/engine/src';
+import { CommentReply, Comment } from './src/comment';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -28,6 +29,8 @@ export default defineConfig({
     Transaction,
     TriggerEntity,
     WorkflowEntity,
+    Comment,
+    CommentReply
   ],
   extensions: [SeedManager, Migrator],
   // allowGlobalContext: true,

@@ -7,8 +7,11 @@ import {
   RestoreCommentService,
 } from './command';
 import { ListCommentIdService } from './query';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Comment } from './comment.entity';
 
 @Module({
+  imports: [MikroOrmModule.forFeature([Comment])],
   controllers: [CommentController],
   providers: [
     CommentService,
