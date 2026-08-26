@@ -8,10 +8,10 @@ import {
 } from './command';
 import { ListCommentIdService } from './query';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Comment } from './comment.entity';
+import { Comment, CommentReply } from './comment.entity';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Comment])],
+  imports: [MikroOrmModule.forFeature([Comment, CommentReply])],
   controllers: [CommentController],
   providers: [
     CommentService,
