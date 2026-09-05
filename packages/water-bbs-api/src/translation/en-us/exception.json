@@ -1,6 +1,7 @@
 {
   "INTERNAL_ERROR": "Internal Error",
   "UNAUTHORIZED": "unauthorized",
+  "PERMISSION_DENIED": "Permission Denied",
   "INVALID_TOKEN": "Invalid Token",
   "TOKEN_EXPIRED": "Login Expired",
   "USER_EXISTS": "User Exists",
@@ -18,5 +19,7 @@
   "REPLY_CAN_NOT_REMOVE": "Can Not Remove Reply",
   "REPLY_NOT_FOUND": "Reply Not Found",
   "INSUFFICIENT_BALANCE": "Insufficient Balance",
-  "WALLET_NOT_FOUND": "Wallet Not Found"
+  "WALLET_NOT_FOUND": "Wallet Not Found",
+  "MEMBER_ALREADY_EXISTS": "Member Already Exists",
+  "MEMBER_NOT_FOUND": "Member Not Found"
 }
