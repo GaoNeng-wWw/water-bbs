@@ -34,6 +34,10 @@ export type I18nTranslations = {
         "PROPOSAL_CAN_NOT_VOTE": string;
         "VOTE_NOT_FOUND": string;
         "DUPLICATE_VOTE": string;
+        "COMMENT_ALREADY_EXISTS": string;
+        "COMMENT_NOT_FOUND": string;
+        "FORBIDDEN": string;
+        "COMMENT_REPLY_NOT_FOUND": string;
     };
     "mail": {
         "register": {

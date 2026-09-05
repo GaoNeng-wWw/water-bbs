@@ -31,6 +31,12 @@ export class MetaEntity {
   onUpdate() {
     this.updatedAt = new Date();
   }
+  _remove() {
+    this.removedAt = new Date();
+  }
+  _recover() {
+    this.removedAt = null;
+  }
 }
 
 @Filter({

@@ -26,5 +26,9 @@
   "PROPOSAL_STATUS_MACHINE_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}",
   "PROPOSAL_CAN_NOT_VOTE": "Proposal Can not Vote",
   "VOTE_NOT_FOUND": "Vote Not Found",
-  "DUPLICATE_VOTE": "Duplicate Vote"
+  "DUPLICATE_VOTE": "Duplicate Vote",
+  "COMMENT_ALREADY_EXISTS": "Comment Already Exists",
+  "COMMENT_NOT_FOUND": "Comment Not Found",
+  "FORBIDDEN": "Forbidden",
+  "COMMENT_REPLY_NOT_FOUND": "Comment Reply Not Found"
 }

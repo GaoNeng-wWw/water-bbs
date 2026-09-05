@@ -14,6 +14,7 @@ import {
   Vote,
   Wallet,
 } from './libs/gamification/src';
+import { CommentReply, Comment } from './src/comment';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -36,6 +37,8 @@ export default defineConfig({
     Proposal,
     Vote,
     ProposalSlot,
+    Comment,
+    CommentReply,
   ],
   extensions: [SeedManager, Migrator],
   allowGlobalContext: true,
