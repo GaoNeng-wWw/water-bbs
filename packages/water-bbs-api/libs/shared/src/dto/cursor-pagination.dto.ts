@@ -1,5 +1,5 @@
 import { Loaded } from '@mikro-orm/core';
-import { applyDecorators } from '@nestjs/common';
+import { applyDecorators, Type as NestType } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiOkResponse,
@@ -41,7 +41,9 @@ export class CursorPagination<T> {
   }
 }
 
-export const ApiCursorPagination = <TModel extends Type<any>>(model: TModel) =>
+export const ApiCursorPagination = <TModel extends NestType<any>>(
+  model: TModel,
+) =>
   applyDecorators(
     ApiExtraModels(CursorPagination, model),
     ApiOkResponse({

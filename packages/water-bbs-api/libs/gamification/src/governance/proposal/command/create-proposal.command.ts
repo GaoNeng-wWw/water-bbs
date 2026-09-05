@@ -9,9 +9,10 @@ import {
 } from '../proposal.entity';
 import { DomainError } from '@app/shared';
 import { ok, Result } from 'neverthrow';
-import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { Command, CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { ProposalCreated } from '../events';
 
 export class CreateProposal extends Command<Result<ProposalId, DomainError>> {
   constructor(
@@ -31,6 +32,7 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
   constructor(
     @InjectRepository(Proposal)
     private readonly proposalRepository: EntityRepository<Proposal>,
+    private readonly eventBus: EventBus,
   ) {}
   async execute({
     title,
@@ -61,6 +63,7 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
       slots.forEach((slot) => em.persist(slot));
       await em.flush();
     });
+    this.eventBus.publish(new ProposalCreated(proposal.id));
     return ok(proposal.id);
   }
 }

@@ -676,6 +676,212 @@ export const ListTransactionsResponseSchema = {
     ]
 } as const;
 
+export const CursorPaginationSchema = {
+    type: 'object',
+    properties: {
+        items: {
+            description: '数据',
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        },
+        nextCursor: {
+            type: 'object',
+            description: '下一页的分页'
+        },
+        prevCursor: {
+            type: 'object',
+            description: '上一页的分页'
+        },
+        total: {
+            type: 'number',
+            description: '总数'
+        }
+    },
+    required: [
+        'items',
+        'nextCursor',
+        'prevCursor',
+        'total'
+    ]
+} as const;
+
+export const ListProposalItemSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '提案ID'
+        },
+        title: {
+            type: 'string',
+            description: '提案标题'
+        },
+        status: {
+            type: 'object',
+            description: '提案状态'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string',
+            description: '创建时间'
+        },
+        updatedAt: {
+            type: 'string',
+            description: '更新时间'
+        }
+    },
+    required: [
+        'id',
+        'title',
+        'status',
+        'createdAt',
+        'updatedAt'
+    ]
+} as const;
+
+export const ProposalStepSchema = {
+    type: 'object',
+    properties: {
+        stepName: {
+            type: 'string',
+            description: '提案步骤名称'
+        },
+        param: {
+            type: 'object',
+            description: '提案步骤参数'
+        }
+    },
+    required: [
+        'stepName',
+        'param'
+    ]
+} as const;
+
+export const CreateProposalDTOSchema = {
+    type: 'object',
+    properties: {
+        title: {
+            type: 'string',
+            description: '提案标题'
+        },
+        kind: {
+            type: 'string',
+            description: '提案类型',
+            enum: [
+                'normal',
+                'emergency'
+            ]
+        },
+        steps: {
+            description: '提案步骤',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ProposalStep'
+            }
+        },
+        proposalEndAt: {
+            format: 'date-time',
+            type: 'string',
+            description: '提案结束时间'
+        },
+        content: {
+            type: 'string',
+            description: '提案内容'
+        }
+    },
+    required: [
+        'title',
+        'kind',
+        'steps',
+        'proposalEndAt',
+        'content'
+    ]
+} as const;
+
+export const CreateProposalResponseDTOSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '提案ID'
+        },
+        title: {
+            type: 'string',
+            description: '提案标题'
+        },
+        step: {
+            description: '提案步骤',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ProposalStep'
+            }
+        },
+        createdAt: {
+            type: 'string',
+            description: '提案创建时间'
+        },
+        status: {
+            type: 'string',
+            description: '提案状态',
+            enum: [
+                'pending',
+                'controversy',
+                'approved',
+                'rejected',
+                'executing',
+                'executed',
+                'failed',
+                'cancelled',
+                'emergency-review'
+            ]
+        }
+    },
+    required: [
+        'id',
+        'title',
+        'step',
+        'createdAt',
+        'status'
+    ]
+} as const;
+
+export const VoteProposalDTOSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'object',
+            description: '提案ID'
+        },
+        kind: {
+            type: 'string',
+            description: '投票类型',
+            enum: [
+                'Agree',
+                'DisAgree'
+            ]
+        }
+    },
+    required: [
+        'id',
+        'kind'
+    ]
+} as const;
+
+export const VoteProposalResponseDTOSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '投票ID'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
 export const HttpPresentationErrorSchema = {
     type: 'object',
     properties: {
