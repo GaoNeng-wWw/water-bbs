@@ -28,6 +28,8 @@ export type I18nTranslations = {
         "WALLET_NOT_FOUND": string;
         "COMMENT_ALREADY_EXISTS": string;
         "COMMENT_NOT_FOUND": string;
+        "FORBIDDEN": string;
+        "COMMENT_REPLY_NOT_FOUND": string;
     };
     "mail": {
         "register": {

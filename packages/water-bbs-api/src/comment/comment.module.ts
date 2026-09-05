@@ -3,12 +3,19 @@ import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
 import {
   CreateCommentService,
+  RemoveCommentReplyService,
   RemoveCommentService,
   RestoreCommentService,
 } from './command';
-import { ListCommentIdService } from './query';
+import {
+  GetReplyService,
+  GetReplyTreeService,
+  ListCommentIdService,
+} from './query';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Comment, CommentReply } from './comment.entity';
+import { ReplyCreatedHandler } from './event-handler';
+import { CreateCommentReplyService } from './command/create-comment-reply.command';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Comment, CommentReply])],
@@ -19,6 +26,11 @@ import { Comment, CommentReply } from './comment.entity';
     RemoveCommentService,
     RestoreCommentService,
     ListCommentIdService,
+    ReplyCreatedHandler,
+    GetReplyTreeService,
+    GetReplyService,
+    CreateCommentReplyService,
+    RemoveCommentReplyService,
   ],
 })
 export class CommentModule {}

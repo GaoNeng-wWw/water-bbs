@@ -5,6 +5,7 @@ import { Comment, CommentId, CommentReply, ReplyId } from '../comment.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Profile } from 'src/auth';
 import { CommentNotFound } from '../error';
+import { InjectRepository } from '@mikro-orm/nestjs';
 
 type ReplyAuthor = {
   id: string;
@@ -39,7 +40,9 @@ export class GetReplyTree extends Query<Result<ReplyTree, DomainError>> {
 @QueryHandler(GetReplyTree)
 export class GetReplyTreeService implements IQueryHandler<GetReplyTree> {
   constructor(
+    @InjectRepository(Comment)
     private readonly repo: EntityRepository<Comment>,
+    @InjectRepository(CommentReply)
     private readonly commentReplyRepo: EntityRepository<CommentReply>,
     private readonly em: EntityManager,
   ) {}

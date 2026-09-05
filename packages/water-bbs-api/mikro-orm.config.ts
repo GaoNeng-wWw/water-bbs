@@ -30,7 +30,7 @@ export default defineConfig({
     TriggerEntity,
     WorkflowEntity,
     Comment,
-    CommentReply
+    CommentReply,
   ],
   extensions: [SeedManager, Migrator],
   // allowGlobalContext: true,
