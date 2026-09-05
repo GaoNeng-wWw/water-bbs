@@ -8,7 +8,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
 import { Account, Credential, Identifier, Profile } from '../src/auth';
 import { Category } from '../src/category';
-import { TriggerEntity, WorkflowEntity } from '@app/engine';
+import { E2EAppModule } from 'src/e2e-test-app.modulel';
 
 describe('CategoryController (e2e)', () => {
   let app: INestApplication<App>;
@@ -16,30 +16,8 @@ describe('CategoryController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideModule(MikroOrmModule)
-      .useModule(
-        MikroOrmModule.forRoot({
-          driver: SqliteDriver,
-          dbName: ':memory:',
-          entities: [
-            Account,
-            Identifier,
-            Credential,
-            Profile,
-            Category,
-            TriggerEntity,
-            WorkflowEntity,
-          ],
-          pool: {
-            min: 0,
-            max: 1,
-          },
-          debug: true,
-        }),
-      )
-      .compile();
+      imports: [E2EAppModule],
+    }).compile();
     app = moduleFixture.createNestApplication();
     const orm = moduleFixture.get(MikroORM);
     await orm.schema.createDatabase();

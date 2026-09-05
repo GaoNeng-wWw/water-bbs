@@ -6,8 +6,14 @@ import { Category } from './src/category';
 import { Reply, Topic } from './src/topic';
 import { SeedManager } from '@mikro-orm/seeder';
 import { Migrator } from '@mikro-orm/migrations';
-import { Transaction, Wallet } from './libs/gamification/src';
-import { TriggerEntity, WorkflowEntity } from './libs/engine/src';
+import {
+  GovernanceMember,
+  Proposal,
+  ProposalSlot,
+  Transaction,
+  Vote,
+  Wallet,
+} from './libs/gamification/src';
 import { CommentReply, Comment } from './src/comment';
 
 export default defineConfig({
@@ -27,11 +33,13 @@ export default defineConfig({
     Reply,
     Wallet,
     Transaction,
-    TriggerEntity,
-    WorkflowEntity,
+    GovernanceMember,
+    Proposal,
+    Vote,
+    ProposalSlot,
     Comment,
     CommentReply,
   ],
   extensions: [SeedManager, Migrator],
-  // allowGlobalContext: true,
+  allowGlobalContext: true,
 });
