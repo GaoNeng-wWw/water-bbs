@@ -8,6 +8,7 @@ export type I18nTranslations = {
     "exception": {
         "INTERNAL_ERROR": string;
         "UNAUTHORIZED": string;
+        "PERMISSION_DENIED": string;
         "INVALID_TOKEN": string;
         "TOKEN_EXPIRED": string;
         "USER_EXISTS": string;
@@ -28,6 +29,11 @@ export type I18nTranslations = {
         "WALLET_NOT_FOUND": string;
         "MEMBER_ALREADY_EXISTS": string;
         "MEMBER_NOT_FOUND": string;
+        "PROPOSAL_NOT_FOUND": string;
+        "PROPOSAL_STATUS_MACHINE_TRANS_ERROR": string;
+        "PROPOSAL_CAN_NOT_VOTE": string;
+        "VOTE_NOT_FOUND": string;
+        "DUPLICATE_VOTE": string;
     };
     "mail": {
         "register": {

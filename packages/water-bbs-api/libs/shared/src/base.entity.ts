@@ -52,21 +52,21 @@ export class HiddenPeriod {
   @Property({
     type: 'date',
   })
-  end: Date;
+  end?: Date;
 
   @Property({
     type: 'text',
   })
   reason: string;
 
-  private constructor(start: Date, end: Date, reason: string) {
+  private constructor(start: Date, reason: string, end?: Date) {
     this.start = start;
     this.end = end;
     this.reason = reason;
   }
 
-  static create(reason: string, end: Date) {
-    if (end <= new Date()) {
+  static create(reason: string, end?: Date) {
+    if (end && end <= new Date()) {
       return err(new EndMustAfterAfterStartError());
     }
 
@@ -74,10 +74,10 @@ export class HiddenPeriod {
       return err(new ReasonRequiredError());
     }
 
-    return ok(new HiddenPeriod(new Date(), end, reason));
+    return ok(new HiddenPeriod(new Date(), reason, end));
   }
 
   isExpired(now = new Date()) {
-    return now >= this.end;
+    return this.end ? now >= this.end : false;
   }
 }

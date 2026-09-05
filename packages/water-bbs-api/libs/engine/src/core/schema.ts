@@ -1,8 +1,6 @@
-import { EntityManager } from '@mikro-orm/sqlite';
-import { applyDecorators, Injectable } from '@nestjs/common';
-import { DiscoveryService } from '@nestjs/core';
+import { EntityManager } from '@mikro-orm/core';
 import { Result } from 'neverthrow';
-import { z } from 'zod';
+import { z, ZodType } from 'zod';
 export const uiInputSchema = z.object({
   type: z.literal('input'),
   textType: z.enum(['password', 'text']),
@@ -37,9 +35,9 @@ export type Context<Events extends unknown[] = []> = {
 };
 
 export type Definition<
-  UiSchema extends z.infer<typeof uiSchema>[],
-  Param extends z.ZodType,
-  Events extends unknown[],
+  UiSchema extends z.infer<typeof uiSchema>[] = z.infer<typeof uiSchema>[],
+  Param extends z.ZodType = ZodType,
+  Events extends unknown[] = [],
 > = {
   key: string;
   events: Events;
@@ -47,46 +45,9 @@ export type Definition<
   ui: UiSchema;
 };
 
-export type GetFromDefinition<
-  Def extends Definition<any[], any, any[]>,
-  Key extends 'ui-schema' | 'param' | 'events',
-> =
-  Def extends Definition<infer U, infer P, infer E>
-    ? Key extends 'ui-schema'
-      ? U
-      : Key extends 'param'
-        ? P
-        : Key extends 'events'
-          ? E
-          : never
-    : never;
-
-export type Handler<
-  UiSchema extends z.infer<typeof uiSchema>[],
-  Param extends z.ZodType,
-  Events extends unknown[],
-> = {
-  definition: Definition<UiSchema, Param, Events>;
+export type Handler<D extends Definition> = {
   handle(
-    param: z.infer<Param>,
-    ctx: Context<Events>,
+    param: z.infer<D['param']>,
+    ctx: Context<D['events']>,
   ): Promise<Result<void, Error>>;
 };
-
-export const Key = Symbol('handler.metadata');
-
-export const HandlerMetadata =
-  DiscoveryService.createDecorator<Definition<any, any, any>>();
-
-// 2. 新的 SetDefinition 使用 HandlerMetadata
-export const SetDefinition = <
-  UiSchema extends z.infer<typeof uiSchema>[],
-  Param extends z.ZodType,
-  Events extends unknown[],
->(
-  def: Definition<UiSchema, Param, Events>,
-) =>
-  applyDecorators(
-    Injectable(),
-    HandlerMetadata(def as Definition<any, any, any>),
-  );

@@ -5,3 +5,4 @@ export * from './commands';
 export * from './member.module';
 export * from './member.decorator';
 export * from './member.guard';
+export * from './query';

@@ -25,11 +25,13 @@ export class ErrorFilter implements ExceptionFilter {
         statusCode: status,
         message: translatedMessage,
         details,
+        url: req.url,
       });
     }
-    return resp.status(500).json({
-      statusCode: 500,
+    return resp.status(exception['status'] ?? 500).json({
+      statusCode: exception['status'] ?? 500,
       message: this.i18n.translate('exception.INTERNAL_ERROR', { lang }),
+      url: req.url,
     });
   }
 }

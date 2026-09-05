@@ -1,5 +1,5 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { DiscoveryService } from '@nestjs/core';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { DiscoveryService, Reflector } from '@nestjs/core';
 import { StepHandlerMetadata } from './step.decorator';
 import { Handler } from '../core';
 import { err, ok } from 'neverthrow';
@@ -7,20 +7,26 @@ import { StepNotFound } from './errors';
 
 @Injectable()
 export class StepDiscoverService implements OnApplicationBootstrap {
-  private map: Map<string, Handler<any, any, any>> = new Map();
-  constructor(private readonly discoveryService: DiscoveryService) {}
+  private map: Map<string, Handler<any>> = new Map();
+  private logger = new Logger('StepResolver');
+  constructor(
+    private readonly discoveryService: DiscoveryService,
+    private readonly reflector: Reflector,
+  ) {}
   onApplicationBootstrap() {
-    const handlers = this.discoveryService
+    this.discoveryService
       .getProviders({
         metadataKey: StepHandlerMetadata.KEY,
       })
-      .map((value) => {
-        const handler: Handler<any, any, any> = value.instance;
-        return handler;
+      .forEach((value) => {
+        const handler: Handler<any> = value.instance;
+        const def = this.reflector.get(
+          StepHandlerMetadata.KEY,
+          value.metatype!,
+        );
+        this.logger.log(`Install ${def.key}`);
+        this.map.set(def.key, handler);
       });
-    handlers.forEach((handle) => {
-      this.map.set(handle.definition.key, handle);
-    });
   }
   getById(id: string) {
     const handler = this.map.get(id);

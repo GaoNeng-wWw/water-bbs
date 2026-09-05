@@ -4,20 +4,19 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
-import cfg from '../mikro-orm.config';
-import { RedisModule, RedisService } from '@liaoliaots/nestjs-redis';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { CqrsModule } from '@nestjs/cqrs';
-import { readFileSync } from 'fs';
 import { JwtModule } from '@nestjs/jwt';
 import { CategoryModule } from './category/category.module';
 import { TopicModule } from './topic/topic.module';
 import { ProfileModule } from './profile/profile.module';
 import { WalletModule } from './wallet/wallet.module';
-import { EngineModule } from '@app/engine/engine.module';
-import { GovernanceMemberModule, MemberGuard } from '@app/gamification';
+import { EngineModule } from '@app/engine';
+import { GovernanceMemberModule, MemberGuard, ProposalModule } from '@app/gamification';
+import { AppRedisModule } from './redis.module';
+import { DatabaseModule } from './infra/database.module';
+import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 
 @Module({
   imports: [
@@ -46,30 +45,17 @@ import { GovernanceMemberModule, MemberGuard } from '@app/gamification';
     ConfigureModule.register({
       path: join(__dirname, 'configs/config.json'),
     }),
-    RedisModule.forRootAsync({
-      imports: [ConfigureModule],
-      inject: [ConfigureService],
-      useFactory(service) {
-        const cfg = service as ConfigureService;
-        return {
-          config: {
-            host: cfg.get('redis.host'),
-            port: cfg.get('redis.port'),
-            username: cfg.get('redis.user'),
-            password: cfg.get('redis.pass'),
-            db: cfg.get('redis.db'),
-          },
-        };
-      },
-    }),
+    AppRedisModule,
+    DatabaseModule.forRoot(),
     AuthModule,
-    MikroOrmModule.forRoot(cfg),
     CategoryModule,
     TopicModule,
     ProfileModule,
     WalletModule,
     EngineModule,
     GovernanceMemberModule,
+    ProposalModule,
+    ProposalCRUD
   ],
   providers: [
     {
@@ -90,26 +76,4 @@ import { GovernanceMemberModule, MemberGuard } from '@app/gamification';
     }
   ],
 })
-export class AppModule {
-  constructor(private readonly redis: RedisService) {
-    const r = this.redis.getOrThrow();
-    r.defineCommand('issueToken', {
-      lua: readFileSync(join(__dirname, './lua/issue-token.lua')).toString(),
-      numberOfKeys: 0,
-    });
-    r.defineCommand('refreshToken', {
-      lua: readFileSync(join(__dirname, './lua/refresh-token.lua')).toString(),
-      numberOfKeys: 0,
-    });
-    r.defineCommand('revokeSession', {
-      lua: readFileSync(join(__dirname, './lua/revoke-session.lua')).toString(),
-      numberOfKeys: 0,
-    });
-    r.defineCommand('revokeAllSession', {
-      lua: readFileSync(
-        join(__dirname, './lua/revoke-all-session.lua'),
-      ).toString(),
-      numberOfKeys: 0,
-    });
-  }
-}
+export class AppModule {}

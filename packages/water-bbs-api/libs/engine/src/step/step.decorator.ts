@@ -1,5 +1,5 @@
 import z from 'zod';
-import { Definition, SetDefinition, uiSchema } from '../core';
+import { Definition, uiSchema } from '../core';
 import { applyDecorators, Injectable, SetMetadata } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 
@@ -16,8 +16,7 @@ export const Step = <
   def: Definition<UiSchema, Param, Events>,
 ) =>
   applyDecorators(
-    Injectable(),
     StepHandlerMetadata(def),
-    SetDefinition(def),
     SetMetadata(StepKey, true),
+    Injectable(),
   );
