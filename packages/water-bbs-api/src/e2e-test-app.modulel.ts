@@ -21,6 +21,7 @@ import {
 import { AppRedisModule } from './redis.module';
 import { DatabaseModule } from './infra/database.module';
 import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
     GovernanceMemberModule,
     ProposalModule,
     ProposalCRUD,
+    CommentModule,
   ],
   providers: [
     {
