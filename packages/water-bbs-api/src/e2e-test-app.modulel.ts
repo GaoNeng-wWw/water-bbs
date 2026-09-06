@@ -51,7 +51,7 @@ import { CommentModule } from './comment/comment.module';
       path: join(__dirname, 'configs/config.json'),
     }),
     AppRedisModule,
-    DatabaseModule.forRoot(),
+    DatabaseModule.forTest(),
     AuthModule,
     CategoryModule,
     TopicModule,
