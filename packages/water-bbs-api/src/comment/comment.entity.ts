@@ -20,6 +20,7 @@ export const createReplyId = () => v7() as ReplyId;
 export enum ResourceKind {
   Topic = 'topic',
   TopicReply = 'topic_reply',
+  Proposal = 'proposal',
 }
 
 @Entity()

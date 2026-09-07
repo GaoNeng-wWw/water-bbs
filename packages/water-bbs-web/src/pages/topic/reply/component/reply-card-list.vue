@@ -117,6 +117,7 @@ const total = computed(() => data.value?.total ?? 0);
     <div v-if="!isLoading" class="w-full">
       <reply-card
         v-for="item of topicList"
+        :id="item.id.toString()"
         :key="item.id.toString()"
         :content="item.content"
         :author-id="item.author.id.toString()"

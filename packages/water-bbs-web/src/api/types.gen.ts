@@ -438,6 +438,207 @@ export type ListTransactionsResponse = {
     nextCursor: string;
 };
 
+export type CursorPagination = {
+    /**
+     * 数据
+     */
+    items: Array<string>;
+    /**
+     * 下一页的分页
+     */
+    nextCursor: {
+        [key: string]: unknown;
+    };
+    /**
+     * 上一页的分页
+     */
+    prevCursor: {
+        [key: string]: unknown;
+    };
+    /**
+     * 总数
+     */
+    total: number;
+};
+
+export type ListProposalItem = {
+    /**
+     * 提案ID
+     */
+    id: string;
+    /**
+     * 提案标题
+     */
+    title: string;
+    /**
+     * 提案状态
+     */
+    status: {
+        [key: string]: unknown;
+    };
+    /**
+     * 创建时间
+     */
+    createdAt: Date;
+    /**
+     * 更新时间
+     */
+    updatedAt: string;
+};
+
+export type ProposalStep = {
+    /**
+     * 提案步骤名称
+     */
+    stepName: string;
+    /**
+     * 提案步骤参数
+     */
+    param: {
+        [key: string]: unknown;
+    };
+};
+
+export type CreateProposalDto = {
+    /**
+     * 提案标题
+     */
+    title: string;
+    /**
+     * 提案类型
+     */
+    kind: 'normal' | 'emergency';
+    /**
+     * 提案步骤
+     */
+    steps: Array<ProposalStep>;
+    /**
+     * 提案结束时间
+     */
+    proposalEndAt: Date;
+    /**
+     * 提案内容
+     */
+    content: string;
+};
+
+export type CreateProposalResponseDto = {
+    /**
+     * 提案ID
+     */
+    id: string;
+    /**
+     * 提案标题
+     */
+    title: string;
+    /**
+     * 提案步骤
+     */
+    step: Array<ProposalStep>;
+    /**
+     * 提案创建时间
+     */
+    createdAt: string;
+    /**
+     * 提案状态
+     */
+    status: 'pending' | 'controversy' | 'approved' | 'rejected' | 'executing' | 'executed' | 'failed' | 'cancelled' | 'emergency-review';
+};
+
+export type VoteProposalDto = {
+    /**
+     * 提案ID
+     */
+    id: {
+        [key: string]: unknown;
+    };
+    /**
+     * 投票类型
+     */
+    kind: 'Agree' | 'DisAgree';
+};
+
+export type VoteProposalResponseDto = {
+    /**
+     * 投票ID
+     */
+    id: string;
+};
+
+export type GetCommentByResourceIdResponse = {
+    /**
+     * 评论区ID
+     */
+    id: string;
+};
+
+export type ReplyNode = {
+    /**
+     * 回复节点ID
+     */
+    id: string;
+    /**
+     * 回复内容
+     */
+    content: string;
+    /**
+     * 回复作者
+     */
+    author: ReplyAuthor;
+    /**
+     * 是否可展开
+     */
+    expandable: boolean;
+};
+
+export type ReplyNodeMeta = {
+    /**
+     * 下一页游标
+     */
+    nextCursor: string;
+    /**
+     * 总回复数
+     */
+    total: number;
+};
+
+export type ReplyTree = {
+    /**
+     * 回复节点列表
+     */
+    nodes: Array<ReplyNode>;
+    /**
+     * 分页元数据
+     */
+    meta: ReplyNodeMeta;
+};
+
+export type CreateCommentReplyRequest = {
+    /**
+     * 回复内容
+     */
+    content: string;
+};
+
+export type GetReplyResponse = {
+    /**
+     * 是否有子回复
+     */
+    hasChildren: boolean;
+    /**
+     * 回复ID
+     */
+    replyId: string;
+    /**
+     * 回复内容
+     */
+    content: string;
+    /**
+     * 创建人ID
+     */
+    creator: string;
+};
+
 export type HttpPresentationError = {
     /**
      * 错误 message
@@ -891,3 +1092,193 @@ export type GetTransactionsResponses = {
 };
 
 export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
+
+export type ListProposalItemsData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * 分页游标
+         */
+        cursor: string;
+        /**
+         * 每页数量
+         */
+        size: number;
+        /**
+         * 每页数量
+         */
+        limit: unknown;
+    };
+    url: '/proposal';
+};
+
+export type ListProposalItemsResponses = {
+    200: CursorPagination & {
+        data?: Array<ListProposalItem>;
+    };
+};
+
+export type ListProposalItemsResponse = ListProposalItemsResponses[keyof ListProposalItemsResponses];
+
+export type CreateProposalData = {
+    body: CreateProposalDto;
+    path: {
+        /**
+         * 用户ID
+         */
+        accountId: unknown;
+    };
+    query?: never;
+    url: '/proposal';
+};
+
+export type CreateProposalResponses = {
+    /**
+     * 创建提案
+     */
+    201: CreateProposalResponseDto;
+};
+
+export type CreateProposalResponse = CreateProposalResponses[keyof CreateProposalResponses];
+
+export type ProposalControllerFindProposalData = {
+    body?: never;
+    path: {
+        /**
+         * 提案ID
+         */
+        id: unknown;
+    };
+    query?: never;
+    url: '/proposal/{id}';
+};
+
+export type ProposalControllerFindProposalResponses = {
+    /**
+     * 提案详情
+     */
+    200: ListProposalItem;
+};
+
+export type ProposalControllerFindProposalResponse = ProposalControllerFindProposalResponses[keyof ProposalControllerFindProposalResponses];
+
+export type ResolveControversyData = {
+    body?: never;
+    path: {
+        /**
+         * 提案ID
+         */
+        id: unknown;
+        /**
+         * 用户ID
+         */
+        accountId: unknown;
+    };
+    query: {
+        /**
+         * 解决类型
+         */
+        kind: 'approve' | 'reject';
+    };
+    url: '/proposal/{id}/resolve';
+};
+
+export type ResolveControversyResponses = {
+    /**
+     * 解决争议
+     */
+    200: unknown;
+};
+
+export type VoteProposalData = {
+    body: VoteProposalDto;
+    path: {
+        /**
+         * 用户ID
+         */
+        accountId: unknown;
+    };
+    query?: never;
+    url: '/proposal/vote';
+};
+
+export type VoteProposalResponses = {
+    /**
+     * 投票提案
+     */
+    200: VoteProposalResponseDto;
+};
+
+export type VoteProposalResponse = VoteProposalResponses[keyof VoteProposalResponses];
+
+export type GetCommentByResourceIdData = {
+    body?: never;
+    path: {
+        /**
+         * 资源ID
+         */
+        resourceID: string;
+    };
+    query?: never;
+    url: '/comment/comment/{resourceID}';
+};
+
+export type GetCommentByResourceIdResponses = {
+    200: GetCommentByResourceIdResponse;
+};
+
+export type GetCommentByResourceIdResponse2 = GetCommentByResourceIdResponses[keyof GetCommentByResourceIdResponses];
+
+export type GetReplyTreeData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * 每页数量
+         */
+        size: number;
+        /**
+         * 分页游标
+         */
+        cursor?: string;
+        /**
+         * 父回复ID
+         */
+        parentId?: unknown;
+        /**
+         * 评论区ID
+         */
+        commentId: unknown;
+    };
+    url: '/comment/replies';
+};
+
+export type GetReplyTreeResponses = {
+    200: ReplyTree;
+};
+
+export type GetReplyTreeResponse = GetReplyTreeResponses[keyof GetReplyTreeResponses];
+
+export type CreateCommentReplyData = {
+    body: CreateCommentReplyRequest;
+    path: {
+        /**
+         * 评论区ID
+         */
+        commentId: string;
+    };
+    query?: {
+        /**
+         * 父回复ID
+         */
+        parentId?: unknown;
+    };
+    url: '/comment/{commentId}/reply';
+};
+
+export type CreateCommentReplyResponses = {
+    200: GetReplyResponse;
+};
+
+export type CreateCommentReplyResponse = CreateCommentReplyResponses[keyof CreateCommentReplyResponses];

@@ -6,7 +6,7 @@ import { err, ok } from 'neverthrow';
 import { AccountId } from 'src/auth';
 import { CreateCommentReplyRequest } from './dto';
 import { CreateCommentReply } from './command/create-comment-reply.command';
-import { GetReply } from './query';
+import { GetCommentByResourceId, GetReply, GetReplyTree } from './query';
 import { Forbidden } from '@app/shared';
 
 @Injectable()
@@ -27,9 +27,10 @@ export class CommentService {
     commentId: CommentId,
     request: CreateCommentReplyRequest,
     accountId: AccountId,
+    parentId?: ReplyId,
   ) {
     const replyId = await this.cb.execute(
-      new CreateCommentReply(commentId, request.content, accountId),
+      new CreateCommentReply(commentId, request.content, accountId, parentId),
     );
     if (replyId.isErr()) {
       return replyId;
@@ -48,5 +49,19 @@ export class CommentService {
     }
     await this.cb.execute(new RemoveCommentReply(id));
     return ok({ id });
+  }
+  async listCommentReplies(
+    commentId: CommentId,
+    size: number,
+    parentId?: ReplyId,
+    cursor?: string,
+  ) {
+    const tree = await this.qb.execute(
+      new GetReplyTree(commentId, cursor, parentId, size),
+    );
+    return tree;
+  }
+  async getCommentByResourceId(resourceId: string) {
+    return this.qb.execute(new GetCommentByResourceId(resourceId));
   }
 }

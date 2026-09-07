@@ -13,7 +13,11 @@ import { TopicModule } from './topic/topic.module';
 import { ProfileModule } from './profile/profile.module';
 import { WalletModule } from './wallet/wallet.module';
 import { EngineModule } from '@app/engine';
-import { GovernanceMemberModule, MemberGuard, ProposalModule } from '@app/gamification';
+import {
+  GovernanceMemberModule,
+  MemberGuard,
+  ProposalModule,
+} from '@app/gamification';
 import { AppRedisModule } from './redis.module';
 import { DatabaseModule } from './infra/database.module';
 import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
@@ -56,7 +60,7 @@ import { CommentModule } from './comment/comment.module';
     EngineModule,
     GovernanceMemberModule,
     ProposalModule,
-    ProposalCRUD
+    ProposalCRUD,
     CommentModule,
   ],
   providers: [
@@ -75,7 +79,7 @@ import { CommentModule } from './comment/comment.module';
     {
       provide: APP_GUARD,
       useClass: MemberGuard,
-    }
+    },
   ],
 })
 export class AppModule {}

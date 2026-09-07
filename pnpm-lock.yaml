@@ -205,7 +205,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      '@tanstack/vue-virtual':
+        specifier: ^3.13.36
+        version: 3.13.36(vue@3.5.40(typescript@6.0.3))
 
   packages/water-bbs-api:
     dependencies:
@@ -441,6 +445,12 @@ importers:
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
+      hashvatar:
+        specifier: ^0.1.2
+        version: 0.1.2
+      jdenticon:
+        specifier: ^3.3.0
+        version: 3.3.0
       motion-v:
         specifier: ^2.3.0
         version: 2.3.0(@vueuse/core@14.4.0(vue@3.5.40(typescript@6.0.3)))(vue@3.5.40(typescript@6.0.3))
@@ -2466,6 +2476,9 @@ packages:
   '@tanstack/virtual-core@3.17.7':
     resolution: {integrity: sha512-bp+v10y65sp2H7WpWfIMyxTNfl8ZVfxFTLRjPIFRryi6FV/J33z4IS53WO4pTk36KlvJ4iLiQz+oaydDC1xbcA==}
 
+  '@tanstack/virtual-core@3.17.8':
+    resolution: {integrity: sha512-BfEvehNpOT75r5Ksc5xW6NZuXujTfb7nlSEyVu4XHG3gdxNg1KqXruWbDewXOUaUYIo4oRbSfkjIajz4MAT8tA==}
+
   '@tanstack/vue-query@5.101.4':
     resolution: {integrity: sha512-UYjkUZhnWQIFGNb7SdgjCitAftNyYQfOIVUh6vBUQAG4SQKNMSBKeQERFDubpxLAMpIBJTaOrE8fM4c1kZcIGQ==}
     peerDependencies:
@@ -2477,6 +2490,11 @@ packages:
 
   '@tanstack/vue-virtual@3.13.35':
     resolution: {integrity: sha512-lOfSPvgPdlaH6Qy+CyIc3XpycitaSQ9GECndGpTuDiu+uDA1am+90yWXwzDSd/20ZM196ggWJLS+Qb6WjVd/OA==}
+    peerDependencies:
+      vue: ^2.7.0 || ^3.0.0
+
+  '@tanstack/vue-virtual@3.13.36':
+    resolution: {integrity: sha512-gKpExv4RbB9luVG+SucTXoqPZv/gzu/Yvz6BNO+8kpNxJ2x+I/ulryzl5W9BRciahZGp5Tls3Dp5XP1ztVGbMw==}
     peerDependencies:
       vue: ^2.7.0 || ^3.0.0
 
@@ -3454,6 +3472,9 @@ packages:
 
   caniuse-lite@1.0.30001809:
     resolution: {integrity: sha512-xxWVywk6a6Arlk+hymeycyn/VgqEfLDxupvhH/xiY5SJ/18kmi9o6MiO320DCUzypORHLtvh0I4i04tUhCNHNQ==}
+
+  canvas-renderer@2.2.1:
+    resolution: {integrity: sha512-RrBgVL5qCEDIXpJ6NrzyRNoTnXxYarqm/cS/W6ERhUJts5UQtt/XPEosGN3rqUkZ4fjBArlnCbsISJ+KCFnIAg==}
 
   chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
@@ -4642,6 +4663,14 @@ packages:
   hash-it@6.0.0:
     resolution: {integrity: sha512-KHzmSFx1KwyMPw0kXeeUD752q/Kfbzhy6dAZrjXV9kAIXGqzGvv8vhkUqj+2MGZldTo0IBpw6v7iWE7uxsvH0w==}
 
+  hashvatar@0.1.2:
+    resolution: {integrity: sha512-RdGvT8Ct0qTzDwAFkJACurTiCJ+Pv7YBwvq4YCKX6ZPNFvOPsb9nCc7Leh3jgxZCgutnCjaWEkYm7p4lVQaq1g==}
+    peerDependencies:
+      react: '>=17'
+    peerDependenciesMeta:
+      react:
+        optional: true
+
   hasown@2.0.4:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
@@ -4941,6 +4970,11 @@ packages:
   jackspeak@4.2.3:
     resolution: {integrity: sha512-ykkVRwrYvFm1nb2AJfKKYPr0emF6IiXDYUaFx4Zn9ZuIH7MrzEZ3sD5RlqGXNRpHtvUHJyOnCEFxOlNDtGo7wg==}
     engines: {node: 20 || >=22}
+
+  jdenticon@3.3.0:
+    resolution: {integrity: sha512-DhuBRNRIybGPeAjMjdHbkIfiwZCCmf8ggu7C49jhp6aJ7DYsZfudnvnTY5/1vgUhrGA7JaDAx1WevnpjCPvaGg==}
+    engines: {node: '>=6.4.0'}
+    hasBin: true
 
   jest-worker@27.4.5:
     resolution: {integrity: sha512-f2s8kEdy15cv9r7q4KkzGXvlY0JTcmCbMHZBfSQDwW77REr45IDWwd0lksDFeVHH2jJ5pqb90T77XscrjeGzzg==}
@@ -9370,6 +9404,8 @@ snapshots:
 
   '@tanstack/virtual-core@3.17.7': {}
 
+  '@tanstack/virtual-core@3.17.8': {}
+
   '@tanstack/vue-query@5.101.4(vue@3.5.40(typescript@6.0.3))':
     dependencies:
       '@tanstack/match-sorter-utils': 8.19.4
@@ -9381,6 +9417,11 @@ snapshots:
   '@tanstack/vue-virtual@3.13.35(vue@3.5.40(typescript@6.0.3))':
     dependencies:
       '@tanstack/virtual-core': 3.17.7
+      vue: 3.5.40(typescript@6.0.3)
+
+  '@tanstack/vue-virtual@3.13.36(vue@3.5.40(typescript@6.0.3))':
+    dependencies:
+      '@tanstack/virtual-core': 3.17.8
       vue: 3.5.40(typescript@6.0.3)
 
   '@tiptap/core@3.29.2(@tiptap/pm@3.29.2)':
@@ -10431,7 +10472,6 @@ snapshots:
   ansi-styles@4.1.0:
     dependencies:
       color-convert: 2.0.1
-    optional: true
 
   ansi-styles@4.3.0:
     dependencies:
@@ -10670,6 +10710,10 @@ snapshots:
     optional: true
 
   caniuse-lite@1.0.30001809: {}
+
+  canvas-renderer@2.2.1:
+    dependencies:
+      '@types/node': 24.13.3
 
   chai@6.2.2: {}
 
@@ -12037,6 +12081,8 @@ snapshots:
 
   hash-it@6.0.0: {}
 
+  hashvatar@0.1.2: {}
+
   hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
@@ -12317,6 +12363,10 @@ snapshots:
     dependencies:
       '@isaacs/cliui': 9.0.0
     optional: true
+
+  jdenticon@3.3.0:
+    dependencies:
+      canvas-renderer: 2.2.1
 
   jest-worker@27.4.5:
     dependencies:
@@ -15327,13 +15377,13 @@ snapshots:
 
   wrap-ansi@6.2.0:
     dependencies:
-      ansi-styles: 4.3.0
+      ansi-styles: 4.1.0
       string-width: 4.1.0
       strip-ansi: 6.0.0
 
   wrap-ansi@7.0.0:
     dependencies:
-      ansi-styles: 4.3.0
+      ansi-styles: 4.1.0
       string-width: 4.1.0
       strip-ansi: 6.0.0
 
