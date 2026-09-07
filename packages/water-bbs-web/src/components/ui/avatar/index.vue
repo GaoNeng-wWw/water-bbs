@@ -7,13 +7,14 @@ defineOptions({
   inheritAttrs: true,
 });
 
-const { url, fallbackText, size = 'md' } = defineProps<{
+const { url, fallbackText, size = 'md', border=true } = defineProps<{
   url?: string;
   fallbackText: string;
   size?: 'xs' | 'sm' | 'md' | 'lg';
+  border?: boolean;
 }>();
 
-const clazz = computed(() => avatarStyle({ size }));
+const clazz = computed(() => avatarStyle({ size, border }));
 const friendlyFallbackText = computed(() => fallbackText.length <= 2 ? fallbackText : fallbackText.slice(0, 2).toUpperCase());
 </script>
 

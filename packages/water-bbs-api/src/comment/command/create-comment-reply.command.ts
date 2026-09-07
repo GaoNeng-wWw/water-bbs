@@ -56,6 +56,7 @@ export class CreateCommentReplyService implements ICommandHandler<CreateCommentR
       content,
       creator: accountId,
       parentPath: path,
+      parentId: parentId
     });
     this.em.persist(reply);
     await this.em.flush();

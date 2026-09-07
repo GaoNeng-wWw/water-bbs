@@ -3,7 +3,7 @@
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
 import { createReplyResponseTransformer, listProposalItemsResponseTransformer, proposalControllerFindProposalResponseTransformer, removeReplyResponseTransformer } from './transformers.gen';
-import type { CreateCategoryData, CreateCategoryResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetBalanceData, GetBalanceResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, ProposalControllerFindProposalData, ProposalControllerFindProposalResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
+import type { CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetBalanceData, GetBalanceResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, ProposalControllerFindProposalData, ProposalControllerFindProposalResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -308,6 +308,37 @@ export const resolveControversy = <ThrowOnError extends boolean = false>(options
 export const voteProposal = <ThrowOnError extends boolean = false>(options: Options<VoteProposalData, ThrowOnError>): RequestResult<VoteProposalResponses, unknown, ThrowOnError> => (options.client ?? client).post<VoteProposalResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/proposal/vote',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * 根据资源ID获取评论区
+ */
+export const getCommentByResourceId = <ThrowOnError extends boolean = false>(options: Options<GetCommentByResourceIdData, ThrowOnError>): RequestResult<GetCommentByResourceIdResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetCommentByResourceIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/comment/comment/{resourceID}',
+    ...options
+});
+
+/**
+ * 获取评论回复树
+ */
+export const getReplyTree = <ThrowOnError extends boolean = false>(options: Options<GetReplyTreeData, ThrowOnError>): RequestResult<GetReplyTreeResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetReplyTreeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/comment/replies',
+    ...options
+});
+
+/**
+ * 创建评论回复
+ */
+export const createCommentReply = <ThrowOnError extends boolean = false>(options: Options<CreateCommentReplyData, ThrowOnError>): RequestResult<CreateCommentReplyResponses, unknown, ThrowOnError> => (options.client ?? client).post<CreateCommentReplyResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/comment/{commentId}/reply',
     ...options,
     headers: {
         'Content-Type': 'application/json',

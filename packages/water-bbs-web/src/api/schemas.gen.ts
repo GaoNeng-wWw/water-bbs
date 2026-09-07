@@ -882,6 +882,135 @@ export const VoteProposalResponseDTOSchema = {
     ]
 } as const;
 
+export const GetCommentByResourceIdResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '评论区ID'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
+export const ReplyNodeSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '回复节点ID'
+        },
+        content: {
+            type: 'string',
+            description: '回复内容'
+        },
+        author: {
+            description: '回复作者',
+            allOf: [
+                {
+                    $ref: '#/components/schemas/ReplyAuthor'
+                }
+            ]
+        },
+        expandable: {
+            type: 'boolean',
+            description: '是否可展开'
+        }
+    },
+    required: [
+        'id',
+        'content',
+        'author',
+        'expandable'
+    ]
+} as const;
+
+export const ReplyNodeMetaSchema = {
+    type: 'object',
+    properties: {
+        nextCursor: {
+            type: 'string',
+            description: '下一页游标'
+        },
+        total: {
+            type: 'number',
+            description: '总回复数'
+        }
+    },
+    required: [
+        'nextCursor',
+        'total'
+    ]
+} as const;
+
+export const ReplyTreeSchema = {
+    type: 'object',
+    properties: {
+        nodes: {
+            description: '回复节点列表',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ReplyNode'
+            }
+        },
+        meta: {
+            description: '分页元数据',
+            allOf: [
+                {
+                    $ref: '#/components/schemas/ReplyNodeMeta'
+                }
+            ]
+        }
+    },
+    required: [
+        'nodes',
+        'meta'
+    ]
+} as const;
+
+export const CreateCommentReplyRequestSchema = {
+    type: 'object',
+    properties: {
+        content: {
+            type: 'string',
+            description: '回复内容'
+        }
+    },
+    required: [
+        'content'
+    ]
+} as const;
+
+export const GetReplyResponseSchema = {
+    type: 'object',
+    properties: {
+        hasChildren: {
+            type: 'boolean',
+            description: '是否有子回复'
+        },
+        replyId: {
+            type: 'string',
+            description: '回复ID'
+        },
+        content: {
+            type: 'string',
+            description: '回复内容'
+        },
+        creator: {
+            type: 'string',
+            description: '创建人ID'
+        }
+    },
+    required: [
+        'hasChildren',
+        'replyId',
+        'content',
+        'creator'
+    ]
+} as const;
+
 export const HttpPresentationErrorSchema = {
     type: 'object',
     properties: {

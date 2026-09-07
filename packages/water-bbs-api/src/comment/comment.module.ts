@@ -8,6 +8,7 @@ import {
   RestoreCommentService,
 } from './command';
 import {
+  GetCommentByResourceIdService,
   GetReplyService,
   GetReplyTreeService,
   ListCommentIdService,
@@ -32,6 +33,7 @@ import { CreateCommentReplyService } from './command/create-comment-reply.comman
     CreateCommentReplyService,
     RemoveCommentReplyService,
     CreateProposalComment,
+    GetCommentByResourceIdService,
   ],
 })
 export class CommentModule {}

@@ -565,6 +565,80 @@ export type VoteProposalResponseDto = {
     id: string;
 };
 
+export type GetCommentByResourceIdResponse = {
+    /**
+     * 评论区ID
+     */
+    id: string;
+};
+
+export type ReplyNode = {
+    /**
+     * 回复节点ID
+     */
+    id: string;
+    /**
+     * 回复内容
+     */
+    content: string;
+    /**
+     * 回复作者
+     */
+    author: ReplyAuthor;
+    /**
+     * 是否可展开
+     */
+    expandable: boolean;
+};
+
+export type ReplyNodeMeta = {
+    /**
+     * 下一页游标
+     */
+    nextCursor: string;
+    /**
+     * 总回复数
+     */
+    total: number;
+};
+
+export type ReplyTree = {
+    /**
+     * 回复节点列表
+     */
+    nodes: Array<ReplyNode>;
+    /**
+     * 分页元数据
+     */
+    meta: ReplyNodeMeta;
+};
+
+export type CreateCommentReplyRequest = {
+    /**
+     * 回复内容
+     */
+    content: string;
+};
+
+export type GetReplyResponse = {
+    /**
+     * 是否有子回复
+     */
+    hasChildren: boolean;
+    /**
+     * 回复ID
+     */
+    replyId: string;
+    /**
+     * 回复内容
+     */
+    content: string;
+    /**
+     * 创建人ID
+     */
+    creator: string;
+};
+
 export type HttpPresentationError = {
     /**
      * 错误 message
@@ -1137,3 +1211,74 @@ export type VoteProposalResponses = {
 };
 
 export type VoteProposalResponse = VoteProposalResponses[keyof VoteProposalResponses];
+
+export type GetCommentByResourceIdData = {
+    body?: never;
+    path: {
+        /**
+         * 资源ID
+         */
+        resourceID: string;
+    };
+    query?: never;
+    url: '/comment/comment/{resourceID}';
+};
+
+export type GetCommentByResourceIdResponses = {
+    200: GetCommentByResourceIdResponse;
+};
+
+export type GetCommentByResourceIdResponse2 = GetCommentByResourceIdResponses[keyof GetCommentByResourceIdResponses];
+
+export type GetReplyTreeData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * 每页数量
+         */
+        size: number;
+        /**
+         * 分页游标
+         */
+        cursor?: string;
+        /**
+         * 父回复ID
+         */
+        parentId?: unknown;
+        /**
+         * 评论区ID
+         */
+        commentId: unknown;
+    };
+    url: '/comment/replies';
+};
+
+export type GetReplyTreeResponses = {
+    200: ReplyTree;
+};
+
+export type GetReplyTreeResponse = GetReplyTreeResponses[keyof GetReplyTreeResponses];
+
+export type CreateCommentReplyData = {
+    body: CreateCommentReplyRequest;
+    path: {
+        /**
+         * 评论区ID
+         */
+        commentId: string;
+    };
+    query?: {
+        /**
+         * 父回复ID
+         */
+        parentId?: unknown;
+    };
+    url: '/comment/{commentId}/reply';
+};
+
+export type CreateCommentReplyResponses = {
+    200: GetReplyResponse;
+};
+
+export type CreateCommentReplyResponse = CreateCommentReplyResponses[keyof CreateCommentReplyResponses];
