@@ -438,6 +438,16 @@ export type ListTransactionsResponse = {
     nextCursor: string;
 };
 
+export type StepInfo = {
+    key: string;
+    ui: {
+        [key: string]: unknown;
+    };
+    param: {
+        [key: string]: unknown;
+    };
+};
+
 export type CursorPagination = {
     /**
      * 数据
@@ -484,6 +494,25 @@ export type ListProposalItem = {
      * 更新时间
      */
     updatedAt: string;
+};
+
+export type ListProposalResponse = {
+    /**
+     * 提案列表
+     */
+    items: Array<ListProposalItem>;
+    /**
+     * 下一页游标
+     */
+    nextCursor: string | null;
+    /**
+     * 上一页游标
+     */
+    prevCursor: string | null;
+    /**
+     * 总提案数
+     */
+    total: number;
 };
 
 export type ProposalStep = {
@@ -1093,6 +1122,22 @@ export type GetTransactionsResponses = {
 
 export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
 
+export type ListStepsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/proposal/steps';
+};
+
+export type ListStepsResponses = {
+    /**
+     * 获取提案步骤
+     */
+    200: Array<StepInfo>;
+};
+
+export type ListStepsResponse = ListStepsResponses[keyof ListStepsResponses];
+
 export type ListProposalItemsData = {
     body?: never;
     path?: never;
@@ -1100,22 +1145,18 @@ export type ListProposalItemsData = {
         /**
          * 分页游标
          */
-        cursor: string;
+        cursor?: string;
         /**
          * 每页数量
          */
         size: number;
-        /**
-         * 每页数量
-         */
-        limit: unknown;
     };
     url: '/proposal';
 };
 
 export type ListProposalItemsResponses = {
     200: CursorPagination & {
-        data?: Array<ListProposalItem>;
+        data?: Array<ListProposalResponse>;
     };
 };
 

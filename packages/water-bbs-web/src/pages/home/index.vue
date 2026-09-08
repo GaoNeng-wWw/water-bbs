@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppNavBar, Category, TopicList } from '@/components/app';
 import { UiShadowScroll, UiSkeleton } from '@/components/ui';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import TopicListSkeleton from '@/components/app/topic/topic-list.skeleton.vue';
 import { findCategory } from '@/api';
@@ -17,10 +17,17 @@ const activeId = ref(route.params.id?.toString() ?? '');
 const { data: category, isLoading } = useQuery({
   queryKey: ['categoryId', activeId],
   queryFn: () => {
+    if (activeId.value === 'proposal') {
+      return null;
+    }
     return findCategory({
       path: { id: activeId.value },
     }).then(resp => resp.data);
   },
+});
+
+const title = computed(() => {
+  return activeId.value === 'proposal' ? 'Proposal' : category.value?.name || '';
 });
 
 watch(activeId, () => {
@@ -36,7 +43,7 @@ watch(activeId, () => {
     <div class="max-w-5xl flex flex-col mx-auto pt-8 pb-4 gap-8 px-5">
       <div class="w-full">
         <h1 v-if="!isLoading" class="text-3xl text-surface-fg">
-          {{ category?.name }}
+          {{ title }}
         </h1>
         <ui-skeleton v-else class="w-64! h-3" animated />
       </div>
@@ -44,7 +51,7 @@ watch(activeId, () => {
         <div class="w-full">
           <div v-if="!isLoading">
             <suspense>
-              <topic-list v-if="category" :category="{ ...category }" />
+              <router-view />
               <template #fallback>
                 <topic-list-skeleton />
               </template>

@@ -15,3 +15,13 @@ export class ListProposalItem {
   @Transform(({ value }) => (value as Date).toISOString())
   updatedAt: string;
 }
+export class ListProposalResponse {
+  @ApiProperty({ description: '提案列表', type: [ListProposalItem] })
+  items: ListProposalItem[];
+  @ApiProperty({ description: '下一页游标', type: String, nullable: true })
+  nextCursor: string | null;
+  @ApiProperty({ description: '上一页游标', type: String, nullable: true })
+  prevCursor: string | null;
+  @ApiProperty({ description: '总提案数', type: Number })
+  total: number;
+}

@@ -9,7 +9,12 @@ import {
 } from '../proposal.entity';
 import { DomainError } from '@app/shared';
 import { ok, Result } from 'neverthrow';
-import { Command, CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  Command,
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { ProposalCreated } from '../events';

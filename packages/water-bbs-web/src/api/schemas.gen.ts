@@ -676,6 +676,28 @@ export const ListTransactionsResponseSchema = {
     ]
 } as const;
 
+export const StepInfoSchema = {
+    type: 'object',
+    properties: {
+        key: {
+            type: 'string'
+        },
+        ui: {
+            type: 'object',
+            additionalProperties: {}
+        },
+        param: {
+            type: 'object',
+            additionalProperties: {}
+        }
+    },
+    required: [
+        'key',
+        'ui',
+        'param'
+    ]
+} as const;
+
 export const CursorPaginationSchema = {
     type: 'object',
     properties: {
@@ -738,6 +760,39 @@ export const ListProposalItemSchema = {
         'status',
         'createdAt',
         'updatedAt'
+    ]
+} as const;
+
+export const ListProposalResponseSchema = {
+    type: 'object',
+    properties: {
+        items: {
+            description: '提案列表',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ListProposalItem'
+            }
+        },
+        nextCursor: {
+            type: 'string',
+            description: '下一页游标',
+            nullable: true
+        },
+        prevCursor: {
+            type: 'string',
+            description: '上一页游标',
+            nullable: true
+        },
+        total: {
+            type: 'number',
+            description: '总提案数'
+        }
+    },
+    required: [
+        'items',
+        'nextCursor',
+        'prevCursor',
+        'total'
     ]
 } as const;
 

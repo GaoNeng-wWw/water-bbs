@@ -18,14 +18,26 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { ListProposalItem } from './dto/list-proposal.dto';
+import {
+  ListProposalItem,
+  ListProposalResponse,
+} from './dto/list-proposal.dto';
+import { StepInfo } from './dto/list-steps.dto';
 
 @Controller('proposal')
 export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
-  @ApiQuery({ name: 'cursor', description: '分页游标' })
-  @ApiQuery({ name: 'limit', description: '每页数量' })
-  @ApiCursorPagination(ListProposalItem)
+
+  @ApiOperation({ description: '获取提案步骤', operationId: 'listSteps' })
+  @ApiOkResponse({ description: '获取提案步骤', type: [StepInfo] })
+  @Get('steps')
+  listSteps() {
+    return this.proposalService.listSteps();
+  }
+
+  @ApiQuery({ name: 'cursor', description: '分页游标', required: false })
+  @ApiQuery({ name: 'size', description: '每页数量' })
+  @ApiCursorPagination(ListProposalResponse)
   @ApiOperation({
     summary: '获取提案列表',
     description: '分页获取提案列表',

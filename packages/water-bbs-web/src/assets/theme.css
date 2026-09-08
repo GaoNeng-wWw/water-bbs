@@ -251,17 +251,17 @@
   --success-900: var(--color-green-900);
   --success-950: var(--color-green-950);
 
-  --wanring-50: var(--color-orange-50);
-  --wanring-100: var(--color-orange-100);
-  --wanring-200: var(--color-orange-200);
-  --wanring-300: var(--color-orange-300);
-  --wanring-400: var(--color-orange-400);
-  --wanring-500: var(--color-orange-500);
-  --wanring-600: var(--color-orange-600);
-  --wanring-700: var(--color-orange-700);
-  --wanring-800: var(--color-orange-800);
-  --wanring-900: var(--color-orange-900);
-  --wanring-950: var(--color-orange-950);
+  --warning-50: var(--color-orange-50);
+  --warning-100: var(--color-orange-100);
+  --warning-200: var(--color-orange-200);
+  --warning-300: var(--color-orange-300);
+  --warning-400: var(--color-orange-400);
+  --warning-500: var(--color-orange-500);
+  --warning-600: var(--color-orange-600);
+  --warning-700: var(--color-orange-700);
+  --warning-800: var(--color-orange-800);
+  --warning-900: var(--color-orange-900);
+  --warning-950: var(--color-orange-950);
 
   --danger-50: var(--color-red-50);
   --danger-100: var(--color-red-100);

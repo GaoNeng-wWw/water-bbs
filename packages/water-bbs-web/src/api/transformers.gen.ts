@@ -22,9 +22,14 @@ const listProposalItemSchemaResponseTransformer = (data: any) => {
     return data;
 };
 
+const listProposalResponseSchemaResponseTransformer = (data: any) => {
+    data.items = data.items.map((item: any) => listProposalItemSchemaResponseTransformer(item));
+    return data;
+};
+
 export const listProposalItemsResponseTransformer = async (data: any): Promise<ListProposalItemsResponse> => {
     if (data.data) {
-        data.data = data.data.map((item: any) => listProposalItemSchemaResponseTransformer(item));
+        data.data = data.data.map((item: any) => listProposalResponseSchemaResponseTransformer(item));
     }
     return data;
 };

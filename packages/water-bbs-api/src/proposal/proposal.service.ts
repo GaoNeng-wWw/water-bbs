@@ -19,12 +19,14 @@ import { plainToInstance } from 'class-transformer';
 import { FindProposalResponseDTO } from './dto/find-proposal.dto';
 import { VoteKind, VoteProposalDTO } from './dto/vote-proposal.dto';
 import { CursorDTO } from '@app/shared';
+import { StepDiscoverService } from '@app/engine';
 
 @Injectable()
 export class ProposalService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly stepDiscoverService: StepDiscoverService,
   ) {}
 
   async createProposal(dto: CreateProposalDTO, creator: AccountId) {
@@ -98,5 +100,8 @@ export class ProposalService {
     return this.commandBus.execute(
       new ResolveControversy(id, accountId, kind === 'approve'),
     );
+  }
+  listSteps() {
+    return this.stepDiscoverService.getAll();
   }
 }
