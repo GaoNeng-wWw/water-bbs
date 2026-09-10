@@ -43,7 +43,9 @@ export const joinPath = (parentPath: string, currentId: string): string => {
 @Entity()
 @Index({ properties: ['commentId', 'removedAt', 'path'] })
 @Index({ properties: ['commentId', 'parentId', 'removedAt'] })
-export class CommentReply extends MetaEntity {
+export class CommentReply<
+  T extends object = Record<string, any>,
+> extends MetaEntity {
   @PrimaryKey({ type: 'uuid' })
   id: Opt<ReplyId> = createReplyId();
   @Property({ type: 'text' })
@@ -56,6 +58,8 @@ export class CommentReply extends MetaEntity {
   parentId?: Opt<ReplyId>;
   @Property({ type: 'text' })
   path: Path;
+  @Property({ type: 'jsonb', nullable: true })
+  meta: Opt<T>;
   static create(props: {
     content: string;
     creator: AccountId;

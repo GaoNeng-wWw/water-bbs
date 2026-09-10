@@ -25,9 +25,8 @@ const { data: category, isLoading } = useQuery({
     }).then(resp => resp.data);
   },
 });
-
 const title = computed(() => {
-  return activeId.value === 'proposal' ? 'Proposal' : category.value?.name || '';
+  return route.meta.title ?? activeId.value === 'proposal' ? 'Proposal' : category.value?.name || '';
 });
 
 watch(activeId, () => {

@@ -20,6 +20,7 @@ export default [
         component: () => import('@/pages/home/proposal/index.vue'),
         meta: {
           scrollToTop: true,
+          title: 'Proposal',
         },
       },
       {
@@ -31,4 +32,11 @@ export default [
       },
     ],
   },
+  {
+    path: '/proposal/:id',
+    component: () => import('@/pages/home/proposal/info.vue'),
+    meta: {
+      scrollToTop: true,
+    },
+  }
 ] as RouteRecordRaw[];

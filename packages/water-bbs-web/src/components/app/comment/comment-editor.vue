@@ -4,8 +4,8 @@ import { EditorContent, useEditor } from '@tiptap/vue-3';
 import { StarterKit } from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
 
-const { cancel = true } = defineProps<{
-  loading: boolean;
+const { loading = false, cancel = true } = defineProps<{
+  loading?: boolean;
   cancel?: boolean;
 }>();
 

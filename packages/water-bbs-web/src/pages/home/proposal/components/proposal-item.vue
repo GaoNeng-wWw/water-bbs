@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { ProgressRoot, ProgressIndicator } from 'reka-ui';
+
+import ProposalProgress from './proposal-progress.vue';
 </script>
 
 <template>
@@ -20,20 +21,7 @@ import { ProgressRoot, ProgressIndicator } from 'reka-ui';
     >
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus atque, repellat voluptatem dicta autem expedita veniam voluptas eaque, exercitationem numquam explicabo corporis reprehenderit nostrum! Totam error accusantium eaque fugiat iusto?
     </div>
-    <progress-root
-      class="rounded-full relative h-2 w-full overflow-hidden bg-surface-50 border border-surface-200"
-    >
-      <progress-indicator
-        :agreen="50"
-        :disagreen="50"
-        class="indicator"
-        style="transform: translateX(0%)"
-      />
-    </progress-root>
-    <div class="w-full grid grid-cols-2 content-center place-items-center">
-      <div class="grid cols-2">支持: 50</div>
-      <div class="grid cols-2">反对: 50</div>
-    </div>
+    <proposal-progress :agree="50" :disagree="50" />
   </div>
 </template>
 

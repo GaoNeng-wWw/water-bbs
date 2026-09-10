@@ -15,14 +15,15 @@ type ReplyNodeMeta = {
   nextCursor?: string;
   total: number;
 };
-type ReplyNode = {
+type ReplyNode<T extends object = Record<string, any>> = {
   id: string;
   content: string;
   author: ReplyAuthor;
   expandable: boolean;
+  replyMeta: T;
 };
-type ReplyTree = {
-  nodes: ReplyNode[];
+type ReplyTree<T extends object = Record<string, any>> = {
+  nodes: ReplyNode<T>[];
   meta: ReplyNodeMeta;
 };
 
@@ -84,7 +85,7 @@ export class GetReplyTreeService implements IQueryHandler<GetReplyTree> {
     );
     const childrenSet = new Set(children.map((x) => x.parentId));
 
-    const nodes: ReplyNode[] = [];
+    const nodes: ReplyNode<Record<string, any>>[] = [];
     for (const node of root.items) {
       const profile = profileMap.get(node.creator);
       if (!profile) {
@@ -99,6 +100,7 @@ export class GetReplyTreeService implements IQueryHandler<GetReplyTree> {
           nick: profile.nick,
         },
         expandable,
+        replyMeta: node.meta as Record<string, any>,
       });
     }
     return ok({
