@@ -16,6 +16,7 @@
     },
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "lib": ["ESNext.Temporal", "ESNext"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue","configs/**/*", "env.d.ts"]
 }

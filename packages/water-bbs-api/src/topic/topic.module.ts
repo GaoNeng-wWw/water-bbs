@@ -4,6 +4,7 @@ import { TopicController } from './topic.controller';
 import {
   CreateReplyService,
   CreateTopicService,
+  HideReplyCommandService,
   HideTopicService,
   RemoveReplyService,
   RemoveTopicService,
@@ -28,6 +29,8 @@ import {
 } from './event-handler';
 import { Category } from '../category';
 import { HideTopic, RemoveTopic } from './steps';
+import { RestoreTopicService } from './commands/restore-topic.command';
+import { RestoreReplyService } from './commands/restore-reply.command';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Topic, Reply, Profile, Category])],
@@ -52,6 +55,9 @@ import { HideTopic, RemoveTopic } from './steps';
     OnReplyCreated,
     HideTopic,
     RemoveTopic,
+    HideReplyCommandService,
+    RestoreTopicService,
+    RestoreReplyService,
   ],
 })
 export class TopicModule {}

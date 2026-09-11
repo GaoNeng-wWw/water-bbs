@@ -18,11 +18,9 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import {
-  ListProposalItem,
-  ListProposalResponse,
-} from './dto/list-proposal.dto';
+import { ListProposalResponse } from './dto/list-proposal.dto';
 import { StepInfo } from './dto/list-steps.dto';
+import { FindProposalResponseDTO } from './dto/find-proposal.dto';
 
 @Controller('proposal')
 export class ProposalController {
@@ -48,9 +46,9 @@ export class ProposalController {
     return this.proposalService.listProposal(dto);
   }
 
-  @ApiOperation({ description: '提案详情' })
-  @ApiOkResponse({ description: '提案详情', type: ListProposalItem })
-  @ApiParam({ name: 'id', description: '提案ID' })
+  @ApiOperation({ description: '提案详情', operationId: 'findProposal' })
+  @ApiOkResponse({ description: '提案详情', type: FindProposalResponseDTO })
+  @ApiParam({ name: 'id', description: '提案ID', type: String })
   @Get(':id')
   async findProposal(@Param('id') id: ProposalId) {
     return this.proposalService.findProposal(id);

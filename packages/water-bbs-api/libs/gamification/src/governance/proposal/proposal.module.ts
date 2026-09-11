@@ -16,6 +16,7 @@ import {
   ResolveControversyService,
 } from './command';
 import {
+  BatchCalculateVoteService,
   CalculateVote,
   CalculateVoteService,
   CountAccountVoteService,
@@ -54,6 +55,7 @@ import { GovernanceMember } from '../member';
     OnEmergencyProposalCreated,
     ResolveControversyService,
     OnProposalControversyResolved,
+    BatchCalculateVoteService
   ],
 })
 export class ProposalModule implements OnApplicationBootstrap {

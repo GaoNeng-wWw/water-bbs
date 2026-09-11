@@ -1,6 +1,38 @@
 <script lang="ts" setup>
-
+import { computed } from 'vue';
 import ProposalProgress from './proposal-progress.vue';
+import { useQuery } from '@tanstack/vue-query';
+import { findProposal } from '@/api';
+const { id, name, endAt, agree, disagree } = defineProps<{
+  id: string;
+  name: string;
+  endAt: string | Date;
+  agree: number;
+  disagree: number;
+}>();
+
+const endAtDate = computed(() => {
+  return Temporal.PlainDate.from(endAt instanceof Date ? endAt.toISOString() : endAt);
+});
+const now = computed(() => {
+  return Temporal.Now.plainDateISO();
+});
+const remainDay = computed(() => {
+  const days = now.value.until(endAtDate.value).total({ unit: 'days' });
+  return days < 0 ? `${days}天前结束` : `剩余${days}天`;
+});
+
+const { data } = useQuery({
+  queryFn: () => {
+    return findProposal({
+      path: {
+        id,
+      },
+    })
+      .then(resp => resp.data);
+  },
+  queryKey: ['findProposal', id],
+});
 </script>
 
 <template>
@@ -8,20 +40,17 @@ import ProposalProgress from './proposal-progress.vue';
     <div class="w-full flex gap-2 items-center">
       <router-link class="transition duration-fast hover:text-primary" to="/proposal/123">
         <p class="text-xl">
-          Proposal Name
+          {{ name }}
         </p>
       </router-link>
       <div class="badge">
-        剩余2天
+        {{ remainDay }}
       </div>
     </div>
-    <div
-      class="w-full line-clamp-2"
-      title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus atque, repellat voluptatem dicta autem expedita veniam voluptas eaque, exercitationem numquam explicabo corporis reprehenderit nostrum! Totam error accusantium eaque fugiat iusto?"
-    >
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus atque, repellat voluptatem dicta autem expedita veniam voluptas eaque, exercitationem numquam explicabo corporis reprehenderit nostrum! Totam error accusantium eaque fugiat iusto?
+    <div class="w-full">
+      {{ data?.content }}
     </div>
-    <proposal-progress :agree="50" :disagree="50" />
+    <proposal-progress :agree="agree" :disagree="disagree" />
   </div>
 </template>
 

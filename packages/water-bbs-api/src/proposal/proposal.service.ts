@@ -6,6 +6,7 @@ import {
   CreateVote,
   ListProposal,
   ResolveControversy,
+  BatchCalculateVote,
 } from '@app/gamification';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -20,6 +21,7 @@ import { FindProposalResponseDTO } from './dto/find-proposal.dto';
 import { VoteKind, VoteProposalDTO } from './dto/vote-proposal.dto';
 import { CursorDTO } from '@app/shared';
 import { StepDiscoverService } from '@app/engine';
+import { ListProposalItem } from './dto/list-proposal.dto';
 
 @Injectable()
 export class ProposalService {
@@ -93,8 +95,30 @@ export class ProposalService {
     if (proposalListResult.isErr()) {
       return proposalListResult;
     }
-    const proposalList = proposalListResult.value;
-    return proposalList;
+
+    const ids = proposalListResult.value.items.map((item) => item.id);
+
+    const voteResult = await this.queryBus.execute(
+      new BatchCalculateVote(ids as ProposalId[]),
+    );
+    if (voteResult.isErr()) {
+      return voteResult;
+    }
+    const votes = voteResult.value;
+    const items = proposalListResult.value.items.map((item) => {
+      return new ListProposalItem({
+        ...item,
+        yes: votes[item.id].yes,
+        no: votes[item.id].no,
+        total: votes[item.id].total,
+      });
+    });
+    return ok({
+      items,
+      nextCursor: proposalListResult.value.nextCursor,
+      prevCursor: proposalListResult.value.prevCursor,
+      total: proposalListResult.value.total,
+    });
   }
   async resolveControversy(id: ProposalId, accountId: AccountId, kind: string) {
     return this.commandBus.execute(

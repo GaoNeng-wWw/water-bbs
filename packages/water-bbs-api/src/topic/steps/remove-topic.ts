@@ -10,7 +10,7 @@ export const removeTopicDef = {
   param: z.object({
     topicId: z.string(),
   }),
-  ui: [{ type: 'input', label: 'topicID', textType: 'password' }],
+  ui: [{ type: 'input', label: 'topicID', textType: 'text' }],
 } satisfies Definition;
 
 @Step(removeTopicDef)

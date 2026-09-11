@@ -2,6 +2,17 @@ import { ProposalStatus } from '@app/gamification';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
+export type ListProposalItemProps = {
+  id: string;
+  title: string;
+  status: ProposalStatus;
+  createdAt: Date;
+  updatedAt: Date;
+  yes: number;
+  no: number;
+  total: number;
+}
+
 export class ListProposalItem {
   @ApiProperty({ description: '提案ID' })
   id: string;
@@ -14,7 +25,27 @@ export class ListProposalItem {
   @ApiProperty({ description: '更新时间' })
   @Transform(({ value }) => (value as Date).toISOString())
   updatedAt: string;
+  @ApiProperty({ description: '同意数' })
+  yes: number;
+  @ApiProperty({ description: '反对数' })
+  no: number;
+  @ApiProperty({ description: '总票数' })
+  total: number;
+
+  constructor(props: ListProposalItemProps) {
+    Object.assign(this, props);
+  }
 }
+
+export type ListProposalResponseProps = {
+  items: ListProposalItem[];
+  nextCursor: string | null;
+  prevCursor: string | null;
+  total: number;
+}
+
+
+
 export class ListProposalResponse {
   @ApiProperty({ description: '提案列表', type: [ListProposalItem] })
   items: ListProposalItem[];
@@ -24,4 +55,8 @@ export class ListProposalResponse {
   prevCursor: string | null;
   @ApiProperty({ description: '总提案数', type: Number })
   total: number;
+
+  constructor(props: ListProposalResponseProps) {
+    Object.assign(this, props);
+  }
 }

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { reportReply } from '@/api';
 import {
   UiPopover,
   UiPopoverContent,
@@ -9,6 +10,10 @@ import {
   UiListboxItem,
 } from '@/components/ui';
 
+defineProps<{
+  replyId: string;
+}>()
+
 const emits = defineEmits<{
   commentClick: [];
 }>();
@@ -16,6 +21,13 @@ const emits = defineEmits<{
 const onClickComment = () => {
   emits('commentClick');
 };
+const onReport = () => {
+  reportReply({
+    path: {
+      replyId: props.replyId,
+    }
+  })
+}
 </script>
 
 <template>
@@ -32,7 +44,7 @@ const onClickComment = () => {
       <ui-popover-content class="w-50!">
         <ui-listbox mode="none">
           <ui-listbox-section label="行为">
-            <ui-listbox-item id="report" value="report" danger>
+            <ui-listbox-item id="report" value="report" danger @click="onReport">
               举报
             </ui-listbox-item>
           </ui-listbox-section>

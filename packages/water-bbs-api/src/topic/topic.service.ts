@@ -1,4 +1,4 @@
-import { PaginationQuery } from '@app/shared';
+import { Forbidden, PaginationQuery } from '@app/shared';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
@@ -16,6 +16,8 @@ import { AccountId } from '../auth';
 import {
   CreateReplyCommand,
   CreateTopicCommand,
+  HideReplyCommand,
+  HideTopicCommand,
   RemoveReplyCommand,
   RemoveTopicCommand,
   UpdateTopicCommand,
@@ -28,12 +30,22 @@ import { GetReply } from './query/get-reply.query';
 import { err, ok } from 'neverthrow';
 import { CreateTopicDto } from './dto/create-topic.dto';
 import { ReplyCanNotRemove, TopicCanNotRemove } from './errors';
+import { ReportDto } from './dto/report';
+import {
+  CreateProposal,
+  GetAccountGovernanceMember,
+  ProposalKind,
+} from '@app/gamification';
+import { removeTopicDef } from './steps';
+import { I18nService } from 'nestjs-i18n';
+import { removeReplyDef } from './steps/remove-reply';
 
 @Injectable()
 export class TopicService {
   constructor(
     private readonly qb: QueryBus,
     private readonly cb: CommandBus,
+    private readonly i18nService: I18nService,
   ) {}
 
   async updateTopic(id: TopicId, actor: AccountId, dto: UpdateTopicDto) {
@@ -157,5 +169,85 @@ export class TopicService {
     }
     await this.cb.execute(new RemoveReplyCommand(id));
     return reply;
+  }
+
+  async reportReply(id: ReplyId, actor: AccountId, dto: ReportDto) {
+    const reply = await this.qb.execute(new GetReply(id));
+    if (reply.isErr()) {
+      return reply;
+    }
+    const governanceMemberInfo = await this.qb.execute(
+      new GetAccountGovernanceMember(actor),
+    );
+    if (governanceMemberInfo.isErr() && dto.emergency) {
+      return err(new Forbidden());
+    }
+    const replyIdResult = await this.cb.execute(
+      new HideReplyCommand(id, dto.reason, new Date(dto.proposalEndAt)),
+    );
+    if (replyIdResult.isErr()) {
+      return replyIdResult;
+    }
+    const proposalTitle = this.i18nService.t('PROPOSAL.REMOVE_REPLY', {
+      args: {
+        name: reply.value.content,
+      },
+    });
+    await this.cb.execute(
+      new CreateProposal(
+        proposalTitle,
+        [
+          {
+            stepName: removeReplyDef.key,
+            param: { replyId: replyIdResult.value },
+          },
+        ],
+        dto.reason,
+        dto.emergency ? ProposalKind.Emergency : ProposalKind.Normal,
+        actor,
+        new Date(dto.proposalEndAt),
+      ),
+    );
+    return replyIdResult;
+  }
+
+  async reportTopic(id: TopicId, actor: AccountId, dto: ReportDto) {
+    const topic = await this.qb.execute(new GetTopicQuery(id));
+    if (topic.isErr()) {
+      return topic;
+    }
+    const governanceMemberInfo = await this.qb.execute(
+      new GetAccountGovernanceMember(actor),
+    );
+    if (governanceMemberInfo.isErr() && dto.emergency) {
+      return err(new Forbidden());
+    }
+    const topicIdResult = await this.cb.execute(
+      new HideTopicCommand(id, dto.reason, new Date(dto.proposalEndAt)),
+    );
+    if (topicIdResult.isErr()) {
+      return topicIdResult;
+    }
+    const proposalTitle = this.i18nService.t('PROPOSAL.REMOVE_TOPIC', {
+      args: {
+        name: topic.value.title,
+      },
+    });
+    await this.cb.execute(
+      new CreateProposal(
+        proposalTitle,
+        [
+          {
+            stepName: removeTopicDef.key,
+            param: { topicId: topicIdResult.value },
+          },
+        ],
+        dto.reason,
+        dto.emergency ? ProposalKind.Emergency : ProposalKind.Normal,
+        actor,
+        new Date(dto.proposalEndAt),
+      ),
+    );
+    return topic;
   }
 }

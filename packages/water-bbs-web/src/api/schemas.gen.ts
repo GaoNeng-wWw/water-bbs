@@ -486,6 +486,11 @@ export const CreateTopicDtoSchema = {
     ]
 } as const;
 
+export const ReportDtoSchema = {
+    type: 'object',
+    properties: {}
+} as const;
+
 export const UpdateTopicDtoSchema = {
     type: 'object',
     properties: {
@@ -752,6 +757,18 @@ export const ListProposalItemSchema = {
         updatedAt: {
             type: 'string',
             description: '更新时间'
+        },
+        yes: {
+            type: 'number',
+            description: '同意数'
+        },
+        no: {
+            type: 'number',
+            description: '反对数'
+        },
+        total: {
+            type: 'number',
+            description: '总票数'
         }
     },
     required: [
@@ -759,7 +776,10 @@ export const ListProposalItemSchema = {
         'title',
         'status',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+        'yes',
+        'no',
+        'total'
     ]
 } as const;
 
@@ -811,6 +831,85 @@ export const ProposalStepSchema = {
     required: [
         'stepName',
         'param'
+    ]
+} as const;
+
+export const ProposalVoteSummarySchema = {
+    type: 'object',
+    properties: {
+        yes: {
+            type: 'number',
+            description: '支持票'
+        },
+        no: {
+            type: 'number',
+            description: '反对票'
+        }
+    },
+    required: [
+        'yes',
+        'no'
+    ]
+} as const;
+
+export const FindProposalResponseDTOSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '提案ID'
+        },
+        content: {
+            type: 'string',
+            description: '提案内容'
+        },
+        title: {
+            type: 'string',
+            description: '提案标题'
+        },
+        step: {
+            description: '提案步骤',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/ProposalStep'
+            }
+        },
+        createdAt: {
+            type: 'string',
+            description: '提案创建时间'
+        },
+        status: {
+            type: 'string',
+            description: '提案状态',
+            enum: [
+                'pending',
+                'controversy',
+                'approved',
+                'rejected',
+                'executing',
+                'executed',
+                'failed',
+                'cancelled',
+                'emergency-review'
+            ]
+        },
+        voteSummary: {
+            description: '提案投票摘要',
+            allOf: [
+                {
+                    $ref: '#/components/schemas/ProposalVoteSummary'
+                }
+            ]
+        }
+    },
+    required: [
+        'id',
+        'content',
+        'title',
+        'step',
+        'createdAt',
+        'status',
+        'voteSummary'
     ]
 } as const;
 
