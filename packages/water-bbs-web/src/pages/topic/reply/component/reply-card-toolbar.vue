@@ -10,9 +10,9 @@ import {
   UiListboxItem,
 } from '@/components/ui';
 
-defineProps<{
+const props = defineProps<{
   replyId: string;
-}>()
+}>();
 
 const emits = defineEmits<{
   commentClick: [];
@@ -25,6 +25,9 @@ const onReport = () => {
   reportReply({
     path: {
       replyId: props.replyId,
+    },
+    body: {
+      
     }
   })
 }
