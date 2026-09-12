@@ -8,7 +8,11 @@ import {
   UiListbox,
   UiListboxSection,
   UiListboxItem,
+  UiDialog,
+  UiDialogContent,
+  UiDialogTrigger,
 } from '@/components/ui';
+import ReportTopicReplyModal from './report-topic-reply-modal.vue';
 
 const props = defineProps<{
   replyId: string;
@@ -22,15 +26,8 @@ const onClickComment = () => {
   emits('commentClick');
 };
 const onReport = () => {
-  reportReply({
-    path: {
-      replyId: props.replyId,
-    },
-    body: {
-      
-    }
-  })
-}
+
+};
 </script>
 
 <template>
@@ -47,9 +44,16 @@ const onReport = () => {
       <ui-popover-content class="w-50!">
         <ui-listbox mode="none">
           <ui-listbox-section label="行为">
-            <ui-listbox-item id="report" value="report" danger @click="onReport">
-              举报
-            </ui-listbox-item>
+            <ui-dialog>
+              <ui-dialog-trigger>
+                <ui-listbox-item id="report" value="report" danger @click="onReport">
+                  举报
+                </ui-listbox-item>
+              </ui-dialog-trigger>
+              <ui-dialog-content>
+                <report-topic-reply-modal />
+              </ui-dialog-content>
+            </ui-dialog>
           </ui-listbox-section>
         </ui-listbox>
       </ui-popover-content>

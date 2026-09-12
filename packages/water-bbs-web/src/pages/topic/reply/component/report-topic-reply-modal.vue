@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { UiForm, UiFormItem, UiInput } from '@/components/ui';
+import { UiForm, UiFormItem, UiInput, UiCalendar } from '@/components/ui';
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import { UiForm, UiFormItem, UiInput } from '@/components/ui';
         <ui-input placeholder="请输入举报原因" />
       </ui-form-item>
       <ui-form-item prop="duration" label="提案时常">
-
+        <ui-calendar />
       </ui-form-item>
     </ui-form>
   </div>
