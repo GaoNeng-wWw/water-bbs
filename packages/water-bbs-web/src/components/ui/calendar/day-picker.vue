@@ -1,71 +1,74 @@
-<script lang="ts" setup>
-import { UiButton } from '@/components/ui';
-import {
-  CalendarCell,
-  CalendarCellTrigger,
-  CalendarGrid,
-  CalendarGridBody,
-  CalendarGridHead,
-  CalendarGridRow,
-  CalendarHeadCell,
-  CalendarHeader,
-  CalendarHeading,
-  CalendarNext,
-  CalendarPrev,
-  CalendarRoot,
-  type DateValue,
-} from 'reka-ui';
-import { computed, ref, watch } from 'vue';
+<script setup lang="ts">
+import calendarToolbar from './calendar-toolbar.vue';
+import { Icon } from '@iconify/vue';
+import { CalendarCell, CalendarCellTrigger, CalendarGrid, CalendarGridBody, CalendarGridHead, CalendarGridRow, CalendarHeadCell, CalendarHeader, CalendarHeading, CalendarNext, CalendarPrev, CalendarRoot } from 'reka-ui';
 import { useContext } from './context';
 
-const { setCalenderDate, calendarDate, setMode } = useContext();
-
-const date = ref<DateValue>(calendarDate.value);
-const currentMonth = computed(() => calendarDate.value.month);
-const currentYear = computed(() => calendarDate.value.year);
-
-watch(() => date, () => {
-  setCalenderDate(date.value as DateValue);
-}, { deep: true });
+const { currentDate, placeholder } = useContext();
 </script>
 
 <template>
   <calendar-root
     v-slot="{ weekDays, grid }"
-    v-model="date"
+    v-model:placeholder="placeholder"
+    :default-value="currentDate"
+    class="rounded-xl bg-surface-50 p-4"
     fixed-weeks
-    class="rounded-xl p-4 bg-surface-100 border border-surface-200"
+    prevent-deselect
   >
-    <calendar-header class="flex w-full justify-between">
-      <calendar-prev class="cursor-pointer">
-        <div class="size-4 icon-[flat-color-icons--previous]" />
+    <calendar-header class="flex items-center justify-between">
+      <calendar-prev
+        class="
+        text-surface-fg
+        inline-flex items-center cursor-pointer justify-center rounded-md bg-transparent
+        size-6 hover:bg-surface-100 active:scale-98 active:transition-all"
+      >
+        <icon
+          icon="radix-icons:chevron-left"
+          class="w-4 h-4"
+        />
       </calendar-prev>
-      <calendar-heading class="text-sm text-surface-fg font-medium">
-        <ui-button variant="ghost" size="sm" @click="() => setMode('month')">
-          {{ currentMonth }}
-        </ui-button>
-        <ui-button variant="ghost" size="sm" @click="() => setMode('year')">
-          {{ currentYear }}
-        </ui-button>
+      <calendar-heading class="text-sm font-medium flex">
+        <calendar-toolbar />
       </calendar-heading>
-      <calendar-next class="cursor-pointer">
-        <div class="size-4 icon-[flat-color-icons--next]" />
+
+      <calendar-next
+        class="
+        text-surface-fg
+        inline-flex items-center cursor-pointer justify-center rounded-md bg-transparent
+        size-6 hover:bg-surface-100 active:scale-98 active:transition-all
+        "
+      >
+        <icon
+          icon="radix-icons:chevron-right"
+          class="w-4 h-4"
+        />
       </calendar-next>
     </calendar-header>
-    <div class="w-full">
-      <calendar-grid v-for="month in grid" :key="month.value.toString()" class="w-full">
+    <div
+      class="flex flex-col space-y-4 pt-4 sm:flex-row sm:space-x-4 sm:space-y-0"
+    >
+      <calendar-grid
+        v-for="month in grid"
+        :key="month.value.toString()"
+        class="w-full border-collapse select-none space-y-1"
+      >
         <calendar-grid-head>
-          <calendar-grid-row class="grid grid-cols-7">
-            <calendar-head-cell v-for="day in weekDays" :key="day" class="text-surface-fg">
+          <calendar-grid-row class="mb-1 grid w-full grid-cols-7">
+            <calendar-head-cell
+              v-for="day in weekDays"
+              :key="day"
+              class="rounded-md text-xs text-surface-fg/50"
+            >
               {{ day }}
             </calendar-head-cell>
           </calendar-grid-row>
         </calendar-grid-head>
-        <calendar-grid-body class="w-full">
+        <calendar-grid-body class="grid">
           <calendar-grid-row
             v-for="(weekDates, index) in month.rows"
             :key="`weekDate-${index}`"
-            class="w-full grid grid-cols-7 text-surface-fg"
+            class="grid grid-cols-7 space-y-2"
           >
             <calendar-cell
               v-for="weekDate in weekDates"
@@ -77,15 +80,19 @@ watch(() => date, () => {
                 :day="weekDate"
                 :month="month.value"
                 class="
-                  cursor-pointer
-                  relative flex items-center justify-center rounded-full whitespace-nowrap text-sm font-normal text-surface-fg
-                  w-8 h-8 outline-none
-                  data-outside-view:text-surface-fg/30 data-selected:bg-primary/20! data-selected:text-white
-                  data-highlighted:bg-primary/20 data-unavailable:pointer-events-none
-                  data-unavailable:text-surface-fg/30 data-unavailable:line-through
-                  before:top-1.25
-                  data-today:before:block data-today:before:bg-primary-500
-                  hover:bg-green5  before:absolute  before:hidden before:rounded-full before:w-1 before:h-1 before:bg-white"
+                mx-auto
+                relative flex items-center justify-center rounded-full whitespace-nowrap text-sm font-normal
+                text-surface-fg w-8 h-8 outline-none cursor-pointer
+                data-outside-view:text-surface-fg/30
+                data-selected:bg-primary/20 data-selected:text-surface-fg
+                hover:bg-primary/20
+                data-highlighted:bg-primary/20
+                data-unavailable:pointer-events-none
+                data-unavailable:text-surface-fg/30
+                data-unavailable:line-through
+                before:absolute before:top-1.25 before:hidden before:rounded-full before:w-1 before:h-1
+                data-today:before:block data-today:before:bg-primary-500
+              "
               />
             </calendar-cell>
           </calendar-grid-row>

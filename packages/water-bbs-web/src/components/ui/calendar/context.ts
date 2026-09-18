@@ -1,14 +1,20 @@
 import { createContext } from '@/composables';
-import type { DateValue } from '@internationalized/date';
-import type { ComputedRef } from 'vue';
+import type { DateValue } from 'reka-ui';
+import type { ComputedRef, Ref } from 'vue';
 
-export type CalendarMode = 'day' | 'month' | 'year';
-
+export type Setter = (value: DateValue) => void;
+export type Mode = 'year' | 'month' | 'day';
 export type CalendarContext = {
-  calendarDate: ComputedRef<DateValue>;
-  setCalenderDate: (date: DateValue) => void;
-  mode: ComputedRef<CalendarMode>;
-  setMode: (mode: CalendarMode) => void;
+  placeholder: Ref<DateValue>;
+  mode: ComputedRef<Mode>;
+  setMode: (mode: Mode) => void;
+  currentDate: ComputedRef<DateValue>;
+  setDay: Setter;
+  setMonth: Setter;
+  setYear: Setter;
+  toMonthView: () => void;
+  toYearView: () => void;
+  toDayView: () => void;
 };
 
-export const [provideContext, useContext] = createContext<CalendarContext>('calendar');
+export const [provideContext, useContext] = createContext<CalendarContext>('Calendar');
