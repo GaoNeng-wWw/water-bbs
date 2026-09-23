@@ -1,5 +1,5 @@
-import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { EmergencyProposalCreated } from '../events';
+import { EventBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { Approve, EmergencyProposalCreated } from '../events';
 import { EntityRepository } from '@mikro-orm/sqlite';
 import { Proposal } from '../proposal.entity';
 import { InjectRepository } from '@mikro-orm/nestjs';
@@ -11,13 +11,21 @@ export class OnEmergencyProposalCreated implements IEventHandler<EmergencyPropos
   constructor(
     @InjectRepository(Proposal)
     private readonly repo: EntityRepository<Proposal>,
+    private readonly eventBus: EventBus
   ) {}
   async handle({ proposalId }: EmergencyProposalCreated) {
     const proposal = await this.repo.findOne({ id: proposalId });
     if (!proposal) {
       return err(new ProposalNotFound());
     }
-    // TODO: 通知BD
+
+    proposal.pending();
+    const approveResult = proposal.approve();
+    if (approveResult.isErr()) {
+      return approveResult;
+    }
+    await this.repo.upsert(proposal);
+    await this.eventBus.publish(new Approve(proposal.id));
     return ok();
   }
 }

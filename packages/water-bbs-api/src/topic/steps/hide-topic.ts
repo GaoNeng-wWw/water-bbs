@@ -20,6 +20,7 @@ export const hideTopicDef = {
   param: z.object({
     topicId: z.uuid(),
     reason: z.string(),
+    endAt: z.iso.datetime().optional(),
   }),
 } satisfies Definition;
 
@@ -32,12 +33,16 @@ export class HideTopic implements Handler<typeof hideTopicDef> {
   async handle(param: {
     topicId: string;
     reason: string;
+    endAt?: string;
   }): Promise<Result<void, Error>> {
     const topic = await this.repo.findOne({ id: param.topicId as TopicId });
     if (!topic) {
       return err(new TopicNotFound(param.topicId as TopicId));
     }
-    const hidePeriod = HiddenPeriod.create(param.reason);
+    const hidePeriod = HiddenPeriod.create(
+      param.reason,
+      param.endAt ? new Date(param.endAt) : undefined,
+    );
     if (hidePeriod.isErr()) {
       return hidePeriod;
     }

@@ -81,6 +81,10 @@ export class Proposal extends MetaEntity {
     return this.status === ProposalStatus.Pending;
   }
 
+  pending() {
+    this.status = ProposalStatus.Pending;
+    return ok();
+  }
   approve() {
     if (this.status !== ProposalStatus.Pending) {
       return err(new StatusError(ProposalStatus.Pending, this.status));

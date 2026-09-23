@@ -31,6 +31,9 @@ export class ListProposalItem {
   no: number;
   @ApiProperty({ description: '总票数' })
   total: number;
+  @ApiProperty({ description: '过期时间' })
+  @Transform(({ value }) => (value as Date).toISOString())
+  endAt: string;
 
   constructor(props: ListProposalItemProps) {
     Object.assign(this, props);
@@ -43,8 +46,6 @@ export type ListProposalResponseProps = {
   prevCursor: string | null;
   total: number;
 }
-
-
 
 export class ListProposalResponse {
   @ApiProperty({ description: '提案列表', type: [ListProposalItem] })

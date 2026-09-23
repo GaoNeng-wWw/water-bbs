@@ -11,6 +11,7 @@ export type ListProposalItem = {
   status: ProposalStatus;
   createdAt: Date;
   updatedAt: Date;
+  endAt: Date;
 };
 
 export type ListProposalResponse = {
@@ -55,6 +56,7 @@ export class ListProposalService implements IQueryHandler<ListProposal> {
         status: item.status,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
+        endAt: item.expiredAt,
       })),
       prevCursor: items.startCursor,
       nextCursor: items.endCursor,

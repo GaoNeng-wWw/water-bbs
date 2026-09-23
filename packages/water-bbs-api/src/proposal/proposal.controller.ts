@@ -35,7 +35,7 @@ export class ProposalController {
 
   @ApiQuery({ name: 'cursor', description: '分页游标', required: false })
   @ApiQuery({ name: 'size', description: '每页数量' })
-  @ApiCursorPagination(ListProposalResponse)
+  @ApiOkResponse({ description: '获取提案列表', type: ListProposalResponse })
   @ApiOperation({
     summary: '获取提案列表',
     description: '分页获取提案列表',

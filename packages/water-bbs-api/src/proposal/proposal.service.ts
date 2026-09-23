@@ -104,7 +104,17 @@ export class ProposalService {
     if (voteResult.isErr()) {
       return voteResult;
     }
-    const votes = voteResult.value;
+    const votes = voteResult.value
+      .map((item) => {
+        return {
+          [item.proposalId]: {
+            yes: item.yes,
+            no: item.no,
+            total: item.yes + item.no,
+          },
+        };
+      })
+      .reduce((prev, cur) => ({ ...prev, ...cur }), {});
     const items = proposalListResult.value.items.map((item) => {
       return new ListProposalItem({
         ...item,

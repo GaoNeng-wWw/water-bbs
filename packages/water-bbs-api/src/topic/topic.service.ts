@@ -35,8 +35,9 @@ import {
   CreateProposal,
   GetAccountGovernanceMember,
   ProposalKind,
+  ProposalStep,
 } from '@app/gamification';
-import { removeTopicDef } from './steps';
+import { hideReplyDef, hideTopicDef, removeTopicDef } from './steps';
 import { I18nService } from 'nestjs-i18n';
 import { removeReplyDef } from './steps/remove-reply';
 
@@ -188,20 +189,24 @@ export class TopicService {
     if (replyIdResult.isErr()) {
       return replyIdResult;
     }
-    const proposalTitle = this.i18nService.t('PROPOSAL.REMOVE_REPLY', {
-      args: {
-        name: reply.value.content,
+    const proposalTitle = dto.title;
+    const steps: ProposalStep[] = [
+      {
+        stepName: hideReplyDef.key,
+        param: { replyId: replyIdResult.value, reason: dto.reason },
       },
-    });
+    ];
+    if (dto.remove) {
+      steps.shift();
+      steps.push({
+        stepName: removeReplyDef.key,
+        param: { replyId: replyIdResult.value },
+      });
+    }
     await this.cb.execute(
       new CreateProposal(
         proposalTitle,
-        [
-          {
-            stepName: removeReplyDef.key,
-            param: { replyId: replyIdResult.value },
-          },
-        ],
+        steps,
         dto.reason,
         dto.emergency ? ProposalKind.Emergency : ProposalKind.Normal,
         actor,
@@ -228,19 +233,20 @@ export class TopicService {
     if (topicIdResult.isErr()) {
       return topicIdResult;
     }
-    const proposalTitle = this.i18nService.t('PROPOSAL.REMOVE_TOPIC', {
-      args: {
-        name: topic.value.title,
-      },
-    });
+    const proposalTitle = dto.title;
     await this.cb.execute(
       new CreateProposal(
         proposalTitle,
         [
-          {
-            stepName: removeTopicDef.key,
-            param: { topicId: topicIdResult.value },
-          },
+          dto.remove
+            ? {
+                stepName: removeTopicDef.key,
+                param: { topicId: topicIdResult.value },
+              }
+            : {
+                stepName: hideTopicDef.key,
+                param: { topicId: topicIdResult.value, reason: dto.reason },
+              },
         ],
         dto.reason,
         dto.emergency ? ProposalKind.Emergency : ProposalKind.Normal,

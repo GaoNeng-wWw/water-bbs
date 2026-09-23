@@ -17,7 +17,7 @@ import {
 } from '@nestjs/cqrs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { ProposalCreated } from '../events';
+import { EmergencyProposalCreated, ProposalCreated } from '../events';
 
 export class CreateProposal extends Command<Result<ProposalId, DomainError>> {
   constructor(
@@ -69,6 +69,9 @@ export class CreateProposalService implements ICommandHandler<CreateProposal> {
       await em.flush();
     });
     this.eventBus.publish(new ProposalCreated(proposal.id));
+    if (kind === ProposalKind.Emergency) {
+      this.eventBus.publish(new EmergencyProposalCreated(proposal.id));
+    }
     return ok(proposal.id);
   }
 }

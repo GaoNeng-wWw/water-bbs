@@ -1,8 +1,14 @@
 import { InjectRepository, MikroOrmModule } from '@mikro-orm/nestjs';
-import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Logger,
+  LoggerService,
+  Module,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import {
   Proposal,
   ProposalId,
+  ProposalKind,
   ProposalSlot,
   ProposalStatus,
   Vote,
@@ -55,10 +61,11 @@ import { GovernanceMember } from '../member';
     OnEmergencyProposalCreated,
     ResolveControversyService,
     OnProposalControversyResolved,
-    BatchCalculateVoteService
+    BatchCalculateVoteService,
   ],
 })
 export class ProposalModule implements OnApplicationBootstrap {
+  private logger: LoggerService = new Logger();
   constructor(
     @InjectRepository(Proposal)
     private readonly proposalEntity: EntityRepository<Proposal>,
@@ -66,7 +73,9 @@ export class ProposalModule implements OnApplicationBootstrap {
     private readonly eventBus: EventBus,
   ) {}
   onApplicationBootstrap() {
+    this.logger.log('ProposalModule onApplicationBootstrap');
     this.scanProposal();
+    this.logger.log('ProposalModule scanProposal done');
   }
 
   @Cron(CronExpression.EVERY_2_HOURS)
@@ -74,8 +83,24 @@ export class ProposalModule implements OnApplicationBootstrap {
     const now = new Date();
     const proposals = await this.proposalEntity.findAll({
       where: {
-        expiredAt: { $lte: now },
-        status: ProposalStatus.Pending,
+        $or: [
+          {
+            expiredAt: { $lte: now },
+            status: {
+              $in: [
+                ProposalStatus.Pending,
+                ProposalStatus.Approved,
+                ProposalStatus.EmergencyReview,
+              ],
+            },
+          },
+          {
+            kind: ProposalKind.Emergency,
+            status: {
+              $in: [ProposalStatus.Pending],
+            },
+          },
+        ],
       },
     });
     const record = new Map<ProposalId, Proposal>();
@@ -94,6 +119,11 @@ export class ProposalModule implements OnApplicationBootstrap {
           const proposal = record.get(vote.proposalId);
           if (!proposal) {
             throw new ProposalNotFound();
+          }
+          if (proposal.kind === ProposalKind.Emergency) {
+            proposal.approve();
+            eventBox.push(new Approve(vote.proposalId));
+            return this.proposalEntity.upsert(proposal, { em });
           }
           if (vote.yes === vote.no) {
             const updateResult = proposal.controversy();

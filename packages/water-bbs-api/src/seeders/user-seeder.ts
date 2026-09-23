@@ -3,6 +3,9 @@ import { Seeder } from '@mikro-orm/seeder';
 import { Account, Identifier, Profile } from '../auth';
 import { randomBytes } from 'crypto';
 import {
+  GovernanceMember,
+  MemberGrantType,
+  MemberKind,
   SYSTEM_WALLET_ID,
   Transaction,
   TransactionStatus,
@@ -50,5 +53,22 @@ export class UserSeeder extends Seeder {
       await em.upsert(Wallet, wallet);
       await em.upsert(Transaction, transcation);
     }
+    const governance = await em.findOne(GovernanceMember, {
+      accountId: id,
+      startedAt: {
+        $lt: new Date(),
+      },
+      $or: [{ endedAt: null }, { endedAt: { $gt: new Date() } }],
+    });
+    if (governance) {
+      return;
+    }
+    const bdRecord = em.create(GovernanceMember, {
+      accountId: id,
+      kind: MemberKind.Admin,
+      startedAt: new Date(),
+      grantType: MemberGrantType.Migration,
+    });
+    await em.upsert(GovernanceMember, bdRecord);
   }
 }

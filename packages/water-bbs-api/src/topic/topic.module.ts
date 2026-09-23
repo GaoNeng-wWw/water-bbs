@@ -28,9 +28,10 @@ import {
   OnReplyCreated,
 } from './event-handler';
 import { Category } from '../category';
-import { HideTopic, RemoveTopic } from './steps';
+import { HideReply, HideTopic, RemoveTopic } from './steps';
 import { RestoreTopicService } from './commands/restore-topic.command';
 import { RestoreReplyService } from './commands/restore-reply.command';
+import { RemoveReply } from './steps/remove-reply';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Topic, Reply, Profile, Category])],
@@ -54,7 +55,9 @@ import { RestoreReplyService } from './commands/restore-reply.command';
     OnTopicCreated,
     OnReplyCreated,
     HideTopic,
+    HideReply,
     RemoveTopic,
+    RemoveReply,
     HideReplyCommandService,
     RestoreTopicService,
     RestoreReplyService,

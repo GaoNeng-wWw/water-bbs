@@ -24,7 +24,7 @@ export class BatchCalculateVoteService implements IQueryHandler<BatchCalculateVo
     const result = await this.em.execute(
       `
 SELECT
-  proposal_id,
+  proposal_id as proposalId,
   SUM(agree_count) as yes,
   SUM(disagree_count) as no
 FROM proposal_slot
