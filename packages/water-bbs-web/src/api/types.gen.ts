@@ -314,14 +314,6 @@ export type CreateTopicDto = {
     pinned: boolean;
 };
 
-export type ReportDto = {
-    title: string;
-    reason: string;
-    proposalEndAt: string;
-    remove: boolean;
-    emergency: boolean;
-};
-
 export type UpdateTopicDto = {
     /**
      * 主题标题
@@ -446,14 +438,27 @@ export type ListTransactionsResponse = {
     nextCursor: string;
 };
 
-export type StepInfo = {
-    key: string;
-    ui: {
+export type CursorPagination = {
+    /**
+     * 数据
+     */
+    items: Array<string>;
+    /**
+     * 下一页的分页
+     */
+    nextCursor: {
         [key: string]: unknown;
-    };
-    param: {
+    } | null;
+    /**
+     * 上一页的分页
+     */
+    prevCursor: {
         [key: string]: unknown;
-    };
+    } | null;
+    /**
+     * 总数
+     */
+    total: number;
 };
 
 export type ListProposalItem = {
@@ -479,41 +484,6 @@ export type ListProposalItem = {
      * 更新时间
      */
     updatedAt: string;
-    /**
-     * 同意数
-     */
-    yes: number;
-    /**
-     * 反对数
-     */
-    no: number;
-    /**
-     * 总票数
-     */
-    total: number;
-    /**
-     * 过期时间
-     */
-    endAt: string;
-};
-
-export type ListProposalResponse = {
-    /**
-     * 提案列表
-     */
-    items: Array<ListProposalItem>;
-    /**
-     * 下一页游标
-     */
-    nextCursor: string | null;
-    /**
-     * 上一页游标
-     */
-    prevCursor: string | null;
-    /**
-     * 总提案数
-     */
-    total: number;
 };
 
 export type ProposalStep = {
@@ -527,48 +497,6 @@ export type ProposalStep = {
     param: {
         [key: string]: unknown;
     };
-};
-
-export type ProposalVoteSummary = {
-    /**
-     * 支持票
-     */
-    yes: number;
-    /**
-     * 反对票
-     */
-    no: number;
-};
-
-export type FindProposalResponseDto = {
-    /**
-     * 提案ID
-     */
-    id: string;
-    /**
-     * 提案内容
-     */
-    content: string;
-    /**
-     * 提案标题
-     */
-    title: string;
-    /**
-     * 提案步骤
-     */
-    step: Array<ProposalStep>;
-    /**
-     * 提案创建时间
-     */
-    createdAt: string;
-    /**
-     * 提案状态
-     */
-    status: 'pending' | 'controversy' | 'approved' | 'rejected' | 'executing' | 'executed' | 'failed' | 'cancelled' | 'emergency-review';
-    /**
-     * 提案投票摘要
-     */
-    voteSummary: ProposalVoteSummary;
 };
 
 export type CreateProposalDto = {
@@ -709,6 +637,21 @@ export type GetReplyResponse = {
      * 创建人ID
      */
     creator: string;
+};
+
+export type GovernanceMemberInfo = {
+    /**
+     * 治理成员类型
+     */
+    kind: 'admin' | 'bd';
+    /**
+     * 开始时间
+     */
+    startedAt: Date;
+    /**
+     * 结束时间
+     */
+    endedAt: Date;
 };
 
 export type HttpPresentationError = {
@@ -1018,7 +961,7 @@ export type RemoveReplyData = {
         /**
          * 回复ID
          */
-        replyId: string;
+        replyId: unknown;
     };
     query?: never;
     url: '/topic/replies/{replyId}';
@@ -1029,42 +972,6 @@ export type RemoveReplyResponses = {
 };
 
 export type RemoveReplyResponse = RemoveReplyResponses[keyof RemoveReplyResponses];
-
-export type ReportReplyData = {
-    body: ReportDto;
-    path: {
-        /**
-         * 回复ID
-         */
-        replyId: string;
-    };
-    query?: never;
-    url: '/topic/report/reply/{replyId}';
-};
-
-export type ReportReplyResponses = {
-    200: ReplyInfo;
-};
-
-export type ReportReplyResponse = ReportReplyResponses[keyof ReportReplyResponses];
-
-export type ReportTopicData = {
-    body: ReportDto;
-    path: {
-        /**
-         * 主题ID
-         */
-        topicId: unknown;
-    };
-    query?: never;
-    url: '/topic/report/topic/{topicId}';
-};
-
-export type ReportTopicResponses = {
-    200: TopicInfo;
-};
-
-export type ReportTopicResponse = ReportTopicResponses[keyof ReportTopicResponses];
 
 export type RemoveTopicData = {
     body?: never;
@@ -1201,22 +1108,6 @@ export type GetTransactionsResponses = {
 
 export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
 
-export type ListStepsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/proposal/steps';
-};
-
-export type ListStepsResponses = {
-    /**
-     * 获取提案步骤
-     */
-    200: Array<StepInfo>;
-};
-
-export type ListStepsResponse = ListStepsResponses[keyof ListStepsResponses];
-
 export type ListProposalItemsData = {
     body?: never;
     path?: never;
@@ -1224,20 +1115,23 @@ export type ListProposalItemsData = {
         /**
          * 分页游标
          */
-        cursor?: string;
+        cursor: string;
         /**
          * 每页数量
          */
         size: number;
+        /**
+         * 每页数量
+         */
+        limit: unknown;
     };
     url: '/proposal';
 };
 
 export type ListProposalItemsResponses = {
-    /**
-     * 获取提案列表
-     */
-    200: ListProposalResponse;
+    200: CursorPagination & {
+        items?: Array<ListProposalItem>;
+    };
 };
 
 export type ListProposalItemsResponse = ListProposalItemsResponses[keyof ListProposalItemsResponses];
@@ -1263,26 +1157,26 @@ export type CreateProposalResponses = {
 
 export type CreateProposalResponse = CreateProposalResponses[keyof CreateProposalResponses];
 
-export type FindProposalData = {
+export type ProposalControllerFindProposalData = {
     body?: never;
     path: {
         /**
          * 提案ID
          */
-        id: string;
+        id: unknown;
     };
     query?: never;
     url: '/proposal/{id}';
 };
 
-export type FindProposalResponses = {
+export type ProposalControllerFindProposalResponses = {
     /**
      * 提案详情
      */
-    200: FindProposalResponseDto;
+    200: ListProposalItem;
 };
 
-export type FindProposalResponse = FindProposalResponses[keyof FindProposalResponses];
+export type ProposalControllerFindProposalResponse = ProposalControllerFindProposalResponses[keyof ProposalControllerFindProposalResponses];
 
 export type ResolveControversyData = {
     body?: never;
@@ -1403,3 +1297,54 @@ export type CreateCommentReplyResponses = {
 };
 
 export type CreateCommentReplyResponse = CreateCommentReplyResponses[keyof CreateCommentReplyResponses];
+
+export type GetSelfRecordData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/bd/me';
+};
+
+export type GetSelfRecordResponses = {
+    200: GovernanceMemberInfo;
+};
+
+export type GetSelfRecordResponse = GetSelfRecordResponses[keyof GetSelfRecordResponses];
+
+export type GetBdRecordData = {
+    body?: never;
+    path: {
+        /**
+         * 用户ID
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/bd/{id}';
+};
+
+export type GetBdRecordResponses = {
+    200: GovernanceMemberInfo;
+};
+
+export type GetBdRecordResponse = GetBdRecordResponses[keyof GetBdRecordResponses];
+
+export type GetBdRecordListData = {
+    body?: never;
+    path: {
+        /**
+         * 用户ID
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/bd/{id}/list';
+};
+
+export type GetBdRecordListResponses = {
+    200: CursorPagination & {
+        items?: Array<GovernanceMemberInfo>;
+    };
+};
+
+export type GetBdRecordListResponse = GetBdRecordListResponses[keyof GetBdRecordListResponses];

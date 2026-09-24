@@ -2,8 +2,8 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import { createReplyResponseTransformer, listProposalItemsResponseTransformer, removeReplyResponseTransformer, reportReplyResponseTransformer } from './transformers.gen';
-import type { CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, FindProposalData, FindProposalResponses, GetBalanceData, GetBalanceResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListStepsData, ListStepsResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ReportReplyData, ReportReplyResponses, ReportTopicData, ReportTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
+import { createReplyResponseTransformer, getBdRecordListResponseTransformer, getBdRecordResponseTransformer, getSelfRecordResponseTransformer, listProposalItemsResponseTransformer, proposalControllerFindProposalResponseTransformer, removeReplyResponseTransformer } from './transformers.gen';
+import type { CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, GetBalanceData, GetBalanceResponses, GetBdRecordData, GetBdRecordListData, GetBdRecordListResponses, GetBdRecordResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetSelfRecordData, GetSelfRecordResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, ProposalControllerFindProposalData, ProposalControllerFindProposalResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -185,33 +185,6 @@ export const removeReply = <ThrowOnError extends boolean = false>(options: Optio
 });
 
 /**
- * 举报回复
- */
-export const reportReply = <ThrowOnError extends boolean = false>(options: Options<ReportReplyData, ThrowOnError>): RequestResult<ReportReplyResponses, unknown, ThrowOnError> => (options.client ?? client).delete<ReportReplyResponses, unknown, ThrowOnError>({
-    responseTransformer: reportReplyResponseTransformer,
-    responseType: 'json',
-    url: '/topic/report/reply/{replyId}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * 举报主题
- */
-export const reportTopic = <ThrowOnError extends boolean = false>(options: Options<ReportTopicData, ThrowOnError>): RequestResult<ReportTopicResponses, unknown, ThrowOnError> => (options.client ?? client).delete<ReportTopicResponses, unknown, ThrowOnError>({
-    responseType: 'json',
-    url: '/topic/report/topic/{topicId}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
  * 删除主题
  */
 export const removeTopic = <ThrowOnError extends boolean = false>(options: Options<RemoveTopicData, ThrowOnError>): RequestResult<RemoveTopicResponses, unknown, ThrowOnError> => (options.client ?? client).delete<RemoveTopicResponses, unknown, ThrowOnError>({
@@ -286,15 +259,6 @@ export const getTransactions = <ThrowOnError extends boolean = false>(options: O
 });
 
 /**
- * 获取提案步骤
- */
-export const listSteps = <ThrowOnError extends boolean = false>(options?: Options<ListStepsData, ThrowOnError>): RequestResult<ListStepsResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListStepsResponses, unknown, ThrowOnError>({
-    responseType: 'json',
-    url: '/proposal/steps',
-    ...options
-});
-
-/**
  * 获取提案列表
  *
  * 分页获取提案列表
@@ -322,7 +286,8 @@ export const createProposal = <ThrowOnError extends boolean = false>(options: Op
 /**
  * 提案详情
  */
-export const findProposal = <ThrowOnError extends boolean = false>(options: Options<FindProposalData, ThrowOnError>): RequestResult<FindProposalResponses, unknown, ThrowOnError> => (options.client ?? client).get<FindProposalResponses, unknown, ThrowOnError>({
+export const proposalControllerFindProposal = <ThrowOnError extends boolean = false>(options: Options<ProposalControllerFindProposalData, ThrowOnError>): RequestResult<ProposalControllerFindProposalResponses, unknown, ThrowOnError> => (options.client ?? client).get<ProposalControllerFindProposalResponses, unknown, ThrowOnError>({
+    responseTransformer: proposalControllerFindProposalResponseTransformer,
     responseType: 'json',
     url: '/proposal/{id}',
     ...options
@@ -379,4 +344,34 @@ export const createCommentReply = <ThrowOnError extends boolean = false>(options
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * 获取当前用户记录
+ */
+export const getSelfRecord = <ThrowOnError extends boolean = false>(options?: Options<GetSelfRecordData, ThrowOnError>): RequestResult<GetSelfRecordResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetSelfRecordResponses, unknown, ThrowOnError>({
+    responseTransformer: getSelfRecordResponseTransformer,
+    responseType: 'json',
+    url: '/bd/me',
+    ...options
+});
+
+/**
+ * 获取用户记录
+ */
+export const getBdRecord = <ThrowOnError extends boolean = false>(options: Options<GetBdRecordData, ThrowOnError>): RequestResult<GetBdRecordResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetBdRecordResponses, unknown, ThrowOnError>({
+    responseTransformer: getBdRecordResponseTransformer,
+    responseType: 'json',
+    url: '/bd/{id}',
+    ...options
+});
+
+/**
+ * 获取用户所有记录
+ */
+export const getBdRecordList = <ThrowOnError extends boolean = false>(options: Options<GetBdRecordListData, ThrowOnError>): RequestResult<GetBdRecordListResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetBdRecordListResponses, unknown, ThrowOnError>({
+    responseTransformer: getBdRecordListResponseTransformer,
+    responseType: 'json',
+    url: '/bd/{id}/list',
+    ...options
 });

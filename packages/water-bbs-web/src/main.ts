@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { vAuthed } from './directive';
+import { vAuthed, vGovernanceMember } from './directive';
 import './assets/style.css';
 import { router } from '@/router';
 import { createPinia } from 'pinia';
@@ -23,6 +23,7 @@ app.use(VueQueryPlugin, { queryClient });
 app.use(router);
 app.use(pinia);
 app.directive('authed', vAuthed);
+app.directive('governance-member', vGovernanceMember);
 
 setupClient();
 

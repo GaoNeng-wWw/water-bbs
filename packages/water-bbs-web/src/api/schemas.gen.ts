@@ -486,34 +486,6 @@ export const CreateTopicDtoSchema = {
     ]
 } as const;
 
-export const ReportDtoSchema = {
-    type: 'object',
-    properties: {
-        title: {
-            type: 'string'
-        },
-        reason: {
-            type: 'string'
-        },
-        proposalEndAt: {
-            type: 'string'
-        },
-        remove: {
-            type: 'boolean'
-        },
-        emergency: {
-            type: 'boolean'
-        }
-    },
-    required: [
-        'title',
-        'reason',
-        'proposalEndAt',
-        'remove',
-        'emergency'
-    ]
-} as const;
-
 export const UpdateTopicDtoSchema = {
     type: 'object',
     properties: {
@@ -704,25 +676,36 @@ export const ListTransactionsResponseSchema = {
     ]
 } as const;
 
-export const StepInfoSchema = {
+export const CursorPaginationSchema = {
     type: 'object',
     properties: {
-        key: {
-            type: 'string'
+        items: {
+            description: '数据',
+            type: 'array',
+            items: {
+                type: 'string'
+            }
         },
-        ui: {
+        nextCursor: {
             type: 'object',
-            additionalProperties: {}
+            description: '下一页的分页',
+            nullable: true
         },
-        param: {
+        prevCursor: {
             type: 'object',
-            additionalProperties: {}
+            description: '上一页的分页',
+            nullable: true
+        },
+        total: {
+            type: 'number',
+            description: '总数'
         }
     },
     required: [
-        'key',
-        'ui',
-        'param'
+        'items',
+        'nextCursor',
+        'prevCursor',
+        'total'
     ]
 } as const;
 
@@ -749,22 +732,6 @@ export const ListProposalItemSchema = {
         updatedAt: {
             type: 'string',
             description: '更新时间'
-        },
-        yes: {
-            type: 'number',
-            description: '同意数'
-        },
-        no: {
-            type: 'number',
-            description: '反对数'
-        },
-        total: {
-            type: 'number',
-            description: '总票数'
-        },
-        endAt: {
-            type: 'string',
-            description: '过期时间'
         }
     },
     required: [
@@ -772,44 +739,7 @@ export const ListProposalItemSchema = {
         'title',
         'status',
         'createdAt',
-        'updatedAt',
-        'yes',
-        'no',
-        'total',
-        'endAt'
-    ]
-} as const;
-
-export const ListProposalResponseSchema = {
-    type: 'object',
-    properties: {
-        items: {
-            description: '提案列表',
-            type: 'array',
-            items: {
-                $ref: '#/components/schemas/ListProposalItem'
-            }
-        },
-        nextCursor: {
-            type: 'string',
-            description: '下一页游标',
-            nullable: true
-        },
-        prevCursor: {
-            type: 'string',
-            description: '上一页游标',
-            nullable: true
-        },
-        total: {
-            type: 'number',
-            description: '总提案数'
-        }
-    },
-    required: [
-        'items',
-        'nextCursor',
-        'prevCursor',
-        'total'
+        'updatedAt'
     ]
 } as const;
 
@@ -828,85 +758,6 @@ export const ProposalStepSchema = {
     required: [
         'stepName',
         'param'
-    ]
-} as const;
-
-export const ProposalVoteSummarySchema = {
-    type: 'object',
-    properties: {
-        yes: {
-            type: 'number',
-            description: '支持票'
-        },
-        no: {
-            type: 'number',
-            description: '反对票'
-        }
-    },
-    required: [
-        'yes',
-        'no'
-    ]
-} as const;
-
-export const FindProposalResponseDTOSchema = {
-    type: 'object',
-    properties: {
-        id: {
-            type: 'string',
-            description: '提案ID'
-        },
-        content: {
-            type: 'string',
-            description: '提案内容'
-        },
-        title: {
-            type: 'string',
-            description: '提案标题'
-        },
-        step: {
-            description: '提案步骤',
-            type: 'array',
-            items: {
-                $ref: '#/components/schemas/ProposalStep'
-            }
-        },
-        createdAt: {
-            type: 'string',
-            description: '提案创建时间'
-        },
-        status: {
-            type: 'string',
-            description: '提案状态',
-            enum: [
-                'pending',
-                'controversy',
-                'approved',
-                'rejected',
-                'executing',
-                'executed',
-                'failed',
-                'cancelled',
-                'emergency-review'
-            ]
-        },
-        voteSummary: {
-            description: '提案投票摘要',
-            allOf: [
-                {
-                    $ref: '#/components/schemas/ProposalVoteSummary'
-                }
-            ]
-        }
-    },
-    required: [
-        'id',
-        'content',
-        'title',
-        'step',
-        'createdAt',
-        'status',
-        'voteSummary'
     ]
 } as const;
 
@@ -1159,6 +1010,35 @@ export const GetReplyResponseSchema = {
         'replyId',
         'content',
         'creator'
+    ]
+} as const;
+
+export const GovernanceMemberInfoSchema = {
+    type: 'object',
+    properties: {
+        kind: {
+            type: 'string',
+            description: '治理成员类型',
+            enum: [
+                'admin',
+                'bd'
+            ]
+        },
+        startedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: '开始时间'
+        },
+        endedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: '结束时间'
+        }
+    },
+    required: [
+        'kind',
+        'startedAt',
+        'endedAt'
     ]
 } as const;
 
