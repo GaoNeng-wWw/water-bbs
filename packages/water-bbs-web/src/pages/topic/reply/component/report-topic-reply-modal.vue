@@ -1,24 +1,61 @@
 <script lang="ts" setup>
-import { UiForm, UiFormItem, UiInput, UiCalendarSelectField } from '@/components/ui';
-import { CalendarDate } from '@internationalized/date';
-import { ref, type Ref } from 'vue';
+import { reportReply } from '@/api';
+import { UiButton, UiForm, UiFormItem, UiInput, UiCalendarSelectField, UiCheckbox } from '@/components/ui';
+import { CalendarDate, type DateValue } from '@internationalized/date';
+import { ConfigProvider } from 'reka-ui';
+import { reactive } from 'vue';
 
-const date = new Date();
+const { replyId } = defineProps<{ replyId: string }>();
 
-const now = ref(
-  new CalendarDate(date.getFullYear() + 1, date.getMonth(), date.getDate() + 1),
-) as Ref<CalendarDate>;
+const now = new Date();
+
+const model = reactive({
+  title: '',
+  duration: new CalendarDate(now.getFullYear() + 1, now.getMonth(), now.getDate() + 1) as DateValue,
+  reason: '',
+  emergency: false,
+  remove: false,
+});
+
+const submit = () => {
+  reportReply({
+    body: {
+      emergency: model.emergency,
+      proposalEndAt: model.duration.toString(),
+      reason: model.reason,
+      title: model.title,
+      remove: model.remove,
+    },
+    path: { replyId },
+  });
+};
 </script>
 
 <template>
   <div class="w-full">
-    <ui-form>
-      <ui-form-item prop="reason" label="举报原因">
-        <ui-input placeholder="请输入举报原因" />
+    <ui-form class="space-y-2">
+      <ui-form-item prop="title" label="提案标题">
+        <ui-input v-model="model.title" placeholder="15字以内阐述举报原因" />
       </ui-form-item>
-      <ui-form-item prop="duration" label="提案时常">
-        <ui-calendar-select-field v-model="now" />
+      <ui-form-item prop="reason" label="举报原因">
+        <ui-input v-model="model.reason" placeholder="举报详细原因" />
+      </ui-form-item>
+      <ui-form-item prop="duration" label="提案时长">
+        <config-provider locale="zh">
+          <ui-calendar-select-field v-model="model.duration as DateValue" />
+        </config-provider>
+      </ui-form-item>
+      <ui-form-item prop="emergency" label="紧急提案">
+        <ui-checkbox v-model="model.emergency" />
+      </ui-form-item>
+      <ui-form-item prop="remove" label="删除">
+        <ui-checkbox v-model="model.remove" />
       </ui-form-item>
     </ui-form>
+    <div class="mt-3">
+      <ui-button color="primary" size="full" @click="submit">
+        提交举报
+      </ui-button>
+    </div>
   </div>
 </template>

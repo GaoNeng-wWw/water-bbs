@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { reportReply } from '@/api';
 import {
   UiPopover,
   UiPopoverContent,
@@ -51,7 +50,7 @@ const onReport = () => {
                 </ui-listbox-item>
               </ui-dialog-trigger>
               <ui-dialog-content>
-                <report-topic-reply-modal />
+                <report-topic-reply-modal :reply-id="props.replyId" />
               </ui-dialog-content>
             </ui-dialog>
           </ui-listbox-section>

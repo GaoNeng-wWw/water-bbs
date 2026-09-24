@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { listProposalItems } from '@/api';
-import { ref } from 'vue';
+import { computed } from 'vue';
 import ProposalItem from './proposal-item.vue';
 
-const { data, isLoading, refetch } = useInfiniteQuery({
+const { data } = useInfiniteQuery({
   queryKey: ['proposalItems'],
   queryFn: ({ pageParam }) => {
     return listProposalItems({
@@ -20,14 +20,15 @@ const { data, isLoading, refetch } = useInfiniteQuery({
     return param?.nextCursor?.toString() ?? undefined;
   },
 });
+
+const items = computed(() => {
+  const pages = data.value?.pages ?? [];
+  return pages.flatMap(page => page?.items ?? []);
+});
 </script>
 
 <template>
   <div class="w-full space-y-4">
-    <proposal-item />
-    <proposal-item />
-    <proposal-item />
-    <proposal-item />
-    <proposal-item />
+    <proposal-item v-for="item in items" :id="item.id" :key="item.id" :name="item.title" :agree="item.yes" :disagree="item.no" :end-at="item.endAt" />
   </div>
 </template>

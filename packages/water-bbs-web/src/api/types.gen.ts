@@ -315,7 +315,11 @@ export type CreateTopicDto = {
 };
 
 export type ReportDto = {
-    [key: string]: unknown;
+    title: string;
+    reason: string;
+    proposalEndAt: string;
+    remove: boolean;
+    emergency: boolean;
 };
 
 export type UpdateTopicDto = {
@@ -452,29 +456,6 @@ export type StepInfo = {
     };
 };
 
-export type CursorPagination = {
-    /**
-     * 数据
-     */
-    items: Array<string>;
-    /**
-     * 下一页的分页
-     */
-    nextCursor: {
-        [key: string]: unknown;
-    };
-    /**
-     * 上一页的分页
-     */
-    prevCursor: {
-        [key: string]: unknown;
-    };
-    /**
-     * 总数
-     */
-    total: number;
-};
-
 export type ListProposalItem = {
     /**
      * 提案ID
@@ -510,6 +491,10 @@ export type ListProposalItem = {
      * 总票数
      */
     total: number;
+    /**
+     * 过期时间
+     */
+    endAt: string;
 };
 
 export type ListProposalResponse = {
@@ -1249,9 +1234,10 @@ export type ListProposalItemsData = {
 };
 
 export type ListProposalItemsResponses = {
-    200: CursorPagination & {
-        data?: Array<ListProposalResponse>;
-    };
+    /**
+     * 获取提案列表
+     */
+    200: ListProposalResponse;
 };
 
 export type ListProposalItemsResponse = ListProposalItemsResponses[keyof ListProposalItemsResponses];

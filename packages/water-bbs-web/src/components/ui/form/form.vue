@@ -24,7 +24,16 @@ watch(() => model, () => {
 </script>
 
 <template>
-  <form v-bind="$attrs">
+  <form v-bind="$attrs" class="form">
     <slot />
   </form>
 </template>
+
+<style scoped>
+.form {
+  display: grid;
+  grid-template-columns: repeat(1, max-content minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 16px;
+}
+</style>

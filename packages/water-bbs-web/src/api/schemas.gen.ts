@@ -488,7 +488,30 @@ export const CreateTopicDtoSchema = {
 
 export const ReportDtoSchema = {
     type: 'object',
-    properties: {}
+    properties: {
+        title: {
+            type: 'string'
+        },
+        reason: {
+            type: 'string'
+        },
+        proposalEndAt: {
+            type: 'string'
+        },
+        remove: {
+            type: 'boolean'
+        },
+        emergency: {
+            type: 'boolean'
+        }
+    },
+    required: [
+        'title',
+        'reason',
+        'proposalEndAt',
+        'remove',
+        'emergency'
+    ]
 } as const;
 
 export const UpdateTopicDtoSchema = {
@@ -703,37 +726,6 @@ export const StepInfoSchema = {
     ]
 } as const;
 
-export const CursorPaginationSchema = {
-    type: 'object',
-    properties: {
-        items: {
-            description: '数据',
-            type: 'array',
-            items: {
-                type: 'string'
-            }
-        },
-        nextCursor: {
-            type: 'object',
-            description: '下一页的分页'
-        },
-        prevCursor: {
-            type: 'object',
-            description: '上一页的分页'
-        },
-        total: {
-            type: 'number',
-            description: '总数'
-        }
-    },
-    required: [
-        'items',
-        'nextCursor',
-        'prevCursor',
-        'total'
-    ]
-} as const;
-
 export const ListProposalItemSchema = {
     type: 'object',
     properties: {
@@ -769,6 +761,10 @@ export const ListProposalItemSchema = {
         total: {
             type: 'number',
             description: '总票数'
+        },
+        endAt: {
+            type: 'string',
+            description: '过期时间'
         }
     },
     required: [
@@ -779,7 +775,8 @@ export const ListProposalItemSchema = {
         'updatedAt',
         'yes',
         'no',
-        'total'
+        'total',
+        'endAt'
     ]
 } as const;
 

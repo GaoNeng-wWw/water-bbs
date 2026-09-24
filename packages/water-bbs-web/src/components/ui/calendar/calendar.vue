@@ -8,9 +8,9 @@ import MonthPick from './month-pick.vue';
 import DayPicker from './day-picker.vue';
 import YearPicker from './year-picker.vue';
 
-const modelValue = defineModel<string | Date | DateValue>({ required: true, default: () => new Date() });
+const modelValue = defineModel<DateValue>({ required: true });
 
-const date = computed(() => typeof modelValue.value === 'string' ? new Date(modelValue.value) : modelValue.value instanceof Date ? modelValue.value : modelValue.value);
+const date = computed(() => modelValue.value);
 const currentDate = ref(
   date.value instanceof Date
     ? new CalendarDate(
@@ -42,7 +42,9 @@ watch(placeholder, () => {
   currentDate.value = placeholder.value as DateValue;
 });
 watch(currentDate, () => {
-  modelValue.value = new Date(currentDate.value.toString());
+  if (modelValue.value !== undefined) {
+    modelValue.value = currentDate.value as DateValue;
+  }
 });
 
 provideContext({
@@ -66,11 +68,9 @@ provideContext({
 </script>
 
 <template>
-  <config-provider locale="zh">
-    <div>
-      <year-picker v-if="mode === 'year'" />
-      <month-pick v-if="mode === 'month'" />
-      <day-picker v-if="mode === 'day'" />
-    </div>
-  </config-provider>
+  <div>
+    <year-picker v-if="mode === 'year'" />
+    <month-pick v-if="mode === 'month'" />
+    <day-picker v-if="mode === 'day'" />
+  </div>
 </template>

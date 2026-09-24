@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
-import { ApiCursorPagination, CursorDTO } from '@app/shared';
+import { CursorDTO } from '@app/shared';
 import { Member, MemberKind, type ProposalId } from '@app/gamification';
 import {
   CreateProposalDTO,

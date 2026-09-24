@@ -97,7 +97,7 @@ const onSubmit = (content: string, commentId: string) => {
     <div class="w-full h-fit" @click.stop.prevent>
       <editor-content :editor="editor" />
     </div>
-    <reply-card-toolbar @comment-click="toggleCommentVisbility" />
+    <reply-card-toolbar :reply-id="props.id" @comment-click="toggleCommentVisbility" />
     <animate-presence>
       <motion.div
         v-show="commentVisiblity"

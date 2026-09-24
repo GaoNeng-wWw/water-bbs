@@ -33,8 +33,6 @@ const listProposalResponseSchemaResponseTransformer = (data: any) => {
 };
 
 export const listProposalItemsResponseTransformer = async (data: any): Promise<ListProposalItemsResponse> => {
-    if (data.data) {
-        data.data = data.data.map((item: any) => listProposalResponseSchemaResponseTransformer(item));
-    }
+    data = listProposalResponseSchemaResponseTransformer(data);
     return data;
 };

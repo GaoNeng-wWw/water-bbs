@@ -8,4 +8,4 @@ export const useProfile = defineStore('profile', () => {
     profile.value = info;
   };
   return { profile, setProfile };
-}, {persist: true});
+}, { persist: true });

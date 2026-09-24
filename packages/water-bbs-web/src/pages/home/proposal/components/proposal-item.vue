@@ -12,7 +12,7 @@ const { id, name, endAt, agree, disagree } = defineProps<{
 }>();
 
 const endAtDate = computed(() => {
-  return Temporal.PlainDate.from(endAt instanceof Date ? endAt.toISOString() : endAt);
+  return Temporal.Instant.from(endAt instanceof Date ? endAt.toISOString() : endAt).toZonedDateTimeISO('Asia/Shanghai');
 });
 const now = computed(() => {
   return Temporal.Now.plainDateISO();

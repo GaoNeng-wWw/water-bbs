@@ -44,9 +44,10 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      port: 8848,
       proxy: {
         '/api': {
-          target: 'http://localhost:3000',
+          target: 'http://localhost:3000', 
           changeOrigin: true,
           rewrite(path) {
             return path.replace('/api', '');

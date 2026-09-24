@@ -10,21 +10,14 @@ defineOptions({
   inheritAttrs: true,
 });
 
-const modelValue = defineModel<Date | string>({ default: () => new Date(), required: true });
+const modelValue = defineModel<DateValue>({ required: true });
 
-const date = computed(() => typeof modelValue.value === 'string' ? new Date(modelValue.value) : modelValue.value instanceof Date ? modelValue.value : modelValue.value);
-const currentDate = ref(
-  date.value instanceof Date
-    ? new CalendarDate(
-      date.value.getFullYear(),
-      date.value.getMonth() + 1,
-      date.value.getDate() + 1,
-    ) as DateValue
-    : date.value,
-) as Ref<DateValue>;
+const date = computed(() => modelValue.value);
+const currentDate = ref(date.value) as Ref<DateValue>;
 
 watch(currentDate, () => {
-  modelValue.value = currentDate.value.toDate('zh');
+  modelValue.value = currentDate.value;
+  console.log(modelValue.value)
 });
 </script>
 
@@ -35,6 +28,7 @@ watch(currentDate, () => {
         <date-field-root
           v-slot="{ segments }"
           :default-value="currentDate"
+          :model-value="currentDate"
           class="flex w-fit items-center justify-center gap-2"
         >
           <template
