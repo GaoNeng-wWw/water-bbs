@@ -30,9 +30,9 @@ export class CursorDTO {
 export class CursorPagination<T> {
   @ApiProperty({ description: '数据' })
   items: T[];
-  @ApiProperty({ description: '下一页的分页' })
+  @ApiProperty({ description: '下一页的分页', nullable: true })
   nextCursor?: string | null;
-  @ApiProperty({ description: '上一页的分页' })
+  @ApiProperty({ description: '上一页的分页', nullable: true })
   prevCursor?: string | null;
   @ApiProperty({ description: '总数' })
   total: number;
@@ -54,7 +54,7 @@ export const ApiCursorPagination = <TModel extends NestType<any>>(
           },
           {
             properties: {
-              data: {
+              items: {
                 type: 'array',
                 items: {
                   $ref: getSchemaPath(model),
