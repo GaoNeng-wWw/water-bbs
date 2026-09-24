@@ -448,13 +448,13 @@ export type CursorPagination = {
      */
     nextCursor: {
         [key: string]: unknown;
-    };
+    } | null;
     /**
      * 上一页的分页
      */
     prevCursor: {
         [key: string]: unknown;
-    };
+    } | null;
     /**
      * 总数
      */
@@ -637,6 +637,21 @@ export type GetReplyResponse = {
      * 创建人ID
      */
     creator: string;
+};
+
+export type GovernanceMemberInfo = {
+    /**
+     * 治理成员类型
+     */
+    kind: 'admin' | 'bd';
+    /**
+     * 开始时间
+     */
+    startedAt: Date;
+    /**
+     * 结束时间
+     */
+    endedAt: Date;
 };
 
 export type HttpPresentationError = {
@@ -1115,7 +1130,7 @@ export type ListProposalItemsData = {
 
 export type ListProposalItemsResponses = {
     200: CursorPagination & {
-        data?: Array<ListProposalItem>;
+        items?: Array<ListProposalItem>;
     };
 };
 
@@ -1282,3 +1297,54 @@ export type CreateCommentReplyResponses = {
 };
 
 export type CreateCommentReplyResponse = CreateCommentReplyResponses[keyof CreateCommentReplyResponses];
+
+export type GetSelfRecordData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/bd/me';
+};
+
+export type GetSelfRecordResponses = {
+    200: GovernanceMemberInfo;
+};
+
+export type GetSelfRecordResponse = GetSelfRecordResponses[keyof GetSelfRecordResponses];
+
+export type GetBdRecordData = {
+    body?: never;
+    path: {
+        /**
+         * 用户ID
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/bd/{id}';
+};
+
+export type GetBdRecordResponses = {
+    200: GovernanceMemberInfo;
+};
+
+export type GetBdRecordResponse = GetBdRecordResponses[keyof GetBdRecordResponses];
+
+export type GetBdRecordListData = {
+    body?: never;
+    path: {
+        /**
+         * 用户ID
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/bd/{id}/list';
+};
+
+export type GetBdRecordListResponses = {
+    200: CursorPagination & {
+        items?: Array<GovernanceMemberInfo>;
+    };
+};
+
+export type GetBdRecordListResponse = GetBdRecordListResponses[keyof GetBdRecordListResponses];

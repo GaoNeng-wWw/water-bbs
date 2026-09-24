@@ -688,11 +688,13 @@ export const CursorPaginationSchema = {
         },
         nextCursor: {
             type: 'object',
-            description: '下一页的分页'
+            description: '下一页的分页',
+            nullable: true
         },
         prevCursor: {
             type: 'object',
-            description: '上一页的分页'
+            description: '上一页的分页',
+            nullable: true
         },
         total: {
             type: 'number',
@@ -1008,6 +1010,35 @@ export const GetReplyResponseSchema = {
         'replyId',
         'content',
         'creator'
+    ]
+} as const;
+
+export const GovernanceMemberInfoSchema = {
+    type: 'object',
+    properties: {
+        kind: {
+            type: 'string',
+            description: '治理成员类型',
+            enum: [
+                'admin',
+                'bd'
+            ]
+        },
+        startedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: '开始时间'
+        },
+        endedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: '结束时间'
+        }
+    },
+    required: [
+        'kind',
+        'startedAt',
+        'endedAt'
     ]
 } as const;
 
