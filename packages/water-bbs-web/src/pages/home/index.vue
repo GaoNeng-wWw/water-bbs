@@ -35,7 +35,7 @@ watch(activeId, () => {
     <app-nav-bar />
     <div class="max-w-5xl flex flex-col mx-auto pt-8 pb-4 gap-8 px-5">
       <div class="w-full">
-        <h1 v-if="!isLoading" v-governance-member class="text-3xl text-surface-fg">
+        <h1 v-if="!isLoading" class="text-3xl text-surface-fg">
           {{ category?.name }}
         </h1>
         <ui-skeleton v-else class="w-64! h-3" animated />
