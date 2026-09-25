@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import ProposalProgress from './proposal-progress.vue';
+import ProposalBadge from './proposal-badge.vue';
 import { useQuery } from '@tanstack/vue-query';
 import { findProposal } from '@/api';
 const { id, name, endAt, agree, disagree } = defineProps<{
@@ -17,11 +18,6 @@ const endAtDate = computed(() => {
 const now = computed(() => {
   return Temporal.Now.plainDateISO();
 });
-const remainDay = computed(() => {
-  const days = now.value.until(endAtDate.value).total({ unit: 'days' });
-  return days < 0 ? `${days}天前结束` : `剩余${days}天`;
-});
-
 const { data } = useQuery({
   queryFn: () => {
     return findProposal({
@@ -33,24 +29,87 @@ const { data } = useQuery({
   },
   queryKey: ['findProposal', id],
 });
+
+const badgeText = computed(() => {
+  const status = data.value?.status;
+  if (!status) {
+    return '';
+  }
+  if (status === 'pending') {
+    const days = now.value.until(endAtDate.value).total({ unit: 'days' });
+    return days < 0 ? `${days}天前结束` : `剩余${days}天`;
+  }
+  if (status === 'controversy') {
+    return '争议';
+  }
+  if (status === 'approved') {
+    return '已通过';
+  }
+  if (status === 'rejected') {
+    return '已拒绝';
+  }
+  if (status === 'executing') {
+    return '执行中';
+  }
+  if (status === 'executed') {
+    return '已完成';
+  }
+  if (status === 'failed') {
+    return '执行失败';
+  }
+  if (status === 'cancelled') {
+    return '已取消';
+  }
+  if (status === 'emergency-review') {
+    return '紧急审核';
+  }
+  return '';
+});
+const color = computed(() => {
+  if (!data.value) {
+    return 'surface';
+  }
+  const status = data.value.status;
+  switch (status) {
+    case 'pending':
+      return 'surface';
+    case 'controversy':
+      return 'warning';
+    case 'approved':
+      return 'success';
+    case 'rejected':
+      return 'danger';
+    case 'executing':
+      return 'primary';
+    case 'executed':
+      return 'success';
+    case 'failed':
+      return 'danger';
+    case 'cancelled':
+      return 'danger';
+    case 'emergency-review':
+      return 'danger';
+    default:
+      return 'surface';
+  }
+});
 </script>
 
 <template>
-  <div class="w-full flex flex-col gap-2 bg-surface-100 p-2 rounded-md border border-solid border-surface-200 text-surface-fg">
+  <div v-if="data" class="w-full flex flex-col gap-2 bg-surface-100 p-2 rounded-md border border-solid border-surface-200 text-surface-fg">
     <div class="w-full flex gap-2 items-center">
-      <router-link class="transition duration-fast hover:text-primary" to="/proposal/123">
+      <router-link class="transition duration-fast hover:text-primary" :to="`/proposal/${data.id}`">
         <p class="text-xl">
           {{ name }}
         </p>
       </router-link>
-      <div class="badge">
-        {{ remainDay }}
-      </div>
+      <proposal-badge v-if="data" :text="badgeText" :color="color" />
+      <proposal-badge v-if="data.kind === 'emergency'" text="紧急事务" color="danger" />
     </div>
     <div class="w-full">
       {{ data?.content }}
     </div>
-    <proposal-progress :agree="agree" :disagree="disagree" />
+    <proposal-progress v-if="data.kind !== 'emergency'" :agree="agree" :disagree="disagree" />
   </div>
 </template>
 

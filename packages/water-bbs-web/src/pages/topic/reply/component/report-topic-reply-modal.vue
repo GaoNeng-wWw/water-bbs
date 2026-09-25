@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { reportReply } from '@/api';
 import { UiButton, UiForm, UiFormItem, UiInput, UiCalendarSelectField, UiCheckbox } from '@/components/ui';
+import { GovernanceMemberKind } from '@/directive';
 import { CalendarDate, type DateValue } from '@internationalized/date';
 import { ConfigProvider } from 'reka-ui';
 import { reactive } from 'vue';
@@ -45,10 +46,10 @@ const submit = () => {
           <ui-calendar-select-field v-model="model.duration as DateValue" />
         </config-provider>
       </ui-form-item>
-      <ui-form-item prop="emergency" label="紧急提案">
+      <ui-form-item v-governance-member="GovernanceMemberKind.Bd" prop="emergency" label="紧急提案">
         <ui-checkbox v-model="model.emergency" />
       </ui-form-item>
-      <ui-form-item prop="remove" label="删除">
+      <ui-form-item v-governance-member="GovernanceMemberKind.Bd" prop="remove" label="删除">
         <ui-checkbox v-model="model.remove" />
       </ui-form-item>
     </ui-form>

@@ -1,4 +1,4 @@
-import { ProposalStatus } from '@app/gamification';
+import { ProposalKind, ProposalStatus } from '@app/gamification';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
@@ -34,6 +34,8 @@ export class ListProposalItem {
   @ApiProperty({ description: '过期时间' })
   @Transform(({ value }) => (value as Date).toISOString())
   endAt: string;
+  @ApiProperty({ description: '提案类型', enum: ProposalKind })
+  kind: ProposalKind;
 
   constructor(props: ListProposalItemProps) {
     Object.assign(this, props);

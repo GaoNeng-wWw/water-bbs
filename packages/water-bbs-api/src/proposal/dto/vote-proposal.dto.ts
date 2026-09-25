@@ -9,7 +9,7 @@ export enum VoteKind {
 
 export class VoteProposalDTO {
   @IsString()
-  @ApiProperty({ description: '提案ID' })
+  @ApiProperty({ description: '提案ID', type: String })
   @IsNotEmpty()
   id: ProposalId;
   @IsEnum(VoteKind)

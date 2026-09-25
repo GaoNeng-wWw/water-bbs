@@ -314,6 +314,14 @@ export type CreateTopicDto = {
     pinned: boolean;
 };
 
+export type ReportDto = {
+    title: string;
+    reason: string;
+    proposalEndAt: string;
+    remove: boolean;
+    emergency: boolean;
+};
+
 export type UpdateTopicDto = {
     /**
      * 主题标题
@@ -438,27 +446,14 @@ export type ListTransactionsResponse = {
     nextCursor: string;
 };
 
-export type CursorPagination = {
-    /**
-     * 数据
-     */
-    items: Array<string>;
-    /**
-     * 下一页的分页
-     */
-    nextCursor: {
+export type StepInfo = {
+    key: string;
+    ui: {
         [key: string]: unknown;
-    } | null;
-    /**
-     * 上一页的分页
-     */
-    prevCursor: {
+    };
+    param: {
         [key: string]: unknown;
-    } | null;
-    /**
-     * 总数
-     */
-    total: number;
+    };
 };
 
 export type ListProposalItem = {
@@ -484,6 +479,45 @@ export type ListProposalItem = {
      * 更新时间
      */
     updatedAt: string;
+    /**
+     * 同意数
+     */
+    yes: number;
+    /**
+     * 反对数
+     */
+    no: number;
+    /**
+     * 总票数
+     */
+    total: number;
+    /**
+     * 过期时间
+     */
+    endAt: string;
+    /**
+     * 提案类型
+     */
+    kind: 'normal' | 'emergency';
+};
+
+export type ListProposalResponse = {
+    /**
+     * 提案列表
+     */
+    items: Array<ListProposalItem>;
+    /**
+     * 下一页游标
+     */
+    nextCursor: string | null;
+    /**
+     * 上一页游标
+     */
+    prevCursor: string | null;
+    /**
+     * 总提案数
+     */
+    total: number;
 };
 
 export type ProposalStep = {
@@ -497,6 +531,52 @@ export type ProposalStep = {
     param: {
         [key: string]: unknown;
     };
+};
+
+export type ProposalVoteSummary = {
+    /**
+     * 支持票
+     */
+    yes: number;
+    /**
+     * 反对票
+     */
+    no: number;
+};
+
+export type FindProposalResponseDto = {
+    /**
+     * 提案ID
+     */
+    id: string;
+    /**
+     * 提案内容
+     */
+    content: string;
+    /**
+     * 提案标题
+     */
+    title: string;
+    /**
+     * 提案步骤
+     */
+    step: Array<ProposalStep>;
+    /**
+     * 提案创建时间
+     */
+    createdAt: string;
+    /**
+     * 提案状态
+     */
+    status: 'pending' | 'controversy' | 'approved' | 'rejected' | 'executing' | 'executed' | 'failed' | 'cancelled' | 'emergency-review';
+    /**
+     * 提案类型
+     */
+    kind: 'normal' | 'emergency';
+    /**
+     * 提案投票摘要
+     */
+    voteSummary: ProposalVoteSummary;
 };
 
 export type CreateProposalDto = {
@@ -549,9 +629,7 @@ export type VoteProposalDto = {
     /**
      * 提案ID
      */
-    id: {
-        [key: string]: unknown;
-    };
+    id: string;
     /**
      * 投票类型
      */
@@ -652,6 +730,29 @@ export type GovernanceMemberInfo = {
      * 结束时间
      */
     endedAt: Date;
+};
+
+export type CursorPagination = {
+    /**
+     * 数据
+     */
+    items: Array<string>;
+    /**
+     * 下一页的分页
+     */
+    nextCursor: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * 上一页的分页
+     */
+    prevCursor: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * 总数
+     */
+    total: number;
 };
 
 export type HttpPresentationError = {
@@ -961,7 +1062,7 @@ export type RemoveReplyData = {
         /**
          * 回复ID
          */
-        replyId: unknown;
+        replyId: string;
     };
     query?: never;
     url: '/topic/replies/{replyId}';
@@ -972,6 +1073,42 @@ export type RemoveReplyResponses = {
 };
 
 export type RemoveReplyResponse = RemoveReplyResponses[keyof RemoveReplyResponses];
+
+export type ReportReplyData = {
+    body: ReportDto;
+    path: {
+        /**
+         * 回复ID
+         */
+        replyId: string;
+    };
+    query?: never;
+    url: '/topic/report/reply/{replyId}';
+};
+
+export type ReportReplyResponses = {
+    200: ReplyInfo;
+};
+
+export type ReportReplyResponse = ReportReplyResponses[keyof ReportReplyResponses];
+
+export type ReportTopicData = {
+    body: ReportDto;
+    path: {
+        /**
+         * 主题ID
+         */
+        topicId: unknown;
+    };
+    query?: never;
+    url: '/topic/report/topic/{topicId}';
+};
+
+export type ReportTopicResponses = {
+    200: TopicInfo;
+};
+
+export type ReportTopicResponse = ReportTopicResponses[keyof ReportTopicResponses];
 
 export type RemoveTopicData = {
     body?: never;
@@ -1108,6 +1245,22 @@ export type GetTransactionsResponses = {
 
 export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
 
+export type ListStepsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/proposal/steps';
+};
+
+export type ListStepsResponses = {
+    /**
+     * 获取提案步骤
+     */
+    200: Array<StepInfo>;
+};
+
+export type ListStepsResponse = ListStepsResponses[keyof ListStepsResponses];
+
 export type ListProposalItemsData = {
     body?: never;
     path?: never;
@@ -1115,23 +1268,20 @@ export type ListProposalItemsData = {
         /**
          * 分页游标
          */
-        cursor: string;
+        cursor?: string;
         /**
          * 每页数量
          */
         size: number;
-        /**
-         * 每页数量
-         */
-        limit: unknown;
     };
     url: '/proposal';
 };
 
 export type ListProposalItemsResponses = {
-    200: CursorPagination & {
-        items?: Array<ListProposalItem>;
-    };
+    /**
+     * 获取提案列表
+     */
+    200: ListProposalResponse;
 };
 
 export type ListProposalItemsResponse = ListProposalItemsResponses[keyof ListProposalItemsResponses];
@@ -1157,26 +1307,26 @@ export type CreateProposalResponses = {
 
 export type CreateProposalResponse = CreateProposalResponses[keyof CreateProposalResponses];
 
-export type ProposalControllerFindProposalData = {
+export type FindProposalData = {
     body?: never;
     path: {
         /**
          * 提案ID
          */
-        id: unknown;
+        id: string;
     };
     query?: never;
     url: '/proposal/{id}';
 };
 
-export type ProposalControllerFindProposalResponses = {
+export type FindProposalResponses = {
     /**
      * 提案详情
      */
-    200: ListProposalItem;
+    200: FindProposalResponseDto;
 };
 
-export type ProposalControllerFindProposalResponse = ProposalControllerFindProposalResponses[keyof ProposalControllerFindProposalResponses];
+export type FindProposalResponse = FindProposalResponses[keyof FindProposalResponses];
 
 export type ResolveControversyData = {
     body?: never;
@@ -1208,12 +1358,7 @@ export type ResolveControversyResponses = {
 
 export type VoteProposalData = {
     body: VoteProposalDto;
-    path: {
-        /**
-         * 用户ID
-         */
-        accountId: unknown;
-    };
+    path?: never;
     query?: never;
     url: '/proposal/vote';
 };

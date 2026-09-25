@@ -97,7 +97,6 @@ export class ProposalController {
     description: '投票提案, 一个提案每人只能投1票',
   })
   @ApiOkResponse({ description: '投票提案', type: VoteProposalResponseDTO })
-  @ApiParam({ name: 'accountId', description: '用户ID' })
   @Post('vote')
   async voteProposal(
     @Body() body: VoteProposalDTO,

@@ -57,6 +57,7 @@ export class ListProposalService implements IQueryHandler<ListProposal> {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         endAt: item.expiredAt,
+        kind: item.kind,
       })),
       prevCursor: items.startCursor,
       nextCursor: items.endCursor,

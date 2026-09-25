@@ -2,25 +2,25 @@ import type { RouteRecordRaw } from 'vue-router';
 
 export default [
   {
-    path: '',
+    path: '/',
     component: () => import('@/pages/home/index.vue'),
     meta: {
       scrollToTop: true,
     },
     children: [
       {
-        path: '',
-        component: () => import('@/pages/home/topic.vue'),
-        meta: {
-          scrollToTop: true,
-        },
-      },
-      {
         path: 'proposal',
         component: () => import('@/pages/home/proposal/index.vue'),
         meta: {
           scrollToTop: true,
           title: 'Proposal',
+        },
+      },
+      {
+        path: '',
+        component: () => import('@/pages/home/topic.vue'),
+        meta: {
+          scrollToTop: true,
         },
       },
       {
@@ -38,5 +38,5 @@ export default [
     meta: {
       scrollToTop: true,
     },
-  }
+  },
 ] as RouteRecordRaw[];
