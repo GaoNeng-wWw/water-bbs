@@ -183,24 +183,19 @@ export class TopicService {
     if (governanceMemberInfo.isErr() && dto.emergency) {
       return err(new Forbidden());
     }
-    const replyIdResult = await this.cb.execute(
-      new HideReplyCommand(id, dto.reason, new Date(dto.proposalEndAt)),
-    );
-    if (replyIdResult.isErr()) {
-      return replyIdResult;
-    }
+    const replyId = reply.value.id;
     const proposalTitle = dto.title;
     const steps: ProposalStep[] = [
       {
         stepName: hideReplyDef.key,
-        param: { replyId: replyIdResult.value, reason: dto.reason },
+        param: { replyId: replyId, reason: dto.reason },
       },
     ];
     if (dto.remove) {
       steps.shift();
       steps.push({
         stepName: removeReplyDef.key,
-        param: { replyId: replyIdResult.value },
+        param: { replyId: replyId },
       });
     }
     await this.cb.execute(
@@ -213,7 +208,7 @@ export class TopicService {
         new Date(dto.proposalEndAt),
       ),
     );
-    return replyIdResult;
+    return replyId;
   }
 
   async reportTopic(id: TopicId, actor: AccountId, dto: ReportDto) {

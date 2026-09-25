@@ -1334,11 +1334,7 @@ export type ResolveControversyData = {
         /**
          * 提案ID
          */
-        id: unknown;
-        /**
-         * 用户ID
-         */
-        accountId: unknown;
+        id: string;
     };
     query: {
         /**

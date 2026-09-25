@@ -6,7 +6,7 @@ const {
   htmlType,
   ...themeProps
 } = defineProps<{
-  color?: 'surface' | 'primary' | 'danger' | 'success' | undefined;
+  color?: 'surface' | 'primary' | 'danger' | 'success' | 'warning' | undefined;
   variant?: 'solid' | 'outline' | 'ghost' | 'text' | 'flat' | undefined;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'full' | undefined;
   icon?: boolean | undefined;

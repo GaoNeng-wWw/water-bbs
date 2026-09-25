@@ -18,6 +18,7 @@ export class ErrorFilter implements ExceptionFilter {
     const resp = http.getResponse<Response>();
     const req = http.getRequest<Request>();
     const lang = req.headers['accept-language'] || 'en-us';
+    // console.log(exception);
     if (exception instanceof DomainError) {
       const { status, key, details, args } = exception;
       const translatedMessage = this.i18n.translate(key, { args, lang });

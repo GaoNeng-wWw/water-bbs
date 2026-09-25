@@ -4,20 +4,13 @@ import ProposalProgress from './proposal-progress.vue';
 import ProposalBadge from './proposal-badge.vue';
 import { useQuery } from '@tanstack/vue-query';
 import { findProposal } from '@/api';
-const { id, name, endAt, agree, disagree } = defineProps<{
+import { proposalBadgeColor, proposalBadgeText } from '@/helper';
+const { id, name, agree, disagree } = defineProps<{
   id: string;
   name: string;
-  endAt: string | Date;
   agree: number;
   disagree: number;
 }>();
-
-const endAtDate = computed(() => {
-  return Temporal.Instant.from(endAt instanceof Date ? endAt.toISOString() : endAt).toZonedDateTimeISO('Asia/Shanghai');
-});
-const now = computed(() => {
-  return Temporal.Now.plainDateISO();
-});
 const { data } = useQuery({
   queryFn: () => {
     return findProposal({
@@ -30,69 +23,8 @@ const { data } = useQuery({
   queryKey: ['findProposal', id],
 });
 
-const badgeText = computed(() => {
-  const status = data.value?.status;
-  if (!status) {
-    return '';
-  }
-  if (status === 'pending') {
-    const days = now.value.until(endAtDate.value).total({ unit: 'days' });
-    return days < 0 ? `${days}天前结束` : `剩余${days}天`;
-  }
-  if (status === 'controversy') {
-    return '争议';
-  }
-  if (status === 'approved') {
-    return '已通过';
-  }
-  if (status === 'rejected') {
-    return '已拒绝';
-  }
-  if (status === 'executing') {
-    return '执行中';
-  }
-  if (status === 'executed') {
-    return '已完成';
-  }
-  if (status === 'failed') {
-    return '执行失败';
-  }
-  if (status === 'cancelled') {
-    return '已取消';
-  }
-  if (status === 'emergency-review') {
-    return '紧急审核';
-  }
-  return '';
-});
-const color = computed(() => {
-  if (!data.value) {
-    return 'surface';
-  }
-  const status = data.value.status;
-  switch (status) {
-    case 'pending':
-      return 'surface';
-    case 'controversy':
-      return 'warning';
-    case 'approved':
-      return 'success';
-    case 'rejected':
-      return 'danger';
-    case 'executing':
-      return 'primary';
-    case 'executed':
-      return 'success';
-    case 'failed':
-      return 'danger';
-    case 'cancelled':
-      return 'danger';
-    case 'emergency-review':
-      return 'danger';
-    default:
-      return 'surface';
-  }
-});
+const badgeText = computed(() => proposalBadgeText(data.value?.status));
+const color = computed(() => proposalBadgeColor(data.value?.status));
 </script>
 
 <template>

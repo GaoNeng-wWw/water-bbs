@@ -10,7 +10,7 @@ const style = tv({
   base: 'w-fit px-2 py-1 rounded-full flex items-center text-xs font-medium',
   variants: {
     color: {
-      surface: 'bg-surface-100 text-surface-fg',
+      surface: 'bg-surface-200 text-surface-fg',
       primary: 'bg-primary-100 text-primary-fg',
       warning: 'bg-warning-100 text-warning-fg',
       danger: 'bg-danger-100 text-danger-fg',

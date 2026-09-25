@@ -80,7 +80,10 @@ export class ListReplyService implements IQueryHandler<ListReplyQuery> {
           nick: profile.nick,
           bio: profile.bio,
         },
-        content: reply.content,
+        content:
+          reply.hiddenPeriod && reply.hiddenPeriod.isExpired()
+            ? ''
+            : reply.content,
         id: reply.id,
         createdAt: reply.createdAt,
       });

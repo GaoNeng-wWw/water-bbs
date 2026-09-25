@@ -29,6 +29,6 @@ const items = computed(() => {
 
 <template>
   <div class="w-full space-y-4">
-    <proposal-item v-for="item in items" :id="item.id" :key="item.id" :name="item.title" :agree="item.yes" :disagree="item.no" :end-at="item.endAt" />
+    <proposal-item v-for="item in items" :id="item.id" :key="item.id" :name="item.title" :agree="item.yes" :disagree="item.no" />
   </div>
 </template>

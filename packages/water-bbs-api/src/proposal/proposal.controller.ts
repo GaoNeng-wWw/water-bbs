@@ -74,15 +74,14 @@ export class ProposalController {
     description: '解决争议, 只有BD或Admin才可以解决争议.',
   })
   @ApiOkResponse({ description: '解决争议' })
-  @ApiParam({ name: 'accountId', description: '用户ID' })
   @ApiQuery({
     name: 'kind',
     description: '解决类型',
     enum: ['approve', 'reject'],
   })
   @Post(':id/resolve')
-  @ApiParam({ name: 'id', description: '提案ID' })
-  @Member(MemberKind.BD)
+  @ApiParam({ name: 'id', description: '提案ID', type: String })
+  @Member(MemberKind.BD, MemberKind.Admin)
   async resolveControversy(
     @Param('id') id: ProposalId,
     @User('id') accountId: AccountId,

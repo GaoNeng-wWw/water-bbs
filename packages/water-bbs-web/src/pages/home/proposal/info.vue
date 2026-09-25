@@ -12,6 +12,7 @@ import { findProposal, voteProposal } from '@/api/sdk.gen.ts';
 import ProposalBadge from './components/proposal-badge.vue';
 import { useComment } from '@/composables';
 import { proposalBadgeText, proposalBadgeColor } from '@/helper';
+import ProposalControversyResolve from './components/proposal-controversy-resolve.vue';
 
 const router = useRouter();
 const route = computed(() => router.currentRoute.value);
@@ -58,6 +59,7 @@ const createdAt = computed(() => data.value?.createdAt ? new Date(data.value.cre
 
 const agree = computed(() => data.value?.voteSummary.yes ?? 0);
 const disagree = computed(() => data.value?.voteSummary.no ?? 0);
+
 const loading = ref(false);
 
 const onAgree = () => {
@@ -139,15 +141,15 @@ const color = computed(() => {
             </div>
           </div>
           <div class="w-full grid gap-4 mt-4">
-            <proposal-progress v-if="data?.kind !== 'emergency'" :agree="agree" :disagree="disagree">
-              <template #meta>
+            <proposal-progress v-if="data && data?.kind !== 'emergency'" :agree="agree" :disagree="disagree">
+              <template #meta="{agreePercent, disagreePercent}">
                 <div class="w-full flex flex-col gap-2">
                   <div class="w-full grid grid-cols-2 place-items-center">
                     <p class="text-surface-fg text-sm mt-2">
-                      赞同 {{ agree }}%
+                      赞同 {{ agreePercent }}%
                     </p>
                     <p class="text-surface-fg text-sm mt-2">
-                      反对 {{ disagree }}%
+                      反对 {{ disagreePercent }}%
                     </p>
                   </div>
                   <div class="w-full grid grid-cols-2 gap-4 mt-4">
@@ -167,6 +169,7 @@ const color = computed(() => {
                 </div>
               </template>
             </proposal-progress>
+            <proposal-controversy-resolve v-if="data && data.status === 'controversy'" v-governance-member :proposal-id="id" />
           </div>
         </div>
         <div class="w-full p-4 rounded-md bg-surface-100">

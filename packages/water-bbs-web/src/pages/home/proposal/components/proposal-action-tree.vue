@@ -23,8 +23,9 @@ const { nodes } = defineProps<{
       v-bind="node.bind"
       class="w-full"
       :style="{ 'padding-left': `${node.level}rem` }"
+      @click.stop
     >
-      <div v-if="node.value.type === 'action'" class="w-fit cursor-pointer py-1 px-2 rounded-md transition duration-fast ease-in-out hover:bg-surface-200">
+      <div v-if="node.value.type === 'action'" class="w-full cursor-pointer py-1 px-2 rounded-md transition duration-fast ease-in-out hover:bg-surface-200">
         {{ node.value.name }}
       </div>
       <div v-else class="w-full grid grid-cols-2">

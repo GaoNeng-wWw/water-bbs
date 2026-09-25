@@ -69,7 +69,7 @@ export class ProposalService {
     return ok(
       plainToInstance(FindProposalResponseDTO, {
         ...proposal,
-        voteSummary,
+        voteSummary: voteSummary.value,
       }),
     );
   }

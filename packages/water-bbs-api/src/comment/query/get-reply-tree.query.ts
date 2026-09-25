@@ -55,6 +55,7 @@ export class GetReplyTreeService implements IQueryHandler<GetReplyTree> {
     const root = await this.commentReplyRepo.findByCursor({
       where: {
         parentId: parentId ?? null,
+        commentId,
       },
       orderBy: {
         createdAt: 'desc',

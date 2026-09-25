@@ -15,7 +15,7 @@ export class MemberGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const http = context.switchToHttp();
     const handler = context.getHandler();
-    const memberKind = this.reflector.getAllAndOverride<MemberKind>(
+    const memberKind = this.reflector.getAllAndOverride<MemberKind[]>(
       MEMBER_KEY,
       [handler],
     );
@@ -25,9 +25,9 @@ export class MemberGuard implements CanActivate {
     const req = http.getRequest();
     const user: AuthUser = req.user;
     const accountId = user.id;
-    const member = await this.repo.findOne(GovernanceMember,{
+    const member = await this.repo.findOne(GovernanceMember, {
       accountId: accountId,
-      kind: memberKind,
+      kind: { $in: memberKind },
       $or: [{ endedAt: null }, { endedAt: { $gt: new Date() } }],
     });
     if (!member) {

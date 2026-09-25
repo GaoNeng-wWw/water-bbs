@@ -42,4 +42,7 @@ export default defineConfig({
   ],
   extensions: [SeedManager, Migrator],
   allowGlobalContext: true,
+  driverOptions: {
+    statement_timeout: 5000,
+  },
 });

@@ -1,4 +1,4 @@
-export const proposalBadgeColor = (status: string) => {
+export const proposalBadgeColor = (status?: string) => {
   switch (status) {
     case 'pending':
       return 'surface';
