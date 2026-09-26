@@ -17,6 +17,12 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Comment, CommentReply } from './comment.entity';
 import { CreateProposalComment, ReplyCreatedHandler } from './event-handler';
 import { CreateCommentReplyService } from './command/create-comment-reply.command';
+import {
+  HideCommentReply,
+  LockComment,
+  ShowCommentReply,
+  UnlockComment,
+} from './steps';
 
 @Module({
   imports: [MikroOrmModule.forFeature([Comment, CommentReply])],
@@ -34,6 +40,10 @@ import { CreateCommentReplyService } from './command/create-comment-reply.comman
     RemoveCommentReplyService,
     CreateProposalComment,
     GetCommentByResourceIdService,
+    ShowCommentReply,
+    HideCommentReply,
+    UnlockComment,
+    LockComment,
   ],
 })
 export class CommentModule {}

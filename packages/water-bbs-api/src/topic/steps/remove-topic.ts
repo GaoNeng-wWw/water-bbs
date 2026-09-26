@@ -6,7 +6,6 @@ import { TopicNotFound } from '../errors';
 
 export const removeTopicDef = {
   key: 'topic.remove',
-  events: [],
   param: z.object({
     topicId: z.string(),
   }),
@@ -17,7 +16,7 @@ export const removeTopicDef = {
 export class RemoveTopic implements Handler<typeof removeTopicDef> {
   async handle(
     param: { topicId: string },
-    ctx: Context<[]>,
+    ctx: Context,
   ): Promise<Result<void, Error>> {
     const { em } = ctx;
     const topic = await em.findOne(Topic, { id: param.topicId as TopicId });

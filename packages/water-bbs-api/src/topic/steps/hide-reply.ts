@@ -7,7 +7,6 @@ import { HiddenPeriod } from '@app/shared';
 
 export const hideReplyDef = {
   key: 'reply.hide',
-  events: [],
   param: z.object({
     replyId: z.string(),
     reason: z.string(),
@@ -20,7 +19,7 @@ export const hideReplyDef = {
 export class HideReply implements Handler<typeof hideReplyDef> {
   async handle(
     param: { replyId: ReplyId; reason: string; endAt?: string },
-    ctx: Context<[]>,
+    ctx: Context,
   ): Promise<Result<void, Error>> {
     const { em } = ctx;
     const reply = await em.findOne(Reply, { id: param.replyId });

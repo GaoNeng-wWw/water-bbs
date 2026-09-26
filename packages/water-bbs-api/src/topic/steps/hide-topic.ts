@@ -8,7 +8,6 @@ import { TopicNotFound } from '../errors';
 import { HiddenPeriod } from '@app/shared';
 
 export const hideTopicDef = {
-  events: [],
   key: 'topic.hide',
   ui: [
     {

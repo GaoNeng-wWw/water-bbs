@@ -1,6 +1,7 @@
-import { MetaEntity } from '@app/shared';
+import { HiddenPeriod, MetaEntity } from '@app/shared';
 import { type Opt } from '@mikro-orm/core';
 import {
+  Embedded,
   Entity,
   Enum,
   Index,
@@ -33,6 +34,22 @@ export class Comment extends MetaEntity {
   resourceId: string;
   @Enum(() => ResourceKind)
   resourceKind: ResourceKind;
+  @Property({ type: 'datetime', nullable: true })
+  lockedAt: Opt<Date> | null;
+  @Property({ type: 'text', nullable: true })
+  lockReason: Opt<string> | null;
+
+  lock(reason: string) {
+    this.lockedAt = new Date();
+    this.lockReason = reason;
+  }
+  unlock() {
+    this.lockedAt = null;
+    this.lockReason = null;
+  }
+  isLocked() {
+    return this.lockedAt !== null;
+  }
 }
 
 export const joinPath = (parentPath: string, currentId: string): string => {
@@ -60,6 +77,8 @@ export class CommentReply<
   path: Path;
   @Property({ type: 'jsonb', nullable: true })
   meta: Opt<T>;
+  @Embedded(() => HiddenPeriod, { nullable: true })
+  hidden_period: Opt<HiddenPeriod> | null;
   static create(props: {
     content: string;
     creator: AccountId;
@@ -76,5 +95,16 @@ export class CommentReply<
     const basePath = props.parentPath || ROOT_PATH;
     reply.path = joinPath(basePath, reply.id) as Path;
     return reply;
+  }
+
+  show() {
+    this.hidden_period = null;
+  }
+  hidden(reason: string, endAt?: Date) {
+    const period = HiddenPeriod.create(reason, endAt);
+    if (period.isErr()) {
+      return period;
+    }
+    this.hidden_period = period.value;
   }
 }

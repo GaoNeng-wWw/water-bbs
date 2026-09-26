@@ -16,7 +16,6 @@ export class StepRunner {
     }
     return step.value.handle(param, {
       em,
-      events: [],
     });
   }
 }

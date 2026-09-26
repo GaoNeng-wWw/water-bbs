@@ -8,7 +8,7 @@ import { StepNotFound } from './errors';
 @Injectable()
 export class StepDiscoverService implements OnApplicationBootstrap {
   private map: Map<string, Handler<any>> = new Map();
-  private metamap: Map<string, Definition<any, any, any>> = new Map();
+  private metamap: Map<string, Definition<any, any>> = new Map();
   private logger = new Logger('StepResolver');
   constructor(
     private readonly discoveryService: DiscoveryService,

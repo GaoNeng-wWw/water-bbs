@@ -6,7 +6,6 @@ import { ReplyNotFound } from '../errors';
 
 export const removeReplyDef = {
   key: 'reply.remove',
-  events: [],
   param: z.object({
     replyId: z.string(),
   }),
@@ -17,7 +16,7 @@ export const removeReplyDef = {
 export class RemoveReply implements Handler<typeof removeReplyDef> {
   async handle(
     param: { replyId: ReplyId },
-    ctx: Context<[]>,
+    ctx: Context,
   ): Promise<Result<void, Error>> {
     const { em } = ctx;
     const reply = await em.findOne(Reply, { id: param.replyId });

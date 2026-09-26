@@ -17,6 +17,10 @@ export const uiSelect = z.object({
 export const uiCheckbox = z.object({
   type: z.literal('checkbox'),
 });
+export const uiDatePicker = z.object({
+  type: z.literal('date-picker'),
+});
+
 export const uiBase = z.object({
   label: z.string().optional(),
   desc: z.string().optional(),
@@ -27,20 +31,18 @@ export const uiSchema = z.discriminatedUnion('type', [
   uiInputSchema.extend(uiBase.shape),
   uiSelect.extend(uiBase.shape),
   uiCheckbox.extend(uiBase.shape),
+  uiDatePicker.extend(uiBase.shape),
 ]);
 
-export type Context<Events extends unknown[] = []> = {
+export type Context = {
   em: EntityManager;
-  events: Events;
 };
 
 export type Definition<
   UiSchema extends z.infer<typeof uiSchema>[] = z.infer<typeof uiSchema>[],
   Param extends z.ZodType = ZodType,
-  Events extends unknown[] = [],
 > = {
   key: string;
-  events: Events;
   param: Param;
   ui: UiSchema;
 };
@@ -48,6 +50,6 @@ export type Definition<
 export type Handler<D extends Definition> = {
   handle(
     param: z.infer<D['param']>,
-    ctx: Context<D['events']>,
+    ctx: Context,
   ): Promise<Result<void, Error>>;
 };
