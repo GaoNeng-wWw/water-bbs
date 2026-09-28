@@ -3,7 +3,7 @@
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
 import { createReplyResponseTransformer, getBdRecordListResponseTransformer, getBdRecordResponseTransformer, getSelfRecordResponseTransformer, listProposalItemsResponseTransformer, removeReplyResponseTransformer, reportReplyResponseTransformer } from './transformers.gen';
-import type { CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, FindProposalData, FindProposalResponses, GetBalanceData, GetBalanceResponses, GetBdRecordData, GetBdRecordListData, GetBdRecordListResponses, GetBdRecordResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetSelfRecordData, GetSelfRecordResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListStepsData, ListStepsResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ReportReplyData, ReportReplyResponses, ReportTopicData, ReportTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
+import type { CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, FindProposalData, FindProposalResponses, GetBalanceData, GetBalanceResponses, GetBdRecordData, GetBdRecordListData, GetBdRecordListResponses, GetBdRecordResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetSelfRecordData, GetSelfRecordResponses, GetStepDefData, GetStepDefResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListStepsData, ListStepsResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ReportReplyData, ReportReplyResponses, ReportTopicData, ReportTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -288,7 +288,16 @@ export const getTransactions = <ThrowOnError extends boolean = false>(options: O
 /**
  * 获取提案步骤
  */
-export const listSteps = <ThrowOnError extends boolean = false>(options?: Options<ListStepsData, ThrowOnError>): RequestResult<ListStepsResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListStepsResponses, unknown, ThrowOnError>({
+export const getStepDef = <ThrowOnError extends boolean = false>(options: Options<GetStepDefData, ThrowOnError>): RequestResult<GetStepDefResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetStepDefResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/proposal/steps/{id}',
+    ...options
+});
+
+/**
+ * 获取提案步骤
+ */
+export const listSteps = <ThrowOnError extends boolean = false>(options: Options<ListStepsData, ThrowOnError>): RequestResult<ListStepsResponses, unknown, ThrowOnError> => (options.client ?? client).get<ListStepsResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/proposal/steps',
     ...options

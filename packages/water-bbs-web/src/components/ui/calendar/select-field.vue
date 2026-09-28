@@ -3,7 +3,7 @@ import calendar from './calendar.vue';
 import { DateFieldInput, DateFieldRoot } from 'reka-ui';
 import { computed, ref, watch, type Ref } from 'vue';
 import { UiField } from '../form';
-import { CalendarDate, type DateValue } from '@internationalized/date';
+import type { DateValue } from '@internationalized/date';
 import { UiPopoverContent, Popover, PopoverTrigger } from '../popover';
 
 defineOptions({
@@ -17,7 +17,6 @@ const currentDate = ref(date.value) as Ref<DateValue>;
 
 watch(currentDate, () => {
   modelValue.value = currentDate.value;
-  console.log(modelValue.value)
 });
 </script>
 

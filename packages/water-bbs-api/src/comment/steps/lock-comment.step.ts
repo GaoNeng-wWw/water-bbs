@@ -11,7 +11,10 @@ export const lockCommentStepDef = {
     commentId: z.string(),
     reason: z.string(),
   }),
-  ui: [{ type: 'input', label: 'reason', textType: 'text' }],
+  ui: [
+    { type: 'input', label: 'reason', textType: 'text', id: 'reason' },
+    { type: 'input', label: 'comment-id', textType: 'text', id: 'commentId' },
+  ],
 } satisfies Definition;
 
 @Step(lockCommentStepDef)

@@ -446,14 +446,53 @@ export type ListTransactionsResponse = {
     nextCursor: string;
 };
 
+export type UiInputDto = {
+    type: 'input';
+    textType: 'password' | 'text';
+    id: string;
+    label?: string;
+    desc?: string;
+    tips?: string;
+};
+
+export type UiSelectDto = {
+    type: 'select';
+    options: Array<{
+        label: string;
+        value: string;
+    }>;
+    id: string;
+    label?: string;
+    desc?: string;
+    tips?: string;
+};
+
+export type UiCheckboxDto = {
+    type: 'checkbox';
+    id: string;
+    label?: string;
+    desc?: string;
+    tips?: string;
+};
+
+export type UiDatePickerDto = {
+    type: 'date-picker';
+    id: string;
+    label?: string;
+    desc?: string;
+    tips?: string;
+};
+
 export type StepInfo = {
     key: string;
-    ui: {
-        [key: string]: unknown;
-    };
+    ui: Array<UiInputDto | UiSelectDto | UiCheckboxDto | UiDatePickerDto>;
     param: {
         [key: string]: unknown;
     };
+};
+
+export type String = {
+    [key: string]: unknown;
 };
 
 export type ListProposalItem = {
@@ -1245,18 +1284,41 @@ export type GetTransactionsResponses = {
 
 export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
 
+export type GetStepDefData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/proposal/steps/{id}';
+};
+
+export type GetStepDefResponses = {
+    200: StepInfo;
+};
+
+export type GetStepDefResponse = GetStepDefResponses[keyof GetStepDefResponses];
+
 export type ListStepsData = {
     body?: never;
     path?: never;
-    query?: never;
+    query: {
+        /**
+         * 页码
+         */
+        page: number;
+        /**
+         * 每页数量
+         */
+        size: number;
+    };
     url: '/proposal/steps';
 };
 
 export type ListStepsResponses = {
-    /**
-     * 获取提案步骤
-     */
-    200: Array<StepInfo>;
+    200: PaginationData & {
+        data?: Array<String>;
+    };
 };
 
 export type ListStepsResponse = ListStepsResponses[keyof ListStepsResponses];

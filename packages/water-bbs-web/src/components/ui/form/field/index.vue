@@ -36,7 +36,7 @@ const { invalid } = injectFormItem();
     @apply opacity-80;
   }
   &[data-disabled] {
-    @apply bg-surface-100/80 text-surface-800 pointer-events-none;
+    @apply bg-surface-100/80 text-surface-800/50 pointer-events-none;
   }
   &[data-invalid] {
     @apply text-danger ring-danger ring-2;

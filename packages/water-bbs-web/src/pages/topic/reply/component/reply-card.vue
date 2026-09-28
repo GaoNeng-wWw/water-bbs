@@ -10,6 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { createCommentReply, getCommentByResourceId } from '@/api';
 import { CommentList, CommentEditor } from '@/components/app';
 import { ref } from 'vue';
+import { useModal } from '@/composables/use-modal.ts';
 
 const props = defineProps<{
   id: string;

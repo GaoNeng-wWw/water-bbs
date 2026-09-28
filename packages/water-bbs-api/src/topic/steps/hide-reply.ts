@@ -12,7 +12,11 @@ export const hideReplyDef = {
     reason: z.string(),
     endAt: z.iso.datetime().optional(),
   }),
-  ui: [{ type: 'input', label: 'replyID', textType: 'text' }],
+  ui: [
+    { id: 'replyId', type: 'input', label: 'replyID', textType: 'text' },
+    { id: 'reason', type: 'input', label: 'reason', textType: 'text' },
+    { id: 'endAt', type: 'date-picker', label: 'endAt' },
+  ],
 } satisfies Definition;
 
 @Step(hideReplyDef)

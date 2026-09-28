@@ -11,9 +11,9 @@ export const hideCommentReplyDef = {
     endAt: z.iso.datetime().optional(),
   }),
   ui: [
-    { type: 'input', label: 'replyID', textType: 'text' },
-    { type: 'input', label: 'reason', textType: 'text' },
-    { type: 'date-picker', label: 'endAt' },
+    { id: 'replyId', type: 'input', label: 'replyID', textType: 'text' },
+    { id: 'reason', type: 'input', label: 'reason', textType: 'text' },
+    { id: 'endAt', type: 'date-picker', label: 'endAt' },
   ],
 } satisfies Definition;
 

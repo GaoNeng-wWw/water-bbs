@@ -2,7 +2,6 @@
 import { computed, ref, watch, type ComputedRef, type Ref } from 'vue';
 import { provideContext, type Mode } from './context';
 import type { DateValue } from 'reka-ui';
-import { ConfigProvider } from 'reka-ui';
 import { CalendarDate } from '@internationalized/date';
 import MonthPick from './month-pick.vue';
 import DayPicker from './day-picker.vue';

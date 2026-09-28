@@ -4,6 +4,7 @@ import { StepHandlerMetadata } from './step.decorator';
 import { Definition, Handler } from '../core';
 import { err, ok } from 'neverthrow';
 import { StepNotFound } from './errors';
+import z, { ZodObject } from 'zod';
 
 @Injectable()
 export class StepDiscoverService implements OnApplicationBootstrap {
@@ -37,6 +38,28 @@ export class StepDiscoverService implements OnApplicationBootstrap {
       return err(new StepNotFound(id));
     }
     return ok(handler);
+  }
+  getDefByKey(key: string) {
+    const def = this.metamap.get(key);
+    if (!def) {
+      return err(new StepNotFound(key));
+    }
+    return {
+      ...def,
+      param: z.toJSONSchema<ZodObject>(def.param),
+    };
+  }
+  getAllKey(page: number = 1, size: number = 20) {
+    const values = Array.from(this.metamap.values());
+    const ret: string[] = [];
+    for (
+      let i = (page - 1) * size;
+      i < Math.min(page * size, values.length);
+      i++
+    ) {
+      ret.push(values[i].key);
+    }
+    return { data: ret, total: values.length };
   }
   getAll() {
     const values = Array.from(this.metamap.values());

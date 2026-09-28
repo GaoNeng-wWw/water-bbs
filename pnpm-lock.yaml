@@ -267,6 +267,12 @@ importers:
       '@nestjs/swagger':
         specifier: ^11.4.6
         version: 11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)
+      '@voznov/zod-dto':
+        specifier: ^0.4.2
+        version: 0.4.2(zod@4.4.3)
+      '@voznov/zod-dto-nestjs':
+        specifier: ^0.4.2
+        version: 0.4.2(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2))(@voznov/zod-dto@0.4.2(zod@4.4.3))(reflect-metadata@0.2.2)(rxjs@7.8.2)(zod@4.4.3)
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -2958,6 +2964,23 @@ packages:
 
   '@volar/typescript@2.4.28':
     resolution: {integrity: sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==}
+
+  '@voznov/zod-dto-nestjs@0.4.2':
+    resolution: {integrity: sha512-ch6ROPcqA9ui2OxxqTbK6pZimvl4Yki0wShu57ziSoVoi6yC/CtcaWUYv0LoChLnS/pqV4SS7PJpK2DY6I0YVQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@nestjs/common': '>=10.0.0'
+      '@nestjs/swagger': '>=7.0.0'
+      '@voznov/zod-dto': ^0.4.2
+      reflect-metadata: '>=0.1.13'
+      rxjs: '>=7.0.0'
+      zod: '>=4.0.0'
+
+  '@voznov/zod-dto@0.4.2':
+    resolution: {integrity: sha512-rDnEcv6NSrOgYlMKtAzb2xPSre3FCohTfVDX3Kj0bYmqswt8BykjZECbZ6xzVPj+s6oMeLDOWX7EzdCYscgY3g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: '>=4.0.0'
 
   '@vue-macros/common@3.1.4':
     resolution: {integrity: sha512-/5Fv+6DgIcM9ajY05ZmKBv+LMX1M9A0X+IUwDRVdt67ciw8OV9bvG2r34p3RiEadlsQybjhKPRKNXDC8Bp23cw==}
@@ -10066,6 +10089,19 @@ snapshots:
       '@volar/language-core': 2.4.28
       path-browserify: 1.0.1
       vscode-uri: 3.1.0
+
+  '@voznov/zod-dto-nestjs@0.4.2(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2))(@voznov/zod-dto@0.4.2(zod@4.4.3))(reflect-metadata@0.2.2)(rxjs@7.8.2)(zod@4.4.3)':
+    dependencies:
+      '@nestjs/common': 11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/swagger': 11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)
+      '@voznov/zod-dto': 0.4.2(zod@4.4.3)
+      reflect-metadata: 0.2.2
+      rxjs: 7.8.2
+      zod: 4.4.3
+
+  '@voznov/zod-dto@0.4.2(zod@4.4.3)':
+    dependencies:
+      zod: 4.4.3
 
   '@vue-macros/common@3.1.4(vue@3.5.40(typescript@6.0.3))':
     dependencies:

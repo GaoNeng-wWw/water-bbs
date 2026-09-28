@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ProposalForm } from '@/components/app';
 import {
   UiPopover,
   UiPopoverContent,
@@ -7,11 +8,9 @@ import {
   UiListbox,
   UiListboxSection,
   UiListboxItem,
-  UiDialog,
-  UiDialogContent,
-  UiDialogTrigger,
 } from '@/components/ui';
-import ReportTopicReplyModal from './report-topic-reply-modal.vue';
+import { useModal } from '@/composables';
+import { h } from 'vue';
 
 const props = defineProps<{
   replyId: string;
@@ -21,11 +20,15 @@ const emits = defineEmits<{
   commentClick: [];
 }>();
 
+const { Primitive, render, ModalHost } = useModal();
+
 const onClickComment = () => {
   emits('commentClick');
 };
 const onReport = () => {
-
+  render(
+    h(ProposalForm),
+  );
 };
 </script>
 
@@ -43,19 +46,15 @@ const onReport = () => {
       <ui-popover-content class="w-50!">
         <ui-listbox mode="none">
           <ui-listbox-section label="行为">
-            <ui-dialog>
-              <ui-dialog-trigger>
-                <ui-listbox-item id="report" value="report" danger @click="onReport">
-                  举报
-                </ui-listbox-item>
-              </ui-dialog-trigger>
-              <ui-dialog-content>
-                <report-topic-reply-modal :reply-id="props.replyId" />
-              </ui-dialog-content>
-            </ui-dialog>
+            <primitive as-child>
+              <ui-listbox-item id="report" value="report" danger @click="onReport">
+                举报
+              </ui-listbox-item>
+            </primitive>
           </ui-listbox-section>
         </ui-listbox>
       </ui-popover-content>
     </ui-popover>
+    <modal-host />
   </div>
 </template>

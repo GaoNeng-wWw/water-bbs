@@ -1,6 +1,8 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Result } from 'neverthrow';
 import { z, ZodType } from 'zod';
+import { ZodDto } from '@voznov/zod-dto';
+
 export const uiInputSchema = z.object({
   type: z.literal('input'),
   textType: z.enum(['password', 'text']),
@@ -22,16 +24,27 @@ export const uiDatePicker = z.object({
 });
 
 export const uiBase = z.object({
+  id: z.string(),
   label: z.string().optional(),
   desc: z.string().optional(),
   tips: z.string().optional(),
 });
 
+const UiInputSchema = uiInputSchema.extend(uiBase.shape);
+const UiSelect = uiSelect.extend(uiBase.shape);
+const UiCheckbox = uiCheckbox.extend(uiBase.shape);
+const UiDatePicker = uiDatePicker.extend(uiBase.shape);
+
+export class UiInputDto extends ZodDto(UiInputSchema) {}
+export class UiSelectDto extends ZodDto(UiSelect) {}
+export class UiCheckboxDto extends ZodDto(UiCheckbox) {}
+export class UiDatePickerDto extends ZodDto(UiDatePicker) {}
+
 export const uiSchema = z.discriminatedUnion('type', [
-  uiInputSchema.extend(uiBase.shape),
-  uiSelect.extend(uiBase.shape),
-  uiCheckbox.extend(uiBase.shape),
-  uiDatePicker.extend(uiBase.shape),
+  UiInputSchema,
+  UiSelect,
+  UiCheckbox,
+  UiDatePicker,
 ]);
 
 export type Context = {

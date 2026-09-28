@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
-import { CursorDTO } from '@app/shared';
+import { ApiPaginationResponse, CursorDTO, PaginationQuery } from '@app/shared';
 import { Member, MemberKind, type ProposalId } from '@app/gamification';
 import {
   CreateProposalDTO,
@@ -26,11 +26,18 @@ import { FindProposalResponseDTO } from './dto/find-proposal.dto';
 export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
+  @ApiOperation({ description: '获取提案步骤', operationId: 'getStepDef' })
+  @ApiOkResponse({ type: StepInfo })
+  @Get('steps/:id')
+  getStep(@Param('id') id: string) {
+    return this.proposalService.getStepDef(id);
+  }
+
   @ApiOperation({ description: '获取提案步骤', operationId: 'listSteps' })
-  @ApiOkResponse({ description: '获取提案步骤', type: [StepInfo] })
+  @ApiPaginationResponse(String)
   @Get('steps')
-  listSteps() {
-    return this.proposalService.listSteps();
+  listSteps(@Query() dto: PaginationQuery) {
+    return this.proposalService.listSteps(dto);
   }
 
   @ApiQuery({ name: 'cursor', description: '分页游标', required: false })

@@ -9,7 +9,9 @@ export const unlockCommentStepDef = {
   param: z.object({
     commentId: z.string(),
   }),
-  ui: [{ type: 'input', label: 'commentID', textType: 'text' }],
+  ui: [
+    { type: 'input', label: 'commentID', textType: 'text', id: 'commentId' },
+  ],
 } satisfies Definition;
 
 @Step(unlockCommentStepDef)

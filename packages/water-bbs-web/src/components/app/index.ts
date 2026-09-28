@@ -3,3 +3,4 @@ export * from './topic';
 export * from './editor';
 export { default as Category } from './category';
 export * from './comment';
+export * from './proposal';

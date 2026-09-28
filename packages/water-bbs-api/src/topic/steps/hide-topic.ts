@@ -14,6 +14,18 @@ export const hideTopicDef = {
       type: 'input',
       textType: 'text',
       label: 'Topic ID',
+      id: 'topicId',
+    },
+    {
+      type: 'input',
+      textType: 'text',
+      label: 'reason',
+      id: 'reason',
+    },
+    {
+      type: 'date-picker',
+      label: 'endAt',
+      id: 'endAt',
     },
   ],
   param: z.object({

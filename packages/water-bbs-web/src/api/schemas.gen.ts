@@ -704,6 +704,145 @@ export const ListTransactionsResponseSchema = {
     ]
 } as const;
 
+export const UiInputDtoSchema = {
+    type: 'object',
+    properties: {
+        type: {
+            type: 'string',
+            enum: [
+                'input'
+            ]
+        },
+        textType: {
+            type: 'string',
+            enum: [
+                'password',
+                'text'
+            ]
+        },
+        id: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        desc: {
+            type: 'string'
+        },
+        tips: {
+            type: 'string'
+        }
+    },
+    required: [
+        'type',
+        'textType',
+        'id'
+    ]
+} as const;
+
+export const UiSelectDtoSchema = {
+    type: 'object',
+    properties: {
+        type: {
+            type: 'string',
+            enum: [
+                'select'
+            ]
+        },
+        options: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    label: {
+                        type: 'string'
+                    },
+                    value: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'label',
+                    'value'
+                ]
+            }
+        },
+        id: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        desc: {
+            type: 'string'
+        },
+        tips: {
+            type: 'string'
+        }
+    },
+    required: [
+        'type',
+        'options',
+        'id'
+    ]
+} as const;
+
+export const UiCheckboxDtoSchema = {
+    type: 'object',
+    properties: {
+        type: {
+            type: 'string',
+            enum: [
+                'checkbox'
+            ]
+        },
+        id: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        desc: {
+            type: 'string'
+        },
+        tips: {
+            type: 'string'
+        }
+    },
+    required: [
+        'type',
+        'id'
+    ]
+} as const;
+
+export const UiDatePickerDtoSchema = {
+    type: 'object',
+    properties: {
+        type: {
+            type: 'string',
+            enum: [
+                'date-picker'
+            ]
+        },
+        id: {
+            type: 'string'
+        },
+        label: {
+            type: 'string'
+        },
+        desc: {
+            type: 'string'
+        },
+        tips: {
+            type: 'string'
+        }
+    },
+    required: [
+        'type',
+        'id'
+    ]
+} as const;
+
 export const StepInfoSchema = {
     type: 'object',
     properties: {
@@ -711,8 +850,32 @@ export const StepInfoSchema = {
             type: 'string'
         },
         ui: {
-            type: 'object',
-            additionalProperties: {}
+            discriminator: {
+                propertyName: 'type',
+                mapping: {
+                    input: '#/components/schemas/UiInputDto',
+                    select: '#/components/schemas/UiSelectDto',
+                    checkbox: '#/components/schemas/UiCheckboxDto',
+                    'date-picker': '#/components/schemas/UiDatePickerDto'
+                }
+            },
+            type: 'array',
+            items: {
+                oneOf: [
+                    {
+                        $ref: '#/components/schemas/UiInputDto'
+                    },
+                    {
+                        $ref: '#/components/schemas/UiSelectDto'
+                    },
+                    {
+                        $ref: '#/components/schemas/UiCheckboxDto'
+                    },
+                    {
+                        $ref: '#/components/schemas/UiDatePickerDto'
+                    }
+                ]
+            }
         },
         param: {
             type: 'object',
@@ -724,6 +887,11 @@ export const StepInfoSchema = {
         'ui',
         'param'
     ]
+} as const;
+
+export const StringSchema = {
+    type: 'object',
+    properties: {}
 } as const;
 
 export const ListProposalItemSchema = {

@@ -19,7 +19,7 @@ import { ok } from 'neverthrow';
 import { plainToInstance } from 'class-transformer';
 import { FindProposalResponseDTO } from './dto/find-proposal.dto';
 import { VoteKind, VoteProposalDTO } from './dto/vote-proposal.dto';
-import { CursorDTO } from '@app/shared';
+import { CursorDTO, PaginationQuery } from '@app/shared';
 import { StepDiscoverService } from '@app/engine';
 import { ListProposalItem } from './dto/list-proposal.dto';
 
@@ -135,7 +135,10 @@ export class ProposalService {
       new ResolveControversy(id, accountId, kind === 'approve'),
     );
   }
-  listSteps() {
-    return this.stepDiscoverService.getAll();
+  getStepDef(id: string) {
+    return this.stepDiscoverService.getDefByKey(id);
+  }
+  listSteps(dto: PaginationQuery) {
+    return this.stepDiscoverService.getAllKey(dto.page, dto.size);
   }
 }

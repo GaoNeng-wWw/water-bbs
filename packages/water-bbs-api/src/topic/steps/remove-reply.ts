@@ -9,7 +9,7 @@ export const removeReplyDef = {
   param: z.object({
     replyId: z.string(),
   }),
-  ui: [{ type: 'input', label: 'replyID', textType: 'text' }],
+  ui: [{ type: 'input', label: 'replyID', textType: 'text', id: 'replyId' }],
 } satisfies Definition;
 
 @Step(removeReplyDef)
