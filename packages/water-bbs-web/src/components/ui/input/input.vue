@@ -20,6 +20,6 @@ const type = computed(() => password ? 'password' : textType);
 
 <template>
   <ui-field v-bind="{ ...$attrs, disabled }">
-    <input v-model="modelValue" class="w-full h-full outline-none cursor-pointer" :type="type">
+    <input v-model="modelValue" class="w-full h-full outline-none cursor-pointer" :type="type" :disabled="disabled">
   </ui-field>
 </template>

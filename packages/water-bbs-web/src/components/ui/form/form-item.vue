@@ -10,10 +10,11 @@ export type FormItemProps = {
 };
 
 const { prop, label } = defineProps<FormItemProps>();
-
-const { errorMessage, ...field } = useField(prop);
-
 const form = useFormContext();
+
+const { errorMessage, ...field } = useField(prop, {}, {
+  validateOnValueUpdate: form.triggerMethod.value === 'change',
+});
 
 FormItemProvider({
   invalid: computed(() => !!errorMessage.value),

@@ -7,24 +7,38 @@ const {
   schema,
   model = {},
   labelPosition: formPosition,
+  triggerMethod: formTriggerMethod,
 } = defineProps<FormProps<Schema>>();
 
-const { setValues } = useForm({
+const emit = defineEmits<{
+  submit: [values: Record<string, any>];
+  invalid: [errors: Partial<Record<string, string>>];
+}>();
+
+const { setValues, handleSubmit, validate } = useForm({
   initialValues: model,
   validationSchema: schema,
 });
 
 FormProvider({
   labelPosition: computed(() => formPosition ?? 'left'),
+  triggerMethod: computed(() => formTriggerMethod ?? 'change'),
 });
 
 watch(() => model, () => {
   setValues(model, true);
 }, { deep: true });
+
+const onSubmit = handleSubmit(
+  values => emit('submit', values),
+  ({ errors }) => emit('invalid', errors),
+);
+
+defineExpose({ validate, handleSubmit });
 </script>
 
 <template>
-  <form v-bind="$attrs" class="form">
+  <form v-bind="$attrs" class="form" @submit.prevent="onSubmit">
     <slot />
   </form>
 </template>

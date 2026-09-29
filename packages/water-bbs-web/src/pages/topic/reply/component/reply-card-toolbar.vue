@@ -27,7 +27,7 @@ const onClickComment = () => {
 };
 const onReport = () => {
   render(
-    h(ProposalForm),
+    h(ProposalForm, { defaultSteps: ['reply.hide'], allowAddStep: false, stepFieldConfig: { 'reply.hide': { defaults: { replyId: props.replyId }, disabled: ['replyId'] } } }),
   );
 };
 </script>

@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import type { ZodObject } from 'zod';
-import type z from 'zod';
+import z from 'zod';
 import type { JSONSchema } from 'zod/v4/core';
 import type { UiCheckboxDto, UiDatePickerDto, UiInputDto, UiSelectDto } from '@/api';
-import { computed, h, reactive, watch, type VNode } from 'vue';
-import { UiCalendarSelectField, UiCheckbox, UiFormItem, UiInput, UiListbox, UiListboxItem } from '@/components/ui';
+import { computed, h, reactive, useTemplateRef, watch, type VNode } from 'vue';
+import { UiCalendarSelectField, UiCheckbox, UiFormItem, UiInput, UiListbox, UiListboxItem, UiForm } from '@/components/ui';
 import { useNow } from '@/composables';
+import { toTypedSchema } from '@vee-validate/zod';
+import { createCalendarDate, createNowCalendarDate, getUserTimezone } from '@/helper';
 
 type UiDto = UiCheckboxDto | UiDatePickerDto | UiInputDto | UiSelectDto;
 
@@ -17,12 +19,10 @@ const { param, ui, disabledFields = [], defaultValues = {} } = defineProps<{
 }>();
 
 const modelValue = defineModel<Record<string, any>>({ default: () => ({}) });
-
-const { nowDateValue } = useNow();
-
 const uiDef = Object.groupBy(ui, item => item.id);
-
 const data = reactive<Record<string, any>>({ ...defaultValues, ...modelValue.value });
+const rules = toTypedSchema(z.fromJSONSchema(param));
+const form = useTemplateRef('form');
 
 const onModelValueUpdate = (key: string, value: any) => {
   data[key] = value;
@@ -58,12 +58,15 @@ const buildUiAction = (dto: UiDto) => {
         'disabled': isDisabled,
       });
     case 'date-picker':
+      debugger;
       if (!data[dto.id]) {
-        data[dto.id] = nowDateValue;
+        data[dto.id] = createNowCalendarDate().toDate(getUserTimezone()).toISOString();
       }
       return h(UiCalendarSelectField, {
         'modelValue': data[dto.id],
-        'onUpdate:modelValue': value => onModelValueUpdate(dto.id, value),
+        'onUpdate:modelValue': (value) => {
+          data[dto.id] = value
+        },
         'disabled': isDisabled,
       });
   }
@@ -105,6 +108,15 @@ const visit = (node: JSONSchema._JSONSchema, name?: string): VNode[] => {
   return [];
 };
 
+const validate = () => {
+  if (!form.value) {
+    return;
+  }
+  return form.value.validate();
+};
+
+defineExpose({ validate });
+
 const components = computed(() => visit(param, ''));
 
 watch(data, () => {
@@ -114,6 +126,8 @@ watch(data, () => {
 
 <template>
   <div>
-    <component :is="component" v-for="component in components" :key="component.key" />
+    <ui-form ref="form" :model="data" :schema="rules">
+      <component :is="component" v-for="component in components" :key="component.key" />
+    </ui-form>
   </div>
 </template>

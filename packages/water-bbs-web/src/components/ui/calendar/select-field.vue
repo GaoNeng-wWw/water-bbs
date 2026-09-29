@@ -5,18 +5,19 @@ import { computed, ref, watch, type Ref } from 'vue';
 import { UiField } from '../form';
 import type { DateValue } from '@internationalized/date';
 import { UiPopoverContent, Popover, PopoverTrigger } from '../popover';
+import { createCalendarDate, getUserTimezone } from '@/helper/index.ts';
 
 defineOptions({
   inheritAttrs: true,
 });
 
-const modelValue = defineModel<DateValue>({ required: true });
+const modelValue = defineModel<string>({ required: true });
 
 const date = computed(() => modelValue.value);
-const currentDate = ref(date.value) as Ref<DateValue>;
+const currentDate = ref(createCalendarDate(date.value)) as Ref<DateValue>;
 
 watch(currentDate, () => {
-  modelValue.value = currentDate.value;
+  modelValue.value = currentDate.value.toDate(getUserTimezone()).toISOString();
 });
 </script>
 
