@@ -35,22 +35,14 @@ watch(activeId, () => {
     <app-nav-bar />
     <div class="max-w-5xl flex flex-col mx-auto pt-8 pb-4 gap-8 px-5">
       <div class="w-full">
-        <h1 v-if="!isLoading" v-governance-member class="text-3xl text-surface-fg">
+        <h1 v-if="!isLoading" class="text-3xl text-surface-fg">
           {{ category?.name }}
         </h1>
         <ui-skeleton v-else class="w-64! h-3" animated />
       </div>
       <div class="flex flex-col md:flex-row gap-4">
         <div class="w-full">
-          <div v-if="!isLoading">
-            <suspense>
-              <topic-list v-if="category" :category="{ ...category }" />
-              <template #fallback>
-                <topic-list-skeleton />
-              </template>
-            </suspense>
-          </div>
-          <topic-list-skeleton v-else />
+          <router-view />
         </div>
         <div class="w-full shrink-0 h-fit -order-1 top-16 static space-y-4 md:sticky md:order-1 md:w-75">
           <div class="w-full h-fit bg-surface-100 rounded-md border border-surface-200 p-2">

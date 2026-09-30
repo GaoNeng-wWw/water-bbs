@@ -69,4 +69,11 @@ export class CommentController {
       parentId,
     );
   }
+
+  // @Post(':commentId/reply/report/:replyId')
+  // async reportCommentReply(
+  //   @Param('commentId') commentId: CommentId,
+  //   @Param('replyId') replyId: ReplyId,
+  //   @User('id') id: AccountId,
+  // ) {}
 }

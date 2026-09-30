@@ -44,6 +44,7 @@ export class GetReplyService implements IQueryHandler<GetReply> {
           id: authorProfile.accountId,
           nick: authorProfile.nick,
         },
+        hidden: Boolean(topic.hiddenPeriod && !topic.hiddenPeriod.isExpired()),
       }),
     );
   }

@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { I18nValidationPipe } from 'nestjs-i18n';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpPresentationError } from '@app/shared';
+import '@voznov/zod-dto-nestjs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

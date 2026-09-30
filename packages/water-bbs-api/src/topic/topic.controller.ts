@@ -23,6 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { TopicInfo, UpdateTopicDto, UpdateTopicResponse } from './dto';
 import { ReplyInfo, ReplyItem } from './dto/find-reply.dto';
+import { ReportDto } from './dto/report';
 
 @Controller('topic')
 export class TopicController {
@@ -88,13 +89,37 @@ export class TopicController {
 
   @ApiOperation({ summary: '删除回复', operationId: 'removeReply' })
   @ApiOkResponse({ type: ReplyInfo })
-  @ApiParam({ name: 'replyId', description: '回复ID' })
+  @ApiParam({ name: 'replyId', description: '回复ID', type: String })
   @Delete('replies/:replyId')
   async removeReply(
     @Param('replyId') replyId: ReplyId,
     @User('id') id: AccountId,
   ) {
     return this.topicService.removeReply(replyId, id);
+  }
+
+  @ApiOperation({ summary: '举报回复', operationId: 'reportReply' })
+  @ApiOkResponse({ type: ReplyInfo })
+  @ApiParam({ name: 'replyId', description: '回复ID', type: String })
+  @Delete('report/reply/:replyId')
+  async reportReply(
+    @Param('replyId') replyId: ReplyId,
+    @User('id') actor: AccountId,
+    @Body() dto: ReportDto,
+  ) {
+    return this.topicService.reportReply(replyId, actor, dto);
+  }
+
+  @ApiOperation({ summary: '举报主题', operationId: 'reportTopic' })
+  @ApiOkResponse({ type: TopicInfo })
+  @ApiParam({ name: 'topicId', description: '主题ID' })
+  @Delete('report/topic/:topicId')
+  async reportTopic(
+    @Param('topicId') topicId: TopicId,
+    @User('id') actor: AccountId,
+    @Body() dto: ReportDto,
+  ) {
+    return this.topicService.reportTopic(topicId, actor, dto);
   }
 
   @ApiOperation({ summary: '删除主题', operationId: 'removeTopic' })

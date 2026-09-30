@@ -38,6 +38,10 @@ export type I18nTranslations = {
         "COMMENT_NOT_FOUND": string;
         "FORBIDDEN": string;
         "COMMENT_REPLY_NOT_FOUND": string;
+        "PROPOSAL": {
+            "REMOVE_TOPIC": string;
+            "REMOVE_REPLY": string;
+        };
     };
     "mail": {
         "register": {

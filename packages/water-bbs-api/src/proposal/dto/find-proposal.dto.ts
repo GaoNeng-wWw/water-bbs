@@ -1,4 +1,4 @@
-import { ProposalStatus } from '@app/gamification';
+import { ProposalKind, ProposalStatus } from '@app/gamification';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsNotEmpty, IsObject, IsString } from 'class-validator';
@@ -47,6 +47,9 @@ export class FindProposalResponseDTO {
   @Expose()
   @ApiProperty({ description: '提案状态', enum: ProposalStatus })
   status: ProposalStatus;
+  @Expose()
+  @ApiProperty({ description: '提案类型', enum: ProposalKind })
+  kind: ProposalKind;
 
   @Expose()
   @ApiProperty({ description: '提案投票摘要', type: ProposalVoteSummary })

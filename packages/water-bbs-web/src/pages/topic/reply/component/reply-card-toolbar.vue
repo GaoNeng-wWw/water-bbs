@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ProposalForm } from '@/components/app';
 import {
   UiPopover,
   UiPopoverContent,
@@ -8,13 +9,34 @@ import {
   UiListboxSection,
   UiListboxItem,
 } from '@/components/ui';
+import { useModal } from '@/composables';
+import { h } from 'vue';
+
+const props = defineProps<{
+  replyId: string;
+}>();
 
 const emits = defineEmits<{
   commentClick: [];
 }>();
 
+const { Primitive, render, ModalHost, remove } = useModal();
+
 const onClickComment = () => {
   emits('commentClick');
+};
+const onReport = () => {
+  const id = render(
+    h(
+      ProposalForm,
+      {
+        defaultSteps: ['reply.hide'],
+        allowAddStep: false,
+        stepFieldConfig: { 'reply.hide': { defaults: { replyId: props.replyId }, disabled: ['replyId'] } },
+        onDone: () => remove(id),
+      },
+    ),
+  );
 };
 </script>
 
@@ -32,12 +54,15 @@ const onClickComment = () => {
       <ui-popover-content class="w-50!">
         <ui-listbox mode="none">
           <ui-listbox-section label="行为">
-            <ui-listbox-item id="report" value="report" danger>
-              举报
-            </ui-listbox-item>
+            <primitive as-child>
+              <ui-listbox-item id="report" value="report" danger @click="onReport">
+                举报
+              </ui-listbox-item>
+            </primitive>
           </ui-listbox-section>
         </ui-listbox>
       </ui-popover-content>
     </ui-popover>
+    <modal-host />
   </div>
 </template>

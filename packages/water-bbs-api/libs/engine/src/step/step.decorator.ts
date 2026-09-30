@@ -6,14 +6,13 @@ import { DiscoveryService } from '@nestjs/core';
 export const StepKey = Symbol('step');
 
 export const StepHandlerMetadata =
-  DiscoveryService.createDecorator<Definition<any, any, any>>();
+  DiscoveryService.createDecorator<Definition<any, any>>();
 
 export const Step = <
   UiSchema extends z.infer<typeof uiSchema>[],
   Param extends z.ZodType,
-  Events extends unknown[],
 >(
-  def: Definition<UiSchema, Param, Events>,
+  def: Definition<UiSchema, Param>,
 ) =>
   applyDecorators(
     StepHandlerMetadata(def),

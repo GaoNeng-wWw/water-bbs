@@ -20,8 +20,8 @@ import {
 })
 @Embeddable()
 export class MetaEntity {
-  @Property({ type: 'datetime', index: true })
-  createdAt: Opt<Date> = new Date();
+  @Property({ type: 'datetime', index: true, onCreate: () => new Date() })
+  createdAt: Opt<Date>;
   @Property({ type: 'datetime', index: true, nullable: true })
   removedAt: Opt<Date> | null;
   @Property({ type: 'datetime', index: true, nullable: true })

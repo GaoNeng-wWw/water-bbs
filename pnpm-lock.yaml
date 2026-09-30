@@ -267,6 +267,12 @@ importers:
       '@nestjs/swagger':
         specifier: ^11.4.6
         version: 11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)
+      '@voznov/zod-dto':
+        specifier: ^0.4.2
+        version: 0.4.2(zod@4.4.3)
+      '@voznov/zod-dto-nestjs':
+        specifier: ^0.4.2
+        version: 0.4.2(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2))(@voznov/zod-dto@0.4.2(zod@4.4.3))(reflect-metadata@0.2.2)(rxjs@7.8.2)(zod@4.4.3)
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -274,6 +280,9 @@ importers:
         specifier: ^0.15.1
         version: 0.15.1
       cron:
+        specifier: ^4.4.0
+        version: 4.4.0
+      date-fns:
         specifier: ^4.4.0
         version: 4.4.0
       ejs:
@@ -406,6 +415,12 @@ importers:
 
   packages/water-bbs-web:
     dependencies:
+      '@iconify/vue':
+        specifier: ^5.0.1
+        version: 5.0.1(vue@3.5.40(typescript@6.0.3))
+      '@internationalized/date':
+        specifier: ^3.12.4
+        version: 3.12.4
       '@tailwindcss/typography':
         specifier: ^0.5.20
         version: 0.5.20(tailwindcss@4.3.3)
@@ -1149,6 +1164,11 @@ packages:
   '@iconify/utils@3.1.4':
     resolution: {integrity: sha512-b1S7B1k9ohZ+iNTi2ATxbRYG9fTrJmUT0rc46bvVnNxqNRGW7dyo/vRREwyniI5IRN2RSJHDcm+s3BjWrSAjHw==}
 
+  '@iconify/vue@5.0.1':
+    resolution: {integrity: sha512-aumwwooJlFJ5H5qYWB6ZTAyM0C8hpfcSVLB9/a3qnH1GGvIJ+FEbpEs4s/HfErYe/M5qZeLjwmESR5fFm3lXEw==}
+    peerDependencies:
+      vue: '>=3.0.0'
+
   '@inquirer/ansi@1.0.2':
     resolution: {integrity: sha512-S8qNSZiYzFd0wAcyG5AXCvUHC5Sr7xpZ9wZ2py9XR88jUz8wooStVx5M6dRzczbBWjic9NP7+rY0Xi7qqK/aMQ==}
     engines: {node: '>=18'}
@@ -1404,8 +1424,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@internationalized/date@3.12.3':
-    resolution: {integrity: sha512-fuLX+3ZKLsxI73y8b01EG/WjHb6gE6weCqlfawPO27kBWGMh9G1yH6Csv1uU7/cac9H2GHmOMt6CjmuQ1aia4Q==}
+  '@internationalized/date@3.12.4':
+    resolution: {integrity: sha512-M1dEn4c1U1HsSlaVR8upZtSqvXrTkHDfv18H01uCSJyjVLDxnBR38v/fMxecmlwXKR4i9HeZcmgQAPE6A+aGJQ==}
 
   '@internationalized/number@3.6.7':
     resolution: {integrity: sha512-3ji1fcrT+FPAK86UqEhB/psHixYo6niWPJtt7+qRaYFynt/BaJG8GhAPimtWUpEiVSTq8ZM8L5psMxGquiB/Vg==}
@@ -2945,6 +2965,23 @@ packages:
   '@volar/typescript@2.4.28':
     resolution: {integrity: sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==}
 
+  '@voznov/zod-dto-nestjs@0.4.2':
+    resolution: {integrity: sha512-ch6ROPcqA9ui2OxxqTbK6pZimvl4Yki0wShu57ziSoVoi6yC/CtcaWUYv0LoChLnS/pqV4SS7PJpK2DY6I0YVQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@nestjs/common': '>=10.0.0'
+      '@nestjs/swagger': '>=7.0.0'
+      '@voznov/zod-dto': ^0.4.2
+      reflect-metadata: '>=0.1.13'
+      rxjs: '>=7.0.0'
+      zod: '>=4.0.0'
+
+  '@voznov/zod-dto@0.4.2':
+    resolution: {integrity: sha512-rDnEcv6NSrOgYlMKtAzb2xPSre3FCohTfVDX3Kj0bYmqswt8BykjZECbZ6xzVPj+s6oMeLDOWX7EzdCYscgY3g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: '>=4.0.0'
+
   '@vue-macros/common@3.1.4':
     resolution: {integrity: sha512-/5Fv+6DgIcM9ajY05ZmKBv+LMX1M9A0X+IUwDRVdt67ciw8OV9bvG2r34p3RiEadlsQybjhKPRKNXDC8Bp23cw==}
     engines: {node: '>=20.19.0'}
@@ -3780,6 +3817,9 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
 
   dayjs@1.11.21:
     resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
@@ -8271,6 +8311,11 @@ snapshots:
       '@iconify/types': 2.0.0
       import-meta-resolve: 4.2.0
 
+  '@iconify/vue@5.0.1(vue@3.5.40(typescript@6.0.3))':
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.5.40(typescript@6.0.3)
+
   '@inquirer/ansi@1.0.2': {}
 
   '@inquirer/checkbox@4.1.2(@types/node@24.13.3)':
@@ -8512,7 +8557,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.13.3
 
-  '@internationalized/date@3.12.3':
+  '@internationalized/date@3.12.4':
     dependencies:
       '@swc/helpers': 0.5.23
 
@@ -10045,6 +10090,19 @@ snapshots:
       path-browserify: 1.0.1
       vscode-uri: 3.1.0
 
+  '@voznov/zod-dto-nestjs@0.4.2(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2))(@voznov/zod-dto@0.4.2(zod@4.4.3))(reflect-metadata@0.2.2)(rxjs@7.8.2)(zod@4.4.3)':
+    dependencies:
+      '@nestjs/common': 11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/swagger': 11.4.6(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)
+      '@voznov/zod-dto': 0.4.2(zod@4.4.3)
+      reflect-metadata: 0.2.2
+      rxjs: 7.8.2
+      zod: 4.4.3
+
+  '@voznov/zod-dto@0.4.2(zod@4.4.3)':
+    dependencies:
+      zod: 4.4.3
+
   '@vue-macros/common@3.1.4(vue@3.5.40(typescript@6.0.3))':
     dependencies:
       '@vue/compiler-sfc': 3.5.40
@@ -11043,6 +11101,8 @@ snapshots:
       css-tree: 2.2.0
 
   csstype@3.2.3: {}
+
+  date-fns@4.4.0: {}
 
   dayjs@1.11.21: {}
 
@@ -14235,7 +14295,7 @@ snapshots:
     dependencies:
       '@floating-ui/dom': 1.8.0
       '@floating-ui/vue': 1.1.11(vue@3.5.40(typescript@6.0.3))
-      '@internationalized/date': 3.12.3
+      '@internationalized/date': 3.12.4
       '@internationalized/number': 3.6.7
       '@tanstack/vue-virtual': 3.13.35(vue@3.5.40(typescript@6.0.3))
       '@vueuse/core': 14.4.0(vue@3.5.40(typescript@6.0.3))

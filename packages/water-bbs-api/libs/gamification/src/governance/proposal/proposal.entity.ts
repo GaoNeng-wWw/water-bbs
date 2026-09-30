@@ -77,44 +77,67 @@ export class Proposal extends MetaEntity {
   @Property({ type: 'text', nullable: true })
   failReason: Opt<string>;
 
+  isControversy() {
+    return this.status === ProposalStatus.Controversy;
+  }
+
   canVote() {
     return this.status === ProposalStatus.Pending;
   }
 
-  approve() {
-    if (this.status !== ProposalStatus.Pending) {
-      return err(new StatusError(ProposalStatus.Pending, this.status));
-    }
-    this.status = ProposalStatus.Approved;
+  pending() {
+    this.status = ProposalStatus.Pending;
     return ok();
   }
-  reject() {
-    if (this.status !== ProposalStatus.Pending) {
-      return err(new StatusError(ProposalStatus.Pending, this.status));
+  approve() {
+    if (
+      this.status === ProposalStatus.Pending ||
+      this.status === ProposalStatus.Controversy
+    ) {
+      this.expiredAt = new Date();
+      this.status = ProposalStatus.Approved;
+      return ok();
     }
+    return err(
+      new StatusError(
+        [ProposalStatus.Pending, ProposalStatus.Controversy],
+        this.status,
+      ),
+    );
+  }
+  reject() {
+    if (
+      this.status !== ProposalStatus.Pending &&
+      this.status !== ProposalStatus.Controversy
+    ) {
+      return err(
+        new StatusError(
+          [ProposalStatus.Pending, ProposalStatus.Controversy],
+          this.status,
+        ),
+      );
+    }
+    this.expiredAt = new Date();
     this.status = ProposalStatus.Rejected;
     return ok();
   }
   controversy() {
-    if (this.status !== ProposalStatus.Approved) {
-      return err(new StatusError(ProposalStatus.Approved, this.status));
+    if (this.status !== ProposalStatus.Pending) {
+      return err(new StatusError([ProposalStatus.Pending], this.status));
     }
     this.status = ProposalStatus.Controversy;
     return ok();
   }
   executing() {
-    if (
-      this.status !== ProposalStatus.Approved &&
-      this.status !== ProposalStatus.Controversy
-    ) {
-      return err(new StatusError(ProposalStatus.Approved, this.status));
+    if (this.status !== ProposalStatus.Approved) {
+      return err(new StatusError([ProposalStatus.Approved], this.status));
     }
     this.status = ProposalStatus.Executing;
     return ok();
   }
   executed() {
     if (this.status !== ProposalStatus.Executing) {
-      return err(new StatusError(ProposalStatus.Executing, this.status));
+      return err(new StatusError([ProposalStatus.Executing], this.status));
     }
     this.status = ProposalStatus.Executed;
     return ok();
@@ -127,7 +150,7 @@ export class Proposal extends MetaEntity {
 
   cancel() {
     if (this.status !== ProposalStatus.Pending) {
-      return err(new StatusError(ProposalStatus.Pending, this.status));
+      return err(new StatusError([ProposalStatus.Pending], this.status));
     }
     this.status = ProposalStatus.Cancelled;
     return ok();

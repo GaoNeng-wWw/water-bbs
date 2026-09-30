@@ -26,5 +26,12 @@ watch(selected, () => {
     >
       <category-item :color="item.color" :name="item.name" :show-color="props.showColor" />
     </ui-listbox-item>
+    <ui-listbox-item
+      id="proposal"
+      key="proposal"
+      value="proposal"
+    >
+      <category-item name="提案" :show-color="props.showColor" />
+    </ui-listbox-item>
   </ui-listbox>
 </template>

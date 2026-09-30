@@ -1,5 +1,5 @@
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
-import { Proposal, ProposalId, ProposalStatus } from '../proposal.entity';
+import { Proposal, ProposalId, ProposalKind, ProposalStatus } from '../proposal.entity';
 import { err, ok, Result } from 'neverthrow';
 import { DomainError } from '@app/shared';
 import { EntityRepository } from '@mikro-orm/sqlite';
@@ -18,6 +18,7 @@ export type ProposalInfo = {
   createdAt: string;
   status: ProposalStatus;
   content: string;
+  kind: ProposalKind,
 };
 
 export class FindProposal extends Query<Result<ProposalInfo, DomainError>> {
@@ -47,6 +48,7 @@ export class FindProposalService implements IQueryHandler<FindProposal> {
       step: proposal.steps,
       createdAt: proposal.createdAt.toString(),
       status: proposal.status,
+      kind: proposal.kind,
       content: proposal.content,
     });
   }

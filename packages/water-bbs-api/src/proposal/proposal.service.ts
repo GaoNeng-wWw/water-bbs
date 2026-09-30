@@ -6,6 +6,7 @@ import {
   CreateVote,
   ListProposal,
   ResolveControversy,
+  BatchCalculateVote,
 } from '@app/gamification';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -18,13 +19,16 @@ import { ok } from 'neverthrow';
 import { plainToInstance } from 'class-transformer';
 import { FindProposalResponseDTO } from './dto/find-proposal.dto';
 import { VoteKind, VoteProposalDTO } from './dto/vote-proposal.dto';
-import { CursorDTO } from '@app/shared';
+import { CursorDTO, PaginationQuery } from '@app/shared';
+import { StepDiscoverService } from '@app/engine';
+import { ListProposalItem } from './dto/list-proposal.dto';
 
 @Injectable()
 export class ProposalService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly stepDiscoverService: StepDiscoverService,
   ) {}
 
   async createProposal(dto: CreateProposalDTO, creator: AccountId) {
@@ -65,7 +69,7 @@ export class ProposalService {
     return ok(
       plainToInstance(FindProposalResponseDTO, {
         ...proposal,
-        voteSummary,
+        voteSummary: voteSummary.value,
       }),
     );
   }
@@ -91,12 +95,50 @@ export class ProposalService {
     if (proposalListResult.isErr()) {
       return proposalListResult;
     }
-    const proposalList = proposalListResult.value;
-    return proposalList;
+
+    const ids = proposalListResult.value.items.map((item) => item.id);
+
+    const voteResult = await this.queryBus.execute(
+      new BatchCalculateVote(ids as ProposalId[]),
+    );
+    if (voteResult.isErr()) {
+      return voteResult;
+    }
+    const votes = voteResult.value
+      .map((item) => {
+        return {
+          [item.proposalId]: {
+            yes: item.yes,
+            no: item.no,
+            total: item.yes + item.no,
+          },
+        };
+      })
+      .reduce((prev, cur) => ({ ...prev, ...cur }), {});
+    const items = proposalListResult.value.items.map((item) => {
+      return new ListProposalItem({
+        ...item,
+        yes: votes[item.id].yes,
+        no: votes[item.id].no,
+        total: votes[item.id].total,
+      });
+    });
+    return ok({
+      items,
+      nextCursor: proposalListResult.value.nextCursor,
+      prevCursor: proposalListResult.value.prevCursor,
+      total: proposalListResult.value.total,
+    });
   }
   async resolveControversy(id: ProposalId, accountId: AccountId, kind: string) {
     return this.commandBus.execute(
       new ResolveControversy(id, accountId, kind === 'approve'),
     );
+  }
+  getStepDef(id: string) {
+    return this.stepDiscoverService.getDefByKey(id);
+  }
+  listSteps(dto: PaginationQuery) {
+    return this.stepDiscoverService.getAllKey(dto.page, dto.size);
   }
 }

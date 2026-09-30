@@ -5,13 +5,13 @@ import { ListBoxContextKey, type ListBoxRootProps, type RootEmits } from './root
 const {
   mode = 'single',
   defaultSelected = [],
-  ...props
+  disabledKey = [],
 } = defineProps<ListBoxRootProps>();
 
 const emits = defineEmits<RootEmits>();
 const modelValue = defineModel<string[]>({ required: false, default: () => [] });
 
-const selected: Ref<string[]> = ref([...modelValue.value]);
+const selected: Ref<string[]> = ref([...defaultSelected, ...modelValue.value]);
 
 const onSelect = (id: string, value: string) => {
   emits('select', { id, value });
@@ -37,7 +37,7 @@ watch(selected, () => {
 provide(ListBoxContextKey, {
   onSelect,
   selectedKey: computed(() => selected.value),
-  disabledKey: computed(() => props.disabledKey ?? []),
+  disabledKey: computed(() => disabledKey ?? []),
 });
 </script>
 

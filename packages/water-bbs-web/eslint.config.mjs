@@ -4,6 +4,7 @@ export default www({
   vue: {
     overrides: {
       'vue/no-v-model-argument': 'off',
+      'vue/no-v-for-template-key': 'off',
     },
   },
 });

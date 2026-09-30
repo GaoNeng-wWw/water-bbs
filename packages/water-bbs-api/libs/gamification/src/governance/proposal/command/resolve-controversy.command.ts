@@ -1,11 +1,16 @@
-import { Command, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  Command,
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { err, ok, Result } from 'neverthrow';
-import { Proposal, ProposalId } from '../proposal.entity';
+import { Proposal, ProposalId, ProposalStatus } from '../proposal.entity';
 import { DomainError, PermissionDeniedError } from '@app/shared';
 import { AccountId } from 'src/auth';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
-import { ProposalNotFound } from '../error';
+import { ProposalNotFound, StatusError } from '../error';
 import { GovernanceMember } from '../../member';
 import { ProposalControversyResolvedEvent } from '../events';
 
@@ -21,6 +26,7 @@ export class ResolveControversy extends Command<
   }
 }
 
+@CommandHandler(ResolveControversy)
 export class ResolveControversyService implements ICommandHandler<ResolveControversy> {
   constructor(
     @InjectRepository(Proposal)
@@ -39,7 +45,11 @@ export class ResolveControversyService implements ICommandHandler<ResolveControv
     if (!proposal) {
       return err(new ProposalNotFound());
     }
-
+    if (!proposal.isControversy()) {
+      return err(
+        new StatusError([ProposalStatus.Controversy], proposal.status),
+      );
+    }
     const member = await this.memberRepository.findOne({
       accountId: command.accountId,
       $or: [{ endedAt: null }, { endedAt: { $gt: new Date() } }],

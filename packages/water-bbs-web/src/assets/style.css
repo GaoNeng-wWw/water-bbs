@@ -3,6 +3,7 @@
 @import "../components/ui/button/theme.css";
 @import "../components/ui/avatar/theme.css";
 @import "../components/ui/skeleton/theme.css";
+@import "../components/ui/checkbox/theme.css";
 @plugin "@iconify/tailwind4";
 @plugin "@tailwindcss/typography";
 

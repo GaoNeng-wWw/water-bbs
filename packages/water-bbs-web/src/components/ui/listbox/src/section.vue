@@ -2,13 +2,13 @@
 import type { ListBoxSectionProps } from './section.props';
 
 const {
-  label
+  label,
 } = defineProps<ListBoxSectionProps>();
 </script>
 
 <template>
   <div class="w-full">
-    <span class="text-surface-600 text-sm">{{ label }}</span>
+    <span v-if="label" class="text-surface-600 text-sm">{{ label }}</span>
     <div class="w-full space-y-2">
       <slot />
     </div>

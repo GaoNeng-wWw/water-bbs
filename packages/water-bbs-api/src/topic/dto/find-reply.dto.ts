@@ -26,6 +26,8 @@ export class ReplyInfo {
   author: ReplyAuthor;
   @ApiProperty({ description: '回复创建时间' })
   createdAt: Date;
+  @ApiProperty({ description: '是否隐藏' })
+  hidden: boolean;
 }
 
 export class ReplyItem {
@@ -37,10 +39,13 @@ export class ReplyItem {
   author: ReplyAuthor;
   @ApiProperty({ description: '回复创建时间' })
   createdAt: string;
+  @ApiProperty({ description: '是否隐藏' })
+  hidden: boolean;
   constructor(reply: ReplyInfo) {
     this.id = reply.id;
     this.content = reply.content;
     this.author = reply.author;
     this.createdAt = reply.createdAt.toLocaleTimeString();
+    this.hidden = reply.hidden;
   }
 }

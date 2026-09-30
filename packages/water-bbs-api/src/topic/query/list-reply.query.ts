@@ -18,6 +18,7 @@ export interface ReplyItem {
   content: string;
   author: ReplyAuthor;
   createdAt: Date;
+  hidden: boolean;
 }
 
 export interface ListReplyResult {
@@ -80,9 +81,13 @@ export class ListReplyService implements IQueryHandler<ListReplyQuery> {
           nick: profile.nick,
           bio: profile.bio,
         },
-        content: reply.content,
+        content:
+          reply.hiddenPeriod && !reply.hiddenPeriod.isExpired()
+            ? reply.hiddenPeriod.reason
+            : reply.content,
         id: reply.id,
         createdAt: reply.createdAt,
+        hidden: Boolean(reply.hiddenPeriod && !reply.hiddenPeriod.isExpired()),
       });
     }
     return ok({ replies: items });

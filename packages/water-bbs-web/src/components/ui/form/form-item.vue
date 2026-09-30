@@ -10,10 +10,11 @@ export type FormItemProps = {
 };
 
 const { prop, label } = defineProps<FormItemProps>();
-
-const { errorMessage, ...field } = useField(prop);
-
 const form = useFormContext();
+
+const { errorMessage, ...field } = useField(prop, {}, {
+  validateOnValueUpdate: form.triggerMethod.value === 'change',
+});
 
 FormItemProvider({
   invalid: computed(() => !!errorMessage.value),
@@ -22,7 +23,7 @@ FormItemProvider({
 
 <template>
   <div
-    class="w-full flex gap-2 data-[label-pos='top']:flex-col"
+    class="form-item"
     :data-invalid="!!errorMessage || undefined"
     :data-label-pos="form.labelPosition.value"
   >
@@ -35,3 +36,11 @@ FormItemProvider({
     </div>
   </div>
 </template>
+
+<style scoped>
+.form-item {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: span 2;
+}
+</style>
