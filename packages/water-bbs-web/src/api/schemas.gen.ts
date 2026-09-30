@@ -310,13 +310,18 @@ export const ReplyItemSchema = {
         createdAt: {
             type: 'string',
             description: '回复创建时间'
+        },
+        hidden: {
+            type: 'boolean',
+            description: '是否隐藏'
         }
     },
     required: [
         'id',
         'content',
         'author',
-        'createdAt'
+        'createdAt',
+        'hidden'
     ]
 } as const;
 
@@ -453,13 +458,18 @@ export const ReplyInfoSchema = {
             format: 'date-time',
             type: 'string',
             description: '回复创建时间'
+        },
+        hidden: {
+            type: 'boolean',
+            description: '是否隐藏'
         }
     },
     required: [
         'id',
         'content',
         'author',
-        'createdAt'
+        'createdAt',
+        'hidden'
     ]
 } as const;
 

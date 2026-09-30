@@ -20,7 +20,10 @@
     "test:e2e": "vitest run --config ./test/vitest.config.e2e.ts",
     "repl": "pnpm run start -- --entryFile repl",
     "orm": "pnpm mikro-orm",
-    "migration:create": "mikro-orm migration:create --config ./mikro-orm.config.ts"
+    "migration:create": "mikro-orm migration:create --config ./mikro-orm.config.ts",
+    "db:create": "mikro-orm database:create",
+    "schema:update": "mikro-orm schema:update --run",
+    "seeder:run": "mikro-orm seeder:run"
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",

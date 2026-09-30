@@ -58,7 +58,6 @@ const buildUiAction = (dto: UiDto) => {
         'disabled': isDisabled,
       });
     case 'date-picker':
-      debugger;
       if (!data[dto.id]) {
         data[dto.id] = createNowCalendarDate().toDate(getUserTimezone()).toISOString();
       }

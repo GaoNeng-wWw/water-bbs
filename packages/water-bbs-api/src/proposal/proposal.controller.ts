@@ -66,7 +66,6 @@ export class ProposalController {
     description: '创建提案',
     type: CreateProposalResponseDTO,
   })
-  @ApiParam({ name: 'accountId', description: '用户ID' })
   @Post('')
   async createProposal(
     @Body() body: CreateProposalDTO,

@@ -208,6 +208,10 @@ export type ReplyItem = {
      * 回复创建时间
      */
     createdAt: string;
+    /**
+     * 是否隐藏
+     */
+    hidden: boolean;
 };
 
 export type TopicAuthor = {
@@ -297,6 +301,10 @@ export type ReplyInfo = {
      * 回复创建时间
      */
     createdAt: Date;
+    /**
+     * 是否隐藏
+     */
+    hidden: boolean;
 };
 
 export type CreateTopicDto = {
@@ -1350,12 +1358,7 @@ export type ListProposalItemsResponse = ListProposalItemsResponses[keyof ListPro
 
 export type CreateProposalData = {
     body: CreateProposalDto;
-    path: {
-        /**
-         * 用户ID
-         */
-        accountId: unknown;
-    };
+    path?: never;
     query?: never;
     url: '/proposal';
 };

@@ -11,7 +11,7 @@ export class OnEmergencyProposalCreated implements IEventHandler<EmergencyPropos
   constructor(
     @InjectRepository(Proposal)
     private readonly repo: EntityRepository<Proposal>,
-    private readonly eventBus: EventBus
+    private readonly eventBus: EventBus,
   ) {}
   async handle({ proposalId }: EmergencyProposalCreated) {
     const proposal = await this.repo.findOne({ id: proposalId });
@@ -22,7 +22,7 @@ export class OnEmergencyProposalCreated implements IEventHandler<EmergencyPropos
     proposal.pending();
     const approveResult = proposal.approve();
     if (approveResult.isErr()) {
-      return approveResult;
+      proposal.failed(approveResult.error.message);
     }
     await this.repo.upsert(proposal);
     await this.eventBus.publish(new Approve(proposal.id));

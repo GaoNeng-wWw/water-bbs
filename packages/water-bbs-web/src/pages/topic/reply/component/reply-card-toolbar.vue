@@ -20,14 +20,22 @@ const emits = defineEmits<{
   commentClick: [];
 }>();
 
-const { Primitive, render, ModalHost } = useModal();
+const { Primitive, render, ModalHost, remove } = useModal();
 
 const onClickComment = () => {
   emits('commentClick');
 };
 const onReport = () => {
-  render(
-    h(ProposalForm, { defaultSteps: ['reply.hide'], allowAddStep: false, stepFieldConfig: { 'reply.hide': { defaults: { replyId: props.replyId }, disabled: ['replyId'] } } }),
+  const id = render(
+    h(
+      ProposalForm,
+      {
+        defaultSteps: ['reply.hide'],
+        allowAddStep: false,
+        stepFieldConfig: { 'reply.hide': { defaults: { replyId: props.replyId }, disabled: ['replyId'] } },
+        onDone: () => remove(id),
+      },
+    ),
   );
 };
 </script>

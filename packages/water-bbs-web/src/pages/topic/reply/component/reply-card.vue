@@ -10,13 +10,13 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { createCommentReply, getCommentByResourceId } from '@/api';
 import { CommentList, CommentEditor } from '@/components/app';
 import { ref } from 'vue';
-import { useModal } from '@/composables/use-modal.ts';
 
 const props = defineProps<{
   id: string;
   content: string;
   authorName: string;
   authorId: string;
+  hidden?: boolean;
 }>();
 
 const editor = useEditor({
@@ -96,7 +96,12 @@ const onSubmit = (content: string, commentId: string) => {
       </div>
     </div>
     <div class="w-full h-fit" @click.stop.prevent>
-      <editor-content :editor="editor" />
+      <div v-if="props.hidden" class="w-full p-2 text-surface-fg font-bold rounded bg-warning-500/50">
+        <p>已隐藏</p>
+        <span>理由:</span>
+        <editor-content :editor="editor" />
+      </div>
+      <editor-content v-if="!props.hidden" :editor="editor" />
     </div>
     <reply-card-toolbar :reply-id="props.id" @comment-click="toggleCommentVisbility" />
     <animate-presence>

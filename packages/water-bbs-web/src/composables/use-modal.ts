@@ -76,13 +76,15 @@ export const useModal = () => {
   const render = (vnode: VNode) => {
     const origin = pendingOrigin ?? getOrigin();
     pendingOrigin = null;
+    const id = nextId++;
     modals.push({
-      id: nextId++,
+      id,
       vnode,
       origin,
       exitOrigin: { ...origin },
       open: true,
     });
+    return id;
   };
 
   const ModalHost = defineComponent({
@@ -167,6 +169,9 @@ export const useModal = () => {
     },
   });
 
+  const remove = (id: number) => {
+    closeModal(id);
+  };
   const unmountAll = () => {
     modals.splice(0, modals.length);
   };
@@ -177,5 +182,6 @@ export const useModal = () => {
     ModalHost: ModalHost as Component,
     getOrigin,
     unmountAll,
+    remove,
   };
 };

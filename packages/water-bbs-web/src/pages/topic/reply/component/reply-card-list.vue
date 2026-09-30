@@ -123,6 +123,7 @@ const total = computed(() => data.value?.total ?? 0);
         :content="item.content"
         :author-id="item.author.id.toString()"
         :author-name="item.author.nick"
+        :hidden="item.hidden"
       />
     </div>
     <reply-card-list-skeleton v-else />

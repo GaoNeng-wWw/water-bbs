@@ -16,7 +16,6 @@ import { AccountId } from '../auth';
 import {
   CreateReplyCommand,
   CreateTopicCommand,
-  HideReplyCommand,
   HideTopicCommand,
   RemoveReplyCommand,
   RemoveTopicCommand,
@@ -105,6 +104,7 @@ export class TopicService {
             nick: reply.author.nick,
           },
           createdAt: reply.createdAt,
+          hidden: reply.hidden,
         }),
     );
     return ok(new ListReplyResponse(data, total.value));

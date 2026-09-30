@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, reactive, watch, useTemplateRef } from 'vue';
+import { computed, reactive, watch, useTemplateRef, ref } from 'vue';
 import { UiForm, UiFormItem, UiInput } from '@/components/ui';
-import { getStepDef, type StepInfo } from '@/api';
+import { getStepDef, type ProposalStep, type StepInfo } from '@/api';
 import StepUiRender from './step/ui-render.vue';
 import StepPicker from './step-picker.vue';
 import { motion, AnimatePresence } from 'motion-v';
@@ -9,6 +9,8 @@ import { Icon } from '@iconify/vue';
 import { UiButton, UiCheckbox, UiCalendarSelectField } from '@/components/ui';
 import z from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
+import { createCalendarDate, createNowCalendarDate, getUserTimezone } from '@/helper';
+import { createProposal } from '@/api';
 
 interface StepFieldConfig {
   disabled?: string[];
@@ -27,13 +29,23 @@ const {
   stepFieldConfig?: Record<string, StepFieldConfig>;
 }>();
 
-const form = reactive<Record<string, any>>({});
+const emits = defineEmits<{
+  successed: [string];
+  failed: [string];
+  done: [];
+}>();
+
+const form = reactive<Record<string, any>>({
+  endAt: createNowCalendarDate().toDate(getUserTimezone()).toISOString(),
+});
 const render = useTemplateRef('render');
 const formRef = useTemplateRef('formRef');
 const steps = reactive(new Set<{ info: StepInfo; collapse: boolean }>([]));
+const stepData = reactive<Record<string, any>>({});
 const disabled = computed(() => {
   return Array.from(steps).map(s => s.info.key);
 });
+const loading = ref(false);
 
 const getStepFieldConfig = (key: string) => stepFieldConfig[key] ?? {};
 
@@ -77,14 +89,18 @@ const onSelect = (info: StepInfo) => {
   });
 };
 const onSubmit = async () => {
+  loading.value = true;
   if (!render.value || !render.value.length) {
+    loading.value = false;
     return;
   }
   if (!formRef.value) {
+    loading.value = false;
     return;
   }
   const validateResult = await formRef.value.validate();
   if (!validateResult.valid) {
+    loading.value = false;
     return;
   }
 
@@ -96,14 +112,36 @@ const onSubmit = async () => {
       .filter(v => v !== undefined)
       .every(v => v)
   ) {
-
+    loading.value = false;
+    return;
   }
-  // createProposal({
-  //   body:{
-  //     content: form.description,
-  //     title: form.title,
-  //   }
-  // })
+  const steps: ProposalStep[] = [];
+  for (const [name, data] of Object.entries(stepData)) {
+    steps.push({
+      stepName: name,
+      param: data,
+    });
+  }
+  createProposal({
+    body: {
+      content: form.description,
+      title: form.title,
+      kind: form.emergency ? 'emergency' : 'normal',
+      steps,
+      proposalEndAt: createCalendarDate(form.endAt).toDate(getUserTimezone()),
+    },
+  })
+    .then(data => data.data!)
+    .then((data) => {
+      emits('successed', data.id);
+    })
+    .catch((reason) => {
+      emits('failed', reason.toString());
+    })
+    .finally(() => {
+      loading.value = false;
+      emits('done');
+    });
 };
 
 const schema = toTypedSchema(z.object({
@@ -154,7 +192,7 @@ const schema = toTypedSchema(z.object({
             >
               <step-ui-render
                 ref="render"
-                v-model="form[step.info.key]"
+                v-model="stepData[step.info.key]"
                 :ui="step.info.ui"
                 :param="step.info.param as any"
                 :disabled-fields="getStepFieldConfig(step.info.key).disabled"
@@ -167,7 +205,7 @@ const schema = toTypedSchema(z.object({
       </ui-form-item>
     </ui-form>
     <div class="w-full mt-2">
-      <ui-button size="full" color="primary" @click="onSubmit">
+      <ui-button size="full" color="primary" :loading="loading" @click="onSubmit">
         提交
       </ui-button>
     </div>
