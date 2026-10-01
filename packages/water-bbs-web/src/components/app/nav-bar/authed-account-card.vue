@@ -47,7 +47,7 @@ const onSelect = (item: ListBoxItem) => {
     <ui-popover-trigger class="shrink-0 size-md" as="button">
       <ui-avatar :fallback-text="profileStore.profile?.nick ?? profileStore.profile?.id.toString() ?? ''" />
     </ui-popover-trigger>
-    <ui-popover-content width-follow-trigger class="z-[calc(infinity+2)] bg-red-500 mt-4">
+    <ui-popover-content width-follow-trigger class="bg-red-500 mt-4">
       <ui-listbox mode="none" @select="onSelect">
         <ui-dialog>
           <ui-dialog-trigger>

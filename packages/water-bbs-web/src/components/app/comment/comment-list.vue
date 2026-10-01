@@ -96,6 +96,8 @@ provideContext({
           :content="node.content"
           :expandable="node.expandable"
           :loading="isPending"
+          :hidden="node.hidden"
+          :parent-hidden="node.parentHidden"
         />
       </div>
     </div>

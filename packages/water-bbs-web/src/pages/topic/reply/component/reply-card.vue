@@ -103,7 +103,7 @@ const onSubmit = (content: string, commentId: string) => {
       </div>
       <editor-content v-if="!props.hidden" :editor="editor" />
     </div>
-    <reply-card-toolbar :reply-id="props.id" @comment-click="toggleCommentVisbility" />
+    <reply-card-toolbar :hidden="props.hidden" :reply-id="props.id" @comment-click="toggleCommentVisbility" />
     <animate-presence>
       <motion.div
         v-show="commentVisiblity"
@@ -112,7 +112,7 @@ const onSubmit = (content: string, commentId: string) => {
         :animate="{ height: 'auto', opacity: 1 }"
         :exit="{ height: '0', opacity: 0 }"
       >
-        <comment-editor v-if="data" :loading="loading" :cancel="false" @submit="(content) => onSubmit(content, data!.id)" />
+        <comment-editor v-if="data && !props.hidden" :loading="loading" :cancel="false" @submit="(content) => onSubmit(content, data!.id)" />
         <comment-list v-if="data" :comment-id="data.id" :size="20" />
       </motion.div>
     </animate-presence>
