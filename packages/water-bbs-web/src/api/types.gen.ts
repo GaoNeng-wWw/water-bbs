@@ -714,6 +714,14 @@ export type ReplyNode = {
      * 是否可展开
      */
     expandable: boolean;
+    /**
+     * 是否已隐藏
+     */
+    hidden: boolean;
+    /**
+     * 父节点是否已隐藏
+     */
+    parentHidden: boolean;
 };
 
 export type ReplyNodeMeta = {

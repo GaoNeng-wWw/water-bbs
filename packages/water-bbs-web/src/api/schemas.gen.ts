@@ -1264,13 +1264,23 @@ export const ReplyNodeSchema = {
         expandable: {
             type: 'boolean',
             description: '是否可展开'
+        },
+        hidden: {
+            type: 'boolean',
+            description: '是否已隐藏'
+        },
+        parentHidden: {
+            type: 'boolean',
+            description: '父节点是否已隐藏'
         }
     },
     required: [
         'id',
         'content',
         'author',
-        'expandable'
+        'expandable',
+        'hidden',
+        'parentHidden'
     ]
 } as const;
 

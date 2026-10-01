@@ -14,13 +14,14 @@ import { h } from 'vue';
 
 const props = defineProps<{
   replyId: string;
+  hidden: boolean;
 }>();
 
 const emits = defineEmits<{
   commentClick: [];
 }>();
 
-const { Primitive, render, ModalHost, remove } = useModal();
+const { Primitive, render, remove } = useModal();
 
 const onClickComment = () => {
   emits('commentClick');
@@ -45,7 +46,7 @@ const onReport = () => {
     <ui-button size="sm" variant="ghost" icon @click="onClickComment">
       <div class="icon-[boxicons--message-circle-reply-filled] size-4" />
     </ui-button>
-    <ui-popover>
+    <ui-popover v-if="!hidden">
       <ui-popover-trigger>
         <ui-button icon variant="ghost" size="sm">
           <div class="icon-[material-symbols--more-horiz] size-4 text-surface-fg" />
@@ -63,6 +64,5 @@ const onReport = () => {
         </ui-listbox>
       </ui-popover-content>
     </ui-popover>
-    <modal-host />
   </div>
 </template>

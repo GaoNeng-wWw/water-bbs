@@ -2,6 +2,7 @@ import { Context, Definition, Handler, Step } from '@app/engine';
 import { err, ok, Result } from 'neverthrow';
 import { z } from 'zod';
 import { CommentReply, ReplyId } from '../comment.entity';
+import { CommentReplyNotFound } from '../error';
 
 export const hideCommentReplyDef = {
   key: 'comment.reply.hide',
@@ -28,7 +29,7 @@ export class HideCommentReply implements Handler<typeof hideCommentReplyDef> {
       id: param.replyId as ReplyId,
     });
     if (!reply) {
-      return err(new Error('回复不存在'));
+      return err(new CommentReplyNotFound(param.replyId as ReplyId));
     }
     reply.hidden(param.reason, param.endAt ? new Date(param.endAt) : undefined);
     em.persist(reply);

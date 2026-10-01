@@ -139,7 +139,7 @@ const total = computed(() => data.value?.total ?? 0);
       <ui-shadow-scroll class="h-50" :style="{ '--scroll-shadow-size': '0' }">
         <reply-editor ref="reply-editor" placeholder="write something">
           <template #toolbar="{ editor }">
-            <div class="w-[calc(100%-1rem)] h-fit sticky top-0 z-10 bg-bg/10 backdrop-blur-lg px-4 py-1">
+            <div class="w-[calc(100%-1rem)] h-fit sticky top-0 bg-bg/10 backdrop-blur-lg px-4 py-1">
               <toolbar v-if="editor" :items="items" :editor="editor" />
             </div>
           </template>
