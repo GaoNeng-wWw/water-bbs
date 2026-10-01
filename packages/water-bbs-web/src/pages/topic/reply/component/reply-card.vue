@@ -103,10 +103,10 @@ const onSubmit = (content: string, commentId: string) => {
       </div>
       <editor-content v-if="!props.hidden" :editor="editor" />
     </div>
-    <reply-card-toolbar :hidden="props.hidden" :reply-id="props.id" @comment-click="toggleCommentVisbility" />
+    <reply-card-toolbar v-if="!props.hidden" :hidden="props.hidden" :reply-id="props.id" @comment-click="toggleCommentVisbility" />
     <animate-presence>
       <motion.div
-        v-show="commentVisiblity"
+        v-show="!props.hidden && commentVisiblity"
         class="overflow-hidden"
         :initial="{ height: '0', opacity: 0 }"
         :animate="{ height: 'auto', opacity: 1 }"
