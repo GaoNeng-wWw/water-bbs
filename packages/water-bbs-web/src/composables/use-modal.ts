@@ -8,16 +8,132 @@ interface ModalEntry {
   id: number;
   vnode: VNode;
   origin: { x: number; y: number };
-  exitOrigin: { x: number; y: number };
   open: boolean;
 }
 
 let nextId = 0;
+let pendingOrigin: { x: number; y: number } | null = null;
+const modals = reactive<ModalEntry[]>([]);
+
+const closeModal = (id: number) => {
+  const modal = modals.find(m => m.id === id);
+  if (modal) {
+    modal.open = false;
+  }
+};
+
+const removeModal = (id: number) => {
+  const idx = modals.findIndex(m => m.id === id);
+  if (idx > -1) {
+    modals.splice(idx, 1);
+  }
+};
+
+const render = (vnode: VNode) => {
+  const origin = pendingOrigin ?? defaultOrigin();
+  pendingOrigin = null;
+  const id = nextId++;
+  modals.push({
+    id,
+    vnode,
+    origin,
+    open: true,
+  });
+  return id;
+};
+
+const remove = (id: number) => {
+  closeModal(id);
+};
+
+const unmountAll = () => {
+  modals.splice(0, modals.length);
+};
+
+export const ModalHost = defineComponent({
+  name: 'UseModalHost',
+  setup() {
+    return () => {
+      if (!modals.length) {
+        return null;
+      }
+      return modals.map(modal =>
+        h(DialogRoot, {
+          'key': modal.id,
+          'open': modal.open,
+          'onUpdate:open': (v: boolean) => {
+            if (!v) {
+              closeModal(modal.id);
+            }
+          },
+        }, () => [
+          h(DialogPortal, () => [
+            h(DialogOverlay, { class: 'fixed inset-0 bg-black/20', onClick: () => closeModal(modal.id) }),
+            h(AnimatePresence, () =>
+              modal.open
+                ? h(
+                  DialogContent,
+                  { asChild: true, onInteractOutside: () => closeModal(modal.id) },
+                  () =>
+                    h(
+                      motion.div,
+                      {
+                        key: modal.id,
+                        class: 'fixed top-0 left-0 max-w-lg w-full p-4 rounded-md bg-surface-200 flex flex-col',
+                        initial: {
+                          opacity: 0,
+                          scale: 0,
+                          left: `${modal.origin.x}px`,
+                          top: `${modal.origin.y}px`,
+                          x: '-50%',
+                          y: '-50%',
+                        },
+                        animate: {
+                          opacity: 1,
+                          scale: 1,
+                          left: '50%',
+                          top: '50%',
+                          x: '-50%',
+                          y: '-50%',
+                        },
+                        exit: {
+                          opacity: 0,
+                          scale: 0,
+                          left: `${modal.origin.x}px`,
+                          top: `${modal.origin.y}px`,
+                          x: '-50%',
+                          y: '-50%',
+                        },
+                        onAnimationComplete: () => {
+                          if (!modal.open) {
+                            removeModal(modal.id);
+                          }
+                        },
+                      },
+                      () => [
+                        modal.vnode,
+                        h(
+                          DialogClose,
+                          { class: 'mr-0 ml-auto -order-1 cursor-pointer flex items-center justify-center', onClick: () => closeModal(modal.id) },
+                          () => [
+                            h('div', { class: 'icon-[material-symbols--close] size-6 text-bg-fg' }),
+                            h('span', { class: 'sr-only' }, 'Close'),
+                          ],
+                        ),
+                      ],
+                    ),
+                )
+                : null,
+            ),
+          ]),
+        ]),
+      );
+    };
+  },
+});
 
 export const useModal = () => {
-  let pendingOrigin: { x: number; y: number } | null = null;
   const primitiveEl = ref<HTMLElement | null>(null);
-  const modals = reactive<ModalEntry[]>([]);
 
   const getOrigin = (): { x: number; y: number } => {
     if (!primitiveEl.value) {
@@ -58,130 +174,10 @@ export const useModal = () => {
     },
   });
 
-  const closeModal = (id: number) => {
-    const modal = modals.find(m => m.id === id);
-    if (modal) {
-      modal.exitOrigin = getOrigin();
-      modal.open = false;
-    }
-  };
-
-  const removeModal = (id: number) => {
-    const idx = modals.findIndex(m => m.id === id);
-    if (idx > -1) {
-      modals.splice(idx, 1);
-    }
-  };
-
-  const render = (vnode: VNode) => {
-    const origin = pendingOrigin ?? getOrigin();
-    pendingOrigin = null;
-    const id = nextId++;
-    modals.push({
-      id,
-      vnode,
-      origin,
-      exitOrigin: { ...origin },
-      open: true,
-    });
-    return id;
-  };
-
-  const ModalHost = defineComponent({
-    name: 'UseModalHost',
-    setup() {
-      return () => {
-        if (!modals.length) {
-          return null;
-        }
-        return h(Teleport, { to: 'body' }, modals.map(modal =>
-          h(DialogRoot, {
-            'key': modal.id,
-            'open': modal.open,
-            'onUpdate:open': (v: boolean) => {
-              if (!v) {
-                closeModal(modal.id);
-              }
-            },
-          }, () => [
-            h(DialogPortal, () => [
-              h(DialogOverlay, { class: 'fixed inset-0 bg-black/20', onClick: () => closeModal(modal.id) }),
-              h(AnimatePresence, () =>
-                modal.open
-                  ? h(
-                    DialogContent,
-                    { asChild: true, onInteractOutside: () => closeModal(modal.id) },
-                    () =>
-                      h(
-                        motion.div,
-                        {
-                          key: modal.id,
-                          class: 'fixed top-0 left-0 max-w-lg w-full p-4 rounded-md bg-surface-200 flex flex-col',
-                          initial: {
-                            opacity: 0,
-                            scale: 0,
-                            left: `${modal.origin.x}px`,
-                            top: `${modal.origin.y}px`,
-                            x: '-50%',
-                            y: '50%',
-                          },
-                          animate: {
-                            opacity: 1,
-                            scale: 1,
-                            left: '50%',
-                            top: '50%',
-                            x: '-50%',
-                            y: '-50%',
-                          },
-                          exit: {
-                            opacity: 0,
-                            scale: 0,
-                            left: `${modal.exitOrigin.x}px`,
-                            top: `${modal.exitOrigin.y}px`,
-                            x: '-50%',
-                            y: '50%',
-                          },
-                          onAnimationComplete: () => {
-                            if (!modal.open) {
-                              removeModal(modal.id);
-                            }
-                          },
-                        },
-                        () => [
-                          modal.vnode,
-                          h(
-                            DialogClose,
-                            { class: 'mr-0 ml-auto -order-1 cursor-pointer flex items-center justify-center', onClick: () => closeModal(modal.id) },
-                            () => [
-                              h('div', { class: 'icon-[material-symbols--close] size-6 text-bg-fg' }),
-                              h('span', { class: 'sr-only' }, 'Close'),
-                            ],
-                          ),
-                        ],
-                      ),
-                  )
-                  : null,
-              ),
-            ]),
-          ]),
-        ));
-      };
-    },
-  });
-
-  const remove = (id: number) => {
-    closeModal(id);
-  };
-  const unmountAll = () => {
-    modals.splice(0, modals.length);
-  };
-
   return {
     render,
     Primitive: Primitive as Component,
-    ModalHost: ModalHost as Component,
-    getOrigin,
-    unmountAll,
     remove,
+    unmountAll,
   };
 };

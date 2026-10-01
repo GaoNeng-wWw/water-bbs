@@ -23,6 +23,10 @@ export class ReplyNode {
   author: ReplyAuthor;
   @ApiProperty({ description: '是否可展开' })
   expandable: boolean;
+  @ApiProperty({ description: '是否已隐藏' })
+  hidden: boolean;
+  @ApiProperty({ description: '父节点是否已隐藏' })
+  parentHidden: boolean;
 }
 
 export class ReplyTree {

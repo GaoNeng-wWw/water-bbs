@@ -21,6 +21,8 @@ type ReplyNode<T extends object = Record<string, any>> = {
   author: ReplyAuthor;
   expandable: boolean;
   replyMeta: T;
+  hidden: boolean;
+  parentHidden: boolean;
 };
 type ReplyTree<T extends object = Record<string, any>> = {
   nodes: ReplyNode<T>[];
@@ -85,23 +87,37 @@ export class GetReplyTreeService implements IQueryHandler<GetReplyTree> {
       { fields: ['parentId'] },
     );
     const childrenSet = new Set(children.map((x) => x.parentId));
-
+    const hiddenById = new Map();
     const nodes: ReplyNode<Record<string, any>>[] = [];
     for (const node of root.items) {
+      if (!hiddenById.has(node.parentId)) {
+        const parent = await this.commentReplyRepo.findOne({
+          id: node.parentId,
+        });
+        if (parent) {
+          hiddenById.set(parent.id, parent.hidden_period !== null);
+        }
+      }
       const profile = profileMap.get(node.creator);
       if (!profile) {
         continue;
       }
       const expandable = childrenSet.has(node.id);
+      const parentIsHidden = node.parentId
+        ? hiddenById.get(node.parentId)
+        : false;
+      const selfIsHidden = node.hidden_period !== null;
       nodes.push({
         id: node.id,
-        content: node.content,
+        content: selfIsHidden ? node.hidden_period?.reason || '' : node.content,
         author: {
           id: profile.accountId,
           nick: profile.nick,
         },
         expandable,
         replyMeta: node.meta as Record<string, any>,
+        hidden: selfIsHidden,
+        parentHidden: parentIsHidden ?? false,
       });
     }
     return ok({

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useModal } from '@/composables';
 import { useToggle } from '@vueuse/core';
 import { createHashvatar } from 'hashvatar';
 import {
@@ -15,6 +16,8 @@ import { motion, AnimatePresence } from 'motion-v';
 import { useContext } from './context';
 import commentEditor from './comment-editor.vue';
 import commentList from './comment-list.vue';
+import { h } from 'vue';
+import { ProposalForm } from '../proposal';
 
 const { replyId, loading } = defineProps<{
   replyId: string;
@@ -23,6 +26,8 @@ const { replyId, loading } = defineProps<{
   content: string;
   expandable: boolean;
   loading: boolean;
+  hidden: boolean;
+  parentHidden: boolean;
 }>();
 
 const [editorVisiblity, toggleEditorVisiblity] = useToggle(false);
@@ -36,11 +41,24 @@ const getAvatarBase64 = (id: string) => {
 };
 
 const { commentId, onSubmit, loadingReply } = useContext();
+const { render, remove, Primitive } = useModal();
 
 const handleSubmit = (content: string) => {
   onSubmit({ commentId: commentId.value, content, replyId });
 };
-const onReport = () => {}
+const onReport = () => {
+  const currentID = render(
+    h(
+      ProposalForm,
+      {
+        defaultSteps: ['comment.reply.hide'],
+        allowAddStep: false,
+        stepFieldConfig: { 'comment.reply.hide': { defaults: { replyId }, disabled: ['replyId'] } },
+        onDone: () => remove(currentID),
+      },
+    ),
+  );
+};
 </script>
 
 <template>
@@ -73,10 +91,10 @@ const onReport = () => {}
       </div>
       <div class="w-full">
         <div class="flex gap-1">
-          <ui-button size="sm" variant="ghost" icon @click="() => toggleEditorVisiblity()">
+          <ui-button v-if="!hidden && !parentHidden" size="sm" variant="ghost" icon @click="() => toggleEditorVisiblity()">
             <div class="icon-[boxicons--message-circle-reply-filled] size-4" />
           </ui-button>
-          <ui-popover>
+          <ui-popover v-if="!hidden && !parentHidden">
             <ui-popover-trigger>
               <ui-button icon variant="ghost" size="sm">
                 <div class="icon-[material-symbols--more-horiz] size-4 text-surface-fg" />
@@ -85,9 +103,11 @@ const onReport = () => {}
             <ui-popover-content class="w-50!">
               <ui-listbox mode="none">
                 <ui-listbox-section label="行为">
-                  <ui-listbox-item id="report" value="report" danger @click="onReport">
-                    举报
-                  </ui-listbox-item>
+                  <primitive as-child>
+                    <ui-listbox-item id="report" value="report" danger @click="onReport">
+                      举报
+                    </ui-listbox-item>
+                  </primitive>
                 </ui-listbox-section>
               </ui-listbox>
             </ui-popover-content>
@@ -95,7 +115,7 @@ const onReport = () => {}
         </div>
         <animate-presence>
           <motion.div
-            v-show="editorVisiblity"
+            v-show="editorVisiblity && !hidden && !parentHidden"
             class="overflow-hidden mt-2"
             :initial="{ height: '0', opacity: 0 }"
             :animate="{ height: 'auto', opacity: 1 }"
