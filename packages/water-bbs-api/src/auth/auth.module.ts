@@ -10,6 +10,7 @@ import {
   LoginService,
   RefreshTokenService,
   RegisterService,
+  OnlineService
 } from './application';
 import { VerificationCodeModule } from '@app/verification-code';
 import { TokenGenrator } from './domain';
@@ -23,7 +24,7 @@ import { WalletModule } from '@app/gamification';
     MikroOrmModule.forFeature([Identifier, Credential, Account, Profile]),
     VerificationCodeModule,
     NotificationModule,
-    WalletModule
+    WalletModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -54,6 +55,7 @@ import { WalletModule } from '@app/gamification';
     LoginService,
     RegisterService,
     RefreshTokenService,
+    OnlineService,
   ],
 })
 export class AuthModule {}

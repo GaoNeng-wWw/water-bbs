@@ -16,9 +16,33 @@ export const taggedValue = z.discriminatedUnion('type', [
   ArrayValue,
 ]);
 
+export const UserAccountField = [
+  'user.account.banned',
+  'user.account.online',
+] as const;
+export const UserProfileField = [
+  'user.profile.nick', // 用户昵称
+  'user.profile.avatar', // 用户头像
+  'user.profile.bio', // 用户个人简介
+  'user.governance.member.list', // 用户往届担任治理成员列表
+  'user.governance.member.active', // 用户当前是否是治理成员
+  'user.governance.admin.is', // 用户当前是否是 admin
+  'user.governance.admin.was', // 用用曾经是否是admin
+  'user.governance.bd.is', // 用户当前是否是仁慈独裁者
+  'user.governance.bd.was', // 用户曾经是否是仁慈独裁者
+  'user.governance.bd.list', // 用户担任仁慈独裁者记录
+] as const;
+export const UserPostField = ['user.post.total'] as const;
+
+export const Field = z.enum([
+  ...UserAccountField,
+  ...UserProfileField,
+  ...UserPostField,
+]);
+
 export const conditionSchema = z.strictObject({
   key: z.string(),
-  field: z.string(),
+  field: Field,
   operator: z.string(),
   goal: taggedValue,
 });
@@ -36,19 +60,38 @@ export const whenSchema: z.ZodType<WhenExpression> = z.lazy(() =>
   ]),
 );
 
-export const actionItemSchema = z.looseObject({
+export const actionItemSchema = z.object({
   name: z.string(),
   param: z.record(z.string(), z.unknown()),
 });
 
+export const AvaliableEvents: string[] = [
+  'topic.removed',
+  'comment.removed',
+  'topic.created',
+  'comment.recovered',
+  'topic.reply-removed',
+  'topic.reply-created',
+  'auth.mail-registered',
+  'gamification.governance.proposal.reject',
+  'governance.proposal.created',
+  'gamification.governance.proposal.controversy.resolved',
+  'gamification.governance.proposal.approve',
+  'governance.proposal.emergency.created',
+  'gamification.governance.proposal.controversy',
+  'gamification.governance.member.revoked',
+  'gamification.governance.member.resign',
+  'gamification.governance.member.admin-transfered',
+] as const;
+
 export const trigger = z.union([
   z.object({
     type: z.literal('event'),
-    events: z.array(z.string()),
+    events: z.array(z.enum(AvaliableEvents)),
   }),
 ]);
 
-export const rewardSchema = z.looseObject({
+export const rewardSchema = z.object({
   version: z.string(),
   trigger,
   name: z.string(),
@@ -65,3 +108,44 @@ export type RewardWhenCondition = z.infer<typeof conditionSchema>;
 export type RewardTaggedValue = z.infer<typeof taggedValue>;
 export type RewardTaggedArrayValue = z.infer<typeof ArrayValue>;
 export type RewardPrimitiveValue = z.infer<typeof PrimitiveValue>;
+export type RewardField = z.infer<typeof Field>;
+/**
+你觉得是
+
+version: 1
+trigger:
+  on:
+    type: event
+    event: *
+name:...
+desc:...
+icon:...
+when:
+  all:
+    - expr: user.logged
+      desc: ...
+action:
+  - name: 奖励积分
+    expr: user.wallet.point + 1
+
+更好还是
+
+version: 1
+trigger:
+  on:
+    type: event
+    event: *
+name:...
+desc:...
+icon:...
+when:
+  all:
+    - expr: user.logged
+      desc: ...
+action:
+  - name: 奖励积分
+    use: wallet/point-incr
+    param:
+      id: user.accountID
+      value: 1
+ */

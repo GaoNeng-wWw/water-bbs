@@ -28,6 +28,7 @@
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",
     "@liaoliaots/nestjs-redis": "^10.0.0",
+    "@marcbachmann/cel-js": "^8.0.0",
     "@mikro-orm/cli": "^7.1.11",
     "@mikro-orm/core": "^7.1.11",
     "@mikro-orm/decorators": "^7.1.11",

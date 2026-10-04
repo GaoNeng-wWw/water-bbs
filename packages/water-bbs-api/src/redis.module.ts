@@ -28,6 +28,12 @@ export class RedisInitializer implements OnModuleInit {
       ).toString(),
       numberOfKeys: 0,
     });
+    r.defineCommand('countSessionById', {
+      lua: readFileSync(
+        join(__dirname, './lua/count-session-by-id.lua'),
+      ).toString(),
+      numberOfKeys: 0,
+    });
   }
 }
 

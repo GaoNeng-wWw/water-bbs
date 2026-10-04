@@ -42,6 +42,8 @@ export type I18nTranslations = {
             "REMOVE_TOPIC": string;
             "REMOVE_REPLY": string;
         };
+        "USER_TASK_STATUS_TRANS_ERROR": string;
+        "UNKNOWN_CEL_FIELD": string;
     };
     "mail": {
         "register": {

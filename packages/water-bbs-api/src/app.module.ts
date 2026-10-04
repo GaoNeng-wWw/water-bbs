@@ -17,6 +17,7 @@ import {
   GovernanceMemberModule,
   MemberGuard,
   ProposalModule,
+  TaskModule,
 } from '@app/gamification';
 import { AppRedisModule } from './redis.module';
 import { DatabaseModule } from './infra/database.module';
@@ -64,6 +65,7 @@ import { BdModule } from './bd/bd.module';
     ProposalCRUD,
     CommentModule,
     BdModule,
+    TaskModule
   ],
   providers: [
     {

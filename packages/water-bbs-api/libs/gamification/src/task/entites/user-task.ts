@@ -28,7 +28,7 @@ export class UserTask extends MetaEntity {
   id: Opt<UserTaskID>;
   @Property({ type: 'uuid' })
   accountID: AccountId;
-  @Property({ type: 'uuid' })
+  @Property({ type: 'uuid', index: true })
   taskID: TaskID;
   @Property({ type: 'jsonb' })
   snapshot: IReward;

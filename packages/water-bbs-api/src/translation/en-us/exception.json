@@ -35,5 +35,6 @@
     "REMOVE_TOPIC": "Remove {name} Topic",
     "REMOVE_REPLY": "Remove {name} Reply"
   },
-  "USER_TASK_STATUS_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}"
+  "USER_TASK_STATUS_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}",
+  "UNKNOWN_CEL_FIELD": "Unknown {name}."
 }
