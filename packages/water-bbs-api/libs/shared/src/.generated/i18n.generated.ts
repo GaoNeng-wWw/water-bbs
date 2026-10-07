@@ -44,6 +44,8 @@ export type I18nTranslations = {
         };
         "USER_TASK_STATUS_TRANS_ERROR": string;
         "UNKNOWN_CEL_FIELD": string;
+        "UNKNOWN_REWARD": string;
+        "TASK_REWARD_PARAM_PARSE_ERROR": string;
     };
     "mail": {
         "register": {

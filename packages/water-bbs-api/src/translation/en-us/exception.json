@@ -36,5 +36,7 @@
     "REMOVE_REPLY": "Remove {name} Reply"
   },
   "USER_TASK_STATUS_TRANS_ERROR": "Except {exceptionStatus} but current is {currentStatus}",
-  "UNKNOWN_CEL_FIELD": "Unknown {name}."
+  "UNKNOWN_CEL_FIELD": "Unknown {name}.",
+  "UNKNOWN_REWARD": "Unknown Reward {name}",
+  "TASK_REWARD_PARAM_PARSE_ERROR": "{message}"
 }

@@ -1,12 +1,12 @@
 import { DomainError } from '@app/shared';
 import { HttpStatus } from '@nestjs/common';
 
-export class UnknownField extends DomainError {
+export class UnknownReward extends DomainError {
   constructor(name: string) {
     super({
-      key: 'exception.UNKNOWN_CEL_FIELD',
+      key: 'exception.UNKNOWN_REWARD',
       args: { name },
-      status: HttpStatus.BAD_REQUEST
+      status: HttpStatus.BAD_REQUEST,
     });
   }
 }

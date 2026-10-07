@@ -19,8 +19,6 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Profile } from 'src/auth';
 import { GovernanceMember } from '../../governance/member/member.entity';
 
-
-
 @Module({
   imports: [
     DiscoveryModule,

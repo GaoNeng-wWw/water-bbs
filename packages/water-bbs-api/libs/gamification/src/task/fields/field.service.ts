@@ -1,12 +1,9 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryService, Reflector } from '@nestjs/core';
-import {
-  FieldDecoratorKey,
-  FieldProvider,
-  FieldHandlerMetadata,
-} from './fields.decorator';
+import { FieldProvider, FieldHandlerMetadata } from './fields.decorator';
 import { AccountId } from 'src/auth';
 import { err } from 'neverthrow';
+import { UnknownField } from '../error';
 
 @Injectable()
 export class FieldService implements OnApplicationBootstrap {
@@ -36,8 +33,7 @@ export class FieldService implements OnApplicationBootstrap {
   call(field: string, accountID: AccountId) {
     const provider = this.getProvider(field);
     if (!provider) {
-      throw '';
-      // return Promise.resolve(err());
+      return Promise.resolve(err(new UnknownField(field)));
     }
     return provider.provide({ accountID });
   }
