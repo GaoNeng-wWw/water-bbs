@@ -42,9 +42,7 @@ export const Field = z.enum([
 
 export const conditionSchema = z.strictObject({
   key: z.string(),
-  field: Field,
-  operator: z.string(),
-  goal: taggedValue,
+  expr: z.string(),
 });
 
 type WhenExpression =
@@ -91,9 +89,20 @@ export const trigger = z.union([
   }),
 ]);
 
+export const ui = z.array(
+  z.object({
+    label: z.string(),
+    triggerID: z.string(),
+    field: Field,
+    operator: z.string(),
+    goal: taggedValue,
+  }),
+);
+
 export const rewardSchema = z.object({
   version: z.string(),
   trigger,
+  ui,
   name: z.string(),
   desc: z.string(),
   icon: z.string().optional(),
