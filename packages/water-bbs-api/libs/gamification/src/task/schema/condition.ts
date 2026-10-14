@@ -46,7 +46,7 @@ export type WhenNode =
   | {
       not: WhenNode[];
     }
-  | WhenExpression[];
+  | WhenExpression;
 export type TopWhen =
   | {
       all: WhenNode[];
@@ -78,7 +78,7 @@ const whenNode: z.ZodType<WhenNode> = z.lazy(() =>
     z.object({ all: z.array(whenNode) }),
     z.object({ any: z.array(whenNode) }),
     z.object({ not: z.array(whenNode) }),
-    z.array(whereExpression),
+    whereExpression,
   ]),
 );
 export const when = z.lazy(() => {
