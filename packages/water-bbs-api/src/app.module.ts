@@ -23,6 +23,7 @@ import { DatabaseModule } from './infra/database.module';
 import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
 import { BdModule } from './bd/bd.module';
+import { FieldModule } from '@app/gamification/task';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { BdModule } from './bd/bd.module';
     ProposalCRUD,
     CommentModule,
     BdModule,
+    FieldModule
   ],
   providers: [
     {

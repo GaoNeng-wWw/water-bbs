@@ -34,5 +34,8 @@
   "PROPOSAL": {
     "REMOVE_TOPIC": "Remove {name} Topic",
     "REMOVE_REPLY": "Remove {name} Reply"
-  }
+  },
+  "FIELD_NOT_FOUND": "Field {name} Not Found",
+  "TASK_CANCELLED": "Task Cancelled",
+  "TASK_COMPLETED": "Task Completed"
 }
