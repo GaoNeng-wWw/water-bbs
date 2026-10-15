@@ -2,7 +2,7 @@ import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { IFieldProvider, FieldMetadata, Field } from './field.decorator';
 import { err, ok } from 'neverthrow';
-import { FieldNotFound } from '../error';
+import { FieldNotFound, FieldParamError } from '../error';
 import { EntityManager } from '@mikro-orm/core';
 import { Fields } from '../../schema';
 
@@ -51,6 +51,15 @@ export class FieldDiscoverService implements OnApplicationBootstrap {
     if (name === 'time.now.weekday') {
       return Promise.resolve(ok(date.getDay().toString()));
     }
-    return handler.execute(params, { em: this.em.fork() });
+    const metadata = this.metadata.get(name);
+    if (metadata) {
+      const result = metadata.schema.safeParse(params);
+      if (!result.success) {
+        return err(new FieldParamError(name, params));
+      }
+      return handler.execute(params, { em: this.em.fork() });
+    }
+    return err(new FieldNotFound(name));
+    // return handler.execute(params, { em: this.em.fork() });
   }
 }
