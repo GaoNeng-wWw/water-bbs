@@ -1,4 +1,5 @@
 import { DomainError } from '@app/shared';
+import { HttpStatus } from '@nestjs/common';
 
 export class ExpectTypeError extends DomainError {
   constructor(expectType: string, foundType: string) {
@@ -8,6 +9,7 @@ export class ExpectTypeError extends DomainError {
         expectType,
         foundType,
       },
+      status: HttpStatus.BAD_REQUEST,
     });
   }
 }
