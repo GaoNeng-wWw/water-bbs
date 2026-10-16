@@ -9,7 +9,7 @@ import {
 } from '@mikro-orm/decorators/legacy';
 import { MetaEntity } from '@app/shared';
 import { type Opt } from '@mikro-orm/core';
-import { err } from 'neverthrow';
+import { err, ok } from 'neverthrow';
 import { TaskCancelled, TaskCompleted } from '../error';
 
 export type UserTaskID = string & { readonly __brand: unique symbol };
@@ -43,11 +43,13 @@ export class UserTask extends MetaEntity {
       return err(new TaskCancelled());
     }
     this.status = UserTaskStatus.Completed;
+    return ok();
   }
   cancel() {
     if (this.status === UserTaskStatus.Completed) {
       return err(new TaskCompleted());
     }
     this.status = UserTaskStatus.Cancelled;
+    return ok();
   }
 }

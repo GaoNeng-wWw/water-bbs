@@ -41,5 +41,12 @@
   "EXPECT_TYPE_ERROR": "Expect {expectationType} but found {foundType}",
   "REWARD_PARAM_ERROR": "Param Error",
   "REWARD_NOT_FOUND": "Reward {name} not found",
-  "FIELD_PARAM_ERROR": "Param error"
+  "FIELD_PARAM_ERROR": "Param error",
+  "TASK_NOT_FOUND": "Task not found",
+  "DELIVERY_CONDITION_UNMET": "Deliver condition unmet",
+  "TASK_IN_PROGRESS": "Task In Progress",
+  "TASK_SCHEDULE_ONCE": "Task Schedule Once",
+  "TASK_RESET_NEVER": "Task Reset Never",
+  "TASK_COOLDOWN_NOT_EXPIRED": "Task Cooldown Not Expired",
+  "UNKNOWN_SCHEDULE_KIND": "Unknown Schedule Kind"
 }

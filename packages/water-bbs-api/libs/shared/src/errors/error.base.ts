@@ -27,6 +27,28 @@ export class HttpPresentationError {
   }
 }
 
+export class ApplicationError extends Error {
+  public readonly key: I18nPath;
+  public readonly status: HttpStatus;
+  public readonly args?: Record<string, any>;
+  public readonly details?: Record<string, any>;
+  public readonly cause?: Error;
+  constructor(props: ErrorProps) {
+    super(props.key, { cause: props.cause });
+    this.key = props.key;
+    this.status = props.status;
+    this.args = props.args;
+    this.details = props.details;
+    this.cause = props.cause;
+  }
+  toHttpPresentationError(): HttpPresentationError {
+    return new HttpPresentationError(this.message, this.status, this.details);
+  }
+  toApplicationError(){
+    return this;
+  }
+}
+
 export class DomainError extends Error {
   public readonly key: I18nPath;
   public readonly status: HttpStatus;
@@ -43,6 +65,11 @@ export class DomainError extends Error {
   }
   toHttpPresentationError(): HttpPresentationError {
     return new HttpPresentationError(this.message, this.status, this.details);
+  }
+  toApplicationError() {
+    return new ApplicationError({
+      ...this,
+    });
   }
 }
 
@@ -62,5 +89,10 @@ export class InfraError extends Error {
   }
   toHttpPresentationError(): HttpPresentationError {
     return new HttpPresentationError(this.message, this.status, this.details);
+  }
+  toApplicationError() {
+    return new ApplicationError({
+      ...this,
+    });
   }
 }
