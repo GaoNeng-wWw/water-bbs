@@ -13,7 +13,7 @@ export type TaskDetail = {
   desc?: string;
   icon?: string;
   canClaim: boolean;
-  status: UserTaskStatus;
+  status?: UserTaskStatus;
   condition: WhenNode[];
   claim?: WhenNode[];
 };
@@ -35,9 +35,6 @@ export class GetTaskDetailService implements IQueryHandler<GetTaskDetail> {
     accountID,
   }: GetTaskDetail): Promise<Result<TaskDetail, ApplicationError>> {
     const userTask = await this.em.findOne(UserTask, { accountID, taskID });
-    if (!userTask) {
-      return err(new TaskNotFound());
-    }
     const task = await this.em.findOne(TaskDefinition, { id: taskID });
     if (!task) {
       return err(new TaskNotFound());
@@ -46,7 +43,7 @@ export class GetTaskDetailService implements IQueryHandler<GetTaskDetail> {
     return ok({
       ...task,
       canClaim,
-      status: userTask.status,
+      status: userTask?.status,
     });
   }
 }

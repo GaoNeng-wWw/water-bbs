@@ -23,7 +23,7 @@ import { DatabaseModule } from './infra/database.module';
 import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
 import { BdModule } from './bd/bd.module';
-import { TaskModule } from '@app/gamification/task/task.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [

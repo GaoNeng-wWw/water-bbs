@@ -9,6 +9,16 @@ export type ErrorProps = {
   cause?: Error;
 };
 
+export interface ErrorShape {
+  readonly key: I18nPath;
+  readonly status: HttpStatus;
+  readonly args?: Record<string, any>;
+  readonly details?: Record<string, any>;
+  readonly cause?: Error;
+  toHttpPresentationError(): HttpPresentationError;
+  toApplicationError(): ApplicationError;
+}
+
 export class HttpPresentationError {
   @ApiProperty({ description: '错误 message', example: '错误信息' })
   public readonly message: string;
@@ -27,7 +37,7 @@ export class HttpPresentationError {
   }
 }
 
-export class ApplicationError extends Error {
+export class ApplicationError extends Error implements ErrorShape {
   public readonly key: I18nPath;
   public readonly status: HttpStatus;
   public readonly args?: Record<string, any>;
@@ -44,12 +54,12 @@ export class ApplicationError extends Error {
   toHttpPresentationError(): HttpPresentationError {
     return new HttpPresentationError(this.message, this.status, this.details);
   }
-  toApplicationError(){
+  toApplicationError() {
     return this;
   }
 }
 
-export class DomainError extends Error {
+export class DomainError extends Error implements ErrorShape {
   public readonly key: I18nPath;
   public readonly status: HttpStatus;
   public readonly args?: Record<string, any>;
@@ -73,7 +83,7 @@ export class DomainError extends Error {
   }
 }
 
-export class InfraError extends Error {
+export class InfraError extends Error implements ErrorShape {
   public readonly key: I18nPath;
   public readonly status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
   public readonly args?: Record<string, any>;

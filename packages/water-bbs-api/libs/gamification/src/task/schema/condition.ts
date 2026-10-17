@@ -36,6 +36,7 @@ export type WhenExpression = {
   operator: Operator;
   goal: ValueType;
 };
+
 export type WhenNode =
   | {
       all: WhenNode[];
@@ -47,6 +48,7 @@ export type WhenNode =
       not: WhenNode[];
     }
   | WhenExpression;
+
 export type TopWhen =
   | {
       all: WhenNode[];

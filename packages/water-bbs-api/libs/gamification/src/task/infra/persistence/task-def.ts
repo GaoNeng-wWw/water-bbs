@@ -42,9 +42,12 @@ export class TaskDefinition extends MetaEntity {
   reward: Task['reward'];
   @Property({ type: 'jsonb' })
   schedule: Task['schedule'];
-  @Property({ type: 'jsonb' })
-  claim: Task['claim'];
-  canClaim(userTask: UserTask): Result<boolean, DomainError> {
+  @Property({ type: 'jsonb', nullable: true })
+  claim: Opt<Task['claim']>;
+  canClaim(userTask: UserTask | null): Result<boolean, DomainError> {
+    if (!userTask) {
+      return ok(true);
+    }
     if (userTask.status === UserTaskStatus.Progress) {
       return err(new TaskInProgress());
     }

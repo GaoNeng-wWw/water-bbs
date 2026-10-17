@@ -4,8 +4,11 @@ import { EntityManager } from '@mikro-orm/core';
 import { Fields, Task, WhenNode } from '../schema';
 import { FieldDiscoverService } from '../infra/field/field.discover';
 import { Injectable } from '@nestjs/common';
-import { ok } from 'neverthrow';
+import { err, ok, Result } from 'neverthrow';
 import { TaskProgressCacheService } from './task-progress-cache.service';
+import { TaskNotFound } from './error';
+import { TaskProgress } from './dto/task-progress.dto';
+import { ErrorShape } from '@app/shared';
 
 const getFieldFromWhen = (when: WhenNode): string[] => {
   if ('all' in when) {
@@ -33,20 +36,24 @@ export class TaskProgressService {
     private fieldService: FieldDiscoverService,
     private cacheService: TaskProgressCacheService,
   ) {}
-  async countProgress(accountID: AccountId, taskID: TaskID) {
+  async countProgress(
+    accountID: AccountId,
+    taskID: TaskID,
+  ): Promise<Result<TaskProgress, ErrorShape>> {
     const progress = await this.cacheService.get(accountID, taskID);
     if (progress.length > 0) {
       return ok(progress);
     }
     const userTask = await this.em.findOne(UserTask, {
+      accountID: accountID,
       taskID: taskID,
     });
     if (!userTask) {
-      throw new Error('');
+      return err(new TaskNotFound());
     }
     const snapshot: Task = userTask.snapshot as Task;
     if (!snapshot) {
-      throw new Error('');
+      return err(new TaskNotFound());
     }
     const fields = new Set(
       snapshot.condition.flatMap((cond) => getFieldFromWhen(cond)),
@@ -63,7 +70,7 @@ export class TaskProgressService {
     });
     const taskResults = await Promise.all(tasks);
     const [error] = taskResults.filter((task) => task.result.isErr());
-    if (error.result.isErr()) {
+    if (error && error.result.isErr()) {
       return error.result;
     }
     const results = taskResults

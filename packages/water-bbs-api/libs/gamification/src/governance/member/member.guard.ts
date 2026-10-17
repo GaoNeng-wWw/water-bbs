@@ -33,6 +33,9 @@ export class MemberGuard implements CanActivate {
     if (!member) {
       throw new PermissionDeniedError();
     }
+    if (member.kind === MemberKind.BD && !memberKind.includes(MemberKind.BD)) {
+      throw new PermissionDeniedError();
+    }
     return true;
   }
 }
