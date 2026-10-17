@@ -8,20 +8,23 @@ import {
   GovernanceMember,
   MemberKind,
   MemberGrantType,
+  Task,
 } from '@app/gamification';
 import { AccountId } from 'src/auth';
 
-const validTaskSchema = {
+const validTaskSchema: Task = {
   version: 1,
   name: 'Test Task',
-  condition: [
-    {
-      id: 'cond-1',
-      field: 'user.id',
-      operator: 'eq',
-      goal: 'any-user',
-    },
-  ],
+  condition: {
+    all: [
+      {
+        id: 'cond-1',
+        field: 'user.id',
+        operator: 'eq',
+        goal: 'any-user',
+      },
+    ],
+  },
   reward: [{ use: 'test-reward', args: {} }],
   schedule: {
     kind: 'once',

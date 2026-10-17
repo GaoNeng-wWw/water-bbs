@@ -55,9 +55,7 @@ export class TaskProgressService {
     if (!snapshot) {
       return err(new TaskNotFound());
     }
-    const fields = new Set(
-      snapshot.condition.flatMap((cond) => getFieldFromWhen(cond)),
-    );
+    const fields = new Set(getFieldFromWhen(snapshot.condition));
     const tasks = Array.from(fields).map((field) => {
       return this.fieldService
         .callHandler(field as Fields, { accountID })

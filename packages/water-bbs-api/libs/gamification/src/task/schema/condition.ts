@@ -2,7 +2,7 @@ import z from 'zod';
 import { ValueType, Value } from './data-type';
 
 export const field = z.enum([
-  'user.id',  // 用户 id
+  'user.id', // 用户 id
   'user.nick', // 昵称
   'user.avatar', // 头像
   'user.bio', // 个人介绍
@@ -83,6 +83,13 @@ const whenNode: z.ZodType<WhenNode> = z.lazy(() =>
     whereExpression,
   ]),
 );
+export const topWhen: z.ZodType<TopWhen> = z.lazy(() => {
+  return z.union([
+    z.object({ all: z.array(whenNode) }),
+    z.object({ any: z.array(whenNode) }),
+    z.object({ not: z.array(whenNode) }),
+  ]);
+});
 export const when = z.lazy(() => {
-  return z.array(whenNode);
+  return topWhen;
 });

@@ -18,9 +18,7 @@ export class TaskRunnerService {
     private readonly rewardService: RewardService,
   ) {}
   async run(task: Task, accountID: AccountId) {
-    const fields = Array.from(
-      new Set(task.condition.flatMap((when) => fieldExtractor(when))),
-    );
+    const fields = Array.from(new Set(fieldExtractor(task.condition)));
     const tasks = fields.map((field) => {
       return this.fieldService
         .callHandler(field as Fields, { accountID })
@@ -49,16 +47,11 @@ export class TaskRunnerService {
         [cur.field]: cur.value,
       };
     }, {});
-    const allResult = task.condition.map((when) =>
-      evalCondition(when, context),
-    );
-    const [fail] = allResult.filter((res) => res.isErr());
-    if (fail) {
-      return fail;
+    const allResult = evalCondition(task.condition, context);
+    if (allResult.isErr()) {
+      return allResult;
     }
-    const pass = allResult
-      .map((res) => (res.isOk() ? res.value : false))
-      .every((status) => status);
+    const pass = allResult.isOk() && allResult.value;
     if (!pass) {
       return err(new DeliverConditionUnmet());
     }

@@ -29,6 +29,8 @@
     "dayjs": "^1.11.21",
     "hashvatar": "^0.1.2",
     "jdenticon": "^3.3.0",
+    "monaco-editor": "^0.57.0",
+    "monaco-yaml-inline": "^1.0.0",
     "motion-v": "^2.3.0",
     "pinia": "^4.0.2",
     "pinia-plugin-persistedstate": "^4.7.1",
