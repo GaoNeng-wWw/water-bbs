@@ -3,7 +3,7 @@
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
 import { createReplyResponseTransformer, getBdRecordListResponseTransformer, getBdRecordResponseTransformer, getSelfRecordResponseTransformer, listProposalItemsResponseTransformer, removeReplyResponseTransformer, reportReplyResponseTransformer } from './transformers.gen';
-import type { CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTopicData, CreateTopicResponses, FindCategoryData, FindCategoryResponses, FindProposalData, FindProposalResponses, GetBalanceData, GetBalanceResponses, GetBdRecordData, GetBdRecordListData, GetBdRecordListResponses, GetBdRecordResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetSelfRecordData, GetSelfRecordResponses, GetStepDefData, GetStepDefResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListStepsData, ListStepsResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTopicData, RemoveTopicResponses, ReportReplyData, ReportReplyResponses, ReportTopicData, ReportTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
+import type { CancelTaskData, CancelTaskResponses, ClaimTaskData, ClaimTaskResponses, CreateCategoryData, CreateCategoryResponses, CreateCommentReplyData, CreateCommentReplyResponses, CreateProposalData, CreateProposalResponses, CreateReplyData, CreateReplyResponses, CreateTaskData, CreateTaskResponses, CreateTopicData, CreateTopicResponses, DeliverTaskData, DeliverTaskResponses, FindCategoryData, FindCategoryResponses, FindProposalData, FindProposalResponses, GetBalanceData, GetBalanceResponses, GetBdRecordData, GetBdRecordListData, GetBdRecordListResponses, GetBdRecordResponses, GetCommentByResourceIdData, GetCommentByResourceIdResponses, GetProfileData, GetProfileResponses, GetPublishedTopicData, GetPublishedTopicResponses, GetReplyTreeData, GetReplyTreeResponses, GetSelfRecordData, GetSelfRecordResponses, GetStepDefData, GetStepDefResponses, GetTaskDetailData, GetTaskDetailResponses, GetTaskProgressData, GetTaskProgressResponses, GetTasksData, GetTasksResponses, GetTransactionsData, GetTransactionsResponses, ListAllTopicData, ListAllTopicResponses, ListCategoryData, ListCategoryResponses, ListProposalItemsData, ListProposalItemsResponses, ListReplyData, ListReplyResponses, ListStepsData, ListStepsResponses, ListTopicData, ListTopicResponses, LoginData, LoginResponses, RecoverCategoryData, RecoverCategoryResponses, RefreshTokenData, RefreshTokenResponses, RegisterData, RegisterResponses, RemoveCategoryData, RemoveCategoryResponses, RemoveReplyData, RemoveReplyResponses, RemoveTaskData, RemoveTaskResponses, RemoveTopicData, RemoveTopicResponses, ReportReplyData, ReportReplyResponses, ReportTopicData, ReportTopicResponses, ResolveControversyData, ResolveControversyResponses, UpdateCategoryData, UpdateCategoryResponses, UpdateProfileData, UpdateProfileResponses, UpdateTopicData, UpdateTopicResponses, VoteProposalData, VoteProposalResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -417,5 +417,91 @@ export const getBdRecordList = <ThrowOnError extends boolean = false>(options: O
     responseTransformer: getBdRecordListResponseTransformer,
     responseType: 'json',
     url: '/bd/{id}/list',
+    ...options
+});
+
+/**
+ * 获取任务列表
+ */
+export const getTasks = <ThrowOnError extends boolean = false>(options: Options<GetTasksData, ThrowOnError>): RequestResult<GetTasksResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetTasksResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task',
+    ...options
+});
+
+/**
+ * 创建任务
+ *
+ * 只有bd或admin才有权限创建任务
+ */
+export const createTask = <ThrowOnError extends boolean = false>(options: Options<CreateTaskData, ThrowOnError>): RequestResult<CreateTaskResponses, unknown, ThrowOnError> => (options.client ?? client).post<CreateTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * 删除任务
+ *
+ * 只有bd或admin才有权限删除任务
+ */
+export const removeTask = <ThrowOnError extends boolean = false>(options: Options<RemoveTaskData, ThrowOnError>): RequestResult<RemoveTaskResponses, unknown, ThrowOnError> => (options.client ?? client).delete<RemoveTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}',
+    ...options
+});
+
+/**
+ * 获取任务详情
+ */
+export const getTaskDetail = <ThrowOnError extends boolean = false>(options?: Options<GetTaskDetailData, ThrowOnError>): RequestResult<GetTaskDetailResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetTaskDetailResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}',
+    ...options
+});
+
+/**
+ * 获取任务进度
+ *
+ * 获取任务进度, 如果没有领取任务会返回404
+ */
+export const getTaskProgress = <ThrowOnError extends boolean = false>(options: Options<GetTaskProgressData, ThrowOnError>): RequestResult<GetTaskProgressResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetTaskProgressResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}/progress',
+    ...options
+});
+
+/**
+ * 领取任务
+ */
+export const claimTask = <ThrowOnError extends boolean = false>(options: Options<ClaimTaskData, ThrowOnError>): RequestResult<ClaimTaskResponses, unknown, ThrowOnError> => (options.client ?? client).post<ClaimTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}/claim',
+    ...options
+});
+
+/**
+ * 取消任务
+ *
+ * 取消任务, 如果没有领取任务会返回404
+ */
+export const cancelTask = <ThrowOnError extends boolean = false>(options?: Options<CancelTaskData, ThrowOnError>): RequestResult<CancelTaskResponses, unknown, ThrowOnError> => (options?.client ?? client).post<CancelTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}/cancel',
+    ...options
+});
+
+/**
+ * 交付任务
+ *
+ * 交付任务, 如果没有领取任务会返回404
+ */
+export const deliverTask = <ThrowOnError extends boolean = false>(options: Options<DeliverTaskData, ThrowOnError>): RequestResult<DeliverTaskResponses, unknown, ThrowOnError> => (options.client ?? client).post<DeliverTaskResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/task/{id}/deliver',
     ...options
 });

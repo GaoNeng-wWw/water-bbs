@@ -21,6 +21,7 @@
     "repl": "pnpm run start -- --entryFile repl",
     "orm": "pnpm mikro-orm",
     "migration:create": "mikro-orm migration:create --config ./mikro-orm.config.ts",
+    "migration:up": "mikro-orm migration:up",
     "db:create": "mikro-orm database:create",
     "schema:update": "mikro-orm schema:update --run",
     "seeder:run": "mikro-orm seeder:run"

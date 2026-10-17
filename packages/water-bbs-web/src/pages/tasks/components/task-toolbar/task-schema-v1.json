@@ -1,0 +1,291 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "name", "condition", "reward", "schedule"],
+  "properties": {
+    "version": {
+      "type": "number",
+      "enum": [1]
+    },
+    "name": {
+      "type": "string"
+    },
+    "condition": {
+      "description": "任务达成条件（完成即触发）",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/whenNode"
+      }
+    },
+    "claim": {
+      "description": "认领门槛（为空则完成即可领取）",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/whenNode"
+      }
+    },
+    "reward": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["use", "args"],
+        "properties": {
+          "use": {
+            "type": "string"
+          },
+          "args": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "schedule": {
+      "$ref": "#/definitions/schedule"
+    }
+  },
+  "definitions": {
+    "value": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/value"
+          }
+        }
+      ]
+    },
+    "operator": {
+      "enum": ["lt", "lte", "eq", "neq", "gt", "gte", "in", "not_in"]
+    },
+    "whereExpression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "field", "operator", "goal"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/operator"
+        },
+        "goal": {
+          "$ref": "#/definitions/value"
+        }
+      }
+    },
+    "whenNode": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["all"],
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/whenNode"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["any"],
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/whenNode"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["not"],
+          "properties": {
+            "not": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/whenNode"
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/whereExpression"
+        }
+      ]
+    },
+    "timezone": {
+      "description": "IANA timezone, e.g. Asia/Shanghai",
+      "type": "string",
+      "minLength": 1
+    },
+    "resetRule": {
+      "oneOf": [
+        {
+          "description": "跟随 schedule.kind 的自然周期切分(daily → 每天,weekly → 每周)",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": {
+              "const": "period"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "days"],
+          "properties": {
+            "kind": {
+              "const": "rolling"
+            },
+            "days": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        {
+          "description": "整个任务生命周期只计算一次",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": {
+              "const": "never"
+            }
+          }
+        }
+      ]
+    },
+    "baseScheduleFields": {
+      "type": "object",
+      "required": ["timezone", "startAt"],
+      "properties": {
+        "timezone": {
+          "$ref": "#/definitions/timezone"
+        },
+        "startAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "schedule": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseScheduleFields"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "once"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseScheduleFields"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "daily"
+                },
+                "reset": {
+                  "$ref": "#/definitions/resetRule"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseScheduleFields"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "weekly"
+                },
+                "reset": {
+                  "$ref": "#/definitions/resetRule"
+                },
+                "weekStart": {
+                  "description": "周一为 1, 周日为 7",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 7
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseScheduleFields"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "monthly"
+                },
+                "reset": {
+                  "$ref": "#/definitions/resetRule"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

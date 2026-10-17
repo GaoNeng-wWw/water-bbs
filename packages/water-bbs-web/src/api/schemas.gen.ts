@@ -1408,12 +1408,12 @@ export const CursorPaginationSchema = {
             }
         },
         nextCursor: {
-            type: 'object',
+            type: 'string',
             description: '下一页的分页',
             nullable: true
         },
         prevCursor: {
-            type: 'object',
+            type: 'string',
             description: '上一页的分页',
             nullable: true
         },
@@ -1427,6 +1427,228 @@ export const CursorPaginationSchema = {
         'nextCursor',
         'prevCursor',
         'total'
+    ]
+} as const;
+
+export const CreateTaskDtoSchema = {
+    type: 'object',
+    properties: {
+        schema: {
+            type: 'object',
+            description: '任务定义'
+        }
+    },
+    required: [
+        'schema'
+    ]
+} as const;
+
+export const CreateTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
+export const RemoveTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
+export const GetTaskListResponseItemSchema = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            description: '任务名称'
+        },
+        icon: {
+            type: 'object',
+            description: '任务图标'
+        },
+        desc: {
+            type: 'object',
+            description: '任务描述'
+        },
+        status: {
+            type: 'number',
+            description: '任务状态',
+            enum: [
+                0,
+                1,
+                2
+            ]
+        },
+        canClaim: {
+            type: 'object',
+            description: '是否可领取'
+        }
+    },
+    required: [
+        'name'
+    ]
+} as const;
+
+export const WhenNodeDtoSchema = {
+    type: 'object',
+    properties: {
+        node: {
+            oneOf: [
+                {},
+                {},
+                {},
+                {}
+            ],
+            description: '条件节点：all/any/not 逻辑组合或叶子表达式'
+        }
+    },
+    required: [
+        'node'
+    ]
+} as const;
+
+export const TaskDetailResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        },
+        name: {
+            type: 'string',
+            description: '任务名称'
+        },
+        desc: {
+            type: 'string',
+            description: '任务描述'
+        },
+        icon: {
+            type: 'string',
+            description: '任务图标'
+        },
+        canClaim: {
+            type: 'boolean',
+            description: '是否可领取'
+        },
+        status: {
+            type: 'string',
+            description: '任务状态',
+            enum: [
+                0,
+                1,
+                2
+            ]
+        },
+        condition: {
+            description: '任务条件',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/WhenNodeDto'
+            }
+        },
+        claim: {
+            description: '任务奖励条件',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/WhenNodeDto'
+            }
+        }
+    },
+    required: [
+        'id',
+        'name',
+        'desc',
+        'icon',
+        'canClaim',
+        'condition',
+        'claim'
+    ]
+} as const;
+
+export const TaskProgressItemSchema = {
+    type: 'object',
+    properties: {
+        field: {
+            type: 'string',
+            description: '任务进度字段'
+        },
+        value: {
+            type: 'object',
+            description: '任务进度值'
+        }
+    },
+    required: [
+        'field',
+        'value'
+    ]
+} as const;
+
+export const TaskProgressResponseSchema = {
+    type: 'object',
+    properties: {
+        items: {
+            description: '任务进度列表',
+            type: 'array',
+            items: {
+                $ref: '#/components/schemas/TaskProgressItem'
+            }
+        }
+    },
+    required: [
+        'items'
+    ]
+} as const;
+
+export const ClaimTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
+export const CancelTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        }
+    },
+    required: [
+        'id'
+    ]
+} as const;
+
+export const DeliverTaskResponseSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        }
+    },
+    required: [
+        'id'
     ]
 } as const;
 

@@ -70,6 +70,9 @@ const onSelect = (item: ListBoxItem) => {
             </suspense>
           </ui-dialog-content>
         </ui-dialog>
+        <ui-listbox-item id="tasks" value="/tasks">
+          任务
+        </ui-listbox-item>
         <ui-listbox-item id="Profile" value="/profile">
           Profile
         </ui-listbox-item>

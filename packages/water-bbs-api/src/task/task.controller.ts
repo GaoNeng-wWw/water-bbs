@@ -22,12 +22,14 @@ import {
 import schema from '@app/gamification/task/schema/core';
 import { err } from 'neverthrow';
 import { Member, MemberKind, type TaskID } from '@app/gamification';
-import { ApiCursorPagination, type CursorDTO } from '@app/shared';
+import { ApiCursorPagination, CursorDTO } from '@app/shared';
 import { type AccountId, User } from 'src/auth';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 
 @Controller('task')
@@ -55,6 +57,7 @@ export class TaskController {
     operationId: 'removeTask',
     description: '只有bd或admin才有权限删除任务',
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @ApiCreatedResponse({ description: '删除任务成功', type: RemoveTaskResponse })
   @Member(MemberKind.BD)
   @Delete(':id')
@@ -64,6 +67,7 @@ export class TaskController {
 
   @ApiOperation({ summary: '获取任务列表', operationId: 'getTasks' })
   @ApiCursorPagination(GetTaskListResponseItem)
+  @ApiQuery({ type: CursorDTO })
   @Get()
   getTasks(@Query() query: CursorDTO, @User('id') accountID: AccountId) {
     return this.taskService.listTask(query, accountID);
@@ -85,6 +89,7 @@ export class TaskController {
     description: '获取任务进度',
     type: TaskProgressResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Get(':id/progress')
   getTaskProgress(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.getTaskProgress(id, accountID);
@@ -95,6 +100,7 @@ export class TaskController {
     description: '领取任务成功返回',
     type: ClaimTaskResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Post(':id/claim')
   claimTask(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.claimTask(id, accountID);
@@ -121,6 +127,7 @@ export class TaskController {
     description: '交付任务成功返回',
     type: DeliverTaskResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Post(':id/deliver')
   deliverTask(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.deliverTask(id, accountID);

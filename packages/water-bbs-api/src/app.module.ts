@@ -1,6 +1,6 @@
 import { ConfigureModule, ConfigureService } from '@app/configure';
 import { ErrorFilter, ResultInterceptor } from '@app/shared';
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
@@ -24,6 +24,8 @@ import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
 import { BdModule } from './bd/bd.module';
 import { TaskModule } from './task/task.module';
+import schema from '@app/gamification/task/schema/core';
+import z from 'zod';
 
 @Module({
   imports: [
@@ -86,4 +88,5 @@ import { TaskModule } from './task/task.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule{
+}
