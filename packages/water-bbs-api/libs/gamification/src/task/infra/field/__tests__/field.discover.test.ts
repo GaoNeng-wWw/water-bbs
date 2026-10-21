@@ -174,7 +174,10 @@ describe(FieldDiscoverService.name, () => {
       const result = await service.callHandler('user.id', params);
 
       expect(result.isOk()).toBe(true);
-      expect(execute).toHaveBeenCalledWith(params, { em: forkedEm });
+      expect(execute).toHaveBeenCalledWith(params, {
+        em: forkedEm,
+        accountID: 'acc-1',
+      });
       expect(em.fork).toHaveBeenCalled();
     });
 

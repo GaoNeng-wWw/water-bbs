@@ -4,13 +4,11 @@ import {
   FieldProviderContext,
   IFieldProvider,
 } from '../field.decorator';
-import { AccountId, Profile } from 'src/auth';
+import { Profile } from 'src/auth';
 import { ok, Result } from 'neverthrow';
 import { InfraError } from '@app/shared';
 
-export const UserBioFieldSchema = z.object({
-  accountID: z.string(),
-});
+export const UserBioFieldSchema = z.object({});
 
 @Field({ name: 'user.bio', schema: UserBioFieldSchema })
 export class UserBioField implements IFieldProvider<
@@ -18,11 +16,11 @@ export class UserBioField implements IFieldProvider<
   string | null
 > {
   async execute(
-    params: { accountID: AccountId },
+    _params: z.infer<typeof UserBioFieldSchema>,
     context: FieldProviderContext,
   ): Promise<Result<string | null, InfraError>> {
     const profile = await context.em.findOne(Profile, {
-      accountId: params.accountID,
+      accountId: context.accountID,
     });
     if (!profile) {
       return ok(null);

@@ -7,11 +7,8 @@ import {
 import { InfraError } from '@app/shared';
 import { ok, Result } from 'neverthrow';
 import { GovernanceMember, MemberKind } from '@app/gamification/governance';
-import { AccountId } from 'src/auth';
 
-export const UserGovernanceBDWasSchema = z.object({
-  accountID: z.string(),
-});
+export const UserGovernanceBDWasSchema = z.object({});
 
 @Field({
   name: 'user.governance.bd.was',
@@ -22,11 +19,11 @@ export class UserGovernanceBDWasField implements IFieldProvider<
   boolean
 > {
   async execute(
-    params: { accountID: AccountId },
+    _params: z.infer<typeof UserGovernanceBDWasSchema>,
     context: FieldProviderContext,
   ): Promise<Result<boolean, InfraError>> {
     const bdGovernanceRecord = await context.em.find(GovernanceMember, {
-      accountId: params.accountID,
+      accountId: context.accountID,
       kind: MemberKind.BD,
       endedAt: { $lt: new Date() },
     });

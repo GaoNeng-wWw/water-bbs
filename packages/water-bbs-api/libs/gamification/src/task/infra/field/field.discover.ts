@@ -4,6 +4,7 @@ import { IFieldProvider, FieldMetadata, Field } from './field.decorator';
 import { err, ok } from 'neverthrow';
 import { FieldNotFound, FieldParamError } from '../error';
 import { EntityManager } from '@mikro-orm/core';
+import { AccountId } from 'src/auth';
 import { Fields } from '../../schema';
 
 @Injectable()
@@ -57,9 +58,13 @@ export class FieldDiscoverService implements OnApplicationBootstrap {
       if (!result.success) {
         return err(new FieldParamError(name, params));
       }
-      return handler.execute(params, { em: this.em.fork() });
+      const accountID = (params as { accountID?: AccountId } | undefined)
+        ?.accountID as AccountId;
+      return handler.execute(result.data, {
+        em: this.em.fork(),
+        accountID,
+      });
     }
     return err(new FieldNotFound(name));
-    // return handler.execute(params, { em: this.em.fork() });
   }
 }

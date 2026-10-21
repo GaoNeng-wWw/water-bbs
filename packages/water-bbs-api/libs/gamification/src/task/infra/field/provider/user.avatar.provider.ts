@@ -4,13 +4,10 @@ import {
   FieldProviderContext,
   IFieldProvider,
 } from '../field.decorator';
-import { AccountId } from 'src/auth';
 import { ok, Result } from 'neverthrow';
 import { InfraError } from '@app/shared';
 
-export const UserAvatarFieldSchema = z.object({
-  accountID: z.string(),
-});
+export const UserAvatarFieldSchema = z.object({});
 
 @Field({ name: 'user.avatar', schema: UserAvatarFieldSchema })
 export class UserAvatarField implements IFieldProvider<
@@ -18,7 +15,7 @@ export class UserAvatarField implements IFieldProvider<
   string
 > {
   async execute(
-    params: { accountID: AccountId },
+    _params: z.infer<typeof UserAvatarFieldSchema>,
     _context: FieldProviderContext,
   ): Promise<Result<string | null, InfraError>> {
     return ok('');

@@ -1,5 +1,9 @@
 import z from 'zod';
-import { Field, IFieldProvider } from '../field.decorator';
+import {
+  Field,
+  FieldProviderContext,
+  IFieldProvider,
+} from '../field.decorator';
 import { InfraError } from '@app/shared';
 import { ok, Result } from 'neverthrow';
 import { RedisService } from '@liaoliaots/nestjs-redis';
@@ -9,9 +13,7 @@ interface Redis extends IRedis {
   accountAlive: (uid: string) => Promise<boolean>;
 }
 
-export const UserLoggedSchema = z.object({
-  accountID: z.string(),
-});
+export const UserLoggedSchema = z.object({});
 
 @Field({ name: 'user.logged', schema: UserLoggedSchema })
 export class UserLogged implements IFieldProvider<
@@ -19,11 +21,12 @@ export class UserLogged implements IFieldProvider<
   boolean
 > {
   constructor(private readonly redisSrv: RedisService) {}
-  execute(params: {
-    accountID: string;
-  }): Promise<Result<boolean | null, InfraError>> {
+  execute(
+    _params: z.infer<typeof UserLoggedSchema>,
+    context: FieldProviderContext,
+  ): Promise<Result<boolean | null, InfraError>> {
     const redis = this.redisSrv.getOrThrow() as Redis;
-    return redis.accountAlive(params.accountID).then((alive) => {
+    return redis.accountAlive(context.accountID).then((alive) => {
       return ok(!!alive);
     });
   }

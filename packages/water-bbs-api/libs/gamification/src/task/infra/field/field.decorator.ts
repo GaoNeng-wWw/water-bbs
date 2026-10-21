@@ -4,6 +4,7 @@ import { Result } from 'neverthrow';
 import z from 'zod';
 import { Fields } from '../../schema';
 import { DiscoveryService } from '@nestjs/core';
+import { AccountId } from 'src/auth';
 
 export type FieldMetadata = {
   name: Fields;
@@ -12,6 +13,7 @@ export type FieldMetadata = {
 
 export type FieldProviderContext = {
   em: EntityManager;
+  accountID: AccountId;
 };
 
 export type IFieldProvider<Schema extends z.ZodType, ReturnType> = {
