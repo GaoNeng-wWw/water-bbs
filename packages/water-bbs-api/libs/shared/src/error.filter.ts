@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { DomainError } from '@app/shared';
+import { ApplicationError, DomainError } from '@app/shared';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from './.generated/i18n.generated';
 
@@ -19,7 +19,10 @@ export class ErrorFilter implements ExceptionFilter {
     const resp = http.getResponse<Response>();
     const req = http.getRequest<Request>();
     const lang = req.headers['accept-language'] || 'en-us';
-    if (exception instanceof DomainError) {
+    if (
+      exception instanceof DomainError ||
+      exception instanceof ApplicationError
+    ) {
       const { status, key, details, args } = exception;
       const translatedMessage = this.i18n.translate(key, { args, lang });
       return resp.status(exception.status).json({

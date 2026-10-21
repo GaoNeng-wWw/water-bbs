@@ -10,12 +10,10 @@ import { onBeforeUnmount, shallowRef, useTemplateRef, watchEffect } from 'vue';
 import * as monaco from 'monaco-editor';
 import { configureMonacoYaml } from 'monaco-yaml-inline';
 import { createTask, getTaskSchema } from '@/api';
-import z from 'zod';
 import { load } from 'js-yaml';
 
 const resp = await getTaskSchema();
 const schema = resp.data;
-const zodSchema = z.fromJSONSchema(schema as any);
 
 const editorContainer = useTemplateRef('editor-container');
 const editorInstance = shallowRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -28,22 +26,7 @@ configureMonacoYaml(monaco, {
 });
 
 const uri = monaco.Uri.parse('file:///task.yaml');
-const model = monaco.editor.createModel(`
-version: 1
-name: Sign
-schedule:
-  kind: once
-condition:
-  all:
-    - id: UserLogged
-      field: user.logged
-      operator: eq
-      goal: true
-reward:
-  - use: wallet/point
-    args:
-      amount: 10
-`, 'yaml', uri);
+const model = monaco.editor.createModel('', 'yaml', uri);
 
 watchEffect(() => {
   if (!editorContainer.value) {
@@ -75,8 +58,14 @@ const onSubmitTask = () => {
 </script>
 
 <template>
-  <div v-governance-member="GovernanceMemberKind.Bd" class="w-full flex justify-between">
-    <div />
+  <div v-governance-member="GovernanceMemberKind.Bd" class="w-full h-fit flex justify-between items-center">
+    <div class="w-fit h-full flex items-center">
+      <router-link to="/">
+        <ui-button variant="ghost" icon size="sm">
+          <div class="size-4 icon-[material-symbols--chevron-backward]" />
+        </ui-button>
+      </router-link>
+    </div>
     <ui-drawer-root direction="right">
       <ui-drawer-trigger>
         <ui-button variant="solid" color="primary">

@@ -496,7 +496,7 @@ export const claimTask = <ThrowOnError extends boolean = false>(options: Options
  *
  * 取消任务, 如果没有领取任务会返回404
  */
-export const cancelTask = <ThrowOnError extends boolean = false>(options?: Options<CancelTaskData, ThrowOnError>): RequestResult<CancelTaskResponses, unknown, ThrowOnError> => (options?.client ?? client).post<CancelTaskResponses, unknown, ThrowOnError>({
+export const cancelTask = <ThrowOnError extends boolean = false>(options: Options<CancelTaskData, ThrowOnError>): RequestResult<CancelTaskResponses, unknown, ThrowOnError> => (options.client ?? client).post<CancelTaskResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/task/{id}/cancel',
     ...options

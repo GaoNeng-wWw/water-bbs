@@ -35,6 +35,7 @@ export class CancelTaskService implements ICommandHandler<CancelTask> {
       return cancelResult;
     }
     this.em.persist(userTask);
+    await this.em.flush();
     return ok(taskID);
   }
 }

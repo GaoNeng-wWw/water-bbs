@@ -5,3 +5,4 @@ export * from './base.entity';
 export * from './utils';
 export * from './errors';
 export * from './dto';
+export * from './zod';

@@ -29,6 +29,9 @@ export class ClaimTaskService implements ICommandHandler<ClaimTask> {
     const userTaskRecord = await this.em.findOne(UserTask, {
       accountID,
       taskID,
+      status: {
+        $in: [UserTaskStatus.Progress, UserTaskStatus.Completed],
+      }
     });
     if (userTaskRecord) {
       const claimResult = task.canClaim(userTaskRecord);

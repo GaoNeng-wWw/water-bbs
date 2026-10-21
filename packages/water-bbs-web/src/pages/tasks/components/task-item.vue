@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { UserTaskStatus } from '@/api';
+import { claimTask, UserTaskStatus } from '@/api';
 import { UiButton, UiDrawerRoot, UiDrawerTrigger, UiDrawerContent } from '@/components/ui';
 import taskDetail from './task-detail.vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 type TaskItemProps = {
   id: string;
   title: string;
@@ -12,7 +13,19 @@ type TaskItemProps = {
 };
 
 const props = defineProps<TaskItemProps>();
+const router = useRouter();
 const { t } = useI18n({ useScope: 'local' });
+
+const claim = () => {
+  claimTask({
+    path: {
+      id: props.id,
+    },
+  })
+    .then(() => {
+      router.go(0);
+    });
+};
 </script>
 
 <template>
@@ -40,7 +53,7 @@ const { t } = useI18n({ useScope: 'local' });
               </div>
             </div>
             <div>
-              <ui-button size="sm" :disabled="!props.canClaim">
+              <ui-button size="sm" :disabled="!props.canClaim" color="primary" @click="claim">
                 {{ t('claim') }}
               </ui-button>
             </div>

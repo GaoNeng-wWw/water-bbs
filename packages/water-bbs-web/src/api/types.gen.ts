@@ -1840,7 +1840,12 @@ export type ClaimTaskResponse2 = ClaimTaskResponses[keyof ClaimTaskResponses];
 
 export type CancelTaskData = {
     body?: never;
-    path?: never;
+    path: {
+        /**
+         * 任务ID
+         */
+        id: unknown;
+    };
     query?: never;
     url: '/task/{id}/cancel';
 };

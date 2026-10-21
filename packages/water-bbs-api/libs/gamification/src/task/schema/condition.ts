@@ -1,5 +1,6 @@
 import z from 'zod';
 import { ValueType, Value } from './data-type';
+import { localMap } from '@app/shared';
 
 export const field = z.enum([
   'user.id', // 用户 id
@@ -72,10 +73,10 @@ const operator = z.enum([
 ]);
 const whereExpression = z.object({
   id: z.string(),
-  field: z.string(),
+  field,
   operator,
   goal: Value,
-  desc: z.record(z.string(), z.string()).optional()
+  desc: localMap().optional(),
 });
 const whenNode: z.ZodType<WhenNode> = z.lazy(() =>
   z.union([

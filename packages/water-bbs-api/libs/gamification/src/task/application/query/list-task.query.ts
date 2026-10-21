@@ -43,6 +43,9 @@ export class ListTaskService implements IQueryHandler<ListTask> {
       const userTaskRecord = await this.em.findOne(UserTask, {
         accountID: query.userID as AccountId,
         taskID: task.id,
+        status: {
+          $in: [UserTaskStatus.Progress, UserTaskStatus.Completed],
+        }
       });
       const status = userTaskRecord?.status;
       const canClaim = userTaskRecord

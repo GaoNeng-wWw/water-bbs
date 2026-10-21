@@ -56,6 +56,7 @@ export type I18nTranslations = {
         "TASK_RESET_NEVER": string;
         "TASK_COOLDOWN_NOT_EXPIRED": string;
         "UNKNOWN_SCHEDULE_KIND": string;
+        "INVALID_TASK_SCHEMA": string;
     };
     "mail": {
         "register": {

@@ -31,6 +31,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
+import { TaskSchemaInvalidError } from './error';
 
 @Controller('task')
 export class TaskController {
@@ -58,7 +59,7 @@ export class TaskController {
   createTask(@Body() dto: CreateTaskDto) {
     const { success, data, error } = schema.safeParse(dto.schema);
     if (!success) {
-      return err(error);
+      return err(new TaskSchemaInvalidError(error.message));
     }
     return this.taskService.createTask({ schema: data });
   }
@@ -126,6 +127,7 @@ export class TaskController {
     description: '取消任务成功返回',
     type: CancelTaskResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Post(':id/cancel')
   cancelTask(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.cancelTask(id, accountID);

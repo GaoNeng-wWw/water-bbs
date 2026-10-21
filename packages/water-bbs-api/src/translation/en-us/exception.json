@@ -48,5 +48,6 @@
   "TASK_SCHEDULE_ONCE": "Task Schedule Once",
   "TASK_RESET_NEVER": "Task Reset Never",
   "TASK_COOLDOWN_NOT_EXPIRED": "Task Cooldown Not Expired",
-  "UNKNOWN_SCHEDULE_KIND": "Unknown Schedule Kind"
+  "UNKNOWN_SCHEDULE_KIND": "Unknown Schedule Kind",
+  "INVALID_TASK_SCHEMA": "Invalid Task Schema"
 }

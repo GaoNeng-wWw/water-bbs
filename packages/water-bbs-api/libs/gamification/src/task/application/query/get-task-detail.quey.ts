@@ -36,7 +36,13 @@ export class GetTaskDetailService implements IQueryHandler<GetTaskDetail> {
     taskID,
     accountID,
   }: GetTaskDetail): Promise<Result<TaskDetail, ApplicationError>> {
-    const userTask = await this.em.findOne(UserTask, { accountID, taskID });
+    const userTask = await this.em.findOne(UserTask, {
+      accountID,
+      taskID,
+      status: {
+        $in: [UserTaskStatus.Progress, UserTaskStatus.Completed],
+      }
+    });
     const task = await this.em.findOne(TaskDefinition, { id: taskID });
     if (!task) {
       return err(new TaskNotFound());

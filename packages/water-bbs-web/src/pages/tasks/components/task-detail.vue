@@ -6,6 +6,7 @@ import TaskRewards from './task-rewards.vue';
 import { useI18n } from 'vue-i18n';
 import { provideTaskConditionContext } from './task-condition-tree/context.ts';
 import { UiButton } from '@/components/ui/index.ts';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{ id: string }>();
 
@@ -25,16 +26,20 @@ const canClaim = computed(() => taskDetail.value?.canClaim);
 const progress = computed(() => progressFetcher.error ? null : progressFetcher.data?.items);
 const condition = computed(() => taskDetail.value?.condition as any);
 const rewards = computed(() => taskDetail.value?.reward);
+const router = useRouter();
+
 const { t } = useI18n({ useScope: 'local', inheritLocale: true });
 
-const claim = () => [
+const claim = () => {
   claimTask({
     path: {
       id: props.id,
     },
   })
-    .then(console.log),
-];
+    .then(() => {
+      router.go(0);
+    });
+};
 
 const variable = computed(() => {
   return (progress.value ?? []).reduce((pre, cur) => {
@@ -50,14 +55,20 @@ const deliver = () => {
     path: {
       id: props.id,
     },
-  });
+  })
+    .then(() => {
+      router.go(0);
+    });
 };
 const cancel = () => {
   cancelTask({
     path: {
-      id,
+      id: props.id,
     },
-  });
+  })
+    .then(() => {
+      router.go(0);
+    });
 };
 provideTaskConditionContext({
   variable,
@@ -91,7 +102,7 @@ provideTaskConditionContext({
         <ui-button color="primary" @click="deliver">
           {{ t('condition.action.deliver') }}
         </ui-button>
-        <ui-button color="danger">
+        <ui-button color="danger" @click="cancel">
           {{ t('condition.action.cancel') }}
         </ui-button>
       </div>
