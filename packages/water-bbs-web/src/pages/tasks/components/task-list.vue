@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
+import { useInfiniteQuery } from '@tanstack/vue-query';
 import { getTasks } from '@/api';
+import { computed } from 'vue';
+import TaskItem from './task-item.vue';
 
-const {data} = useInfiniteQuery(
+const { data } = useInfiniteQuery(
   {
     queryFn: ({ pageParam }: { pageParam?: string }) => {
       return getTasks({
@@ -19,11 +21,13 @@ const {data} = useInfiniteQuery(
     queryKey: ['task-list'],
   },
 );
-
-console.log(data)
-
+const list = computed(() => {
+  return data.value?.pages.flatMap(page => page.data?.items ?? []);
+});
 </script>
 
 <template>
-  <div class="w-full" />
+  <div class="w-full space-y-3">
+    <task-item v-for="item in list" :id="item.id" :key="item.id" :title="item.name" :desc="item.desc" :status="item.status" :can-claim="item.canClaim" />
+  </div>
 </template>

@@ -7,22 +7,43 @@ import {
 } from '@/components/ui';
 import { GovernanceMemberKind } from '@/directive';
 import { onBeforeUnmount, shallowRef, useTemplateRef, watchEffect } from 'vue';
-import v1 from './task-schema-v1.json';
 import * as monaco from 'monaco-editor';
 import { configureMonacoYaml } from 'monaco-yaml-inline';
+import { createTask, getTaskSchema } from '@/api';
+import z from 'zod';
+import { load } from 'js-yaml';
+
+const resp = await getTaskSchema();
+const schema = resp.data;
+const zodSchema = z.fromJSONSchema(schema as any);
 
 const editorContainer = useTemplateRef('editor-container');
-const editorInstance = shallowRef();
+const editorInstance = shallowRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 configureMonacoYaml(monaco, {
   schemas: [{
     fileMatch: ['**/task.yaml'],
     uri: 'inmemory://task',
-    schema: v1,
+    schema,
   }],
 });
 
 const uri = monaco.Uri.parse('file:///task.yaml');
-const model = monaco.editor.createModel('', 'yaml', uri);
+const model = monaco.editor.createModel(`
+version: 1
+name: Sign
+schedule:
+  kind: once
+condition:
+  all:
+    - id: UserLogged
+      field: user.logged
+      operator: eq
+      goal: true
+reward:
+  - use: wallet/point
+    args:
+      amount: 10
+`, 'yaml', uri);
 
 watchEffect(() => {
   if (!editorContainer.value) {
@@ -40,8 +61,16 @@ onBeforeUnmount(() => {
   editorInstance.value?.dispose();
 });
 
-const onClickCreateTask = () => {
-
+const onSubmitTask = () => {
+  const yamlStr = editorInstance.value?.getModel()?.getValue();
+  if (!yamlStr) {
+    return;
+  }
+  createTask({
+    body: {
+      schema: load(yamlStr) as any,
+    },
+  });
 };
 </script>
 
@@ -50,12 +79,24 @@ const onClickCreateTask = () => {
     <div />
     <ui-drawer-root direction="right">
       <ui-drawer-trigger>
-        <ui-button variant="solid" color="primary" @click="onClickCreateTask">
+        <ui-button variant="solid" color="primary">
           Create Task
         </ui-button>
       </ui-drawer-trigger>
       <ui-drawer-content hidden-handle>
-        <div ref="editor-container" class="h-full" />
+        <div class="w-full h-full flex flex-col">
+          <p class="text-surface-fg text-3xl mb-3">
+            Task Editor
+          </p>
+          <div class="grow shrink flex flex-col gap-2">
+            <div ref="editor-container" class="grow shrink" />
+            <div class="w-full shrink-0 grow">
+              <ui-button @click="onSubmitTask">
+                Submit
+              </ui-button>
+            </div>
+          </div>
+        </div>
       </ui-drawer-content>
     </ui-drawer-root>
   </div>

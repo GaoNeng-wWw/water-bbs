@@ -5,7 +5,7 @@ import { ApplicationError } from '@app/shared';
 import { AccountId } from 'src/auth';
 import { EntityManager } from '@mikro-orm/sqlite';
 import { TaskNotFound } from '../error';
-import { WhenNode } from '../../schema';
+import { Task, TopWhen } from '../../schema';
 
 export type TaskDetail = {
   id: TaskID;
@@ -14,8 +14,10 @@ export type TaskDetail = {
   icon?: string;
   canClaim: boolean;
   status?: UserTaskStatus;
-  condition: WhenNode[];
-  claim?: WhenNode[];
+  condition: TopWhen;
+  claim?: TopWhen;
+  claimed: boolean;
+  reward: Task['reward'];
 };
 
 export class GetTaskDetail extends Query<Result<TaskDetail, ApplicationError>> {
@@ -44,6 +46,7 @@ export class GetTaskDetailService implements IQueryHandler<GetTaskDetail> {
       ...task,
       canClaim,
       status: userTask?.status,
+      claimed: userTask !== null,
     });
   }
 }

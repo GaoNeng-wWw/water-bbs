@@ -13,4 +13,3 @@ export class CreateTaskResponse {
     this.id = id;
   }
 }
-

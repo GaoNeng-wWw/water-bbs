@@ -26,8 +26,31 @@ export class TaskDetailResponse {
     required: false,
   })
   status?: UserTaskStatus;
-  @ApiProperty({ type: [WhenNodeDto], description: '任务条件' })
-  condition: WhenNodeDto[];
-  @ApiProperty({ type: [WhenNodeDto], description: '任务奖励条件' })
-  claim?: WhenNodeDto[];
+  @ApiProperty({
+    oneOf: [
+      { $ref: '#/components/schemas/WhenAllDto' },
+      { $ref: '#/components/schemas/WhenAnyDto' },
+      { $ref: '#/components/schemas/WhenNotDto' },
+      { $ref: '#/components/schemas/WhenExpressionDto' },
+    ],
+    description: '条件节点：all/any/not 逻辑组合或叶子表达式',
+  })
+  condition: Record<string, any>;
+  @ApiProperty({
+    oneOf: [
+      { $ref: '#/components/schemas/WhenAllDto' },
+      { $ref: '#/components/schemas/WhenAnyDto' },
+      { $ref: '#/components/schemas/WhenNotDto' },
+      { $ref: '#/components/schemas/WhenExpressionDto' },
+    ],
+    description: '条件节点：all/any/not 逻辑组合或叶子表达式',
+  })
+  claim?: Record<string, any>;
+  @ApiProperty({ type: [Object], description: '任务奖励' })
+  reward: Record<string, string>[];
+  @ApiProperty({ type: 'boolean' })
+  claimed?: boolean;
+  constructor(props: TaskDetailResponse){
+    Object.assign(this, props);
+  }
 }

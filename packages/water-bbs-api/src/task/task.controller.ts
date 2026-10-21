@@ -37,6 +37,17 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @ApiOperation({
+    summary: '获取任务schema',
+    operationId: 'getTaskSchema',
+    description: '只有bd或admin才有权限获取schema',
+  })
+  @Get('schema')
+  @Member(MemberKind.BD)
+  getSchema() {
+    return this.taskService.getSchema();
+  }
+
+  @ApiOperation({
     summary: '创建任务',
     operationId: 'createTask',
     description: '只有bd或admin才有权限创建任务',
@@ -73,6 +84,7 @@ export class TaskController {
     return this.taskService.listTask(query, accountID);
   }
 
+  @ApiParam({ type: String, name: 'id' })
   @ApiOperation({ summary: '获取任务详情', operationId: 'getTaskDetail' })
   @ApiOkResponse({ description: '获取任务详情', type: TaskDetailResponse })
   @Get(':id')

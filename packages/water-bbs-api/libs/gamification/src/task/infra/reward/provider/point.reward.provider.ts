@@ -14,6 +14,7 @@ import { AccountId } from 'src/auth';
 export const RewardPointSchema = z.object({
   accountID: z.string(),
   amount: z.number().int(),
+  detail: z.string().optional(),
 });
 
 @Reward({
@@ -22,7 +23,7 @@ export const RewardPointSchema = z.object({
 })
 export class RewardPoint implements IReward<typeof RewardPointSchema, void> {
   async execute(
-    param: { accountID: AccountId; amount: number },
+    param: { accountID: AccountId; amount: number, detail?: string },
     ctx: Context,
   ): Promise<Result<void, InfraError>> {
     const wallet = await ctx.read.findOne(Wallet, {
@@ -36,9 +37,8 @@ export class RewardPoint implements IReward<typeof RewardPointSchema, void> {
       to: wallet.id,
       amount: param.amount.toString(),
       status: TransactionStatus.Success,
-      detail: '',
+      detail: param.detail ?? '',
     });
-    wallet.addTransaction(transaction);
     ctx.write.persist(transaction);
     ctx.write.persist(wallet);
     return ok();

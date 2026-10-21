@@ -1469,55 +1469,51 @@ export const RemoveTaskResponseSchema = {
     ]
 } as const;
 
+export const UserTaskStatusSchema = {
+    type: 'string',
+    enum: [
+        'Progress',
+        'Completed',
+        'Cancelled'
+    ],
+    description: '任务状态'
+} as const;
+
 export const GetTaskListResponseItemSchema = {
     type: 'object',
     properties: {
+        id: {
+            type: 'string',
+            description: '任务ID'
+        },
         name: {
             type: 'string',
             description: '任务名称'
         },
         icon: {
-            type: 'object',
+            type: 'string',
             description: '任务图标'
         },
         desc: {
-            type: 'object',
+            type: 'string',
             description: '任务描述'
         },
         status: {
-            type: 'number',
             description: '任务状态',
-            enum: [
-                0,
-                1,
-                2
+            allOf: [
+                {
+                    $ref: '#/components/schemas/UserTaskStatus'
+                }
             ]
         },
         canClaim: {
-            type: 'object',
+            type: 'boolean',
             description: '是否可领取'
         }
     },
     required: [
+        'id',
         'name'
-    ]
-} as const;
-
-export const WhenNodeDtoSchema = {
-    type: 'object',
-    properties: {
-        node: {
-            oneOf: [
-                {},
-                {},
-                {},
-                {}
-            ],
-            description: '条件节点：all/any/not 逻辑组合或叶子表达式'
-        }
-    },
-    required: [
-        'node'
     ]
 } as const;
 
@@ -1548,24 +1544,38 @@ export const TaskDetailResponseSchema = {
             type: 'string',
             description: '任务状态',
             enum: [
-                0,
-                1,
-                2
+                'Progress',
+                'Completed',
+                'Cancelled'
             ]
         },
         condition: {
-            description: '任务条件',
-            type: 'array',
-            items: {
-                $ref: '#/components/schemas/WhenNodeDto'
-            }
+            oneOf: [
+                {},
+                {},
+                {},
+                {}
+            ],
+            description: '条件节点：all/any/not 逻辑组合或叶子表达式'
         },
         claim: {
-            description: '任务奖励条件',
+            oneOf: [
+                {},
+                {},
+                {},
+                {}
+            ],
+            description: '条件节点：all/any/not 逻辑组合或叶子表达式'
+        },
+        reward: {
+            description: '任务奖励',
             type: 'array',
             items: {
-                $ref: '#/components/schemas/WhenNodeDto'
+                type: 'object'
             }
+        },
+        claimed: {
+            type: 'boolean'
         }
     },
     required: [
@@ -1575,7 +1585,9 @@ export const TaskDetailResponseSchema = {
         'icon',
         'canClaim',
         'condition',
-        'claim'
+        'claim',
+        'reward',
+        'claimed'
     ]
 } as const;
 

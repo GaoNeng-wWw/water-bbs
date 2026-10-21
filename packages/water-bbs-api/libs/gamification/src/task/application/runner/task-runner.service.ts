@@ -31,7 +31,7 @@ export class TaskRunnerService {
     });
     const taskResults = await Promise.all(tasks);
     const [error] = taskResults.filter((task) => task.result.isErr());
-    if (error.result.isErr()) {
+    if (error && error.result.isErr()) {
       return error.result;
     }
     const results = taskResults
@@ -47,7 +47,9 @@ export class TaskRunnerService {
         [cur.field]: cur.value,
       };
     }, {});
-    const allResult = evalCondition(task.condition, context);
+    const allResult = Object.keys(task.condition).length
+      ? evalCondition(task.condition, context)
+      : ok(true);
     if (allResult.isErr()) {
       return allResult;
     }

@@ -8,6 +8,7 @@ export const field = z.enum([
   'user.bio', // 个人介绍
   // 'user.banned', // 是否被封禁 (WIP)
   'user.created_at', // 创建时间
+  'user.logged',
   // 'user.last_seen_at', // 最后活跃时间 (WIP)
   'user.governance.admin.is', // 是否是管理员 (现在)
   'user.governance.admin.was', // 是否是管理员 (过去)
@@ -74,6 +75,7 @@ const whereExpression = z.object({
   field: z.string(),
   operator,
   goal: Value,
+  desc: z.record(z.string(), z.string()).optional()
 });
 const whenNode: z.ZodType<WhenNode> = z.lazy(() =>
   z.union([

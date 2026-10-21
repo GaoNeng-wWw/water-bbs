@@ -3,10 +3,13 @@ import { heyApiPlugin } from '@hey-api/vite-plugin';
 import { join } from 'path';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const plugins = [vue(), tailwindcss()];
+  const plugins = [vue(), tailwindcss(), VueI18nPlugin()];
   if (mode === 'development') {
     plugins.push(heyApiPlugin({
       config: {

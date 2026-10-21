@@ -20,7 +20,7 @@ export class CreateTaskService implements ICommandHandler<CreateTask> {
     const schema = command.schema;
     const taskDef = this.em.create(TaskDefinition, {
       name: schema.name,
-      desc: '',
+      desc: schema.desc,
       icon: '',
       condition: schema.condition,
       schedule: schema.schedule,

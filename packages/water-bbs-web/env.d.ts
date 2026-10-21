@@ -1,7 +1,6 @@
 import type { Directive } from 'vue';
 import { GovernanceMemberKind, vGovernanceMember, vAuthed } from './src/directive';
 
-
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
   readonly VITE_BASE_URL: string;

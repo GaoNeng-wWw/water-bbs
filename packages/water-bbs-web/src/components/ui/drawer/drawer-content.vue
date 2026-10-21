@@ -3,7 +3,7 @@ import { DrawerPortal, DrawerContent, DrawerOverlay, DrawerHandle } from 'vaul-v
 import { useForwardPropsEmits, type DrawerContentEmits, type DrawerContentProps as DrawerContentProps_ } from 'reka-ui';
 
 type DrawerContentProps = DrawerContentProps_ & {
-  hiddenHandle: boolean;
+  hiddenHandle?: boolean;
 };
 
 const props = defineProps<DrawerContentProps>();

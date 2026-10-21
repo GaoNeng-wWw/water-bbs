@@ -42,6 +42,7 @@ export class DeliverTaskService implements ICommandHandler<DeliverTask> {
     }
     userTask.complete();
     this.em.persist(userTask);
+    await this.em.flush();
     return ok(taskID);
   }
 }

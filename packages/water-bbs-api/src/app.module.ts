@@ -24,8 +24,6 @@ import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
 import { BdModule } from './bd/bd.module';
 import { TaskModule } from './task/task.module';
-import schema from '@app/gamification/task/schema/core';
-import z from 'zod';
 
 @Module({
   imports: [
@@ -88,5 +86,4 @@ import z from 'zod';
     },
   ],
 })
-export class AppModule{
-}
+export class AppModule {}

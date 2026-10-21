@@ -829,7 +829,25 @@ export type RemoveTaskResponse = {
     id: string;
 };
 
+/**
+ * 任务状态
+ */
+export const UserTaskStatus = {
+    PROGRESS: 'Progress',
+    COMPLETED: 'Completed',
+    CANCELLED: 'Cancelled'
+} as const;
+
+/**
+ * 任务状态
+ */
+export type UserTaskStatus = typeof UserTaskStatus[keyof typeof UserTaskStatus];
+
 export type GetTaskListResponseItem = {
+    /**
+     * 任务ID
+     */
+    id: string;
     /**
      * 任务名称
      */
@@ -837,32 +855,19 @@ export type GetTaskListResponseItem = {
     /**
      * 任务图标
      */
-    icon?: {
-        [key: string]: unknown;
-    };
+    icon?: string;
     /**
      * 任务描述
      */
-    desc?: {
-        [key: string]: unknown;
-    };
+    desc?: string;
     /**
      * 任务状态
      */
-    status?: 0 | 1 | 2;
+    status?: UserTaskStatus;
     /**
      * 是否可领取
      */
-    canClaim?: {
-        [key: string]: unknown;
-    };
-};
-
-export type WhenNodeDto = {
-    /**
-     * 条件节点：all/any/not 逻辑组合或叶子表达式
-     */
-    node: unknown;
+    canClaim?: boolean;
 };
 
 export type TaskDetailResponse = {
@@ -889,15 +894,22 @@ export type TaskDetailResponse = {
     /**
      * 任务状态
      */
-    status?: 0 | 1 | 2;
+    status?: 'Progress' | 'Completed' | 'Cancelled';
     /**
-     * 任务条件
+     * 条件节点：all/any/not 逻辑组合或叶子表达式
      */
-    condition: Array<WhenNodeDto>;
+    condition: unknown;
     /**
-     * 任务奖励条件
+     * 条件节点：all/any/not 逻辑组合或叶子表达式
      */
-    claim: Array<WhenNodeDto>;
+    claim: unknown;
+    /**
+     * 任务奖励
+     */
+    reward: Array<{
+        [key: string]: unknown;
+    }>;
+    claimed: boolean;
 };
 
 export type TaskProgressItem = {
@@ -1694,6 +1706,17 @@ export type GetBdRecordListResponses = {
 
 export type GetBdRecordListResponse = GetBdRecordListResponses[keyof GetBdRecordListResponses];
 
+export type GetTaskSchemaData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/task/schema';
+};
+
+export type GetTaskSchemaResponses = {
+    200: unknown;
+};
+
 export type GetTasksData = {
     body?: never;
     path?: never;
@@ -1757,7 +1780,9 @@ export type RemoveTaskResponse2 = RemoveTaskResponses[keyof RemoveTaskResponses]
 
 export type GetTaskDetailData = {
     body?: never;
-    path?: never;
+    path: {
+        id: string;
+    };
     query?: never;
     url: '/task/{id}';
 };
