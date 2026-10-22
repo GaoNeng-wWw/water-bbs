@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { cancelTask, claimTask, deliverTask, getTaskDetail, getTaskProgress, UserTaskStatus } from '@/api';
+import { cancelTask, claimTask, deliverTask, getTaskDetail, getTaskProgress, removeTask, UserTaskStatus } from '@/api';
 import { computed } from 'vue';
 import taskConditionTree from './task-condition-tree/root.vue';
 import TaskRewards from './task-rewards.vue';
@@ -70,6 +70,16 @@ const cancel = () => {
       router.go(0);
     });
 };
+const deleteTask = () => {
+  removeTask({
+    path: {
+      id: props.id,
+    },
+  })
+    .then(() => {
+      router.go(0);
+    });
+};
 provideTaskConditionContext({
   variable,
 });
@@ -78,9 +88,14 @@ provideTaskConditionContext({
 <template>
   <div class="h-full grid grid-rows-[1fr_min-content]">
     <div v-if="taskDetail" class="w-full">
-      <h1 class="text-3xl text-surface-fg">
-        {{ taskDetail.name }}
-      </h1>
+      <div class="w-full flex justify-between">
+        <h1 class="text-3xl text-surface-fg">
+          {{ taskDetail.name }}
+        </h1>
+        <ui-button icon size="sm" color="danger" variant="ghost" @click="deleteTask">
+          <div class="icon-[material-symbols--delete-outline] size-6" />
+        </ui-button>
+      </div>
       <p class="text-sm text-surface-fg/50 my-2 line-clamp-3">
         {{ taskDetail.desc }}
       </p>
