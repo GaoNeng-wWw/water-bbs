@@ -12,6 +12,7 @@ import {
 } from './commands';
 import {
   GetReplyTotalService,
+  GetTopicInfoService,
   GetTopicTotalService,
   ListReplyService,
   ListTopicService,
@@ -61,6 +62,7 @@ import { RemoveReply } from './steps/remove-reply';
     HideReplyCommandService,
     RestoreTopicService,
     RestoreReplyService,
+    GetTopicInfoService,
   ],
 })
 export class TopicModule {}

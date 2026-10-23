@@ -34,7 +34,7 @@ export class RemoveTopicService implements ICommandHandler<RemoveTopicCommand> {
     if (!topic) {
       return err(new TopicNotFound(command.id));
     }
-    this.em.remove(topic);
+    topic.remove();
     const redis = this.redisSrv.getOrThrow();
     await this.em.transactional(async (em) => {
       em.persist(topic);

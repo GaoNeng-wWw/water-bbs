@@ -1254,6 +1254,24 @@ export type CreateTopicResponses = {
 
 export type CreateTopicResponse = CreateTopicResponses[keyof CreateTopicResponses];
 
+export type GetTopicInfoData = {
+    body?: never;
+    path: {
+        /**
+         * 主题ID
+         */
+        topicId: string;
+    };
+    query?: never;
+    url: '/topic/{topicId}/info';
+};
+
+export type GetTopicInfoResponses = {
+    200: TopicInfo;
+};
+
+export type GetTopicInfoResponse = GetTopicInfoResponses[keyof GetTopicInfoResponses];
+
 export type RemoveReplyData = {
     body?: never;
     path: {
