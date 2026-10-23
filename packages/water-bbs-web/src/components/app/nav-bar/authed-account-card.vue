@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getBalance, getProfile } from '@/api';
+import { getProfile, logout } from '@/api';
 import { client } from '@/api/client.gen';
 import {
   UiAvatar,
@@ -9,30 +9,38 @@ import {
   UiListboxItem, UiDialog, UiDialogContent, UiDialogTrigger,
 } from '@/components/ui';
 import { useAuthStore, useProfile } from '@/store';
-import { useQuery } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { TransactionsListSkeleton, TransactionsList } from '../wallet';
 import BalanceSkeleton from '../wallet/balance.skeleton.vue';
 import Balance from '../wallet/balance.vue';
 
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n({ useScope: 'local' });
+
 const router = useRouter();
 const authStore = useAuthStore();
 const profileStore = useProfile();
-if (profileStore.profile === null) {
-  await getProfile({ client })
-    .then(resp => resp.data)
-    .then((data) => {
-      if (!data) {
-        authStore.clearToken();
-        return;
-      }
-      profileStore.setProfile(data);
-      return data;
-    });
-}
+// if (profileStore.profile === null) {
+//   await getProfile({ client })
+//     .then(resp => resp.data)
+//     .then((data) => {
+//       if (!data) {
+//         authStore.clearToken();
+//         return;
+//       }
+//       profileStore.setProfile(data);
+//       return data;
+//     });
+// }
 
 const onSelect = (item: ListBoxItem) => {
-  if (item.id === 'loggedout') {
+  if (item.id === 'logout') {
+    logout()
+      .then(() => {
+        authStore.clearToken();
+        profileStore.clearProfile();
+      });
     return;
   }
   if (item.id === 'wallet') {
@@ -52,7 +60,7 @@ const onSelect = (item: ListBoxItem) => {
         <ui-dialog>
           <ui-dialog-trigger>
             <ui-listbox-item id="wallet" value="wallet">
-              钱包
+              {{ t('wallet') }}
             </ui-listbox-item>
           </ui-dialog-trigger>
           <ui-dialog-content class="bg-surface-100! space-y-2">
@@ -71,15 +79,28 @@ const onSelect = (item: ListBoxItem) => {
           </ui-dialog-content>
         </ui-dialog>
         <ui-listbox-item id="tasks" value="/tasks">
-          任务
+          {{ t('tasks') }}
         </ui-listbox-item>
         <ui-listbox-item id="Profile" value="/profile">
-          Profile
+          {{ t('profile') }}
         </ui-listbox-item>
-        <ui-listbox-item id="loggedout" value="Logged Out" danger>
-          Logged Out
+        <ui-listbox-item id="logout" value="logout" danger>
+          {{ t('logout') }}
         </ui-listbox-item>
       </ui-listbox>
     </ui-popover-content>
   </ui-popover>
 </template>
+
+<i18n lang="yaml">
+zh-cn:
+  wallet: 钱包
+  tasks: 任务
+  profile: 个人中心
+  logout: 退出登录
+en-us:
+  wallet: Wallet
+  tasks: Tasks
+  profile: Profile
+  logout: Log out
+</i18n>

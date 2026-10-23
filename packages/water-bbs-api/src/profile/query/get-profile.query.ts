@@ -34,6 +34,7 @@ export class GetProfileService implements IQueryHandler<GetProfileQuery> {
       id: profile.accountId,
       nick: profile.nick,
       bio: profile.bio,
+      createdAt: profile.createdAt.toISOString(),
     });
   }
 }

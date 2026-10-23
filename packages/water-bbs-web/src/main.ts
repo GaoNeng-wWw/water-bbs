@@ -11,7 +11,7 @@ import { createI18n } from 'vue-i18n';
 
 const i18n = createI18n({
   availableLocales: ['en-us', 'zh-cn'],
-  locale: 'zh-cn',
+  locale: 'en-us',
 });
 
 const app = createApp(App);
