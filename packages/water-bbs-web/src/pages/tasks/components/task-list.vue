@@ -5,7 +5,7 @@ import { getTasks } from '@/api';
 import { computed } from 'vue';
 import TaskItem from './task-item.vue';
 
-const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isPending } = useInfiniteQuery(
+const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
   {
     queryFn: ({ pageParam }: { pageParam?: string }) => {
       return getTasks({
