@@ -14,6 +14,7 @@ import {
   CreateTaskDto,
   CreateTaskResponse,
   DeliverTaskResponse,
+  GetTaskListRequest,
   GetTaskListResponseItem,
   RemoveTaskResponse,
   TaskDetailResponse,
@@ -22,7 +23,7 @@ import {
 import schema from '@app/gamification/task/schema/core';
 import { err } from 'neverthrow';
 import { Member, MemberKind, type TaskID } from '@app/gamification';
-import { ApiCursorPagination, CursorDTO } from '@app/shared';
+import { ApiCursorPagination } from '@app/shared';
 import { type AccountId, User } from 'src/auth';
 import {
   ApiCreatedResponse,
@@ -79,9 +80,12 @@ export class TaskController {
 
   @ApiOperation({ summary: '获取任务列表', operationId: 'getTasks' })
   @ApiCursorPagination(GetTaskListResponseItem)
-  @ApiQuery({ type: CursorDTO })
+  @ApiQuery({ type: GetTaskListRequest })
   @Get()
-  getTasks(@Query() query: CursorDTO, @User('id') accountID: AccountId) {
+  getTasks(
+    @Query() query: GetTaskListRequest,
+    @User('id') accountID: AccountId,
+  ) {
     return this.taskService.listTask(query, accountID);
   }
 
