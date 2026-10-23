@@ -45,6 +45,9 @@ export type I18nTranslations = {
         "FIELD_NOT_FOUND": string;
         "TASK_CANCELLED": string;
         "TASK_COMPLETED": string;
+        "EXPECT_TYPE_ERROR": string;
+        "REWARD_PARAM_ERROR": string;
+        "REWARD_NOT_FOUND": string;
     };
     "mail": {
         "register": {

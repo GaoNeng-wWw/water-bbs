@@ -24,6 +24,7 @@ import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
 import { BdModule } from './bd/bd.module';
 import { FieldModule } from '@app/gamification/task';
+import { RewardModule } from '@app/gamification/task/infra/reward/reward.module';
 
 @Module({
   imports: [
@@ -65,7 +66,8 @@ import { FieldModule } from '@app/gamification/task';
     ProposalCRUD,
     CommentModule,
     BdModule,
-    FieldModule
+    FieldModule,
+    RewardModule,
   ],
   providers: [
     {
