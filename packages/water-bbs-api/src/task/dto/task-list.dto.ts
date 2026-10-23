@@ -1,10 +1,19 @@
 import { TaskSummary } from '@app/gamification/task/application/query';
+import { CursorDTO } from '@app/shared';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsOptional } from 'class-validator';
 
 enum UserTaskStatus {
   Progress = 'Progress',
   Completed = 'Completed',
   Cancelled = 'Cancelled',
+}
+
+export class GetTaskListRequest extends CursorDTO {
+  @IsEnum(['progress', 'completed'])
+  @IsOptional()
+  @ApiProperty({ enum: ['progress', 'completed'], required: false })
+  status?: 'progress' | 'completed';
 }
 
 export class GetTaskListResponseItem implements TaskSummary {

@@ -12,6 +12,7 @@ import {
   GetTaskDetailService,
   ListTaskService,
   GetTaskProgressService,
+  ListUserTaskService,
 } from './application/query';
 import { TaskRunnerService } from './application/runner';
 import { RewardModule } from './infra/reward/reward.module';
@@ -30,6 +31,7 @@ import { RewardModule } from './infra/reward/reward.module';
     GetTaskDetailService,
     ListTaskService,
     GetTaskProgressService,
+    ListUserTaskService,
   ],
   exports: [
     TaskRunnerService,

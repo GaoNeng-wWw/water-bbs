@@ -15,6 +15,7 @@ import { AccountId } from 'src/auth';
 const validTaskSchema: Task = {
   version: 1,
   name: 'Test Task',
+  desc: 'test',
   condition: {
     all: [
       {
@@ -25,7 +26,16 @@ const validTaskSchema: Task = {
       },
     ],
   },
-  reward: [{ use: 'test-reward', args: {} }],
+  reward: [
+    {
+      use: 'wallet/point',
+      args: { amount: 10, detail: '任务奖励' },
+      desc: {
+        'zh-cn': '任务奖励10积分',
+        'en-us': '10 points',
+      },
+    },
+  ],
   schedule: {
     kind: 'once',
     timezone: 'Asia/Shanghai',
@@ -209,7 +219,7 @@ describe('TaskController (e2e)', () => {
         .post('/task')
         .set('Authorization', `Bearer ${bdAuthToken}`)
         .send({ schema: { version: 99, name: '' } })
-        .expect(500);
+        .expect(400);
     });
 
     it('should reject create task without authentication', async () => {
@@ -381,7 +391,7 @@ describe('TaskController (e2e)', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(Array.isArray(response.body)).toBe(true);
+      expect(Array.isArray(response.body.items)).toBe(true);
     });
 
     it('should reject get task progress without authentication', async () => {

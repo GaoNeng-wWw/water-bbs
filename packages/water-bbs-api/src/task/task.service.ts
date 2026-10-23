@@ -4,6 +4,7 @@ import {
   ClaimTaskResponse,
   CreateTaskDto,
   CreateTaskResponse,
+  GetTaskListRequest,
   RemoveTaskRequest,
   RemoveTaskResponse,
   TaskDetailResponse,
@@ -16,11 +17,11 @@ import {
   DeliverTask,
   RemoveTask,
 } from '@app/gamification/task/application/command';
-import { CursorDTO } from '@app/shared';
 import {
   GetTaskDetail,
   GetTaskProgress,
   ListTask,
+  ListUserTask,
 } from '@app/gamification/task/application/query';
 import { AccountId } from 'src/auth';
 import { TaskID } from '@app/gamification';
@@ -46,8 +47,15 @@ export class TaskService {
     return result.map((id) => new RemoveTaskResponse(id));
   }
 
-  listTask(dto: CursorDTO, accountID?: AccountId) {
-    return this.query.execute(new ListTask(dto, accountID));
+  listTask(dto: GetTaskListRequest, accountID?: AccountId) {
+    const status = dto.status;
+    if (!status) {
+      return this.query.execute(new ListTask(dto, accountID));
+    }
+    if (!accountID) {
+      return this.query.execute(new ListTask(dto, accountID));
+    }
+    return this.query.execute(new ListUserTask(dto, accountID, status));
   }
   getTaskDetail(id: TaskID, accountID: AccountId) {
     return this.query.execute(new GetTaskDetail(id, accountID)).then((res) => {

@@ -1729,6 +1729,7 @@ export type GetTasksData = {
          * 每页数量
          */
         size: number;
+        status?: string;
     };
     url: '/task';
 };

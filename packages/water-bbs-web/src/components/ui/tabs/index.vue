@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { motion, AnimatePresence } from 'motion-v';
 import { provideContext, type TabRootEmits, type TabsProps } from './props';
-import { computed, reactive, ref, type Ref, type VNode } from 'vue';
+import { computed, reactive, ref, watch, type Ref, type VNode } from 'vue';
 import { UiShadowScroll } from '../shadow-scroll';
 
 const { defaultActvie, disabled = [], lazy = true } = defineProps<TabsProps>();
@@ -44,6 +44,11 @@ const comp = computed(() => curActive.value ? vnodeMap.get(curActive.value!) ?? 
 provideContext({
   active: computed(() => curActive.value),
   onMounted,
+});
+watch(curActive, () => {
+  if (curActive.value) {
+    emits('active', curActive.value);
+  }
 });
 </script>
 
