@@ -9,6 +9,16 @@ export type ErrorProps = {
   cause?: Error;
 };
 
+export interface ErrorShape {
+  readonly key: I18nPath;
+  readonly status: HttpStatus;
+  readonly args?: Record<string, any>;
+  readonly details?: Record<string, any>;
+  readonly cause?: Error;
+  toHttpPresentationError(): HttpPresentationError;
+  toApplicationError(): ApplicationError;
+}
+
 export class HttpPresentationError {
   @ApiProperty({ description: '错误 message', example: '错误信息' })
   public readonly message: string;
@@ -27,7 +37,7 @@ export class HttpPresentationError {
   }
 }
 
-export class DomainError extends Error {
+export class ApplicationError extends Error implements ErrorShape {
   public readonly key: I18nPath;
   public readonly status: HttpStatus;
   public readonly args?: Record<string, any>;
@@ -44,9 +54,36 @@ export class DomainError extends Error {
   toHttpPresentationError(): HttpPresentationError {
     return new HttpPresentationError(this.message, this.status, this.details);
   }
+  toApplicationError() {
+    return this;
+  }
 }
 
-export class InfraError extends Error {
+export class DomainError extends Error implements ErrorShape {
+  public readonly key: I18nPath;
+  public readonly status: HttpStatus;
+  public readonly args?: Record<string, any>;
+  public readonly details?: Record<string, any>;
+  public readonly cause?: Error;
+  constructor(props: ErrorProps) {
+    super(props.key, { cause: props.cause });
+    this.key = props.key;
+    this.status = props.status;
+    this.args = props.args;
+    this.details = props.details;
+    this.cause = props.cause;
+  }
+  toHttpPresentationError(): HttpPresentationError {
+    return new HttpPresentationError(this.message, this.status, this.details);
+  }
+  toApplicationError() {
+    return new ApplicationError({
+      ...this,
+    });
+  }
+}
+
+export class InfraError extends Error implements ErrorShape {
   public readonly key: I18nPath;
   public readonly status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
   public readonly args?: Record<string, any>;
@@ -62,5 +99,10 @@ export class InfraError extends Error {
   }
   toHttpPresentationError(): HttpPresentationError {
     return new HttpPresentationError(this.message, this.status, this.details);
+  }
+  toApplicationError() {
+    return new ApplicationError({
+      ...this,
+    });
   }
 }

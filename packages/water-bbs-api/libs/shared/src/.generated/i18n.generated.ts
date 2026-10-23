@@ -48,6 +48,13 @@ export type I18nTranslations = {
         "EXPECT_TYPE_ERROR": string;
         "REWARD_PARAM_ERROR": string;
         "REWARD_NOT_FOUND": string;
+        "TASK_NOT_FOUND": string;
+        "DELIVERY_CONDITION_UNMET": string;
+        "TASK_IN_PROGRESS": string;
+        "TASK_SCHEDULE_ONCE": string;
+        "TASK_RESET_NEVER": string;
+        "TASK_COOLDOWN_NOT_EXPIRED": string;
+        "UNKNOWN_SCHEDULE_KIND": string;
     };
     "mail": {
         "register": {

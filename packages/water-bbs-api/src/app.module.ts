@@ -23,8 +23,7 @@ import { DatabaseModule } from './infra/database.module';
 import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
 import { BdModule } from './bd/bd.module';
-import { FieldModule } from '@app/gamification/task';
-import { RewardModule } from '@app/gamification/task/infra/reward/reward.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -66,8 +65,7 @@ import { RewardModule } from '@app/gamification/task/infra/reward/reward.module'
     ProposalCRUD,
     CommentModule,
     BdModule,
-    FieldModule,
-    RewardModule,
+    TaskModule,
   ],
   providers: [
     {

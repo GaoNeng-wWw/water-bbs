@@ -6,5 +6,6 @@ import { RewardPoint } from './provider';
 @Module({
   imports: [DiscoveryModule],
   providers: [RewardPoint, RewardService],
+  exports: [RewardPoint, RewardService],
 })
 export class RewardModule {}

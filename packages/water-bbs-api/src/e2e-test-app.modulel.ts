@@ -22,6 +22,8 @@ import { AppRedisModule } from './redis.module';
 import { DatabaseModule } from './infra/database.module';
 import { ProposalModule as ProposalCRUD } from './proposal/proposal.module';
 import { CommentModule } from './comment/comment.module';
+import { BdModule } from './bd/bd.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -51,7 +53,7 @@ import { CommentModule } from './comment/comment.module';
       path: join(__dirname, 'configs/config.json'),
     }),
     AppRedisModule,
-    DatabaseModule.forTest(),
+    DatabaseModule.forRoot(),
     AuthModule,
     CategoryModule,
     TopicModule,
@@ -62,6 +64,8 @@ import { CommentModule } from './comment/comment.module';
     ProposalModule,
     ProposalCRUD,
     CommentModule,
+    BdModule,
+    TaskModule,
   ],
   providers: [
     {

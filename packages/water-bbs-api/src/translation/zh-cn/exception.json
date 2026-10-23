@@ -5,5 +5,10 @@
   "VERIFICATION_CODE_NOT_FOUND_OR_EXPIRED": "Verification Code Not Found Or Exrpied",
   "TEMPLATE_NOT_FOUND": "Can Not Found Template",
   "TEMPLATE_CAN_NOT_OPEN": "Can Not Open Template",
-  "PASSWORD_INCORRECT": "Password Incorrect"
+  "PASSWORD_INCORRECT": "Password Incorrect",
+  "TASK_IN_PROGRESS": "任务进行中",
+  "TASK_SCHEDULE_ONCE": "一次性任务不可重复领取",
+  "TASK_RESET_NEVER": "永不重置任务不可重复领取",
+  "TASK_COOLDOWN_NOT_EXPIRED": "任务冷却期未过",
+  "UNKNOWN_SCHEDULE_KIND": "未知调度类型:"
 }

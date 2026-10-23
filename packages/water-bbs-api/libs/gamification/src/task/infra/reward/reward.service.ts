@@ -5,6 +5,7 @@ import { err } from 'neverthrow';
 import { EntityManager } from '@mikro-orm/core';
 import { RewardNotFound } from '../error';
 import { RewardParamError } from '../error/reward-param-error';
+import { InfraError } from '@app/shared';
 
 @Injectable()
 export class RewardService implements OnApplicationBootstrap {
@@ -32,7 +33,7 @@ export class RewardService implements OnApplicationBootstrap {
       this.logger.log(`Reward ${metadata.name} registered`);
     }
   }
-  call(name: string, param: Record<string, any>) {
+  async call(name: string, param: Record<string, any>) {
     const metadata = this.metadataMap.get(name);
     if (!metadata) {
       return err(new RewardNotFound(name));
@@ -56,6 +57,6 @@ export class RewardService implements OnApplicationBootstrap {
     });
     return rewardExecuteResult
       .then((result) => result)
-      .catch((reason) => err(reason));
+      .catch((reason) => err(new InfraError(reason)));
   }
 }
