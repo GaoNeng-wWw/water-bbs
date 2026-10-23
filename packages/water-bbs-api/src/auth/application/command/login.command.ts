@@ -77,6 +77,7 @@ export class LoginService implements ICommandHandler<Login> {
     if (!account) {
       return err(new UserNotExists());
     }
+    const sessionLimit = this.config.get('token.sessionLimit');
     const sessionId = createSessionId();
     const accessTokenTTL = this.config.get('token.accessTokenTTL');
     const refreshTokenTTL = this.config.get('token.refreshTokenTTL');
@@ -111,7 +112,7 @@ export class LoginService implements ICommandHandler<Login> {
       uid: account.id.toString(),
       accessTokenTTL: accessTokenTTL.toString(),
       refreshTokenTTL: refreshTokenTTL.toString(),
-      sessionLimit: '1',
+      sessionLimit: sessionLimit.toString(),
     });
     return ok(
       new TokenPair({
