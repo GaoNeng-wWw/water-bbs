@@ -21,18 +21,18 @@ const { t } = useI18n({ useScope: 'local' });
 const router = useRouter();
 const authStore = useAuthStore();
 const profileStore = useProfile();
-// if (profileStore.profile === null) {
-//   await getProfile({ client })
-//     .then(resp => resp.data)
-//     .then((data) => {
-//       if (!data) {
-//         authStore.clearToken();
-//         return;
-//       }
-//       profileStore.setProfile(data);
-//       return data;
-//     });
-// }
+if (profileStore.profile === null) {
+  await getProfile({ client })
+    .then(resp => resp.data)
+    .then((data) => {
+      if (!data) {
+        // authStore.clearToken();
+        return;
+      }
+      profileStore.setProfile(data);
+      return data;
+    });
+}
 
 const onSelect = (item: ListBoxItem) => {
   if (item.id === 'logout') {

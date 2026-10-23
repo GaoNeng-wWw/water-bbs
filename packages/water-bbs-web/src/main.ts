@@ -8,6 +8,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { setupClient } from './client';
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { createI18n } from 'vue-i18n';
+import { setupGuard } from './router/guards';
 
 const i18n = createI18n({
   availableLocales: ['en-us', 'zh-cn'],
@@ -26,13 +27,14 @@ const queryClient = new QueryClient({
 });
 pinia.use(piniaPluginPersistedstate);
 app.use(VueQueryPlugin, { queryClient });
-app.use(router);
 app.use(pinia);
+app.use(router);
 app.use(i18n);
 app.directive('authed', vAuthed);
 app.directive('governance-member', vGovernanceMember);
 
 setupClient();
+setupGuard(router);
 
 setTimeout(() => {
   app.mount('#app');

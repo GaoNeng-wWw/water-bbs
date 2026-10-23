@@ -36,7 +36,7 @@ export class ProfileController {
     @Param('id') id?: AccountId,
     @User('id') userId?: AccountId,
   ): Promise<Result<ProfileInfo, DomainError>> {
-    const accountId = id ?? userId;
+    const accountId = id === '{id}' ? userId : id;
     if (!accountId) {
       return err(new UserNotExists());
     }
