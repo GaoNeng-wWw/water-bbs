@@ -22,17 +22,31 @@ import {
 import schema from '@app/gamification/task/schema/core';
 import { err } from 'neverthrow';
 import { Member, MemberKind, type TaskID } from '@app/gamification';
-import { ApiCursorPagination, type CursorDTO } from '@app/shared';
+import { ApiCursorPagination, CursorDTO } from '@app/shared';
 import { type AccountId, User } from 'src/auth';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
+import { TaskSchemaInvalidError } from './error';
 
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
+
+  @ApiOperation({
+    summary: '获取任务schema',
+    operationId: 'getTaskSchema',
+    description: '只有bd或admin才有权限获取schema',
+  })
+  @Get('schema')
+  @Member(MemberKind.BD)
+  getSchema() {
+    return this.taskService.getSchema();
+  }
 
   @ApiOperation({
     summary: '创建任务',
@@ -45,7 +59,7 @@ export class TaskController {
   createTask(@Body() dto: CreateTaskDto) {
     const { success, data, error } = schema.safeParse(dto.schema);
     if (!success) {
-      return err(error);
+      return err(new TaskSchemaInvalidError(error.message));
     }
     return this.taskService.createTask({ schema: data });
   }
@@ -55,6 +69,7 @@ export class TaskController {
     operationId: 'removeTask',
     description: '只有bd或admin才有权限删除任务',
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @ApiCreatedResponse({ description: '删除任务成功', type: RemoveTaskResponse })
   @Member(MemberKind.BD)
   @Delete(':id')
@@ -64,11 +79,13 @@ export class TaskController {
 
   @ApiOperation({ summary: '获取任务列表', operationId: 'getTasks' })
   @ApiCursorPagination(GetTaskListResponseItem)
+  @ApiQuery({ type: CursorDTO })
   @Get()
   getTasks(@Query() query: CursorDTO, @User('id') accountID: AccountId) {
     return this.taskService.listTask(query, accountID);
   }
 
+  @ApiParam({ type: String, name: 'id' })
   @ApiOperation({ summary: '获取任务详情', operationId: 'getTaskDetail' })
   @ApiOkResponse({ description: '获取任务详情', type: TaskDetailResponse })
   @Get(':id')
@@ -85,6 +102,7 @@ export class TaskController {
     description: '获取任务进度',
     type: TaskProgressResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Get(':id/progress')
   getTaskProgress(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.getTaskProgress(id, accountID);
@@ -95,6 +113,7 @@ export class TaskController {
     description: '领取任务成功返回',
     type: ClaimTaskResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Post(':id/claim')
   claimTask(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.claimTask(id, accountID);
@@ -108,6 +127,7 @@ export class TaskController {
     description: '取消任务成功返回',
     type: CancelTaskResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Post(':id/cancel')
   cancelTask(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.cancelTask(id, accountID);
@@ -121,6 +141,7 @@ export class TaskController {
     description: '交付任务成功返回',
     type: DeliverTaskResponse,
   })
+  @ApiParam({ name: 'id', description: '任务ID' })
   @Post(':id/deliver')
   deliverTask(@Param('id') id: TaskID, @User('id') accountID: AccountId) {
     return this.taskService.deliverTask(id, accountID);

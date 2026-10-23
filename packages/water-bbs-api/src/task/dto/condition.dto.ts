@@ -49,6 +49,11 @@ export class WhenExpressionDto {
     description: '目标值',
   })
   goal: any;
+
+  @ApiProperty({
+    description: '条件描述',
+  })
+  desc?: Record<string, string>;
 }
 
 export class WhenNodeDto {

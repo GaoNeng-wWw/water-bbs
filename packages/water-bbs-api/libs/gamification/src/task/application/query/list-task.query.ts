@@ -6,6 +6,7 @@ import { TaskDefinition, UserTask, UserTaskStatus } from '../../infra';
 import { AccountId } from 'src/auth';
 
 export type TaskSummary = {
+  id: string;
   name: string;
   icon?: string;
   desc?: string;
@@ -42,10 +43,16 @@ export class ListTaskService implements IQueryHandler<ListTask> {
       const userTaskRecord = await this.em.findOne(UserTask, {
         accountID: query.userID as AccountId,
         taskID: task.id,
+        status: {
+          $in: [UserTaskStatus.Progress, UserTaskStatus.Completed],
+        }
       });
       const status = userTaskRecord?.status;
-      const canClaim = userTaskRecord ? task.canClaim(userTaskRecord).isOk() : false;
+      const canClaim = userTaskRecord
+        ? task.canClaim(userTaskRecord).isOk()
+        : true;
       summary.push({
+        id: task.id,
         canClaim,
         desc: task.desc,
         icon: task.icon,

@@ -39,4 +39,11 @@ export default [
       scrollToTop: true,
     },
   },
+  {
+    path: '/tasks',
+    component: () => import('@/pages/tasks/index.vue'),
+    meta: {
+      scrollToTop: true,
+    },
+  }
 ] as RouteRecordRaw[];

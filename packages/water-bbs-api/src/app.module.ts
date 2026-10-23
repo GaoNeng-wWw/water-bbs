@@ -1,6 +1,6 @@
 import { ConfigureModule, ConfigureService } from '@app/configure';
 import { ErrorFilter, ResultInterceptor } from '@app/shared';
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';

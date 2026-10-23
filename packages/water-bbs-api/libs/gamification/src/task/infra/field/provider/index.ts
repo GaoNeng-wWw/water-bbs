@@ -6,3 +6,4 @@ export * from './user.governance.bd.is.provider';
 export * from './user.governance.bd.was.provider';
 export * from './user.id.provider';
 export * from './user.nick.provider';
+export * from './user.logged.provider';

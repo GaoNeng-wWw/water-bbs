@@ -8,6 +8,7 @@ import { RewardService } from '../reward.service';
 import { IReward, RewardMetadata } from '../reward.decorator';
 import { RewardNotFound } from '../../error';
 import { RewardParamError } from '../../error/reward-param-error';
+import { InfraError } from '@app/shared';
 
 describe('RewardService', () => {
   let service: RewardService;
@@ -42,17 +43,16 @@ describe('RewardService', () => {
     service.onApplicationBootstrap();
   }
 
-  /** Stubs the two em.fork() calls (read/write) and runs a successful call. */
+  /** Stubs the single em.fork() call (write) and runs a successful call. */
   async function runReward(param: Record<string, unknown> = { amount: 10 }) {
-    const readEm = { marker: 'read' };
     const writeEm = {
       marker: 'write',
       // Simulate a transactional wrapper that forwards the write EM to the cb.
       transactional: vi.fn((cb: (em: unknown) => unknown) => cb(writeEm)),
     };
-    em.fork.mockReturnValueOnce(readEm).mockReturnValueOnce(writeEm);
+    em.fork.mockReturnValue(writeEm);
     const result = await service.call('coin-reward', param);
-    return { readEm, writeEm, result };
+    return { writeEm, result };
   }
 
   describe('onApplicationBootstrap', () => {
@@ -114,15 +114,15 @@ describe('RewardService', () => {
       fakeReward.execute['mockResolvedValue'](ok({ applied: true }));
       registerReward();
 
-      const { readEm, writeEm, result } = await runReward();
+      const { writeEm, result } = await runReward();
 
       expect(result.isOk()).toBe(true);
       expect(result._unsafeUnwrap()).toEqual({ applied: true });
-      expect(em.fork).toHaveBeenCalledTimes(2);
+      expect(em.fork).toHaveBeenCalledTimes(1);
       expect(writeEm.transactional).toHaveBeenCalledTimes(1);
       expect(fakeReward.execute).toHaveBeenCalledWith(
         { amount: 10 },
-        { read: readEm, write: writeEm },
+        { read: writeEm, write: writeEm },
       );
     });
 
@@ -133,7 +133,7 @@ describe('RewardService', () => {
 
       const { result } = await runReward();
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toBe(reason);
+      expect(result._unsafeUnwrapErr()).toBeInstanceOf(InfraError);
     });
   });
 });

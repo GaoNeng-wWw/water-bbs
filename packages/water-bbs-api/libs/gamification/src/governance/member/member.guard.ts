@@ -27,7 +27,6 @@ export class MemberGuard implements CanActivate {
     const accountId = user.id;
     const member = await this.repo.findOne(GovernanceMember, {
       accountId: accountId,
-      kind: { $in: memberKind },
       $or: [{ endedAt: null }, { endedAt: { $gt: new Date() } }],
     });
     if (!member) {

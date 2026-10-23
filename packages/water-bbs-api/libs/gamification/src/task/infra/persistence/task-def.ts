@@ -51,6 +51,9 @@ export class TaskDefinition extends MetaEntity {
     if (userTask.status === UserTaskStatus.Progress) {
       return err(new TaskInProgress());
     }
+    if (userTask.status === UserTaskStatus.Cancelled) {
+      return ok(true);
+    }
     if (this.schedule.kind === 'once') {
       return err(new TaskScheduleOnce());
     }

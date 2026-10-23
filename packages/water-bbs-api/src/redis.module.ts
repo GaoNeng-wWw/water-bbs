@@ -28,6 +28,10 @@ export class RedisInitializer implements OnModuleInit {
       ).toString(),
       numberOfKeys: 0,
     });
+    r.defineCommand('accountAlive', {
+      lua: readFileSync(join(__dirname, './lua/account-alive.lua')).toString(),
+      numberOfKeys: 0,
+    });
   }
 }
 

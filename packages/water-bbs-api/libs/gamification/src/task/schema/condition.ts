@@ -1,13 +1,15 @@
 import z from 'zod';
 import { ValueType, Value } from './data-type';
+import { localMap } from '@app/shared';
 
 export const field = z.enum([
-  'user.id',  // 用户 id
+  'user.id', // 用户 id
   'user.nick', // 昵称
   'user.avatar', // 头像
   'user.bio', // 个人介绍
   // 'user.banned', // 是否被封禁 (WIP)
   'user.created_at', // 创建时间
+  'user.logged',
   // 'user.last_seen_at', // 最后活跃时间 (WIP)
   'user.governance.admin.is', // 是否是管理员 (现在)
   'user.governance.admin.was', // 是否是管理员 (过去)
@@ -71,9 +73,10 @@ const operator = z.enum([
 ]);
 const whereExpression = z.object({
   id: z.string(),
-  field: z.string(),
+  field,
   operator,
   goal: Value,
+  desc: localMap().optional(),
 });
 const whenNode: z.ZodType<WhenNode> = z.lazy(() =>
   z.union([
@@ -83,6 +86,13 @@ const whenNode: z.ZodType<WhenNode> = z.lazy(() =>
     whereExpression,
   ]),
 );
+export const topWhen: z.ZodType<TopWhen> = z.lazy(() => {
+  return z.union([
+    z.object({ all: z.array(whenNode) }),
+    z.object({ any: z.array(whenNode) }),
+    z.object({ not: z.array(whenNode) }),
+  ]);
+});
 export const when = z.lazy(() => {
-  return z.array(whenNode);
+  return topWhen;
 });

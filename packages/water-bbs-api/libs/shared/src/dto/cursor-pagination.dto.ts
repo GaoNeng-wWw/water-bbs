@@ -19,10 +19,10 @@ type ICursorPagination<T> = {
 export class CursorDTO {
   @IsString()
   @IsOptional()
-  @ApiProperty({ description: '分页游标' })
+  @ApiProperty({ description: '分页游标', required: false, type: String })
   cursor?: string;
   @IsNumber()
-  @ApiProperty({ description: '每页数量' })
+  @ApiProperty({ description: '每页数量', type: Number })
   @Type(() => Number)
   size: number;
 }
@@ -30,11 +30,11 @@ export class CursorDTO {
 export class CursorPagination<T> {
   @ApiProperty({ description: '数据' })
   items: T[];
-  @ApiProperty({ description: '下一页的分页', nullable: true })
+  @ApiProperty({ description: '下一页的分页', nullable: true, type: String })
   nextCursor?: string | null;
-  @ApiProperty({ description: '上一页的分页', nullable: true })
+  @ApiProperty({ description: '上一页的分页', nullable: true, type: String })
   prevCursor?: string | null;
-  @ApiProperty({ description: '总数' })
+  @ApiProperty({ description: '总数', type: Number })
   total: number;
   constructor(props: ICursorPagination<T>) {
     Object.assign(this, props);

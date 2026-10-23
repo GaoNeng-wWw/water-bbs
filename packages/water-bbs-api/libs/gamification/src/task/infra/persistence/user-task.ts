@@ -17,9 +17,9 @@ export const createUserTaskID = () => v7() as UserTaskID;
 export const toUserTaskID = (val: string) => val as UserTaskID;
 
 export enum UserTaskStatus {
-  Progress,
-  Completed,
-  Cancelled,
+  Progress = 'Progress',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled',
 }
 @Entity()
 export class UserTask extends MetaEntity {

@@ -29,6 +29,7 @@ interface Redis extends IRedis {
   ) => Promise<void>;
   revokeSession: (uid: string, sessionId: string) => Promise<void>;
   revokeAllSession: (uid: string) => Promise<void>;
+  accountAlive: (uid: string) => Promise<boolean>;
 }
 
 export type IssueTokenProps = {
@@ -120,5 +121,9 @@ export class RedisSessionRepository {
   revokeAllSession(uid: string) {
     const redis = this.redisSrv.getOrThrow() as Redis;
     return redis.revokeAllSession(uid);
+  }
+  accountAlive(uid: string) {
+    const redis = this.redisSrv.getOrThrow() as Redis;
+    return redis.accountAlive(uid);
   }
 }

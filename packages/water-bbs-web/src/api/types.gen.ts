@@ -795,19 +795,162 @@ export type CursorPagination = {
     /**
      * 下一页的分页
      */
-    nextCursor: {
-        [key: string]: unknown;
-    } | null;
+    nextCursor: string | null;
     /**
      * 上一页的分页
      */
-    prevCursor: {
-        [key: string]: unknown;
-    } | null;
+    prevCursor: string | null;
     /**
      * 总数
      */
     total: number;
+};
+
+export type CreateTaskDto = {
+    /**
+     * 任务定义
+     */
+    schema: {
+        [key: string]: unknown;
+    };
+};
+
+export type CreateTaskResponse = {
+    /**
+     * 任务ID
+     */
+    id: string;
+};
+
+export type RemoveTaskResponse = {
+    /**
+     * 任务ID
+     */
+    id: string;
+};
+
+/**
+ * 任务状态
+ */
+export const UserTaskStatus = {
+    PROGRESS: 'Progress',
+    COMPLETED: 'Completed',
+    CANCELLED: 'Cancelled'
+} as const;
+
+/**
+ * 任务状态
+ */
+export type UserTaskStatus = typeof UserTaskStatus[keyof typeof UserTaskStatus];
+
+export type GetTaskListResponseItem = {
+    /**
+     * 任务ID
+     */
+    id: string;
+    /**
+     * 任务名称
+     */
+    name: string;
+    /**
+     * 任务图标
+     */
+    icon?: string;
+    /**
+     * 任务描述
+     */
+    desc?: string;
+    /**
+     * 任务状态
+     */
+    status?: UserTaskStatus;
+    /**
+     * 是否可领取
+     */
+    canClaim?: boolean;
+};
+
+export type TaskDetailResponse = {
+    /**
+     * 任务ID
+     */
+    id: string;
+    /**
+     * 任务名称
+     */
+    name: string;
+    /**
+     * 任务描述
+     */
+    desc: string;
+    /**
+     * 任务图标
+     */
+    icon: string;
+    /**
+     * 是否可领取
+     */
+    canClaim: boolean;
+    /**
+     * 任务状态
+     */
+    status?: 'Progress' | 'Completed' | 'Cancelled';
+    /**
+     * 条件节点：all/any/not 逻辑组合或叶子表达式
+     */
+    condition: unknown;
+    /**
+     * 条件节点：all/any/not 逻辑组合或叶子表达式
+     */
+    claim: unknown;
+    /**
+     * 任务奖励
+     */
+    reward: Array<{
+        [key: string]: unknown;
+    }>;
+    claimed: boolean;
+};
+
+export type TaskProgressItem = {
+    /**
+     * 任务进度字段
+     */
+    field: string;
+    /**
+     * 任务进度值
+     */
+    value: {
+        [key: string]: unknown;
+    };
+};
+
+export type TaskProgressResponse = {
+    /**
+     * 任务进度列表
+     */
+    items: Array<TaskProgressItem>;
+};
+
+export type ClaimTaskResponse = {
+    /**
+     * 任务ID
+     */
+    id: string;
+};
+
+export type CancelTaskResponse = {
+    /**
+     * 任务ID
+     */
+    id: string;
+};
+
+export type DeliverTaskResponse = {
+    /**
+     * 任务ID
+     */
+    id: string;
 };
 
 export type HttpPresentationError = {
@@ -1562,3 +1705,177 @@ export type GetBdRecordListResponses = {
 };
 
 export type GetBdRecordListResponse = GetBdRecordListResponses[keyof GetBdRecordListResponses];
+
+export type GetTaskSchemaData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/task/schema';
+};
+
+export type GetTaskSchemaResponses = {
+    200: unknown;
+};
+
+export type GetTasksData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * 分页游标
+         */
+        cursor?: string;
+        /**
+         * 每页数量
+         */
+        size: number;
+    };
+    url: '/task';
+};
+
+export type GetTasksResponses = {
+    200: CursorPagination & {
+        items?: Array<GetTaskListResponseItem>;
+    };
+};
+
+export type GetTasksResponse = GetTasksResponses[keyof GetTasksResponses];
+
+export type CreateTaskData = {
+    body: CreateTaskDto;
+    path?: never;
+    query?: never;
+    url: '/task';
+};
+
+export type CreateTaskResponses = {
+    /**
+     * 创建任务成功
+     */
+    201: CreateTaskResponse;
+};
+
+export type CreateTaskResponse2 = CreateTaskResponses[keyof CreateTaskResponses];
+
+export type RemoveTaskData = {
+    body?: never;
+    path: {
+        /**
+         * 任务ID
+         */
+        id: unknown;
+    };
+    query?: never;
+    url: '/task/{id}';
+};
+
+export type RemoveTaskResponses = {
+    /**
+     * 删除任务成功
+     */
+    201: RemoveTaskResponse;
+};
+
+export type RemoveTaskResponse2 = RemoveTaskResponses[keyof RemoveTaskResponses];
+
+export type GetTaskDetailData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/task/{id}';
+};
+
+export type GetTaskDetailResponses = {
+    /**
+     * 获取任务详情
+     */
+    200: TaskDetailResponse;
+};
+
+export type GetTaskDetailResponse = GetTaskDetailResponses[keyof GetTaskDetailResponses];
+
+export type GetTaskProgressData = {
+    body?: never;
+    path: {
+        /**
+         * 任务ID
+         */
+        id: unknown;
+    };
+    query?: never;
+    url: '/task/{id}/progress';
+};
+
+export type GetTaskProgressResponses = {
+    /**
+     * 获取任务进度
+     */
+    200: TaskProgressResponse;
+};
+
+export type GetTaskProgressResponse = GetTaskProgressResponses[keyof GetTaskProgressResponses];
+
+export type ClaimTaskData = {
+    body?: never;
+    path: {
+        /**
+         * 任务ID
+         */
+        id: unknown;
+    };
+    query?: never;
+    url: '/task/{id}/claim';
+};
+
+export type ClaimTaskResponses = {
+    /**
+     * 领取任务成功返回
+     */
+    201: ClaimTaskResponse;
+};
+
+export type ClaimTaskResponse2 = ClaimTaskResponses[keyof ClaimTaskResponses];
+
+export type CancelTaskData = {
+    body?: never;
+    path: {
+        /**
+         * 任务ID
+         */
+        id: unknown;
+    };
+    query?: never;
+    url: '/task/{id}/cancel';
+};
+
+export type CancelTaskResponses = {
+    /**
+     * 取消任务成功返回
+     */
+    201: CancelTaskResponse;
+};
+
+export type CancelTaskResponse2 = CancelTaskResponses[keyof CancelTaskResponses];
+
+export type DeliverTaskData = {
+    body?: never;
+    path: {
+        /**
+         * 任务ID
+         */
+        id: unknown;
+    };
+    query?: never;
+    url: '/task/{id}/deliver';
+};
+
+export type DeliverTaskResponses = {
+    /**
+     * 交付任务成功返回
+     */
+    201: DeliverTaskResponse;
+};
+
+export type DeliverTaskResponse2 = DeliverTaskResponses[keyof DeliverTaskResponses];

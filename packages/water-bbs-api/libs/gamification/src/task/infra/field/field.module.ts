@@ -10,12 +10,14 @@ import {
   UserGovernanceBDWasField,
   UserGovernanceAdminIsField,
   UserGovernanceBDIsField,
+  UserLogged,
 } from './provider';
 
 @Module({
   imports: [DiscoveryModule],
   providers: [
     UserIDField,
+    UserLogged,
     UserNickField,
     UserAvatarField,
     UserBioField,
@@ -27,6 +29,7 @@ import {
   ],
   exports: [
     UserIDField,
+    UserLogged,
     UserNickField,
     UserAvatarField,
     UserBioField,

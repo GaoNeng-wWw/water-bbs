@@ -5,7 +5,7 @@ import { ApplicationError } from '@app/shared';
 import { AccountId } from 'src/auth';
 import { EntityManager } from '@mikro-orm/sqlite';
 import { TaskNotFound } from '../error';
-import { WhenNode } from '../../schema';
+import { Task, TopWhen } from '../../schema';
 
 export type TaskDetail = {
   id: TaskID;
@@ -14,8 +14,10 @@ export type TaskDetail = {
   icon?: string;
   canClaim: boolean;
   status?: UserTaskStatus;
-  condition: WhenNode[];
-  claim?: WhenNode[];
+  condition: TopWhen;
+  claim?: TopWhen;
+  claimed: boolean;
+  reward: Task['reward'];
 };
 
 export class GetTaskDetail extends Query<Result<TaskDetail, ApplicationError>> {
@@ -34,7 +36,13 @@ export class GetTaskDetailService implements IQueryHandler<GetTaskDetail> {
     taskID,
     accountID,
   }: GetTaskDetail): Promise<Result<TaskDetail, ApplicationError>> {
-    const userTask = await this.em.findOne(UserTask, { accountID, taskID });
+    const userTask = await this.em.findOne(UserTask, {
+      accountID,
+      taskID,
+      status: {
+        $in: [UserTaskStatus.Progress, UserTaskStatus.Completed],
+      }
+    });
     const task = await this.em.findOne(TaskDefinition, { id: taskID });
     if (!task) {
       return err(new TaskNotFound());
@@ -44,6 +52,7 @@ export class GetTaskDetailService implements IQueryHandler<GetTaskDetail> {
       ...task,
       canClaim,
       status: userTask?.status,
+      claimed: userTask !== null,
     });
   }
 }

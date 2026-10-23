@@ -23,8 +23,8 @@ const resetRule = z.discriminatedUnion('kind', [
 ]);
 
 const baseScheduleFields = {
-  timezone,
-  startAt: z.string().datetime({ offset: true }),
+  timezone: timezone.optional(),
+  startAt: z.string().datetime({ offset: true }).optional(),
   endAt: z.string().datetime({ offset: true }).optional(),
 };
 

@@ -6,6 +6,8 @@ import {
   CreateTaskResponse,
   RemoveTaskRequest,
   RemoveTaskResponse,
+  TaskDetailResponse,
+  TaskProgressResponse,
 } from './dto';
 import {
   CancelTask,
@@ -24,6 +26,8 @@ import { AccountId } from 'src/auth';
 import { TaskID } from '@app/gamification';
 import { CancelTaskResponse } from './dto/cancel-task.dto';
 import { DeliverTaskResponse } from './dto/deliver-task.dto';
+import z from 'zod';
+import schema from '@app/gamification/task/schema/core';
 
 @Injectable()
 export class TaskService {
@@ -46,10 +50,25 @@ export class TaskService {
     return this.query.execute(new ListTask(dto, accountID));
   }
   getTaskDetail(id: TaskID, accountID: AccountId) {
-    return this.query.execute(new GetTaskDetail(id, accountID));
+    return this.query.execute(new GetTaskDetail(id, accountID)).then((res) => {
+      return res.map(
+        (t) =>
+          new TaskDetailResponse({
+            ...t,
+            reward: t.reward
+              .map((reward) => reward.desc)
+              .filter((value) => !!value)
+              .map((reward) => reward),
+          }),
+      );
+    });
   }
   getTaskProgress(id: TaskID, accountID: AccountId) {
-    return this.query.execute(new GetTaskProgress(accountID, id));
+    return this.query
+      .execute(new GetTaskProgress(accountID, id))
+      .then((resp) => {
+        return resp.map((p) => new TaskProgressResponse(p));
+      });
   }
 
   claimTask(id: TaskID, accountID: AccountId) {
@@ -66,5 +85,9 @@ export class TaskService {
     return this.cmd
       .execute(new DeliverTask(accountID, id))
       .then((result) => result.map((id) => new DeliverTaskResponse(id)));
+  }
+
+  getSchema() {
+    return z.toJSONSchema(schema);
   }
 }

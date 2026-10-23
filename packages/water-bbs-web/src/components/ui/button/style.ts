@@ -1,7 +1,7 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 export const buttonStyle = tv({
-  base: 'outline-none inline-flex items-center justify-center transition-all duration-fast cursor-pointer shrink-0',
+  base: 'outline-none inline-flex items-center justify-center transition-all duration-fast cursor-pointer shrink-0 break-keep',
   variants: {
     color: {
       surface: '',

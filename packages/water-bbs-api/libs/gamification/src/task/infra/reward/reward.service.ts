@@ -46,17 +46,20 @@ export class RewardService implements OnApplicationBootstrap {
     if (!instance) {
       return err(new RewardNotFound(name));
     }
-    const read = this.em.fork();
     const write = this.em.fork();
     const rewardExecuteResult = write.transactional(async (em) => {
-      const result = await instance.execute(data, { read, write: em });
+      const result = await instance.execute(data, { read: em, write: em });
       if (result.isErr()) {
         throw result.error;
       }
       return result;
     });
     return rewardExecuteResult
-      .then((result) => result)
-      .catch((reason) => err(new InfraError(reason)));
+      .then((result) => {
+        return result;
+      })
+      .catch((reason) => {
+        return err(new InfraError(reason));
+      });
   }
 }
