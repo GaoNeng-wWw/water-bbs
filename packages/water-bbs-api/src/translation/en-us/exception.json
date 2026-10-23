@@ -38,5 +38,6 @@
   "FIELD_NOT_FOUND": "Field {name} Not Found",
   "TASK_CANCELLED": "Task Cancelled",
   "TASK_COMPLETED": "Task Completed",
+  "EXPECT_TYPE_ERROR": "Expect {expectationType} but found {foundType}",
   "FIELD_PARAM_ERROR": "Param error"
 }
