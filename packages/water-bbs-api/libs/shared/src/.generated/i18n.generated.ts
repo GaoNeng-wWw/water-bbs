@@ -42,6 +42,9 @@ export type I18nTranslations = {
             "REMOVE_TOPIC": string;
             "REMOVE_REPLY": string;
         };
+        "FIELD_NOT_FOUND": string;
+        "TASK_CANCELLED": string;
+        "TASK_COMPLETED": string;
     };
     "mail": {
         "register": {
