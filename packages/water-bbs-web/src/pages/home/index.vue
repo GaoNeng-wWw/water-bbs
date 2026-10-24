@@ -51,7 +51,7 @@ watch(activeId, () => {
               <span>{{ t('category') }}</span>
             </div>
             <ui-shadow-scroll class="h-75">
-              <Category.List v-if="!isLoading" v-model="activeId" :items="data" show-color />
+              <Category.List v-if="!isLoading" v-model="activeId" :items="data" show-color show-proposal />
               <categories-skeleton v-else />
             </ui-shadow-scroll>
           </div>

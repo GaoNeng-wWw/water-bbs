@@ -1,6 +1,7 @@
 import { refreshToken } from '@/api';
 import type { Client } from '@/api/client';
 import { useAuthStore } from '@/store';
+import { toast } from 'vue-sonner';
 
 export function setupInterceptors(client: Client) {
   const authStore = useAuthStore();
@@ -45,6 +46,9 @@ export function setupInterceptors(client: Client) {
             return Promise.reject(error);
           });
       }
+      const resp = error.response;
+      const data = resp.data;
+      toast.error(data.message);
       return Promise.reject(error);
     },
   );

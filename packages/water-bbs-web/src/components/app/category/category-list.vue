@@ -3,14 +3,17 @@ import type { CategoryInfo } from '@/api';
 import { UiListbox, UiListboxItem } from '@/components/ui';
 import CategoryItem from './category-item.vue';
 import { ref, watch, type Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   items: CategoryInfo[];
   showColor?: boolean;
+  showProposal?: boolean;
 }>();
-
+const { t } = useI18n({ useScope: 'local' });
 const modelValue = defineModel<string>({ required: false });
 const selected: Ref<string[]> = ref(modelValue.value ? [modelValue.value] : []);
+
 watch(selected, () => {
   modelValue.value = selected.value[0];
 });
@@ -27,11 +30,19 @@ watch(selected, () => {
       <category-item :color="item.color" :name="item.name" :show-color="props.showColor" />
     </ui-listbox-item>
     <ui-listbox-item
+      v-if="props.showProposal"
       id="proposal"
       key="proposal"
       value="proposal"
     >
-      <category-item name="提案" :show-color="props.showColor" />
+      <category-item :name="t('proposal')" :show-color="props.showColor" />
     </ui-listbox-item>
   </ui-listbox>
 </template>
+
+<i18n lang="yaml">
+zh-cn:
+  proposal: 提案
+en-us:
+  proposal: Proposal
+</i18n>
