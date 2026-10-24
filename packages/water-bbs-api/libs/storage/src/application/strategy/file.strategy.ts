@@ -7,6 +7,7 @@ import { EntityManager } from '@mikro-orm/sqlite';
 import { v7 } from 'uuid';
 import { ConfigureService } from '@app/configure';
 import {
+  copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -26,6 +27,26 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
     @InjectStorageConfig()
     private readonly config: StorageConfig,
   ) {}
+  async persistence(
+    key: StorageKey,
+  ): Promise<Result<StorageEntity, ApplicationError>> {
+    const storage = await this.em.findOne(StorageEntity, { key });
+    if (!storage) {
+      return err(new StorageNotFound());
+    }
+    const tmpPath = join(__dirname, 'tmp', key);
+    const path = join(__dirname, this.config.id, key);
+    if (!existsSync(tmpPath)) {
+      return err(new StorageNotFound());
+    }
+    await this.em.transactional((tx) => {
+      storage.toPersistence();
+      copyFileSync(tmpPath, path);
+      unlinkSync(tmpPath);
+      tx.persist(storage);
+    });
+    return ok(storage);
+  }
   async read(
     key: StorageKey,
   ): Promise<Result<ReadResponse<Buffer<ArrayBufferLike>>, ApplicationError>> {
@@ -39,7 +60,11 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
       return err(new ExpectTypeError('disk', storage.kind));
     }
     const path = this.config.id;
-    const payload = readFileSync(join(__dirname, path, id));
+    const tmpPath = join(__dirname, 'tmp', id);
+    const persistencePath = join(__dirname, path, id);
+    const payload = readFileSync(
+      existsSync(tmpPath) ? tmpPath : persistencePath,
+    );
 
     return ok({
       mimetype: meta.value.mimetype,
@@ -49,6 +74,7 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
   }
   async put(
     payload: Express.Multer.File,
+    persistence?: boolean,
   ): Promise<Result<StorageEntity, ApplicationError>> {
     const hasher = createHash('sha256');
     const hash = hasher.update(payload.buffer).digest('hex');
@@ -57,7 +83,7 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
     if (storage.kind !== 'disk') {
       return err(new ExpectTypeError('disk', storage.kind));
     }
-    const path = this.config.id;
+    const path = persistence ? this.config.id : 'tmp';
     const key = toStorageKey(v7());
     const root = join(__dirname, path);
     if (!existsSync(root)) {
@@ -69,6 +95,7 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
       mimetype,
       size: payload.size,
       hash,
+      persistence: persistence ?? false,
     });
     this.em.persist(storageEntity);
     await this.em.flush();

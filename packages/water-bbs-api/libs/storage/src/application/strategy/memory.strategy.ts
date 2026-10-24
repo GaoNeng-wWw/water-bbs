@@ -40,6 +40,7 @@ export class MemoryStrategy implements IStorage<Express.Multer.File, Buffer> {
   }
   put(
     payload: Express.Multer.File,
+    persistence?: boolean,
   ): Promise<Result<StorageEntity, ApplicationError>> {
     const hasher = createHash('sha256');
     const hash = hasher.update(payload.buffer).digest('hex');
@@ -50,8 +51,19 @@ export class MemoryStrategy implements IStorage<Express.Multer.File, Buffer> {
     storageEntity.mimetype = payload.mimetype;
     storageEntity.size = payload.size;
     storageEntity.hash = hash;
+    storageEntity.persistence = persistence ?? false;
     this.store.set(id, { entity: storageEntity, payload: payload.buffer });
     return Promise.resolve(ok(storageEntity));
+  }
+  async persistence(
+    key: StorageKey,
+  ): Promise<Result<StorageEntity, ApplicationError>> {
+    const storage = await this.meta(key);
+    if (storage.isErr()) {
+      return err(storage.error);
+    }
+    storage.value.toPersistence();
+    return ok(storage.value);
   }
   async remove(
     key: StorageKey,

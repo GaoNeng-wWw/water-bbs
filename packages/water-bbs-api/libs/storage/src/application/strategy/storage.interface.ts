@@ -9,10 +9,16 @@ export type ReadResponse<P> = {
 };
 
 export interface IStorage<PutPayload, ReadPayload> {
-  put(payload: PutPayload): Promise<Result<StorageEntity, ApplicationError>>;
+  put(
+    payload: PutPayload,
+    persistence?: boolean,
+  ): Promise<Result<StorageEntity, ApplicationError>>;
   remove(key: StorageKey): Promise<Result<StorageEntity, ApplicationError>>;
   meta(key: StorageKey): Promise<Result<StorageEntity, ApplicationError>>;
   read(
     key: StorageKey,
   ): Promise<Result<ReadResponse<ReadPayload>, ApplicationError>>;
+  persistence(
+    key: StorageKey,
+  ): Promise<Result<StorageEntity, ApplicationError>>;
 }

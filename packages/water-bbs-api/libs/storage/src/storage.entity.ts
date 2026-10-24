@@ -30,4 +30,10 @@ export class StorageEntity extends MetaEntity {
   @Property({ type: 'string' })
   @Index()
   hash: string;
+  @Property({ type: 'boolean', default: false })
+  persistence: boolean;
+
+  toPersistence() {
+    this.persistence = true;
+  }
 }

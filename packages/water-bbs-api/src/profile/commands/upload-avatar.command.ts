@@ -34,7 +34,7 @@ export class UploadAvatarService implements ICommandHandler<UploadAvatar> {
     if (!profile) {
       return err(new UserNotExists());
     }
-    const putResult = await this.storage.put(file);
+    const putResult = await this.storage.put(file, true);
     await this.em.transactional(async (tx) => {
       if (putResult.isErr()) {
         throw putResult.error;

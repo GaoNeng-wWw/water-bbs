@@ -33,9 +33,13 @@ import { HideReply, HideTopic, RemoveTopic } from './steps';
 import { RestoreTopicService } from './commands/restore-topic.command';
 import { RestoreReplyService } from './commands/restore-reply.command';
 import { RemoveReply } from './steps/remove-reply';
+import { StorageModule } from '@app/storage';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Topic, Reply, Profile, Category])],
+  imports: [
+    StorageModule.register({ id: 'topic-image' }),
+    MikroOrmModule.forFeature([Topic, Reply, Profile, Category]),
+  ],
   controllers: [TopicController],
   providers: [
     TopicService,
