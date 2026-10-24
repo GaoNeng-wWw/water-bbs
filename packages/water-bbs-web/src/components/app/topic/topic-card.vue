@@ -46,7 +46,11 @@ const friendlyCreatedAt = computed(() => dayjs(createdAt).fromNow())
     <div class="w-full mt-4 pl-1 flex justify-between">
       <div v-if="author" class="w-fit flex items-center shrink-0">
         <div class="w-fit shrink-0 flex items-center gap-2">
-          <ui-avatar size="sm" :fallback-text="author.nick" url="" />
+          <ui-avatar
+            size="sm"
+            :fallback-text="author.nick"
+            :url="`/__avatar__/${author.id}`"
+          />
           <router-link :to="{path: `/profile/${author.id}` }" class="text-nowrap">
             <span class="text-sm shrink-0 text-surface-800">{{ author.nick }}</span>
           </router-link>

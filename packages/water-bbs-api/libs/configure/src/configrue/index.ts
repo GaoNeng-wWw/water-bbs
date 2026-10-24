@@ -4,6 +4,7 @@ import { RedisConfig, redisSchema } from './redis';
 import { MailConfigure, MailSchema } from './mail';
 import { Feature, FeatureSchema } from './feature';
 import { TokenConfigure, tokenSchema } from './token';
+import { Storage, StorageSchema } from './storage';
 
 export type Configure = {
   database: Database;
@@ -11,6 +12,8 @@ export type Configure = {
   mail: MailConfigure;
   feature: Feature;
   token: TokenConfigure;
+  storage: Storage;
+  baseUrl: string;
 };
 
 export const schema = Joi.object({
@@ -19,4 +22,6 @@ export const schema = Joi.object({
   mail: MailSchema,
   feature: FeatureSchema,
   token: tokenSchema,
+  storage: StorageSchema,
+  baseUrl: Joi.string(),
 });

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Get, Module } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { ProfileController } from './profile.controller';
 import { OnTopicCreated, OnTopicRemoved } from './event-handler';
@@ -12,9 +12,15 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Reply, Topic } from '../topic';
 import { Profile } from '../auth';
 import { Category } from '../category';
+import { GetAvatarService } from './query/get-avatar.query';
+import { UploadAvatarService } from './commands/upload-avatar.command';
+import { StorageModule } from '@app/storage';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Profile, Topic, Reply, Category])],
+  imports: [
+    StorageModule,
+    MikroOrmModule.forFeature([Profile, Topic, Reply, Category])
+  ],
   controllers: [ProfileController],
   providers: [
     ProfileService,
@@ -24,6 +30,8 @@ import { Category } from '../category';
     GetAccountPublishedTopicService,
     GetProfileService,
     UpdateProfileService,
+    UploadAvatarService,
+    GetAvatarService,
   ],
 })
 export class ProfileModule {}

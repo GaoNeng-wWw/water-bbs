@@ -16,6 +16,7 @@
     "^@app/gamification(|/.*)$": "<rootDir>/../libs/gamification/src/$1",
     "^@app/notification(|/.*)$": "<rootDir>/../libs/notification/src/$1",
     "^@app/shared(|/.*)$": "<rootDir>/../libs/shared/src/$1",
+    "^@app/storage(|/.*)$": "<rootDir>/../libs/storage/src/$1",
     "^@app/translation(|/.*)$": "<rootDir>/../libs/translation/src/$1",
     "^@app/verification-code(|/.*)$": "<rootDir>/../libs/verification-code/src/$1"
   }

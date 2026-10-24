@@ -1,7 +1,7 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 export const avatarStyle = tv({
-  base: 'bg-avatar-bg shirnk-0 overflow-hidden',
+  base: 'bg-avatar-bg shrink-0 overflow-hidden group relative',
   variants: {
     size: {
       xs: 'avatar-xs text-xs',

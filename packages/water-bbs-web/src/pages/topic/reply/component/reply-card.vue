@@ -91,8 +91,12 @@ const onSubmit = (content: string, commentId: string) => {
   >
     <div class="w-full flex justify-between items-center">
       <div class="w-fit flex items-center gap-2">
-        <ui-avatar size="sm" url="https://placehold.co/32" fallback-text="" />
-        <span class="text-md text-surface-fg">{{ props.authorId }}</span>
+        <ui-avatar
+          size="sm"
+          :url="`/__avatar__/${props.authorId}`"
+          :fallback-text="props.authorName"
+        />
+        <span class="text-md text-surface-fg">{{ props.authorName }}</span>
       </div>
     </div>
     <div class="w-full h-fit" @click.stop.prevent>

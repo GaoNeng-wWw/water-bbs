@@ -3,9 +3,9 @@ import { heyApiPlugin } from '@hey-api/vite-plugin';
 import { join } from 'path';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
-import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -50,10 +50,17 @@ export default defineConfig(({ mode }) => {
       port: 8848,
       proxy: {
         '/api': {
-          target: 'http://localhost:3000', 
+          target: 'http://localhost:3000',
           changeOrigin: true,
           rewrite(path) {
             return path.replace('/api', '');
+          },
+        },
+        '/__avatar__': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          rewrite(path) {
+            return path.replace('/__avatar__', '/profile/avatar');
           },
         },
       },

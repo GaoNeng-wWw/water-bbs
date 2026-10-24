@@ -24,7 +24,8 @@
     "strictPropertyInitialization": false,
     "types": [
       "@types/express",
-      "vitest/globals"
+      "vitest/globals",
+      "@types/multer"
     ],
     "paths": {
       "@app/configure": [
@@ -56,6 +57,12 @@
       ],
       "@app/shared/*": [
         "libs/shared/src/*"
+      ],
+      "@app/storage": [
+        "libs/storage/src"
+      ],
+      "@app/storage/*": [
+        "libs/storage/src/*"
       ],
       "@app/verification-code": [
         "libs/verification-code/src"

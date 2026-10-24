@@ -18,6 +18,7 @@ import {
   Wallet,
 } from './libs/gamification/src';
 import { CommentReply, Comment } from './src/comment';
+import { StorageEntity } from '@app/storage';
 
 export default defineConfig({
   host: process.env.DB_HOST ?? database.host,
@@ -45,6 +46,7 @@ export default defineConfig({
     TaskDefinition,
     UserTask,
     UserTaskProgress,
+    StorageEntity,
   ],
   extensions: [SeedManager, Migrator],
   allowGlobalContext: true,

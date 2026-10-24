@@ -7,13 +7,15 @@ import {
   UserPublishedTopicList,
 } from './dto';
 import { err, ok, Result } from 'neverthrow';
-import { DomainError } from '@app/shared';
+import { ApplicationError, DomainError } from '@app/shared';
 import { UpdateProfile } from './commands';
 import {
   GetAccountPublishedTopic,
   GetAccountPublishedTopicTotal,
   GetProfileQuery,
 } from './query';
+import { UploadAvatar } from './commands/upload-avatar.command';
+import { GetAvatar } from './query/get-avatar.query';
 
 @Injectable()
 export class ProfileService {
@@ -53,5 +55,18 @@ export class ProfileService {
       return err(total.error);
     }
     return ok(new UserPublishedTopicList(publishTopic.value, total.value));
+  }
+
+  async getAvatar(
+    accountId: AccountId,
+  ): Promise<Result<Buffer, ApplicationError>> {
+    return this.queryBus.execute(new GetAvatar(accountId));
+  }
+
+  async uploadAvatar(
+    accountId: AccountId,
+    file: Express.Multer.File,
+  ): Promise<Result<string, ApplicationError>> {
+    return this.commandBus.execute(new UploadAvatar(accountId, file));
   }
 }

@@ -1377,6 +1377,40 @@ export type UpdateTopicResponses = {
 
 export type UpdateTopicResponse2 = UpdateTopicResponses[keyof UpdateTopicResponses];
 
+export type GetAvatarData = {
+    body?: never;
+    path?: {
+        /**
+         * Account ID
+         */
+        id?: unknown;
+    };
+    query?: never;
+    url: '/profile/avatar/{id}';
+};
+
+export type GetAvatarResponses = {
+    200: unknown;
+};
+
+export type UploadAvatarData = {
+    /**
+     * 头像文件
+     */
+    body: {
+        file: Blob | File;
+    };
+    path?: never;
+    query?: never;
+    url: '/profile/avatar';
+};
+
+export type UploadAvatarResponses = {
+    200: string;
+};
+
+export type UploadAvatarResponse = UploadAvatarResponses[keyof UploadAvatarResponses];
+
 export type GetProfileData = {
     body?: never;
     path?: {

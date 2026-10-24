@@ -33,13 +33,6 @@ const { replyId, loading } = defineProps<{
 const [editorVisiblity, toggleEditorVisiblity] = useToggle(false);
 const [subTreeVisiblity, toggleSubTreeVisibility] = useToggle(false);
 
-const getAvatarBase64 = (id: string) => {
-  const { canvas } = createHashvatar({
-    hash: id,
-  });
-  return canvas.toDataURL('image/webp');
-};
-
 const { commentId, onSubmit, loadingReply } = useContext();
 const { render, remove, Primitive } = useModal();
 
@@ -68,7 +61,7 @@ const onReport = () => {
         <ui-avatar
           size="sm"
           :border="false"
-          :url="getAvatarBase64(authorId as unknown as string)"
+          :url="`/__avatar__/${authorId}`"
           :fallback-text="nick"
         />
       </div>

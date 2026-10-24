@@ -57,6 +57,8 @@ export type I18nTranslations = {
         "TASK_COOLDOWN_NOT_EXPIRED": string;
         "UNKNOWN_SCHEDULE_KIND": string;
         "INVALID_TASK_SCHEMA": string;
+        "STORAGE_NOT_FOUND": string;
+        "UNKNOWN_STORAGE_STRATEGY": string;
     };
     "mail": {
         "register": {

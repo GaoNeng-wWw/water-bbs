@@ -49,5 +49,7 @@
   "TASK_RESET_NEVER": "Task Reset Never",
   "TASK_COOLDOWN_NOT_EXPIRED": "Task Cooldown Not Expired",
   "UNKNOWN_SCHEDULE_KIND": "Unknown Schedule Kind",
-  "INVALID_TASK_SCHEMA": "Invalid Task Schema"
+  "INVALID_TASK_SCHEMA": "Invalid Task Schema",
+  "STORAGE_NOT_FOUND": "Storage Not Found",
+  "UNKNOWN_STORAGE_STRATEGY": "Unknown Storage Strategy"
 }

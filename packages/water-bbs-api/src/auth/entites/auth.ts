@@ -203,4 +203,10 @@ export class Profile extends MetaEntity {
     nullable: true,
   })
   bio?: string;
+
+  @Property({
+    type: 'text',
+    nullable: true,
+  })
+  avatar?: Opt<string>;
 }
