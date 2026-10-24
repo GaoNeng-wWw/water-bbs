@@ -6,16 +6,25 @@ import { createHash } from 'crypto';
 import { EntityManager } from '@mikro-orm/sqlite';
 import { v7 } from 'uuid';
 import { ConfigureService } from '@app/configure';
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from 'fs';
 import { join } from 'path';
 import { ExpectTypeError, StorageNotFound } from '../error';
 import { Injectable } from '@nestjs/common';
+import { InjectStorageConfig, type StorageConfig } from '../../constant';
 
 @Injectable()
 export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
   constructor(
     private readonly em: EntityManager,
     private readonly cfg: ConfigureService,
+    @InjectStorageConfig()
+    private readonly config: StorageConfig,
   ) {}
   async read(
     key: StorageKey,
@@ -29,7 +38,7 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
     if (storage.kind !== 'disk') {
       return err(new ExpectTypeError('disk', storage.kind));
     }
-    const path = storage.path;
+    const path = this.config.id;
     const payload = readFileSync(join(__dirname, path, id));
 
     return ok({
@@ -48,7 +57,7 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
     if (storage.kind !== 'disk') {
       return err(new ExpectTypeError('disk', storage.kind));
     }
-    const path = storage.path;
+    const path = this.config.id;
     const key = toStorageKey(v7());
     const root = join(__dirname, path);
     if (!existsSync(root)) {
@@ -76,8 +85,8 @@ export class FileStrategy implements IStorage<Express.Multer.File, Buffer> {
     if (storageCfg.kind !== 'disk') {
       return err(new ExpectTypeError('disk', storageCfg.kind));
     }
-    const path = storageCfg.path;
-    const id = storage.id;
+    const path = this.config.id;
+    const id = storage.key;
     storage._remove();
     await this.em.transactional(async (tx) => {
       unlinkSync(join(__dirname, path, id));

@@ -18,8 +18,8 @@ import { StorageModule } from '@app/storage';
 
 @Module({
   imports: [
-    StorageModule,
-    MikroOrmModule.forFeature([Profile, Topic, Reply, Category])
+    StorageModule.register({ id: 'avatar' }),
+    MikroOrmModule.forFeature([Profile, Topic, Reply, Category]),
   ],
   controllers: [ProfileController],
   providers: [
