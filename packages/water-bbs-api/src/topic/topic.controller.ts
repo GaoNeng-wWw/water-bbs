@@ -63,6 +63,14 @@ export class TopicController {
     return this.topicService.listTopics(categoryId, dto);
   }
 
+  @ApiOperation({ summary: '获取主题详情', operationId: 'getTopicInfo' })
+  @ApiOkResponse({ type: TopicInfo })
+  @ApiParam({ name: 'topicId', description: '主题ID', type: String })
+  @Get(':topicId/info')
+  async getTopicInfo(@Param('topicId') topicId: TopicId) {
+    return this.topicService.getTopicInfo(topicId);
+  }
+
   @ApiOperation({ summary: '创建回复', operationId: 'createReply' })
   @ApiCreatedResponse({ type: ReplyInfo })
   @ApiParam({ name: 'topicId', description: '主题ID', type: String })

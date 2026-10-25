@@ -251,4 +251,7 @@ export class TopicService {
     );
     return topic;
   }
+  async getTopicInfo(id: TopicId) {
+    return this.qb.execute(new GetTopicQuery(id));
+  }
 }
