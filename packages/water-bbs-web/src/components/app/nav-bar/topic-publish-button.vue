@@ -1,17 +1,18 @@
 <script lang="ts" setup>
 import {
   UiButton,
-  UiDrawerRoot, UiDrawerContent, UiDrawerTrigger, UiShadowScroll, UiInput, UiForm, UiFormItem,
+  UiDrawerRoot, UiDrawerContent, UiDrawerTrigger, UiInput, UiForm, UiFormItem,
   UiPopover, UiPopoverTrigger, UiPopoverContent,
 } from '@/components/ui';
 import { vElementVisibility } from '@vueuse/components';
-import { TopicEditor, Category } from '@/components/app';
+import { Toolbar, TopicEditor, Category, type ToolbarItem } from '@/components/app';
 import { computed, ref, useTemplateRef } from 'vue';
 import { useCategoryList } from '@/composables';
 import { createTopic } from '@/api';
 import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router';
+import { useFileDialog } from '@vueuse/core';
 
 const topicEditorEl = useTemplateRef('topic-editor');
 const activeCategoryId = ref<string>('');
@@ -24,8 +25,90 @@ const router = useRouter();
 
 const selectedCategory = computed(() => getCategoryById(activeCategoryId.value)?.[0]?.name ?? t('category'));
 
+const { open, onChange } = useFileDialog();
+
+onChange((fileList) => {
+  if (!fileList || !fileList.length || !topicEditorEl.value) {
+    return;
+  }
+  const editor = topicEditorEl.value.getEditor();
+  if (!editor) {
+    return;
+  }
+  
+});
+
+const items: ToolbarItem[] = [
+  {
+    type: 'dropdown',
+    icon: 'icon-[material-symbols--format-h1]',
+    children: [
+      {
+        type: 'button',
+        icon: 'icon-[material-symbols--format-h1]',
+        onClick(editor) {
+          editor.commands.setHeading({ level: 1 });
+        },
+      },
+    ],
+  },
+  {
+    type: 'button',
+    icon: 'icon-[material-symbols--format-bold]',
+    onClick(editor) {
+      return editor.commands.toggleBold();
+    },
+    active(editor) {
+      return editor.isActive('bold');
+    },
+  },
+  {
+    type: 'button',
+    icon: 'icon-[material-symbols--format-italic]',
+    onClick(editor) {
+      return editor.commands.toggleItalic();
+    },
+    active(editor) {
+      return editor.isActive('italic');
+    },
+  },
+  {
+    type: 'button',
+    icon: 'icon-[material-symbols--broken-image-outline]',
+    onClick(editor) {
+      open();
+    },
+  },
+  {
+    type: 'dropdown',
+    icon: 'icon-[material-symbols--format-list-bulleted]',
+    children: [
+      {
+        type: 'button',
+        icon: 'icon-[material-symbols--format-list-bulleted]',
+        onClick(editor) {
+          editor.commands.toggleBulletList();
+        },
+        active(editor) {
+          return editor.isActive('bulletList');
+        },
+      },
+      {
+        type: 'button',
+        icon: 'icon-[material-symbols--format-list-numbered-sharp]',
+        onClick(editor) {
+          editor.commands.toggleOrderedList();
+        },
+        active(editor) {
+          return editor.isActive('orderedList');
+        },
+      },
+    ],
+  },
+];
+
 const publishTopic = () => {
-  const content = topicEditorEl.value?.getContent() ?? '';
+  const content = topicEditorEl.value?.getContent() ?? {};
   publishedLoading.value = true;
   createTopic({
     path: {
@@ -84,9 +167,11 @@ const publishTopic = () => {
           </ui-popover>
         </ui-form-item>
         <ui-form-item :label="t('content')" prop="content">
-          <ui-shadow-scroll class="h-[50vh]">
-            <topic-editor ref="topic-editor" />
-          </ui-shadow-scroll>
+          <topic-editor ref="topic-editor" class="h-full overflow-auto">
+            <template #toolbar="{ editor }">
+              <toolbar v-if="editor" :items="items" :editor="editor" />
+            </template>
+          </topic-editor>
         </ui-form-item>
       </ui-form>
     </ui-drawer-content>

@@ -6,6 +6,7 @@ import { DomainError } from '@app/shared';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { TopicNotFound } from '../errors';
+import { JSONContent } from '@tiptap/core';
 
 export interface ReplyAuthor {
   id: AccountId;
@@ -15,7 +16,8 @@ export interface ReplyAuthor {
 
 export interface ReplyItem {
   id: ReplyId;
-  content: string;
+  content: JSONContent | null;
+  reason?: string;
   author: ReplyAuthor;
   createdAt: Date;
   hidden: boolean;
@@ -83,8 +85,12 @@ export class ListReplyService implements IQueryHandler<ListReplyQuery> {
         },
         content:
           reply.hiddenPeriod && !reply.hiddenPeriod.isExpired()
-            ? reply.hiddenPeriod.reason
+            ? null
             : reply.content,
+        reason:
+          reply.hiddenPeriod && !reply.hiddenPeriod.isExpired()
+            ? reply.hiddenPeriod.reason
+            : undefined,
         id: reply.id,
         createdAt: reply.createdAt,
         hidden: Boolean(reply.hiddenPeriod && !reply.hiddenPeriod.isExpired()),

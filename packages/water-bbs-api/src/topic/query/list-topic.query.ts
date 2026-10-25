@@ -7,6 +7,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { AccountId, Profile } from '../../auth';
 import { RedisService } from '@liaoliaots/nestjs-redis';
+import { JSONContent } from '@tiptap/core';
 
 export type AuthorInfo = {
   id: AccountId;
@@ -22,7 +23,7 @@ export type TopicInfo = {
   id: TopicId;
   title: string;
   createdAt: Date;
-  content: string;
+  content: JSONContent;
   author: AuthorInfo;
   pinned: boolean;
   replyTotal: number;

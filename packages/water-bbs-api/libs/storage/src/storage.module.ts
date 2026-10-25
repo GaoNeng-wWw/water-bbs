@@ -2,7 +2,7 @@ import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigureModule, ConfigureService } from '@app/configure';
 import { FileStrategy } from './application/strategy/file.strategy';
 import { MemoryStrategy } from './application/strategy/memory.strategy';
-import { StorageProvider } from './application/strategy/storage.provider';
+import { StorageProvider, storageProviderOf } from './application/strategy/storage.provider';
 import { UnknownStorageStrategy } from './application/error';
 import { STORAGE_CONFIG_KEY, StorageConfig } from './constant';
 import { join } from 'path';
@@ -50,7 +50,12 @@ export class StorageModule {
           provide: STORAGE_CONFIG_KEY,
           useValue: props,
         },
+        {
+          provide: storageProviderOf(props.id),
+          useExisting: StorageProvider,
+        },
       ],
+      exports: [storageProviderOf(props.id)],
     };
   }
 }

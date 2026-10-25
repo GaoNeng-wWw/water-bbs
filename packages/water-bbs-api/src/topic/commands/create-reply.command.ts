@@ -12,11 +12,12 @@ import { EntityManager } from '@mikro-orm/core';
 import { TopicNotFound } from '../errors';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { ReplyCreated } from '../events';
+import { JSONContent } from '@tiptap/core';
 
 export class CreateReplyCommand extends Command<Result<ReplyId, DomainError>> {
   constructor(
     public readonly topicId: TopicId,
-    public readonly content: string,
+    public readonly content: JSONContent,
     public readonly accountId: AccountId,
   ) {
     super();

@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/vue-query';
 import { listReply } from '@/api/sdk.gen.ts';
 import { computed, useTemplateRef } from 'vue';
 import ReplyCardListSkeleton from './reply-card-list.skeleton.vue';
-import { ProposalForm } from '@/components/app/proposal/index.ts';
 
 const props = defineProps<{
   topicId: string;
@@ -14,7 +13,7 @@ const props = defineProps<{
   size: number;
 }>();
 const emits = defineEmits<{
-  publishReply: [string];
+  publishReply: [Record<string, any>];
 }>();
 const page = defineModel<number>({ required: true, default: () => 1 });
 const items: ToolbarItem[] = [

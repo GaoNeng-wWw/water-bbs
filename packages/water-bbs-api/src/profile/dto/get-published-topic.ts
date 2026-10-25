@@ -2,6 +2,7 @@ import { PaginationData } from '@app/shared';
 import type { TopicId } from '../../topic';
 import { ApiProperty } from '@nestjs/swagger';
 import type { CategoryId } from '../../category';
+import type { JSONContent } from '@tiptap/core';
 
 export class TopicCategory {
   @ApiProperty({ description: '分类ID', type: String })
@@ -20,7 +21,7 @@ export class TopicCategory {
 export type ProfileTopicInfoProps = {
   id: TopicId;
   title: string;
-  content: string;
+  content: JSONContent;
   createdAt: Date;
   category: TopicCategory;
   repliesTotal: number;
@@ -32,7 +33,7 @@ export class ProfileTopicInfo {
   @ApiProperty({ description: '主题标题' })
   title: string;
   @ApiProperty({ description: '主题内容' })
-  content: string;
+  content: JSONContent;
   @ApiProperty({ description: '创建时间' })
   createdAt: string;
   @ApiProperty({ description: '分类' })

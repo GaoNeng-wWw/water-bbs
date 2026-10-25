@@ -6,9 +6,8 @@ export class CreateTopicDto {
   @IsString()
   @IsString()
   title: string;
-  @ApiProperty({ description: '主题内容' })
-  @IsString()
-  content: string;
+  @ApiProperty({ description: '主题内容', type: Object })
+  content: Record<string, any>;
   @ApiProperty({ description: '是否置顶' })
   @IsBoolean()
   @IsOptional()

@@ -13,7 +13,7 @@ import { ref } from 'vue';
 
 const props = defineProps<{
   id: string;
-  content: string;
+  content: Record<string, any>;
   authorName: string;
   authorId: string;
   hidden?: boolean;
@@ -21,18 +21,21 @@ const props = defineProps<{
 
 const editor = useEditor({
   editable: false,
-  extensions: [StarterKit, Markdown.configure({
-    markedOptions: {
-      gfm: true,
-      async: true,
-      pedantic: true,
-    },
-    indentation: {
-      style: 'space',
-    },
-  })],
+  extensions: [
+    StarterKit,
+    Markdown.configure({
+      markedOptions: {
+        gfm: true,
+        async: true,
+        pedantic: true,
+      },
+      indentation: {
+        style: 'space',
+      },
+    }),
+  ],
   content: props.content,
-  contentType: 'markdown',
+  contentType: 'json',
   editorProps: {
     attributes: {
       class: 'prose dark:prose-invert',

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import type { AccountId } from '../../auth';
 import type { TopicId } from '../entites';
 import type { CategoryId } from 'src/category';
+import type { JSONContent } from '@tiptap/core';
 
 export class TopicAuthor {
   @ApiProperty({ description: '主题作者ID', type: String })
@@ -33,7 +34,7 @@ export class TopicInfoProps {
   @ApiProperty({ description: '主题标题' })
   title: string;
   @ApiProperty({ description: '主题内容' })
-  content: string;
+  content: JSONContent;
   @ApiProperty({ description: '主题作者' })
   author: TopicAuthor;
   @ApiProperty({ description: '主题创建时间' })
@@ -52,7 +53,7 @@ export class TopicInfo {
   @ApiProperty({ description: '主题标题' })
   title: string;
   @ApiProperty({ description: '主题内容' })
-  content: string;
+  content: JSONContent;
   @ApiProperty({ description: '主题作者', type: TopicAuthor })
   author: TopicAuthor;
   @ApiProperty({ description: '主题创建时间' })

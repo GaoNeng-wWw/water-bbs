@@ -41,7 +41,7 @@ const focus = () => {
   editor.value?.commands.focus();
 };
 const getContent = () => {
-  return editor.value?.getMarkdown() ?? '';
+  return editor.value?.getJSON() ?? {};
 };
 
 defineExpose({ focus, getContent });

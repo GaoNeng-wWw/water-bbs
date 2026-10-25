@@ -59,6 +59,8 @@ export type I18nTranslations = {
         "INVALID_TASK_SCHEMA": string;
         "STORAGE_NOT_FOUND": string;
         "UNKNOWN_STORAGE_STRATEGY": string;
+        "INVALID_CONTENT": string;
+        "SCHEMA_PARSE_ERROR": string;
     };
     "mail": {
         "register": {

@@ -2,6 +2,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import type { ReplyId, TopicId } from '../entites';
 import type { AccountId } from '../../auth';
 import { ApiProperty } from '@nestjs/swagger';
+import type { JSONContent } from '@tiptap/core';
 
 export class FindReplyDto {
   @ApiProperty({ description: '回复主题ID', type: String })
@@ -21,7 +22,7 @@ export class ReplyInfo {
   @ApiProperty({ description: '回复ID' })
   id: ReplyId;
   @ApiProperty({ description: '回复内容' })
-  content: string;
+  content: JSONContent;
   @ApiProperty({ description: '回复作者' })
   author: ReplyAuthor;
   @ApiProperty({ description: '回复创建时间' })
@@ -34,7 +35,7 @@ export class ReplyItem {
   @ApiProperty({ description: '回复ID' })
   id: ReplyId;
   @ApiProperty({ description: '回复内容' })
-  content: string;
+  content: JSONContent;
   @ApiProperty({ description: '回复作者' })
   author: ReplyAuthor;
   @ApiProperty({ description: '回复创建时间' })

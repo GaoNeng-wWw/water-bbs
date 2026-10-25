@@ -51,5 +51,7 @@
   "UNKNOWN_SCHEDULE_KIND": "Unknown Schedule Kind",
   "INVALID_TASK_SCHEMA": "Invalid Task Schema",
   "STORAGE_NOT_FOUND": "Storage Not Found",
-  "UNKNOWN_STORAGE_STRATEGY": "Unknown Storage Strategy"
+  "UNKNOWN_STORAGE_STRATEGY": "Unknown Storage Strategy",
+  "INVALID_CONTENT": "Invalid Content",
+  "SCHEMA_PARSE_ERROR": "Schema Parse Error"
 }

@@ -18,8 +18,8 @@ export class Reply extends MetaEntity {
   id: Opt<ReplyId> = v7() as ReplyId;
   @Property({ type: 'uuid' })
   topicId: TopicId;
-  @Property({ type: 'longtext' })
-  content: string;
+  @Property({ type: 'jsonb' })
+  content: Record<string, any>;
   @Property({ type: 'uuid' })
   authorId: AccountId;
 

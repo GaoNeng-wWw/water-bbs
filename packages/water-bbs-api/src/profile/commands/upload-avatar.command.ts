@@ -21,7 +21,7 @@ export class UploadAvatar extends Command<
 @CommandHandler(UploadAvatar)
 export class UploadAvatarService implements ICommandHandler<UploadAvatar> {
   constructor(
-    @InjectStorage()
+    @InjectStorage('avatar')
     public readonly storage: Storage,
     public readonly em: EntityManager,
     public readonly cfg: ConfigureService,

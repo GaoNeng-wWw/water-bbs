@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import { UiShadowScroll } from '@/components/ui';
 import { useEditor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
+import { Img } from './extension/node/image.node';
 
 const editor = useEditor({
   autofocus: true,
@@ -19,17 +21,26 @@ const editor = useEditor({
         pedantic: false,
       },
     }),
+    Img,
   ],
   editable: true,
 });
 
-const getContent = () => editor.value?.getMarkdown() ?? '';
+const getContent = () => editor.value?.getJSON() ?? {};
+const getEditor = () => editor.value;
 
-defineExpose({ getContent });
+defineExpose({ getContent, getEditor });
 </script>
 
 <template>
-  <div class="w-full h-full rounded-m border border-surface-200 p-4">
-    <editor-content :editor="editor" />
+  <div class="w-full h-fit rounded-m border border-surface-200 relative">
+    <div class="w-full h-fit sticky top-0">
+      <slot name="toolbar" :editor="editor" />
+    </div>
+    <ui-shadow-scroll class="w-full h-50">
+      <div class="w-full p-4">
+        <editor-content :editor="editor" />
+      </div>
+    </ui-shadow-scroll>
   </div>
 </template>

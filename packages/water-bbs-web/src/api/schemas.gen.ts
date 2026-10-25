@@ -296,7 +296,7 @@ export const ReplyItemSchema = {
             description: '回复ID'
         },
         content: {
-            type: 'string',
+            type: 'object',
             description: '回复内容'
         },
         author: {
@@ -378,7 +378,7 @@ export const TopicInfoSchema = {
             description: '主题标题'
         },
         content: {
-            type: 'string',
+            type: 'object',
             description: '主题内容'
         },
         author: {
@@ -426,7 +426,7 @@ export const CreateReplyDtoSchema = {
     type: 'object',
     properties: {
         content: {
-            type: 'string',
+            type: 'object',
             description: '回复内容'
         }
     },
@@ -443,7 +443,7 @@ export const ReplyInfoSchema = {
             description: '回复ID'
         },
         content: {
-            type: 'string',
+            type: 'object',
             description: '回复内容'
         },
         author: {
@@ -481,7 +481,7 @@ export const CreateTopicDtoSchema = {
             description: '主题标题'
         },
         content: {
-            type: 'string',
+            type: 'object',
             description: '主题内容'
         },
         pinned: {
@@ -604,7 +604,7 @@ export const ProfileTopicInfoSchema = {
             description: '主题标题'
         },
         content: {
-            type: 'string',
+            type: 'object',
             description: '主题内容'
         },
         createdAt: {

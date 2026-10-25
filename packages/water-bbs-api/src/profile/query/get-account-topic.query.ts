@@ -62,7 +62,7 @@ export class GetAccountPublishedTopicService implements IQueryHandler<GetAccount
         new ProfileTopicInfo({
           ...topic,
           category,
-          content: reply?.content ?? '',
+          content: reply?.content ?? {},
           repliesTotal: Number(repliesTotal),
         }),
       );

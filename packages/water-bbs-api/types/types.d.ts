@@ -3,3 +3,11 @@ export declare module '@nestjs/cqrs' {
     id?: string;
   }
 }
+
+declare global {
+  type ImageNode = {
+    attrs: {
+      imageId: string;
+    };
+  }
+}

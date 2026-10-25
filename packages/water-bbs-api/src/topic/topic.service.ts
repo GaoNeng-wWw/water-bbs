@@ -39,6 +39,8 @@ import {
 import { hideReplyDef, hideTopicDef, removeTopicDef } from './steps';
 import { I18nService } from 'nestjs-i18n';
 import { removeReplyDef } from './steps/remove-reply';
+import { validate } from './domain/service';
+import { UploadImageCommand } from './commands/upload-image.command';
 
 @Injectable()
 export class TopicService {
@@ -98,7 +100,7 @@ export class TopicService {
       (reply) =>
         new ReplyItem({
           id: reply.id,
-          content: reply.content,
+          content: reply.content! ?? {},
           author: {
             id: reply.author.id,
             nick: reply.author.nick,
@@ -115,8 +117,12 @@ export class TopicService {
     if (topic.isErr()) {
       return topic;
     }
+    const content = validate(dto.content);
+    if (content.isErr()) {
+      return content;
+    }
     const replyId = await this.cb.execute(
-      new CreateReplyCommand(id, dto.content, accountId),
+      new CreateReplyCommand(id, content.value, accountId),
     );
     if (replyId.isErr()) {
       return replyId;
@@ -132,10 +138,14 @@ export class TopicService {
     if (category.isErr()) {
       return category;
     }
+    const content = validate(dto.content);
+    if (content.isErr()) {
+      return content;
+    }
     const topic = await this.cb.execute(
       new CreateTopicCommand(
         dto.title,
-        dto.content,
+        content.value,
         accountId,
         category.value.id,
         dto.pinned,
@@ -253,5 +263,9 @@ export class TopicService {
   }
   async getTopicInfo(id: TopicId) {
     return this.qb.execute(new GetTopicQuery(id));
+  }
+
+  uploadImage(files: Express.Multer.File[]) {
+    return this.cb.execute(new UploadImageCommand(files));
   }
 }

@@ -199,7 +199,9 @@ export type ReplyItem = {
     /**
      * 回复内容
      */
-    content: string;
+    content: {
+        [key: string]: unknown;
+    };
     /**
      * 回复作者
      */
@@ -252,7 +254,9 @@ export type TopicInfo = {
     /**
      * 主题内容
      */
-    content: string;
+    content: {
+        [key: string]: unknown;
+    };
     /**
      * 主题作者
      */
@@ -279,7 +283,9 @@ export type CreateReplyDto = {
     /**
      * 回复内容
      */
-    content: string;
+    content: {
+        [key: string]: unknown;
+    };
 };
 
 export type ReplyInfo = {
@@ -292,7 +298,9 @@ export type ReplyInfo = {
     /**
      * 回复内容
      */
-    content: string;
+    content: {
+        [key: string]: unknown;
+    };
     /**
      * 回复作者
      */
@@ -315,7 +323,9 @@ export type CreateTopicDto = {
     /**
      * 主题内容
      */
-    content: string;
+    content: {
+        [key: string]: unknown;
+    };
     /**
      * 是否置顶
      */
@@ -391,7 +401,9 @@ export type ProfileTopicInfo = {
     /**
      * 主题内容
      */
-    content: string;
+    content: {
+        [key: string]: unknown;
+    };
     /**
      * 创建时间
      */

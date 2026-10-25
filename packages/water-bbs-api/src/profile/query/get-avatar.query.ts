@@ -15,7 +15,7 @@ export class GetAvatar extends Query<Result<Buffer, ApplicationError>> {
 @QueryHandler(GetAvatar)
 export class GetAvatarService implements IQueryHandler<GetAvatar> {
   constructor(
-    @InjectStorage()
+    @InjectStorage('avatar')
     public readonly storage: Storage<Express.Multer.File, Buffer>,
     public readonly em: EntityManager,
   ) {}
