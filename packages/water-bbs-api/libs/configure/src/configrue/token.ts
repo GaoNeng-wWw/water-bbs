@@ -6,6 +6,7 @@ export type TokenConfigure = {
   publicKey: string;
   privateKey: string;
   secret: string;
+  sessionLimit: number;
 };
 
 export const tokenSchema = Joi.object({
@@ -14,4 +15,5 @@ export const tokenSchema = Joi.object({
   publicKey: Joi.string(),
   privateKey: Joi.string(),
   secret: Joi.string(),
+  sessionLimit: Joi.number().default(1),
 });

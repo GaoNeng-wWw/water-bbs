@@ -2,12 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { SqliteDriver } from '@mikro-orm/sqlite';
 import { MikroORM } from '@mikro-orm/core';
-import { Account, Credential, Identifier, Profile } from '../src/auth';
-import { Category } from '../src/category';
 import { E2EAppModule } from 'src/e2e-test-app.modulel';
 
 describe('CategoryController (e2e)', () => {
