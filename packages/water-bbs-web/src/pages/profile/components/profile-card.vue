@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { Avatar } from 'reka-ui/namespaced';
 
-const { nickName, id, bio } = defineProps<{ nickName: string; id: string; bio?: string }>();
+const { nickName, bio, createTime } = defineProps<{ nickName: string; id: string; bio?: string; createTime: string }>();
 
 const defaultBio = '这位成员还没有填写个人简介，但 TA 已经在社区里留下了不少精彩内容。';
+const year = new Date(createTime).getFullYear();
 </script>
 
 <template>
@@ -31,7 +32,7 @@ const defaultBio = '这位成员还没有填写个人简介，但 TA 已经在�
           </p>
         </div>
         <div class="w-fit px-2 rounded-full bg-surface-200 border border-solid border-surface-300">
-          <span class="text-surface-fg text-sm">2024 年加入</span>
+          <span class="text-surface-fg text-sm">{{ year }} 年加入</span>
         </div>
       </div>
     </div>

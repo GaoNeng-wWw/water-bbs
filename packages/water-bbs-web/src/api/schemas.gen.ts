@@ -579,11 +579,16 @@ export const ProfileInfoSchema = {
         bio: {
             type: 'string',
             description: '个人简介'
+        },
+        createdAt: {
+            type: 'string',
+            description: '创建时间'
         }
     },
     required: [
         'id',
-        'nick'
+        'nick',
+        'createdAt'
     ]
 } as const;
 

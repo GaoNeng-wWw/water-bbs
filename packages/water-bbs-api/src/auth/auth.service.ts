@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { LoginDTO } from './dto';
-import { Login, RefreshToken, RegisterCommand } from './application';
+import { Login, Logout, RefreshToken, RegisterCommand } from './application';
 import { RegisterRequest } from './dto/register.dto';
 
 @Injectable()
@@ -37,5 +37,8 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     return this.commandBus.execute(new RefreshToken(refreshToken));
+  }
+  async logout(token: string) {
+    return this.commandBus.execute(new Logout(token));
   }
 }

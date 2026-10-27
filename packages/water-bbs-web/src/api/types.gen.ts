@@ -373,6 +373,10 @@ export type ProfileInfo = {
      * 个人简介
      */
     bio?: string;
+    /**
+     * 创建时间
+     */
+    createdAt: string;
 };
 
 export type ProfileTopicInfo = {
@@ -1008,6 +1012,17 @@ export type RefreshTokenResponses = {
 };
 
 export type RefreshTokenResponse = RefreshTokenResponses[keyof RefreshTokenResponses];
+
+export type LogoutData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/logout';
+};
+
+export type LogoutResponses = {
+    200: unknown;
+};
 
 export type ListCategoryData = {
     body?: never;

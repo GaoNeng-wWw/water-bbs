@@ -33,13 +33,14 @@ export class ProfileController {
   @ApiParam({ name: 'id', description: 'Account ID', required: false })
   @ApiBearerAuth()
   async getProfile(
-    @Param('id') id: AccountId,
+    @Param('id') id?: AccountId,
     @User('id') userId?: AccountId,
   ): Promise<Result<ProfileInfo, DomainError>> {
-    if (!id && !userId) {
+    const accountId = id === '{id}' ? userId : id;
+    if (!accountId) {
       return err(new UserNotExists());
     }
-    return this.profileService.getProfile(userId ?? id);
+    return this.profileService.getProfile(accountId);
   }
 
   @ApiOperation({

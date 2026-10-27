@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDTO, RefreshTokenDTO, TokenPair } from './dto';
 import { RegisterRequest, RegisterResponse } from './dto/register.dto';
 import { ApiBody, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { Public } from './auth.guard';
+import type { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +37,13 @@ export class AuthController {
   @Post('refresh-token')
   async refreshToken(@Body() body: RefreshTokenDTO) {
     return this.authService.refreshToken(body.token);
+  }
+
+  @Public()
+  @ApiOperation({ summary: '退出登录', operationId: 'logout' })
+  @Delete('logout')
+  async logout(@Req() req: Request) {
+    const token = req.headers.authorization?.replace(/Bearer /, '') ?? '';
+    return this.authService.logout(token);
   }
 }

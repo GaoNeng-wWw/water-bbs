@@ -3,6 +3,9 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ModalHost } from '@/composables';
+import { Toaster } from 'vue-sonner';
+import 'vue-sonner/style.css';
+
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 </script>
@@ -13,5 +16,6 @@ dayjs.extend(relativeTime);
       <router-view />
     </suspense>
     <modal-host />
+    <toaster position="top-center" theme="system" rich-colors />
   </div>
 </template>

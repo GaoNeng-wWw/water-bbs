@@ -7,5 +7,8 @@ export const useProfile = defineStore('profile', () => {
   const setProfile = (info: ProfileInfo) => {
     profile.value = info;
   };
-  return { profile, setProfile };
+  const clearProfile = () => {
+    profile.value = null;
+  }
+  return { profile, setProfile, clearProfile };
 }, { persist: true });

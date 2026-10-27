@@ -8,6 +8,8 @@ import replyCardList from './component/reply-card-list.vue';
 import { useMutation, useQuery } from '@tanstack/vue-query';
 import { createReply, getTopicInfo, removeTopic } from '@/api/sdk.gen.ts';
 import { useProfile } from '@/store/index.ts';
+import { toast } from 'vue-sonner';
+import { useI18n } from 'vue-i18n';
 
 const postTitle = useTemplateRef('post-title');
 const router = useRouter();
@@ -18,6 +20,7 @@ const size = computed(() => Number(router.currentRoute.value.query.size) || 20);
 const opacity = ref(0);
 const blur = ref('0');
 const profile = useProfile();
+const { t } = useI18n({ useScope: 'local' });
 
 const onScroll = (_ev: Event) => {
   const el = postTitle.value;
@@ -31,13 +34,21 @@ const onScroll = (_ev: Event) => {
   blur.value = `${rawBlur}px`;
 };
 
-const { data, status: infoStatus } = useQuery({
+const { data } = useQuery({
   queryFn: () => {
     return getTopicInfo({
       path: {
         topicId: topicId.value,
       },
-    }).then(resp => resp.data);
+    })
+      .then((resp) => {
+        if (resp.status === 404) {
+          toast.error(t('not-found'));
+          router.replace({ path: '/' });
+          return;
+        }
+        return resp.data!;
+      });
   },
   queryKey: ['topic-info', topicId.value],
 });
@@ -72,6 +83,7 @@ const onClickRemove = () => {
     },
   })
     .then(() => {
+      toast.success(t('remove.success'));
       router.push({ path: '/' });
     });
 };
@@ -125,3 +137,14 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<i18n lang="yaml">
+en-us:
+  not-found: Topic not found
+  remove:
+    success: Topic removed successfully
+zh-cn:
+  not-found: 话题不存在
+  remove:
+    success: 话题删除成功
+</i18n>

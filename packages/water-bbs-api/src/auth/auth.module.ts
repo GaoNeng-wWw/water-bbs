@@ -8,6 +8,7 @@ import { Account, Credential, Identifier, Profile } from './entites';
 import { NotificationModule } from '@app/notification/notification.module';
 import {
   LoginService,
+  LogoutService,
   RefreshTokenService,
   RegisterService,
 } from './application';
@@ -23,7 +24,7 @@ import { WalletModule } from '@app/gamification';
     MikroOrmModule.forFeature([Identifier, Credential, Account, Profile]),
     VerificationCodeModule,
     NotificationModule,
-    WalletModule
+    WalletModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -54,6 +55,7 @@ import { WalletModule } from '@app/gamification';
     LoginService,
     RegisterService,
     RefreshTokenService,
+    LogoutService,
   ],
 })
 export class AuthModule {}

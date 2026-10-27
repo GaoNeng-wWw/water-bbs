@@ -8,4 +8,6 @@ export class ProfileInfo {
   nick: string;
   @ApiProperty({ description: '个人简介', required: false })
   bio?: string;
+  @ApiProperty({ description: '创建时间' })
+  createdAt: string;
 }
